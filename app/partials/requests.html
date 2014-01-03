@@ -1,0 +1,45 @@
+<div class="well" ng-repeat="req in requests" ng-controller="requestFormatController">
+
+    <h4 class="text-{{req.openSeatsClass}}">{{req.course.PDS}} - {{req.course.CourseTitle}} <span
+            class="pull-right">{{req.course.CourseNumber}}</span></h4>
+    <hr style="border-color:#000">
+
+    <div class="col-lg-6 pull-left">
+        <h4 style="letter-spacing: .1em">{{req.start}} - {{req.end}}</h4>
+        <h5>{{req.det.Base}} (Detachment {{req.det.Detachment}})</h5>
+        <i>{{req.instructor}}</i>
+
+        <hr>
+
+        <blockquote>
+            <p style="color:#777">{{req.notes}}</p>
+            <small><a href="mailto:{{req.ModifiedBy.WorkEMail}}{{req.mail}}">{{req.ModifiedBy.Name}}
+                ({{req.ModifiedBy.WorkPhone}})</a></small>
+        </blockquote>
+
+    </div>
+    <div class="col-lg-6 pull-right text-right">
+
+        <h4 class="text-{{req.openSeatsClass}}">{{req.reqSeatsText}} ({{req.openSeats}} Open):</h4>
+
+        <p ng-repeat="student in req.Students.results">
+            {{student.Name}}<br>
+            <a href="mailto:{{student.WorkEMail}}{{req.mail}}">{{student.WorkEMail}}</a><br>
+            {{student.WorkPhone}}<br>
+            <br>
+        </p>
+
+    </div>
+
+    <div class="clearfix"></div>
+    <hr style="border-color:#000">
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Approve
+        </button>
+        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-ban-circle"></span>
+            Deny
+        </button>
+    </div>
+    <div class="clearfix"></div>
+
+</div>

@@ -1,6 +1,28 @@
-_.templateSettings.interpolate = /\{\{(.+?)\}\}/g;
+var app, FTSS;
 
-var FTSS;
+app = angular.module('FTSS',
+	[
+		'ngRoute'
+	]);
+
+
+app.config(function ($routeProvider) {
+	$routeProvider
+
+		// route for the home page
+		.when('/', {
+			templateUrl: 'partials/home.html',
+			controller: 'mainController'
+		})
+
+		// route for the requests page
+		.when('/requests', {
+			templateUrl: 'partials/requests.html',
+			controller: 'requestsController'
+		})
+
+});
+
 FTSS = (function ($) {
 
 	var _internal = {
@@ -24,7 +46,7 @@ FTSS = (function ($) {
 			 */
 			'reduce': function (data) {
 
-				var reduced, clean;
+				var translated, reduced, clean;
 
 				// Some queries seem to return data.results while others do not
 				reduced = data.results || data;
@@ -49,10 +71,19 @@ FTSS = (function ($) {
 
 				clean(reduced);
 
+				if (reduced[0].Id) {
+					translated = _.reduce(reduced, function (o, v) {
+						o[v.Id] = v;
+						return o;
+					}, {});
+				} else {
+					translated = reduced;
+				}
+
 				// Return the reduced reduced/JSON data
 				return {
-					'data': reduced,
-					'json': JSON.stringify(reduced).replace(_internal.baseURL, '')
+					'data': translated,
+					'json': JSON.stringify(translated).replace(_internal.baseURL, '')
 				}
 
 			},
@@ -125,6 +156,29 @@ FTSS = (function ($) {
 		'cached': _internal.cached,
 
 		/**
+		 * Converts SharePoint Date format into a the locale date string.
+		 *
+		 * This function uses a closure to store a cache of dates since runtime to reduce the (tiny) parsing overhead
+		 */
+		'fixDate': (function () {
+
+			var dCache = {};
+
+			return function (date) {
+
+				if (!dCache[date]) {
+
+					dCache[date] = new Date(Number(date.replace(/[^\d.]/g, ''))).toLocaleDateString();
+
+				}
+
+				return dCache[date];
+
+			}
+
+		}()),
+
+		/**
 		 * Reads data using the SharePoint REST API with caching/debugging if enabled and after data reduction
 		 * @param options
 		 */
@@ -145,12 +199,11 @@ FTSS = (function ($) {
 						options.params[key] = param.join(',');
 					}
 				});
-				console.log(options.params);
 
 				var http = $.getJSON(_internal.baseURL + options.source, options.params || null);
 
 				http.done(function (data) {
-
+return;
 					data = data.d;
 
 					if (_internal.debug) {
@@ -173,124 +226,48 @@ FTSS = (function ($) {
 
 }(jQuery));
 
-/*
- FTSS.read({
- cache: true,
- source: 'MasterCourseList',
- params: {
- '$select': 'PDS,MDS,Days,Hours,MinStudents,MaxStudents,AFSC,CourseTitle,CourseNumber,Id'
- },
- success: function (data) {
-
- $('#placeholder').append('Master Course List loaded.<br>');
-
- }
- });
-
-
- FTSS.read({
- cache: true,
- source: 'Units',
- params: {
- '$select': 'Base,Detachment,Contact,DSN,Id'
- },
- success: function (data) {
-
- $('#placeholder').append('Units loaded.<br>');
-
- }
- });*/
-
 
 FTSS.read({
+	cache: true,
+	source: 'MasterCourseList',
 	params: {
-		'$filter': 'Completed eq false',
-		'$expand':
-			[
-				'Students',
-				'ScheduledClass/Instructor'
-			],
 		'$select':
 			[
-				'Id',
-				'Students/Name',
-				'Students/WorkEMail',
-				'Students/WorkPhone',
-				'ScheduledClassId',
-				'ScheduledClass/DetachmentId',
-				'ScheduledClass/CourseId',
-				'ScheduledClass/Start',
-				'ScheduledClass/End',
-				'ScheduledClass/Instructor/Name'
+				'PDS',
+				'MDS',
+				'Days',
+				'Hours',
+				'MinStudents',
+				'MaxStudents',
+				'AFSC',
+				'CourseTitle',
+				'CourseNumber',
+				'Id'
 			]
 	},
-	source: 'RequestsPending',
 	success: function (data) {
 
-		$('#placeholder').html('<pre>' + data.json.length + '\n\n' + JSON.stringify(data.data, undefined, 2) + '</pre>');
+		$('#placeholder').append('Master Course List loaded.<br>');
 
 	}
 });
 
-
 FTSS.read({
+	cache: true,
+	source: 'Units',
 	params: {
-		'$filter': 'Completed eq false',
-		'$expand':
-			[
-				'Students',
-				'ScheduledClass/Instructor',
-				'ScheduledClass/Course',
-				'ScheduledClass/Detachment'
-			],
 		'$select':
 			[
-				'Id',
-				'Students/Name',
-				'Students/WorkEMail',
-				'Students/WorkPhone',
-				'ScheduledClassId',
-				'ScheduledClass/Detachment/Base',
-				'ScheduledClass/Detachment/Detachment',
-				'ScheduledClass/Detachment/Contact',
-				'ScheduledClass/Detachment/DSN',
-				'ScheduledClass/CourseId',
-				'ScheduledClass/Start',
-				'ScheduledClass/End',
-				'ScheduledClass/Instructor/Name',
-				'ScheduledClass/Course/AFSC',
-				'ScheduledClass/Course/CourseTitle',
-				'ScheduledClass/Course/CourseNumber',
-				'ScheduledClass/Course/Days',
-				'ScheduledClass/Course/Hours',
-				'ScheduledClass/Course/PDS',
-				'ScheduledClass/Course/MDS',
-				'ScheduledClass/Course/MinStudents',
-				'ScheduledClass/Course/MaxStudents'
+				'Base',
+				'Detachment',
+				'Contact',
+				'DSN',
+				'Id'
 			]
 	},
-	source: 'RequestsPending',
 	success: function (data) {
 
-		$('#placeholder').html('<pre>' + data.json.length + '\n\n' + JSON.stringify(data.data, undefined, 2) + '</pre>');
+		$('#placeholder').append('Units loaded.<br>');
 
 	}
 });
-
-/*
-
- FTSS.read({
- params: {
- '$filter': 'Completed eq false',
- '$expand': 'Students, ScheduledClass',
- '$select': 'Students/Name,Students/WorkEMail,Students/WorkPhone,ScheduledClassId,Id,ScheduledClass/DetachmentId,ScheduledClass/CourseId,ScheduledClass/Start,ScheduledClass/End'
- },
- source: 'RequestsPending',
- success: function (data) {
-
- $('#placeholder').html('<pre>' + data.json.length + '\n\n' + JSON.stringify(data.data,undefined, 2) + '</pre>');
-
- }
- });
-
- */
