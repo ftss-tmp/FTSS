@@ -1,0 +1,41 @@
+<!--
+<div>
+    <smart-table rows="requests" columns="columns" class="table table-striped" config="globalConfig"></smart-table>
+</div>
+-->
+
+
+<div class="well {{wellCollapse}}" ng-repeat="r in requests">
+
+    <h4>{{r.course.PDS}} - {{r.course.CourseTitle}} <span
+            class="pull-right">{{r.course.CourseNumber}}</span></h4>
+
+    <hr class="rollup">
+
+    <div class="rollup">
+
+        <div class="col-lg-6 pull-left">
+            <h4 style="letter-spacing: .1em">{{r.start}} - {{r.end}}</h4>
+            <h5>{{r.det.Base}} (Detachment {{r.det.Detachment}})</h5>
+            <i>{{r.instructor}}</i>
+
+            <hr>
+
+        </div>
+        <div class="col-lg-6 pull-right text-right">
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="requestActions">
+
+            <div class="pull-right">
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,74 +1,260 @@
 <!DOCTYPE html>
 <html ng-app="FTSS">
 <head>
-    <title>AETC Field Training Support System 3</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<title>AETC Field Training Support System 3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="bower_components/select2/select2.css">
-    <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
-    <script type="text/javascript" src="bower_components/select2/select2.js"></script>
-    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
-    <script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
+<link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 
-    <style type="text/css">
-        html,
-        body {
-            height: 100%;
-        }
+<link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.css">
+<link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.bootstrap3.css">
 
-        /* Wrapper for page content to push down footer */
-        #wrap {
-            min-height: 100%;
-            height: auto;
-            /* Negative indent footer by its height */
-            margin: 0 auto -60px;
-            /* Pad bottom by footer height */
-            padding: 0 0 60px;
-        }
 
-        /* Set the fixed height of the footer here */
-        #footer {
-            height: 60px;
-            background-color: #f5f5f5;
-        }
+<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script type="text/javascript" src="bower_components/smart-table/Smart-Table.debug.js"></script>
+<script type="text/javascript" src="bower_components/selectize/dist/js/standalone/selectize.js"></script>
+<script type="text/javascript" src="bower_components/angular-selectize/angular-selectize.js"></script>
+<script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
 
-        #wrap > .container {
-            padding: 60px 15px 0;
-        }
+<style type="text/css">
+html,
+body {
+    height: 100%;
+}
 
-        .container .text-muted {
-            margin: 20px 0;
-        }
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
+}
 
-        #footer > .container {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
+/* Set the fixed height of the footer here */
+#footer {
+    height: 60px;
+    background-color: #f5f5f5;
+}
 
-        a {
-            border-bottom: 1px dotted;
-        }
+#wrap > .container {
+    padding: 60px 15px 0;
+}
 
-        a:hover {
-            text-decoration: none;
-            border-bottom: 1px solid;;
-        }
+.page-header {
+    margin-top: 0px;
+}
 
-        .success {
-            background-color: #e8e8e8
-        }
+.container .text-muted {
+    margin: 20px 0;
+}
 
-        .danger {
-            background-color: #d0e9c6
-        }
+#footer > .container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
 
-    </style>
+.well {
+    position: relative;
+}
+
+.well a {
+    border-bottom: 1px dotted;
+}
+
+.well hr {
+    border-color: #333;
+}
+
+.well a:hover {
+    text-decoration: none;
+    border-bottom: 1px solid;
+}
+
+.well .statusBackground {
+    position: absolute;
+    bottom: -30px;
+    right: 5px;
+    font-size: 120px;
+    opacity: .1;
+    text-transform: uppercase;
+}
+
+.requestPending .statusBackground {
+    bottom: 50px;
+    color: #31708f;
+}
+
+.requestApproved * {
+    color: #3c763d !important;
+}
+
+.requestDenied * {
+    color: #a94442 !important;
+}
+
+.requestApproved hr {
+    border-color: #3c763d;
+}
+
+.requestDenied hr {
+    border-color: #a94442;
+}
+
+.requestPending {
+
+}
+
+.requestApproved {
+    background-color: #d0e9c6
+}
+
+.requestDenied {
+    background-color: #ebcccc;
+}
+
+.requestApproved .requestActions, .requestDenied .requestActions {
+    display: none !important;
+}
+
+[data-value="*"] {
+    font-weight: 800;
+    color: #428bca !important;
+}
+
+[data-value="*"].active {
+    color: #fff !important;
+}
+
+.optgroup .option {
+    margin: 0px !important;
+    padding: 2px 7px 2px !important;
+    /* essential */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.optgroup.smartfilters {
+    width: 100%;
+    height: auto !important;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid;
+}
+
+.optgroup.smartfilters .optgroup-header {
+    display: none;
+}
+
+.optgroup.smartfilters .option {
+    float: left;
+    font-weight: 800;
+    padding-right: 15px;
+    margin-left: 5px !important;
+}
+
+.optgroup.unit {
+    width: 225px;
+}
+
+.optgroup.afsc {
+    width: 85px;
+}
+
+.optgroup.mds {
+    width: 105px;
+}
+
+.optgroup.instructor.count-5, .optgroup.instructor.count-4, .optgroup.instructor.count-3, .optgroup.instructor.count-2 {
+    width: 250px;
+}
+
+.optgroup.course.count-5 {
+    width: 315px;
+}
+
+.optgroup.course.count-4 {
+    width: 400px;
+}
+
+.optgroup.course.count-3 {
+    width: 500px;
+}
+
+.popover {
+    z-index: 9999 !important;
+}
+
+#messages {
+    word-wrap: break-word;
+}
+
+.tooltip-inner {
+    max-width: 500px;
+}
+
+.selectize-input .item {
+    max-width: 175px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.no-pad {
+    padding: 0px !important;
+}
+
+.well h4 {
+    text-transform: uppercase;
+}
+
+.well.collapsed {
+    padding: 0px 15px;
+    margin-bottom: 5px;
+}
+
+.collapsed .rollup {
+    display: none !important;
+}
+
+.collapsed .statusBackground {
+    display: none;
+}
+
+.btn-label {
+    position: relative;
+    left: -12px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px 0 0 3px;
+}
+
+.btn-labeled {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.btn {
+    margin-bottom: 10px;
+}
+
+.nav-stacked > li {
+    float: none;
+}
+
+.nav-stacked > li + li {
+    margin-top: 2px;
+    margin-left: 0;
+}
+</style>
 </head>
-<body>
+<body ng-controller="mainController">
 
 <!-- Wrap all page content here -->
 <div id="wrap">
@@ -76,22 +262,12 @@
     <!-- Fixed navbar -->
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">FTSS 3</a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                <ul class="nav navbar-nav nav-staked">
+                    <li><a class="navbar-brand" href="#">FTSS 3</a></li>
+                    <li ng-class="isPage('home')"><a href="#"><i class="glyphicon glyphicon-home"></i>&nbsp;Home</a></li>
+                    <li ng-class="isPage('scheduled')"><a href="#/scheduled"><i class="glyphicon glyphicon-calendar"></i>&nbsp;Scheduled Classes</a></li>
+                    <li ng-class="isPage('requests')"><a href="#/requests"><i class="glyphicon glyphicon-time"></i>&nbsp;Course Requests</a></li>
                 </ul>
-            </div>
             <!--/.nav-collapse -->
         </div>
 
@@ -100,14 +276,76 @@
     <!-- Begin page content -->
     <div class="container">
         <div class="page-header">
-            <h1>Field Training Support System <img src="img/spinner-small.gif" id="spinner" class="pull-right" /></h1>
+            <!--
+                        <h1>Field Training Support System <img src="img/spinner-small.gif" id="spinner" class="pull-right"/></h1>
+            -->
+            <div id="messages" ng-cloak>
+                <div class="alert alert-{{messages.class}}">
+                    <b>{{messages.intro}}</b><br ng-show="messages.newLine">{{messages.message}}
+                </div>
+            </div>
+
+            <div class="col-lg-12 no-pad" ng-show="loaded">
+                <div class="col-lg-11">
+
+                    <select
+                            class="hide"
+                            selectize="selectizeOptions"
+                            multiple placeholder="Click or type to add search terms" style="width:100%">
+
+                        <optgroup label="">
+                            <option value="*">Find EVERYTHING for this page (this could take a minute)</option>
+                        </optgroup>
+
+                        <optgroup label="SMART FILTERS">
+                        </optgroup>
+
+                        <optgroup label="UNIT">
+                            <option ng-repeat="u in Units" value="d:{{u.Id}}">{{u.Base}} (Det.
+                                {{u.Detachment}})
+                            </option>
+                        </optgroup>
+
+                        <optgroup label="AFSC">
+                            <option ng-repeat="a in AFSC" value="a:{{a}}">{{a}}</option>
+                        </optgroup>
+
+                        <optgroup label="MDS">
+                            <option ng-repeat="m in MDS" value="m:{{m}}">{{m}}</option>
+                        </optgroup>
+
+                        <optgroup label="INSTRUCTOR">
+                            <option ng-repeat="i in Instructors" value="i:{{i.Id}}">{{i.Instructor.Name}}
+                            </option>
+                        </optgroup>
+
+                        <optgroup label="COURSE">
+                            <option ng-repeat="c in MasterCourseList" value="c:{{c.Id}}"
+                                    on-finish-render="rendered">
+                                {{c.PDS}} - {{c.CourseNumber}} / {{c.CourseTitle}} / {{c.MDS}} / {{c.AFSC}}
+                            </option>
+                        </optgroup>
+                    </select>
+
+                </div>
+
+                <div class="col-lg-1 no-pad">
+                    <button type="button" class="btn btn-default btn-sm" ng-click="reset()">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="collapse()">
+                        <span class="glyphicon glyphicon-resize-vertical"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
         </div>
 
         <!-- angular templating -->
         <!-- this is where content will be injected -->
         <div ng-view></div>
 
-        <div id="placeholder"></div>
     </div>
 </div>
 

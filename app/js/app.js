@@ -1,18 +1,40 @@
 var app, FTSS;
 
 app = angular.module('FTSS',
-	[
-		'ngRoute'
-	]);
+		[
+			'ngRoute',
+			'angular-selectize',
+			'ui.bootstrap',
+		    'smartTable.table'
+		])
+	.directive('onFinishRender', function ($timeout) {
+		return {
+			restrict: 'A',
+			link: function (scope, element, attr) {
+				if (scope.$last === true) {
+					$timeout(function () {
+						scope.$emit(attr.onFinishRender);
+					});
+				}
+			}
+		}
+	});
 
-
+/*
+ * The AngularJS Router will be used to handle various page mappings and links to the HTML Partials for FTSS
+ */
 app.config(function ($routeProvider) {
 	$routeProvider
 
 		// route for the home page
 		.when('/', {
-			templateUrl: 'partials/home.html',
-			controller: 'mainController'
+			templateUrl: 'partials/home.html'
+		})
+
+		// route for the requests page
+		.when('/scheduled', {
+			templateUrl: 'partials/scheduled.html',
+			controller: 'scheduledController'
 		})
 
 		// route for the requests page
@@ -21,11 +43,24 @@ app.config(function ($routeProvider) {
 			controller: 'requestsController'
 		})
 
+		// route for the requests page
+		.when('/requests', {
+			templateUrl: 'partials/requests.html',
+			controller: 'requestsController'
+		})
+
+		.otherwise({
+			redirectTo: '/'
+		})
+
 });
 
 FTSS = (function ($) {
 
 	var _internal = {
+
+		// Load some data locally for development purposes
+		'offline': true,
 
 		// Set to enable various console outputs and breakpoints for debugging
 		'debug': true,
@@ -33,7 +68,10 @@ FTSS = (function ($) {
 		// The URL used for oData REST queries (ListData.svc)
 		'baseURL': 'https://sheppard.eis.aetc.af.mil/982TRG/373TRS/Det306/scheduling/_vti_bin/ListData.svc/',
 
-		'cached': {},
+		// Collection of actions to be done before the page closes
+		'unloadables':
+			[
+			],
 
 		// A collection of private functions used by the library
 		'fn': {
@@ -51,6 +89,7 @@ FTSS = (function ($) {
 				// Some queries seem to return data.results while others do not
 				reduced = data.results || data;
 
+				// This function will recursively delete the __metadata property from collections
 				clean = function (item) {
 
 					try {
@@ -69,18 +108,28 @@ FTSS = (function ($) {
 
 				}
 
+				// Call the previously defined clean() function on the dataset
 				clean(reduced);
 
-				if (reduced[0].Id) {
-					translated = _.reduce(reduced, function (o, v) {
-						o[v.Id] = v;
-						return o;
-					}, {});
-				} else {
+				try {
+
+					// In order to speed up cache lookups, this will map the item.Id from SharePoint to the the key for each object
+					if (reduced[0].Id) {
+
+						translated = _.reduce(reduced, function (o, v) {
+							o[v.Id] = v;
+							return o;
+						}, {});
+
+					} else {
+						translated = reduced;
+					}
+
+				} catch (e) {
 					translated = reduced;
 				}
 
-				// Return the reduced reduced/JSON data
+				// Return the reduced data/JSON data
 				return {
 					'data': translated,
 					'json': JSON.stringify(translated).replace(_internal.baseURL, '')
@@ -97,53 +146,64 @@ FTSS = (function ($) {
 				// First, disable caching on future requests (to prevent infinite loops)
 				options.cache = false;
 
-				// Perform an inquire of the list requesting only the last modified timestamp
-				_api.read({
+				var success = function (timeStamp) {
+
+					var link = 'FTSS_Cache_' + options.source;
+
+					if (_internal.offline ||
+						[
+							link + '_Stamp'
+						] && localStorage[link + '_Stamp'] === timeStamp.json) {
+
+						var data = JSON.parse(localStorage[link + '_Data']);
+
+						return options.success({
+							'data': data,
+							'json': localStorage[link + '_Data']
+						}, options);
+
+					} else {
+
+						var finalSuccess = options.success;
+
+						options.success = function (finalData) {
+
+							finalSuccess(finalData, options);
+
+							localStorage[link + '_Stamp'] = timeStamp.json;
+							localStorage[link + '_Data'] = finalData.json;
+
+						};
+
+						return _api.read(options);
+
+					}
+
+					//return options.http;
+
+				}
+
+				if (_internal.offline) {
+					return success();
+				}
+
+				// Create a SharePoint query to get the last modified item's timestamp of a given list (options.source)
+				return _api.read({
+
+					// The SharePoint list to check against
 					'source': options.source,
+
+					// Select only the highest last modified field
 					'params': {
 						'$select': 'Modified',
 						'$orderby': 'Modified desc',
 						'$top': '1'
 					},
-					'success': function (timeStamp) {
 
-						var link = 'FTSS_Cache_' + options.source;
+					//  Process the received timestamp
+					'success': success,
 
-						if (localStorage[link + '_Stamp'] && localStorage[link + '_Stamp'] === timeStamp.json) {
-
-							var data = JSON.parse(localStorage[link + '_Data']);
-
-							options.success({
-								'data': data,
-								'json': localStorage[link + '_Data']
-							});
-
-							_internal.cached[options.source] = data;
-
-						} else {
-
-							var finalSuccess = options.success;
-
-							(function () {
-
-								options.success = function (finalData) {
-
-									finalSuccess(finalData);
-
-									_internal.cached[options.source] = finalData.data;
-
-									localStorage[link + '_Stamp'] = timeStamp.json;
-									localStorage[link + '_Data'] = finalData.json;
-
-								};
-
-								_api.read(options);
-
-							}());
-
-						}
-
-					}
+					'failure': options.failure
 				});
 
 			}
@@ -153,7 +213,30 @@ FTSS = (function ($) {
 
 	var _api = {
 
-		'cached': _internal.cached,
+		/**
+		 * Iterates through _internal.unloadables to handle any last-minute cleanup actions before the page closes
+		 */
+		'exit': function () {
+
+			_.each(_internal.unloadables, function (item) {
+
+				try {
+					item.apply();
+				} catch (e) {
+				}
+
+			});
+
+		},
+
+		'log': function (data) {
+
+			if (_internal.debug) {
+				console.log((new Date).getTime(), data);
+				//console.trace();
+			}
+
+		},
 
 		/**
 		 * Converts SharePoint Date format into a the locale date string.
@@ -162,7 +245,13 @@ FTSS = (function ($) {
 		 */
 		'fixDate': (function () {
 
-			var dCache = {};
+			// Load the dateCache from localStorage or create a new one
+			var dCache = JSON.parse(localStorage.getItem('FTSS_dateCache')) || {};
+
+			// Add a function to _internal.unloadables to save current dateCache back to localStorage on exit
+			_internal.unloadables.push(function () {
+				localStorage['FTSS_dateCache'] = JSON.stringify(dCache);
+			});
 
 			return function (date) {
 
@@ -184,37 +273,65 @@ FTSS = (function ($) {
 		 */
 		'read': function (options) {
 
-			if (_internal.debug) {
-				console.time(options.source);
-			}
+			console.time(options.source);
 
+			// If caching is enabled, first run fn.cache()
 			if (options.cache) {
 
-				_internal.fn.cache(options);
+				return _internal.fn.cache(options);
 
 			} else {
 
+				// Join the params list if it is an array
 				_.each(options.params, function (param, key) {
 					if (param instanceof Array) {
 						options.params[key] = param.join(',');
 					}
 				});
 
-				var http = $.getJSON(_internal.baseURL + options.source, options.params || null);
+				// If options.failure() is not defined, just call _api.log() with the details
+				options.failure = options.failure || function (req) {
+					_api.log(
+						[
+							'Failure:',
+							this.type,
+							'(' + req.status + ')',
+							this.url
+						].join(' '));
+					_api.log(
+						[
+							options.source,
+							options.params
+						]);
+				};
 
-				http.done(function (data) {
-return;
-					data = data.d;
+				// Use AngularJS $http() if passed; otherwise, just use jQuery's $.ajax()
+				options.http = options.http || $.ajax;
 
-					if (_internal.debug) {
+				//  Return the options.http() function for AngularJS promises to work properly
+				return options.http({
+					'method': 'GET',
+					'dataType': 'json',
+					'url': _internal.baseURL + options.source,
+					'data': options.params || null,
+					'params': options.params || null
+				})
+
+					// On success, log and trim the data and pass to options.success()
+					.success(function (data) {
+
+						data = data.d;
+
 						console.timeEnd(options.source);
-						console.log(data);
-					}
+						_api.log(data);
 
-					// Send the data through the reduce() function first
-					options.success(_internal.fn.reduce(data));
+						// Send the data through the reduce() function first
+						options.success(_internal.fn.reduce(data), options);
 
-				});
+					})
+
+					// Otherwise, send an error
+					.error(options.failure);
 
 			}
 
@@ -226,48 +343,4 @@ return;
 
 }(jQuery));
 
-
-FTSS.read({
-	cache: true,
-	source: 'MasterCourseList',
-	params: {
-		'$select':
-			[
-				'PDS',
-				'MDS',
-				'Days',
-				'Hours',
-				'MinStudents',
-				'MaxStudents',
-				'AFSC',
-				'CourseTitle',
-				'CourseNumber',
-				'Id'
-			]
-	},
-	success: function (data) {
-
-		$('#placeholder').append('Master Course List loaded.<br>');
-
-	}
-});
-
-FTSS.read({
-	cache: true,
-	source: 'Units',
-	params: {
-		'$select':
-			[
-				'Base',
-				'Detachment',
-				'Contact',
-				'DSN',
-				'Id'
-			]
-	},
-	success: function (data) {
-
-		$('#placeholder').append('Units loaded.<br>');
-
-	}
-});
+window.onbeforeunload = FTSS.exit;
