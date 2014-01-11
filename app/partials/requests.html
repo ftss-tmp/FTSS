@@ -29,7 +29,8 @@
 
             <p ng-repeat="s in r.Students.results">
                 <i class="glyphicon glyphicon-user"></i>&nbsp;{{s.Name}}<br>
-                <span ng-show="s.WorkEMail"><i class="glyphicon glyphicon-envelope"></i>&nbsp;<a href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.WorkEMail}}</a><br></span>
+                <span ng-show="s.WorkEMail"><i class="glyphicon glyphicon-envelope"></i>&nbsp;<a
+                        href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.WorkEMail}}</a><br></span>
                 <span ng-show="s.WorkPhone"><i class="glyphicon glyphicon-earphone"></i>&nbsp;{{s.WorkPhone}}<br></span>
                 <br>
             </p>
@@ -41,9 +42,11 @@
         <div class="requestActions">
             <hr>
             <div class="pull-right">
-                <button type="button" class="btn btn-primary btn-labeled"> <span class="btn-label"><i class="glyphicon glyphicon-thumbs-up"></i></span>&nbsp;Approve
+                <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
+                        class="glyphicon glyphicon-thumbs-up"></i></span>&nbsp;Approve
                 </button>
-                <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i class="glyphicon glyphicon-thumbs-down"></i></span>&nbsp;Deny
+                <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
+                        class="glyphicon glyphicon-thumbs-down"></i></span>&nbsp;Deny
                 </button>
             </div>
             <div class="clearfix"></div>

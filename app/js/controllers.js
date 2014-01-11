@@ -11,21 +11,32 @@
 
 		utils.$initPage = function () {
 
+			$rootScope.count = {
+				'results': 0
+			};
+
 			filters.$add($rootScope, $location.$$path);
 
-			if ($updateView) {
+			if ($updateView && FTSS.search && FTSS.search.getValue()) {
 
-				if (FTSS.search.getValue()) {
-					utils.selectize.$onChange(FTSS.search.getValue(), true);
-				} else {
-					utils.$message('ready');
-				}
+				utils.selectize.$onChange(FTSS.search.getValue(), true);
+
+			} else {
+
+				document.body.style.cursor = '';
 
 			}
 
 		};
 
+		$rootScope.$on('$locationChangeStart', function ($rootScope) {
+
+			document.body.style.cursor = 'wait';
+
+		});
+
 		$rootScope.$on('$locationChangeSuccess', utils.$initPage);
+
 	});
 
 	/**
@@ -112,7 +123,7 @@
 
 		}
 
-	}
+	};
 
 
 	/**
@@ -168,20 +179,20 @@
 
 						if (val.slice(-1)[0] === '*') {
 
-							utils.$message({'intro': 'Searching...'});
-
-							delaySearch = setTimeout($updateView, 1);
+							document.body.style.cursor = 'wait';
 
 							updating = true;
 							FTSS.search.setValue('*');
 							FTSS.search.lock();
 							updating = false;
 
+							$updateView({'str': null});
+
 						} else {
 
 							var loadView = function () {
 
-								utils.$message({'intro': 'Searching...'});
+								document.body.style.cursor = 'wait';
 
 								var tags = {};
 
@@ -202,7 +213,7 @@
 							};
 
 							if (instant) {
-								delaySearch = setTimeout(loadView, 500);
+								delaySearch = setTimeout(loadView, 750);
 							} else {
 								loadView();
 							}
@@ -243,8 +254,6 @@
 	app.controller('mainController', function ($scope, $location, $http, $q) {
 
 		var cached;
-
-		FTSS.log('Main Controller Initialized');
 
 		if ($updateView) {
 			return;
@@ -410,8 +419,7 @@
 					})
 				])
 			.then(function (resutls) {
-				FTSS.log('Cache loaded!');
-			})
+			});
 
 	});
 
@@ -428,9 +436,7 @@
 		};
 
 		$updateView = function (filter) {
-
-			filter = filter || {'str': null};
-
+			console.trace();
 			FTSS.read({
 				'http': $http,
 				'params': {
@@ -476,10 +482,7 @@
 
 					} else {
 
-						utils.$message({
-							'class': 'success',
-							'intro': 'Found ' + _.keys($scope.requests).length + ' record(s).'
-						});
+						$scope.count.results = _.keys($scope.requests).length;
 
 						/*
 						 var tags;
@@ -512,6 +515,8 @@
 						});
 
 					}
+
+					document.body.style.cursor = '';
 
 				},
 				'failure': utils.$ajaxFailure
@@ -553,7 +558,7 @@
 
 		$updateView = function (filter) {
 
-			filter = filter || {'str': null};
+			console.trace();
 
 			FTSS.read({
 				'http': $http,
@@ -577,6 +582,8 @@
 
 					$scope.requests = _.toArray(data.data);
 
+					$scope.count.results = _.keys($scope.requests).length;
+
 					if ($scope.requests instanceof Array && $scope.requests.length < 1) {
 
 						utils.$message({
@@ -587,11 +594,6 @@
 
 					} else {
 
-						utils.$message({
-							'class': 'success',
-							'intro': 'Found ' + _.keys($scope.requests).length + ' record(s).'
-						});
-
 						_.each($scope.requests, function (req) {
 
 							req = utils.$decorate($scope, req);
@@ -599,6 +601,8 @@
 						});
 
 					}
+
+					document.body.style.cursor = '';
 
 				},
 				'failure': utils.$ajaxFailure
