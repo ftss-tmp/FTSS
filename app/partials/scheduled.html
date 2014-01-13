@@ -7,15 +7,16 @@
 
 <div class="well {{wellCollapse}}" ng-repeat="r in requests">
 
-    <h4>{{r.course.PDS}} - {{r.course.CourseTitle}} <span
-            class="pull-right">{{r.course.CourseNumber}}</span></h4>
+    <h4>{{r.course.PDS}} - {{r.course.CourseTitle}}
+        <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}<i class="glyphicon glyphicon-calendar"></i></span>
+    </h4>
 
     <hr class="rollup">
 
     <div class="rollup">
 
         <div class="col-lg-6 pull-left">
-            <h4 style="letter-spacing: .1em">{{r.start}} - {{r.end}}</h4>
+            <h4>{{r.course.CourseNumber}}</h4>
             <h5>{{r.det.Base}} (Detachment {{r.det.Detachment}})</h5>
             <i>{{r.instructor}}</i>
 

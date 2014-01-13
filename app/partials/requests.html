@@ -11,15 +11,15 @@
 
         <div class="col-lg-6 pull-left">
             <h4 style="letter-spacing: .1em">{{r.start}} - {{r.end}}</h4>
-            <h5>{{r.det.Base}} (Detachment {{r.det.Detachment}})</h5>
+            <h5><i class="glyphicon glyphicon-map-marker"></i>{{r.det.Base}} (Detachment {{r.det.Detachment}})</h5>
             <i>{{r.instructor}}</i>
 
             <hr>
 
             <blockquote>
                 <p style="color:#777">{{r.notes}}</p>
-                <small><a href="mailto:{{r.ModifiedBy.WorkEMail}}{{r.mail}}">{{r.ModifiedBy.Name}}
-                    ({{r.ModifiedBy.WorkPhone}})</a></small>
+                <small><a href="mailto:{{r.CreatedBy.WorkEMail}}{{r.mail}}">{{r.CreatedBy.Name}}
+                    ({{r.CreatedBy.WorkPhone}})</a></small>
             </blockquote>
 
         </div>
