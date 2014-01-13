@@ -14,6 +14,10 @@
 			if (loading) {
 				document.body.style.cursor = $rootScope.loading = 'wait';
 				utils.$message(false);
+				if (FTSS.search) {
+					FTSS.search.close();
+					FTSS.search.blur();
+				}
 			} else {
 				document.body.style.cursor = $rootScope.loading = '';
 			}
@@ -207,7 +211,6 @@
 							FTSS.utils.log('Selectize *');
 
 							utils.$loading(true);
-							FTSS.search.close();
 
 							if (val.length > 1) {
 								updating = true;
@@ -240,7 +243,7 @@
 
 								});
 
-								FTSS.search.close();
+
 
 								$updateView(filters.$compile(tags));
 
