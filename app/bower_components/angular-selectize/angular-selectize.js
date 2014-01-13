@@ -19,8 +19,7 @@
 					// we're building our data with ng-repeat from an async data source // Jeff McCoy, Jan 2014 for FTSS
 					scope.$watch('loaded', function () {
 						if (scope.loaded) {
-							// Add a custom callback to the FTSS object
-							FTSS.search = $(element).selectize(scope.$eval(attrs.selectize))[0].selectize;
+							$(element).selectize(scope.$eval(attrs.selectize));
 						}
 					}, true);
 				});

@@ -1,6 +1,6 @@
 (function () {
 
-	var filters, $updateView, utils, loaded = false;
+	var filters, search, $updateView, utils, loaded = false;
 
 	// Stores routes, maps for each page and a $add/$compile function to assemble the filters
 	filters = {};
@@ -11,12 +11,13 @@
 
 		utils.$loading = function (loading) {
 
+			utils.$message(false);
+
 			if (loading) {
 				document.body.style.cursor = $rootScope.loading = 'wait';
-				utils.$message(false);
-				if (FTSS.search) {
-					FTSS.search.close();
-					FTSS.search.blur();
+				if (search) {
+					search.close();
+					search.blur();
 				}
 			} else {
 				document.body.style.cursor = $rootScope.loading = '';
@@ -32,19 +33,17 @@
 
 				filters.$add($rootScope, $location.$$path);
 
-				if ($updateView && FTSS.search && FTSS.search.getValue()) {
+				$rootScope.count = {
+					'results': 0
+				};
 
-					utils.selectize.$onChange(FTSS.search.getValue(), true);
+				if ($updateView && search.getValue()) {
 
-				} else {
-
-					$rootScope.count = {
-						'results': 0
-					};
-
-					utils.$loading(false);
+					utils.selectize.$onChange(search.getValue(), true);
 
 				}
+
+				utils.$loading(false);
 
 			}
 
@@ -58,15 +57,19 @@
 
 		});
 
+
 	});
 
 	/**
 	 *  This is the app-wide collection of custom filters used by the search box
 	 */
-	filters.route = {
+	filters.route =
+	{
 		'/scheduled':
 			[
-				{'id': 'custom:test', 'text': 'Test Requests'}
+				{'id': "custom:Start ge datetime'TODAY'", 'text': 'Not Started'},
+				{'id': "custom:End le datetime'TODAY'", 'text': 'Completed'},
+				{'id': "custom:(Start le datetime'TODAY' and End ge datetime'TODAY')", 'text': 'In Progress'}
 			],
 		'/requests':
 			[
@@ -74,33 +77,48 @@
 				{'id': 'custom:Status eq 1', 'text': 'Pending Requests'},
 				{'id': 'custom:Status eq 2', 'text': 'Approved Requests'},
 				{'id': 'custom:Status eq 3', 'text': 'Denied Requests'}
-			]};
+			]
+	};
 
 	/**
 	 * This function handles updating the custom filter list when the view is chaned
 	 */
-	filters.$add = function ($scope, $path) {
+	filters.$add =
+		(function () {
 
-		FTSS.utils.log('Add Filters');
+			var today, date = new Date();
 
-		if (_.isObject(FTSS.search)) {
+			today =
+				[
+					date.getFullYear(),
+					('0' + date.getMonth() + 1).slice(-2),
+					('0' + date.getDate()).slice(-2)
+				]
+					.join('-');
 
-			_.each(_.flatten(filters.route), function (f) {
+			return function ($scope, $path) {
 
-				FTSS.search.removeOption(f.id)
+				FTSS.utils.log('Add Filters');
 
-			});
+				_.each(_.flatten(filters.route), function (f) {
 
-			_.each(filters.route[$path], function (filter) {
+					search.removeOption(f.id)
 
-				filter.optgroup = 'SMART FILTERS';
-				FTSS.search.addOption(filter);
+				});
 
-			});
+				_.each(filters.route[$path], function (filter) {
 
-		}
+					filter.id = filter.id.replace(/TODAY/g, today);
 
-	};
+					filter.optgroup = 'SMART FILTERS';
+
+					search.addOption(filter);
+
+				});
+
+			}
+
+		}());
 
 	/**
 	 * Filter Compile Function
@@ -214,8 +232,8 @@
 
 							if (val.length > 1) {
 								updating = true;
-								FTSS.search.setValue('*');
-								FTSS.search.lock();
+								search.setValue('*');
+								search.lock();
 								updating = false;
 							}
 
@@ -244,7 +262,6 @@
 								});
 
 
-
 								$updateView(filters.$compile(tags));
 
 							}, (instant ? 1 : 500));
@@ -253,7 +270,7 @@
 
 					} else {
 						utils.$loading(false);
-						FTSS.search.unlock();
+						search.unlock();
 					}
 
 				}
@@ -261,6 +278,12 @@
 
 			'$onInitialize': function () {
 				$('.hide').removeClass('hide');
+
+				search = this;
+
+				utils.$initPage();
+
+				utils.$message('ready');
 			},
 
 			'$onType': function () {
@@ -271,7 +294,7 @@
 			 */
 			'$reset': function () {
 				clearTimeout(delaySearch);
-				FTSS.search.clear();
+				search.clear();
 			}
 
 		}
@@ -336,9 +359,6 @@
 			$scope.wellCollapse = $scope.wellCollapse ? '' : 'collapsed';
 		};
 
-		// Add a reference to filters.$add() for our Selectize Directive to call
-		$scope.filter = filters.$add;
-
 		(function () {
 
 			var rCount = 0;
@@ -353,10 +373,6 @@
 					FTSS.utils.log('Caches Loaded');
 
 					$scope.loaded = loaded = true;
-
-					utils.$initPage();
-
-					utils.$message('ready');
 
 				}
 
@@ -512,7 +528,7 @@
 					'$expand':
 						[
 							'Students',
-							'ModifiedBy',
+							'CreatedBy',
 							'ScheduledClass/Course'
 						],
 					'$select':
@@ -520,9 +536,9 @@
 							'Id',
 							'Notes',
 							'Status',
-							'ModifiedBy/Name',
-							'ModifiedBy/WorkEMail',
-							'ModifiedBy/WorkPhone',
+							'CreatedBy/Name',
+							'CreatedBy/WorkEMail',
+							'CreatedBy/WorkPhone',
 							'Students/Name',
 							'Students/WorkEMail',
 							'Students/WorkPhone',
@@ -541,6 +557,8 @@
 					$scope.requests = data;
 
 					$scope.count.results = _.keys($scope.requests || {}).length;
+
+					utils.$loading(false);
 
 					if ($scope.count.results < 1) {
 
@@ -567,9 +585,6 @@
 
 						});
 
-						utils.$loading(false);
-
-						FTSS.utils.log($scope);
 					}
 
 				}, utils.$ajaxFailure);
@@ -644,6 +659,8 @@
 
 					$scope.count.results = _.keys($scope.requests || {}).length;
 
+					utils.$loading(false);
+
 					if ($scope.count.results < 1) {
 
 						utils.$message('empty');
@@ -657,10 +674,6 @@
 						});
 
 					}
-
-					utils.$loading(false);
-
-					FTSS.utils.log($scope);
 
 				}, utils.$ajaxFailure);
 
