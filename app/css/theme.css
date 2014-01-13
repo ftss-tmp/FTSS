@@ -837,11 +837,6 @@ input.search {
     margin-top: 15px;
 }
 
-#pad-wrapper h4 {
-    color: #696d73;
-    font-style: italic;
-}
-
 .content {
     min-width: 400px;
     min-height: 620px;
@@ -1010,5 +1005,5 @@ input.search {
 }
 
 .active .pointer, #dashboard-menu .active .badge {
-    display:block!important;
+    display:block;
 }

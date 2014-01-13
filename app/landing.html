@@ -227,6 +227,10 @@ body {
     display: none;
 }
 
+.collapsed h4 {
+    font-weight: 100;
+}
+
 .btn-label {
     position: relative;
     left: -12px;
@@ -266,6 +270,25 @@ img.badge {
     background: none;
     top: 7px;
     right: -5px;
+    display: none;
+}
+
+a.wait span.badge, a img.badge {
+    display: none !important;
+}
+
+.active a.wait img.badge {
+    display: block !important;
+}
+
+.content {
+    position: absolute;
+    top: 50px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+    overflow: auto;
 }
 
 </style>
@@ -351,10 +374,10 @@ img.badge {
                 <div class="arrow"></div>
                 <div class="arrow_border"></div>
             </div>
-            <a href="#">
+            <a href="#" class="{{loading}}">
                 <i class="glyphicon glyphicon-home"></i>
                 <span>Home</span>
-                <img class="badge" src="img/spinner-small.gif" />
+                <img class="badge" src="img/spinner-small.gif"/>
             </a>
         </li>
 
@@ -363,11 +386,11 @@ img.badge {
                 <div class="arrow"></div>
                 <div class="arrow_border"></div>
             </div>
-            <a href="#/scheduled">
+            <a href="#/scheduled" class="{{loading}}">
                 <i class="glyphicon glyphicon-calendar"></i>
                 <span>Classes</span>
                 <span class="badge">{{count.results}}</span>
-                <img class="badge" src="img/spinner-small.gif" />
+                <img class="badge" src="img/spinner-small.gif"/>
             </a>
         </li>
 
@@ -376,11 +399,11 @@ img.badge {
                 <div class="arrow"></div>
                 <div class="arrow_border"></div>
             </div>
-            <a href="#/requests">
+            <a href="#/requests" class="{{loading}}">
                 <i class="glyphicon glyphicon-time"></i>
                 <span>Requests</span>
                 <span class="badge">{{count.results}}</span>
-                <img class="badge" src="img/spinner-small.gif" />
+                <img class="badge" src="img/spinner-small.gif"/>
             </a>
         </li>
 
@@ -389,11 +412,11 @@ img.badge {
                 <div class="arrow"></div>
                 <div class="arrow_border"></div>
             </div>
-            <a href="#/instructors">
+            <a href="#/instructors" class="{{loading}}">
                 <i class="glyphicon glyphicon-user"></i>
                 <span>Instructors</span>
                 <span class="badge">{{count.results}}</span>
-                <img class="badge" src="img/spinner-small.gif" />
+                <img class="badge" src="img/spinner-small.gif"/>
             </a>
         </li>
 
@@ -430,13 +453,13 @@ img.badge {
 
         <div class="row">
 
-            <div id="messages" ng-cloak>
+            <div id="messages" ng-cloak ng-show="messages.class">
                 <div class="alert alert-{{messages.class}}">
                     <b>{{messages.intro}}</b><br ng-show="messages.newLine">{{messages.message}}
                 </div>
             </div>
 
-            <div class="col-lg-12 no-pad" ng-show="loaded">
+            <div class="col-lg-12 no-pad" ng-show="loaded && !isPage('home')">
                 <div class="col-lg-11">
 
                     <select
