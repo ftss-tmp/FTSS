@@ -475,21 +475,21 @@ a.wait span.badge, a img.badge {
                         </optgroup>
 
                         <optgroup label="UNIT">
-                            <option ng-repeat="u in Units" value="d:{{u.Id}}">{{u.Base}} (Det.
+                            <option ng-repeat="u in Units" value="d:{{u.Id}}" on-finish-render="rendered">{{u.Base}} (Det.
                                 {{u.Detachment}})
                             </option>
                         </optgroup>
 
                         <optgroup label="AFSC">
-                            <option ng-repeat="a in AFSC" value="a:{{a}}">{{a}}</option>
+                            <option ng-repeat="a in AFSC" value="a:{{a}}" on-finish-render="rendered">{{a}}</option>
                         </optgroup>
 
                         <optgroup label="MDS">
-                            <option ng-repeat="m in MDS" value="m:{{m}}">{{m}}</option>
+                            <option ng-repeat="m in MDS" value="m:{{m}}" on-finish-render="rendered">{{m}}</option>
                         </optgroup>
 
                         <optgroup label="INSTRUCTOR">
-                            <option ng-repeat="i in Instructors" value="i:{{i.Id}}">{{i.Instructor.Name}}
+                            <option ng-repeat="i in Instructors" value="i:{{i.Id}}" on-finish-render="rendered">{{i.Instructor.Name}}
                             </option>
                         </optgroup>
 

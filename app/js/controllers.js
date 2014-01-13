@@ -1,6 +1,6 @@
 (function () {
 
-	var filters, $updateView, utils;
+	var filters, $updateView, utils, loaded = false;
 
 	// Stores routes, maps for each page and a $add/$compile function to assemble the filters
 	filters = {};
@@ -9,21 +9,38 @@
 
 	app.run(function ($rootScope, $location) {
 
+		utils.$loading = function (loading) {
+
+			if (loading) {
+				document.body.style.cursor = $rootScope.loading = 'wait';
+				utils.$message(false);
+			} else {
+				document.body.style.cursor = $rootScope.loading = '';
+			}
+
+		};
+
 		utils.$initPage = function () {
 
-			$rootScope.count = {
-				'results': 0
-			};
+			if (loaded) {
 
-			filters.$add($rootScope, $location.$$path);
+				FTSS.utils.log('Init Page');
 
-			if ($updateView && FTSS.search && FTSS.search.getValue()) {
+				filters.$add($rootScope, $location.$$path);
 
-				utils.selectize.$onChange(FTSS.search.getValue(), true);
+				if ($updateView && FTSS.search && FTSS.search.getValue()) {
 
-			} else {
+					utils.selectize.$onChange(FTSS.search.getValue(), true);
 
-				document.body.style.cursor = '';
+				} else {
+
+					$rootScope.count = {
+						'results': 0
+					};
+
+					utils.$loading(false);
+
+				}
 
 			}
 
@@ -31,11 +48,11 @@
 
 		$rootScope.$on('$locationChangeStart', function ($rootScope) {
 
-			document.body.style.cursor = 'wait';
+			FTSS.utils.log('Location Change Start');
+
+			utils.$loading(true);
 
 		});
-
-		$rootScope.$on('$locationChangeSuccess', utils.$initPage);
 
 	});
 
@@ -59,6 +76,8 @@
 	 * This function handles updating the custom filter list when the view is chaned
 	 */
 	filters.$add = function ($scope, $path) {
+
+		FTSS.utils.log('Add Filters');
 
 		if (_.isObject(FTSS.search)) {
 
@@ -89,6 +108,8 @@
 	 */
 	filters.$compile = function (tags) {
 
+		FTSS.utils.log('Compile Tags');
+
 		try {
 
 			var filter =
@@ -113,7 +134,7 @@
 
 			}
 
-			filter = filter.length > 0 ? {'str': filter.join(' or '), 'tags': tags} : {'str': '', 'tags': tags};
+			filter = filter.length > 0 ? filter.join(' or ') : '';
 
 			return filter;
 
@@ -147,6 +168,8 @@
 
 	utils.$decorate = function ($scope, req) {
 
+		FTSS.utils.log('Decorate');
+
 		var schedClass = req.ScheduledClass || req;
 
 		req.course = $scope.MasterCourseList[schedClass.CourseId];
@@ -155,9 +178,9 @@
 
 		req.instructor = $scope.Instructors[schedClass.InstructorId].Instructor.Name || 'No Instructor Identified';
 
-		req.start = FTSS.fixDate(schedClass.Start);
+		req.start = FTSS.utils.fixDate(schedClass.Start);
 
-		req.end = FTSS.fixDate(schedClass.End);
+		req.end = FTSS.utils.fixDate(schedClass.End);
 
 		return req;
 
@@ -171,28 +194,37 @@
 
 			'$onChange': function (val, instant) {
 
-				if (!updating) {
+				FTSS.utils.log('Selectize Change');
 
-					clearTimeout(delaySearch);
+				clearTimeout(delaySearch);
+
+				if (!updating) {
 
 					if (val instanceof Array && val.length > 0) {
 
 						if (val.slice(-1)[0] === '*') {
 
-							document.body.style.cursor = 'wait';
+							FTSS.utils.log('Selectize *');
 
-							updating = true;
-							FTSS.search.setValue('*');
-							FTSS.search.lock();
-							updating = false;
+							utils.$loading(true);
+							FTSS.search.close();
 
-							$updateView({'str': null});
+							if (val.length > 1) {
+								updating = true;
+								FTSS.search.setValue('*');
+								FTSS.search.lock();
+								updating = false;
+							}
+
+							$updateView(false);
 
 						} else {
 
-							var loadView = function () {
+							delaySearch = setTimeout(function () {
 
-								document.body.style.cursor = 'wait';
+								FTSS.utils.log('Selectize Filtered');
+
+								utils.$loading(true);
 
 								var tags = {};
 
@@ -208,19 +240,16 @@
 
 								});
 
+								FTSS.search.close();
+
 								$updateView(filters.$compile(tags));
 
-							};
-
-							if (instant) {
-								delaySearch = setTimeout(loadView, 750);
-							} else {
-								loadView();
-							}
+							}, (instant ? 1 : 500));
 
 						}
 
 					} else {
+						utils.$loading(false);
 						FTSS.search.unlock();
 					}
 
@@ -229,8 +258,6 @@
 
 			'$onInitialize': function () {
 				$('.hide').removeClass('hide');
-				$('#spinner').hide();
-				setTimeout(utils.$initPage, 250);
 			},
 
 			'$onType': function () {
@@ -251,9 +278,9 @@
 	/**
 	 * The main controller performs the initial caching functions as well as setting up other app-wide $scope objects
 	 */
-	app.controller('mainController', function ($scope, $location, $http, $q) {
+	app.controller('mainController', function ($scope, $location, SharePoint) {
 
-		var cached;
+		FTSS.utils.log('Main Controller');
 
 		if ($updateView) {
 			return;
@@ -262,11 +289,26 @@
 		// Messages is used to pass various messages regarding program state to the user (including errors);
 		utils.$message = function (msg) {
 
-			if (msg === 'ready') {
-				msg = {
-					'intro': "You're ready to go.  ",
-					'message': 'To get started, use the search box below to create a tag list.  The page will update as you add more tags.'
-				};
+			switch (msg) {
+
+				case false:
+					$scope.messages = {};
+					return;
+
+				case 'empty':
+					msg = {
+						'class': 'warning',
+						'intro': 'Nothing Found!  ',
+						'message': "There doesn't seem to be anything that matches your request.  Maybe you should add some more tags to your search."
+					};
+					break;
+
+				case 'ready':
+					msg = {
+						'intro': "You're ready to go.  ",
+						'message': 'To get started, use the search box below to create a tag list.  The page will update as you add more tags.'
+					};
+
 			}
 
 			$scope.messages = {
@@ -294,25 +336,30 @@
 		// Add a reference to filters.$add() for our Selectize Directive to call
 		$scope.filter = filters.$add;
 
-		/**
-		 * The Cached() function loads the FTSS.Read() return and adds it to the mainController $scope
-		 *
-		 * @param data Object
-		 * @param options Object
-		 */
-		cached = function (data, options) {
-			$scope[options.source || options] = data.data || data;
-		};
+		(function () {
 
-		/**
-		 * This event allows us to detect the completion of the searchbox option tag generation
-		 */
-		$scope.$on('rendered', function () {
-			$scope.loaded = true;
+			var rCount = 0;
 
-			utils.$message('ready');
-		});
+			/**
+			 * This event allows us to detect the completion of the searchbox option tag generation
+			 */
+			$scope.$on('rendered', function () {
 
+				if (++rCount > 4) {
+
+					FTSS.utils.log('Caches Loaded');
+
+					$scope.loaded = loaded = true;
+
+					utils.$initPage();
+
+					utils.$message('ready');
+
+				}
+
+			});
+
+		}());
 
 		/**
 		 * The Selectize init options
@@ -347,85 +394,98 @@
 			'onChange': utils.selectize.$onChange
 		};
 
-		$q.all(
-				[
-				/**
-				 * Load the MasterCourseList into the $scope from cache if able
-				 */
-					FTSS.read({
-						'http': $http,
-						'cache': true,
-						'source': 'MasterCourseList',
-						'params': {
-							'$select':
-								[
-									'PDS',
-									'MDS',
-									'Days',
-									'Hours',
-									'MinStudents',
-									'MaxStudents',
-									'AFSC',
-									'CourseTitle',
-									'CourseNumber',
-									'Id'
-								]
-						},
-						'success': function (data, options) {
+		SharePoint
+			.get({
 
-							cached(_.compact(_.uniq(_.pluck(data.data, 'AFSC'))), 'AFSC');
-							cached(_.compact(_.uniq(_.pluck(data.data, 'MDS'))), 'MDS');
+				'cache': true,
+				'source': 'MasterCourseList',
+				'params': {
+					'$select':
+						[
+							'PDS',
+							'MDS',
+							'Days',
+							'Hours',
+							'MinStudents',
+							'MaxStudents',
+							'AFSC',
+							'CourseTitle',
+							'CourseNumber',
+							'Id'
+						]
+				}
 
-							cached(data, options);
-						},
-						'failure': utils.$ajaxFailure
-					}),
+			})
+			.then(function (response) {
+				FTSS.utils.log('MasterCourseList');
+				$scope.MasterCourseList = response;
 
-					FTSS.read({
-						'http': $http,
-						'cache': true,
-						'source': 'Units',
-						'params': {
-							'$select':
-								[
-									'Base',
-									'Detachment',
-									'Contact',
-									'DSN',
-									'Id'
-								]
-						},
-						'success': cached,
-						'failure': utils.$ajaxFailure
-					}),
+				$scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
+				$scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
 
-					FTSS.read({
-						'http': $http,
-						'cache': true,
-						'source': 'Instructors',
-						'params': {
-							'$expand': 'Instructor',
-							'$select':
-								[
-									'Id',
-									'InstructorId',
-									'Instructor/Name',
-									'Instructor/WorkEMail',
-									'Instructor/WorkPhone'
-								]
-						},
-						'success': cached,
-						'failure': utils.$ajaxFailure
-					})
-				])
-			.then(function (resutls) {
+			});
+
+
+		SharePoint
+			.get({
+
+				'cache': true,
+				'source': 'Units',
+				'params': {
+					'$select':
+						[
+							'Base',
+							'Detachment',
+							'Contact',
+							'DSN',
+							'Id'
+						]
+				}
+
+			})
+			.then(function (response) {
+				FTSS.utils.log('Units');
+				$scope.Units = response;
+			});
+
+		SharePoint
+			.get({
+
+				'cache': true,
+				'source': 'Instructors',
+				'params': {
+					'$expand': 'Instructor',
+					'$select':
+						[
+							'Id',
+							'InstructorId',
+							'Instructor/Name',
+							'Instructor/WorkEMail',
+							'Instructor/WorkPhone'
+						]
+				}
+
+			})
+			.then(function (response) {
+				FTSS.utils.log('Instructors');
+				$scope.Instructors = response;
 			});
 
 	});
 
 
-	app.controller('requestsController', function ($scope, $http) {
+	app.controller('homeController', function ($scope) {
 
+		$updateView = function () {
+		};
+
+		utils.$loading(false);
+
+	});
+
+
+	app.controller('requestsController', function ($scope, SharePoint) {
+		FTSS.utils.log('Request Controller');
 		filters.map =
 		{
 			'd': 'ScheduledClass/DetachmentId eq ',
@@ -436,11 +496,16 @@
 		};
 
 		$updateView = function (filter) {
-			console.trace();
-			FTSS.read({
-				'http': $http,
+			FTSS.utils.log('Request update');
+			$scope.requests =
+				[
+				];
+
+			SharePoint.get({
+
+				'source': 'Requests',
 				'params': {
-					'$filter': filter.str,
+					'$filter': filter,
 					'$expand':
 						[
 							'Students',
@@ -466,34 +531,19 @@
 							'ScheduledClass/OtherReservedSeats',
 							'ScheduledClass/InstructorId'
 						]
-				},
-				'source': 'Requests',
-				'success': function (data) {
+				}
 
-					$scope.requests = data.data;
+			}).then(function (data) {
+					FTSS.utils.log('Request Data Loaded');
+					$scope.requests = data;
 
-					if ($scope.requests instanceof Array && $scope.requests.length < 1) {
+					$scope.count.results = _.keys($scope.requests || {}).length;
 
-						utils.$message({
-							'class': 'warning',
-							'intro': 'Nothing Found!  ',
-							'message': "There doesn't seem to be anything that matches your request.  Maybe you should add some more tags to your search."
-						});
+					if ($scope.count.results < 1) {
+
+						utils.$message('empty');
 
 					} else {
-
-						$scope.count.results = _.keys($scope.requests).length;
-
-						/*
-						 var tags;
-
-						 tags = FTSS.search.$control.find('.item');
-
-						 _.each(FTSS.search.$control.find('.item'), function (item) {
-						 console.log(item);
-						 console.log(item.dataset.value)
-						 });
-						 */
 
 						_.each($scope.requests, function (req) {
 
@@ -514,21 +564,24 @@
 
 						});
 
+						utils.$loading(false);
+
+						FTSS.utils.log($scope);
 					}
 
-					document.body.style.cursor = '';
+				}, utils.$ajaxFailure);
 
-				},
-				'failure': utils.$ajaxFailure
-			});
+		}
 
-		};
+		utils.$initPage();
+
 
 	});
 
 
-	app.controller('scheduledController', function ($scope, $http) {
+	app.controller('scheduledController', function ($scope, SharePoint) {
 
+		FTSS.utils.log('Schedule Controller')
 		/*$scope.requests =
 		 [
 		 ];*/
@@ -557,14 +610,16 @@
 		};
 
 		$updateView = function (filter) {
+			FTSS.utils.log('Schedule Update');
+			$scope.requests =
+				[
+				];
 
-			console.trace();
+			SharePoint.get({
 
-			FTSS.read({
-				'http': $http,
 				'source': 'ScheduledClasses',
 				'params': {
-					'$filter': filter.str,
+					'$filter': filter,
 					'$expand': 'Course',
 					'$select':
 						[
@@ -577,20 +632,18 @@
 							'HostReservedSeats',
 							'OtherReservedSeats'
 						]
-				},
-				'success': function (data) {
+				}
 
-					$scope.requests = _.toArray(data.data);
+			})
+				.then(function (data) {
+					FTSS.utils.log('Schedule Loaded');
+					$scope.requests = data;
 
-					$scope.count.results = _.keys($scope.requests).length;
+					$scope.count.results = _.keys($scope.requests || {}).length;
 
-					if ($scope.requests instanceof Array && $scope.requests.length < 1) {
+					if ($scope.count.results < 1) {
 
-						utils.$message({
-							'class': 'warning',
-							'intro': 'Nothing Found!  ',
-							'message': "There doesn't seem to be anything that matches your request.  Maybe you should add some more tags to your search."
-						});
+						utils.$message('empty');
 
 					} else {
 
@@ -602,13 +655,15 @@
 
 					}
 
-					document.body.style.cursor = '';
+					utils.$loading(false);
 
-				},
-				'failure': utils.$ajaxFailure
-			});
+					FTSS.utils.log($scope);
+
+				}, utils.$ajaxFailure);
 
 		};
+
+		utils.$initPage();
 
 	});
 
