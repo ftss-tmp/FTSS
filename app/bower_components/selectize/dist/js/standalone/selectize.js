@@ -1686,7 +1686,7 @@
 				this.clear();
 				var items = $.isArray(value) ? value : [value];
 				for (var i = 0, n = items.length; i < n; i++) {
-					this.addItem(items[i]);
+ 					this.addItem(items[i]);
 				}
 			});
 		},
