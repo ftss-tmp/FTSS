@@ -1,0 +1,16 @@
+WEB
+1
+https://app-eis.aetc.af.mil/amt/_vti_bin/owssvr.dll?XMLDATA=1&List={53545688-06B6-4517-AC36-5ACBB7D4C8A2}&View={78C54213-5538-48BE-8E1A-CCB15BDF57BA}&RowLimit=0&RootFolder=%2famt%2fLists%2fMonth%20Year%20Days
+
+Selection={53545688-06B6-4517-AC36-5ACBB7D4C8A2}-{78C54213-5538-48BE-8E1A-CCB15BDF57BA}
+EditWebPage=
+Formatting=None
+PreFormattedTextToColumns=True
+ConsecutiveDelimitersAsOne=True
+SingleBlockTextImport=False
+DisableDateRecognition=False
+DisableRedirections=False
+SharePointApplication=https://app-eis.aetc.af.mil/amt/_vti_bin
+SharePointListView={78C54213-5538-48BE-8E1A-CCB15BDF57BA}
+SharePointListName={53545688-06B6-4517-AC36-5ACBB7D4C8A2}
+RootFolder=/amt/Lists/Month Year Days

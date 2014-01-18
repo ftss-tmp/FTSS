@@ -1,0 +1,16 @@
+WEB
+1
+https://app-eis.aetc.af.mil/amt/_vti_bin/owssvr.dll?XMLDATA=1&List={DAC14E1E-49D9-4A34-BDF8-1BAC9CBDED81}&View={F8ED8AC2-EBB4-4ECF-BBD6-5B506B4786F8}&RowLimit=0&RootFolder=%2famt%2fLists%2fMaster%20Course%20List
+
+Selection={DAC14E1E-49D9-4A34-BDF8-1BAC9CBDED81}-{F8ED8AC2-EBB4-4ECF-BBD6-5B506B4786F8}
+EditWebPage=
+Formatting=None
+PreFormattedTextToColumns=True
+ConsecutiveDelimitersAsOne=True
+SingleBlockTextImport=False
+DisableDateRecognition=False
+DisableRedirections=False
+SharePointApplication=https://app-eis.aetc.af.mil/amt/_vti_bin
+SharePointListView={F8ED8AC2-EBB4-4ECF-BBD6-5B506B4786F8}
+SharePointListName={DAC14E1E-49D9-4A34-BDF8-1BAC9CBDED81}
+RootFolder=/amt/Lists/Master Course List

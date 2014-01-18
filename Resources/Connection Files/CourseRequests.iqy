@@ -1,0 +1,16 @@
+WEB
+1
+https://app-eis.aetc.af.mil/amt/_vti_bin/owssvr.dll?XMLDATA=1&List={DD660DD9-495D-40FA-8486-FE34B3829F14}&View={399D2A51-4C4C-430F-9FB2-7B866E10FC27}&RowLimit=0&RootFolder=%2famt%2fLists%2fRequest
+
+Selection={DD660DD9-495D-40FA-8486-FE34B3829F14}-{399D2A51-4C4C-430F-9FB2-7B866E10FC27}
+EditWebPage=
+Formatting=None
+PreFormattedTextToColumns=True
+ConsecutiveDelimitersAsOne=True
+SingleBlockTextImport=False
+DisableDateRecognition=False
+DisableRedirections=False
+SharePointApplication=https://app-eis.aetc.af.mil/amt/_vti_bin
+SharePointListView={399D2A51-4C4C-430F-9FB2-7B866E10FC27}
+SharePointListName={DD660DD9-495D-40FA-8486-FE34B3829F14}
+RootFolder=/amt/Lists/Request
