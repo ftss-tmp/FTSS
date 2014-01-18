@@ -153,20 +153,36 @@ app = angular.module('FTSS',
 
 	app.factory('SharePoint', function ($http) {
 
-		return {
+		var writeParams = function (opt) {
 
-			'get': function (options) {
+			// Join the params list if it is an array
+			_.each(opt.params, function (param, key) {
+				if (param instanceof Array) {
+					opt.params[key] = param.join(',');
+				}
+			});
+
+		};
+
+		FTSS.SP = {
+
+			'create': function (options) {
+
+				return $http({
+					'method': 'POST',
+					'url': _internal.baseURL + options.source,
+					'data': options.params
+				});
+
+			},
+
+			'read': function (options) {
 
 				var getData, checkCache;
 
 				getData = function (opt) {
 
-					// Join the params list if it is an array
-					_.each(opt.params, function (param, key) {
-						if (param instanceof Array) {
-							opt.params[key] = param.join(',');
-						}
-					});
+					writeParams(opt);
 
 					if (options.params && _.isEmpty(options.params.$filter)) {
 						delete options.params.$filter;
@@ -238,24 +254,36 @@ app = angular.module('FTSS',
 
 						'then': function (callback) {
 
-							getData({
+							if (_internal.offline) {
 
-								// The SharePoint list to check against
-								'source': options.source,
+								callback(
+									JSON.parse(
+										localStorage.getItem('SP_REST_Cache_' + options.source + '_Data')
+									)
+								);
 
-								// Select only the highest last modified field
-								'params': {
-									'$select': 'Modified',
-									'$orderby': 'Modified desc',
-									'$top': '1'
-								}
+							} else {
 
-							})
-								.then(function (data) {
+								getData({
 
-									checkCache(data[0].Modified, callback);
+									// The SharePoint list to check against
+									'source': options.source,
 
-								});
+									// Select only the highest last modified field
+									'params': {
+										'$select': 'Modified',
+										'$orderby': 'Modified desc',
+										'$top': '1'
+									}
+
+								})
+									.then(function (data) {
+
+										checkCache(data[0].Modified, callback);
+
+									});
+
+							}
 
 						},
 						'catch': function (callback) {
@@ -271,6 +299,8 @@ app = angular.module('FTSS',
 			}
 
 		}
+
+		return FTSS.SP;
 	});
 
 
