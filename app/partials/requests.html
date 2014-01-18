@@ -2,16 +2,16 @@
 
     <div class="statusBackground">{{r.status}}</div>
 
-    <h4><i class="glyphicon glyphicon-{{r.icon}}"></i> {{r.course.PDS}} - {{r.course.CourseTitle}} <span
-            class="pull-right">{{r.course.CourseNumber}}</span></h4>
+    <h4><i class="glyphicon glyphicon-{{r.icon}}"></i> {{r.course.PDS}} - {{r.course.Title}} <span
+            class="pull-right">{{r.course.Number}}</span></h4>
 
     <hr class="rollup">
 
     <div class="rollup">
 
         <div class="col-lg-6 pull-left">
-            <h4 style="letter-spacing: .1em">{{r.start}} - {{r.end}}</h4>
-            <h5><i class="glyphicon glyphicon-map-marker"></i>{{r.det.Base}} (Detachment {{r.det.Detachment}})</h5>
+            <h4 style="letter-spacing: .1em"><i class="glyphicon glyphicon-calendar"></i>{{r.start}} - {{r.end}}</h4>
+            <h5><i class="glyphicon glyphicon-map-marker"></i>{{r.det.Base}} (Detachment {{r.det.Det}})</h5>
             <i>{{r.instructor}}</i>
 
             <hr>
