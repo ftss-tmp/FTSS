@@ -19,6 +19,7 @@
 <script type="text/javascript" src="bower_components/angular-selectize/angular-selectize.js"></script>
 <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
+<script type="text/javascript" src="bower_components/lz-string/libs/lz-string-1.3.3.js"></script>
 
 <style type="text/css">
 html,
@@ -389,7 +390,7 @@ i.glyphicon {
                 <div class="arrow"></div>
                 <div class="arrow_border"></div>
             </div>
-            <a href="#/scheduled" class="{{loading}}">
+            <a href="#/scheduled/{{permaLink}}" class="{{loading}}">
                 <i class="glyphicon glyphicon-calendar"></i>
                 <span>Classes</span>
                 <span class="badge">{{count.results}}</span>
@@ -402,7 +403,7 @@ i.glyphicon {
                 <div class="arrow"></div>
                 <div class="arrow_border"></div>
             </div>
-            <a href="#/requests" class="{{loading}}">
+            <a href="#/requests/{{permaLink}}" class="{{loading}}">
                 <i class="glyphicon glyphicon-time"></i>
                 <span>Requests</span>
                 <span class="badge">{{count.results}}</span>
@@ -415,7 +416,7 @@ i.glyphicon {
                 <div class="arrow"></div>
                 <div class="arrow_border"></div>
             </div>
-            <a href="#/instructors" class="{{loading}}">
+            <a href="#/instructors/{{permaLink}}" class="{{loading}}">
                 <i class="glyphicon glyphicon-user"></i>
                 <span>Instructors</span>
                 <span class="badge">{{count.results}}</span>
@@ -456,69 +457,75 @@ i.glyphicon {
 
         <div class="row">
 
+            <div ng-show="loaded && !isPage('home')">
+
+                <div class="col-lg-12 no-pad">
+                    <div class="col-lg-11">
+
+                        <select
+                                class="hide"
+                                selectize="selectizeOptions"
+                                multiple placeholder="Click or type to add search terms" style="width:100%">
+
+                            <optgroup label="">
+                                <option value="*">Find EVERYTHING for this page (this could take a minute)</option>
+                            </optgroup>
+
+                            <optgroup label="SMART FILTERS">
+                            </optgroup>
+
+                            <optgroup label="UNIT">
+                                <option ng-repeat="u in Units" value="d:{{u.Id}}" on-finish-render="rendered">{{u.Base}}
+                                    (Det.
+                                    {{u.Det}})
+                                </option>
+                            </optgroup>
+
+                            <optgroup label="AFSC">
+                                <option ng-repeat="a in AFSC" value="a:{{a}}" on-finish-render="rendered">{{a}}</option>
+                            </optgroup>
+
+                            <optgroup label="MDS">
+                                <option ng-repeat="m in MDS" value="m:{{m}}" on-finish-render="rendered">{{m}}</option>
+                            </optgroup>
+
+                            <optgroup label="INSTRUCTOR">
+                                <option ng-repeat="i in Instructors" value="i:{{i.Id}}" on-finish-render="rendered">
+                                    {{i.Instructor.Name}}
+                                </option>
+                            </optgroup>
+
+                            <optgroup label="COURSE">
+                                <option ng-repeat="c in MasterCourseList" value="c:{{c.Id}}"
+                                        on-finish-render="rendered">
+                                    {{c.PDS}} - {{c.Number}} / {{c.Title}} / {{c.MDS}} / {{c.AFSC}}
+                                </option>
+                            </optgroup>
+                        </select>
+
+                    </div>
+
+                    <div class="col-lg-1 no-pad">
+                        <button type="button" class="btn btn-default btn-sm" ng-click="reset()">
+                            <span class="glyphicon glyphicon-repeat"></span>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" ng-click="collapse()">
+                            <span class="glyphicon glyphicon-resize-vertical"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <hr>
+
+            </div>
+
             <div id="messages" ng-cloak ng-show="messages.class">
                 <div class="alert alert-{{messages.class}}">
                     <b>{{messages.intro}}</b><br ng-show="messages.newLine">{{messages.message}}
                 </div>
             </div>
-
-            <div class="col-lg-12 no-pad" ng-show="loaded && !isPage('home')">
-                <div class="col-lg-11">
-
-                    <select
-                            class="hide"
-                            selectize="selectizeOptions"
-                            multiple placeholder="Click or type to add search terms" style="width:100%">
-
-                        <optgroup label="">
-                            <option value="*">Find EVERYTHING for this page (this could take a minute)</option>
-                        </optgroup>
-
-                        <optgroup label="SMART FILTERS">
-                        </optgroup>
-
-                        <optgroup label="UNIT">
-                            <option ng-repeat="u in Units" value="d:{{u.Id}}" on-finish-render="rendered">{{u.Base}} (Det.
-                                {{u.Detachment}})
-                            </option>
-                        </optgroup>
-
-                        <optgroup label="AFSC">
-                            <option ng-repeat="a in AFSC" value="a:{{a}}" on-finish-render="rendered">{{a}}</option>
-                        </optgroup>
-
-                        <optgroup label="MDS">
-                            <option ng-repeat="m in MDS" value="m:{{m}}" on-finish-render="rendered">{{m}}</option>
-                        </optgroup>
-
-                        <optgroup label="INSTRUCTOR">
-                            <option ng-repeat="i in Instructors" value="i:{{i.Id}}" on-finish-render="rendered">{{i.Instructor.Name}}
-                            </option>
-                        </optgroup>
-
-                        <optgroup label="COURSE">
-                            <option ng-repeat="c in MasterCourseList" value="c:{{c.Id}}"
-                                    on-finish-render="rendered">
-                                {{c.PDS}} - {{c.CourseNumber}} / {{c.CourseTitle}} / {{c.MDS}} / {{c.AFSC}}
-                            </option>
-                        </optgroup>
-                    </select>
-
-                </div>
-
-                <div class="col-lg-1 no-pad">
-                    <button type="button" class="btn btn-default btn-sm" ng-click="reset()">
-                        <span class="glyphicon glyphicon-repeat"></span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm" ng-click="collapse()">
-                        <span class="glyphicon glyphicon-resize-vertical"></span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <hr>
 
         </div>
 
