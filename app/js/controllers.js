@@ -188,25 +188,24 @@
 	};
 
 
-	utils.$decorate = function ($scope, req) {
+			FTSS.utils.log('Decorate', true);
 
-		FTSS.utils.log('Decorate');
+			try {
 
-		var schedClass = req.ScheduledClass || req;
+				var schedClass = req.Scheduled || req;
 
-		req.course = $scope.MasterCourseList[schedClass.CourseId];
+				req.course = $scope.MasterCourseList[schedClass.CourseId];
 
-		req.det = $scope.Units[schedClass.DetachmentId];
+				req.det = $scope.Units[schedClass.UnitId];
 
-		req.instructor = $scope.Instructors[schedClass.InstructorId].Instructor.Name || 'No Instructor Identified';
+				req.instructor = $scope.Instructors[schedClass.InstructorId].Instructor || {};
 
-		req.start = FTSS.utils.fixDate(schedClass.Start);
+				req.instructor = req.instructor.Name || 'No Instructor Identified';
 
-		req.end = FTSS.utils.fixDate(schedClass.End);
+				req.start = FTSS.utils.fixDate(schedClass.Start);
 
-		return req;
+				req.end = FTSS.utils.fixDate(schedClass.End);
 
-	};
 
 	utils.selectize = (function () {
 
@@ -421,16 +420,16 @@
 				'params': {
 					'$select':
 						[
+							'Id',
 							'PDS',
 							'MDS',
 							'Days',
 							'Hours',
-							'MinStudents',
-							'MaxStudents',
+							'Min',
+							'Max',
 							'AFSC',
-							'CourseTitle',
-							'CourseNumber',
-							'Id'
+							'Title',
+							'Number'
 						]
 				}
 
@@ -453,11 +452,11 @@
 				'params': {
 					'$select':
 						[
+							'Id',
 							'Base',
-							'Detachment',
-							'Contact',
-							'DSN',
-							'Id'
+							'Det',
+							'Email',
+							'Phone'
 						]
 				}
 
@@ -473,15 +472,15 @@
 				'cache': true,
 				'source': 'Instructors',
 				'params': {
-					'$expand': 'Instructor',
-					'$select':
-						[
-							'Id',
-							'InstructorId',
-							'Instructor/Name',
-							'Instructor/WorkEMail',
-							'Instructor/WorkPhone'
-						]
+					'$expand': 'Instructor'/*,
+					 '$select':
+					 [
+					 'Id',
+					 'InstructorId',
+					 'Instructor/Name',
+					 'Instructor/WorkEMail',             <-- This isn't working on the local development SP copy for some reason...
+					 'Instructor/WorkPhone'
+					 ]*/
 				}
 
 			})
@@ -507,11 +506,11 @@
 		FTSS.utils.log('Request Controller');
 		filters.map =
 		{
-			'd': 'ScheduledClass/DetachmentId eq ',
-			'm': "ScheduledClass/Course/MDS eq '",
-			'a': "ScheduledClass/Course/AFSC eq '",
-			'i': 'ScheduledClass/InstructorId eq ',
-			'c': 'ScheduledClass/CourseId eq '
+			'd': 'Scheduled/UnitId eq ',
+			'm': "Scheduled/Course/MDS eq '",
+			'a': "Scheduled/Course/AFSC eq '",
+			'i': 'Scheduled/InstructorId eq ',
+			'c': 'Scheduled/CourseId eq '
 		};
 
 		$updateView = function (filter) {
@@ -529,7 +528,7 @@
 						[
 							'Students',
 							'CreatedBy',
-							'ScheduledClass/Course'
+							'Scheduled/Course'
 						],
 					'$select':
 						[
@@ -542,13 +541,13 @@
 							'Students/Name',
 							'Students/WorkEMail',
 							'Students/WorkPhone',
-							'ScheduledClass/DetachmentId',
-							'ScheduledClass/CourseId',
-							'ScheduledClass/Start',
-							'ScheduledClass/End',
-							'ScheduledClass/HostReservedSeats',
-							'ScheduledClass/OtherReservedSeats',
-							'ScheduledClass/InstructorId'
+							'Scheduled/UnitId',
+							'Scheduled/CourseId',
+							'Scheduled/Start',
+							'Scheduled/End',
+							'Scheduled/Host',
+							'Scheduled/Other',
+							'Scheduled/InstructorId'
 						]
 				}
 
@@ -573,11 +572,11 @@
 							req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
 							req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
 
-							req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.course.CourseTitle + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
+							req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
 							req.notes = req.Notes || 'Requested by';
 
-							req.openSeats = req.course.MaxStudents - req.ScheduledClass.HostReservedSeats - req.ScheduledClass.OtherReservedSeats;
+							req.openSeats = req.course.Max - req.Scheduled.Host - req.Scheduled.Other;
 							req.reqSeats = req.Students.results.length;
 
 							req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
@@ -620,35 +619,37 @@
 
 		filters.map =
 		{
-			'd': 'DetachmentId eq ',
+			'd': 'UnitId eq ',
 			'm': "Course/MDS eq '",
 			'a': "Course/AFSC eq '",
 			'i': 'InstructorId eq ',
 			'c': 'CourseId eq '
 		};
 
-		$updateView = function (filter) {
+		$scope.update.view = function (filter) {
+
 			FTSS.utils.log('Schedule Update');
+
 			$scope.requests =
 				[
 				];
 
-			SharePoint.get({
+			SharePoint.read({
 
-				'source': 'ScheduledClasses',
+				'source': 'Scheduled',
 				'params': {
 					'$filter': filter,
 					'$expand': 'Course',
 					'$select':
 						[
 							'Id',
-							'DetachmentId',
+							'UnitId',
 							'CourseId',
 							'Start',
 							'End',
 							'InstructorId',
-							'HostReservedSeats',
-							'OtherReservedSeats'
+							'Host',
+							'Other'
 						]
 				}
 
