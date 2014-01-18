@@ -375,19 +375,19 @@ app.config(function ($routeProvider) {
 		})
 
 		// route for the requests page
-		.when('/scheduled', {
+		.when('/scheduled/:link?', {
 			templateUrl: 'partials/scheduled.html',
 			controller: 'scheduledController'
 		})
 
 		// route for the requests page
-		.when('/requests', {
+		.when('/requests/:link?', {
 			templateUrl: 'partials/requests.html',
 			controller: 'requestsController'
 		})
 
 		// route for the requests page
-		.when('/requests', {
+		.when('/requests/:link?', {
 			templateUrl: 'partials/requests.html',
 			controller: 'requestsController'
 		})
