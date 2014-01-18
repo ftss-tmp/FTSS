@@ -1,0 +1,14 @@
+{
+  "name": "lz-string",
+  "homepage": "https://github.com/pieroxy/lz-string",
+  "_release": "1f5e8b4e6b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "1f5e8b4e6b6f75370cd3c198edcf555517ab26e5"
+  },
+  "_source": "git://github.com/pieroxy/lz-string.git",
+  "_target": "*",
+  "_originalSource": "lz-string",
+  "_direct": true
+}
