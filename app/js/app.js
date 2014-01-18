@@ -127,14 +127,28 @@ app = angular.module('FTSS',
 	}());
 
 
-	utils.log = function (data) {
+	utils.log = (function () {
 
-		if (_internal.debug && console) {
-			console.log((new Date).getTime(), data);
-			//	console.trace();
+		var last = (new Date).getTime();
+
+		return function (data, noStamp) {
+
+			if (_internal.debug && console) {
+
+				var stamp = (new Date).getTime();
+
+				if (noStamp) {
+					console.info(data);
+				} else {
+					console.log(stamp, data, stamp - last);
+				}
+
+				last = stamp;
+				//console.trace();
+			}
+
 		}
-
-	};
+	}());
 
 
 	app.factory('SharePoint', function ($http) {
