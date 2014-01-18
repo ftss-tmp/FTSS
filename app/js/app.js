@@ -24,8 +24,10 @@ app = angular.module('FTSS',
 	var _internal, utils = {};
 
 	_internal = {
-		'baseURL': 'https://sheppard.eis.aetc.af.mil/982TRG/373TRS/Det306/scheduling/_vti_bin/ListData.svc/',
+		//'baseURL': 'https://sheppard.eis.aetc.af.mil/982TRG/373TRS/Det306/scheduling/_vti_bin/ListData.svc/',
+		'baseURL': 'http://dev/_vti_bin/ListData.svc/',
 		'debug': true,
+		'offline': true,
 		'noCache': false
 	};
 
