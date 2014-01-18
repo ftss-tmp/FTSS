@@ -168,7 +168,7 @@ app = angular.module('FTSS',
 						}
 					});
 
-					if (options.params && !options.params.$filter) {
+					if (options.params && _.isEmpty(options.params.$filter)) {
 						delete options.params.$filter;
 					}
 
