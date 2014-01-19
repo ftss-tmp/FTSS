@@ -397,5 +397,3 @@ app.config(function ($routeProvider) {
 		})
 
 });
-
-//window.onbeforeunload = FTSS.exit;
