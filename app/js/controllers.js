@@ -301,7 +301,7 @@
 
 				var schedClass = req.Scheduled || req;
 
-				req.course = $scope.MasterCourseList[schedClass.CourseId];
+				req.Course = $scope.MasterCourseList[schedClass.CourseId];
 
 				req.det = $scope.Units[schedClass.UnitId];
 
@@ -693,11 +693,11 @@
 							req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
 							req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
 
-							req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
+							req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
 							req.notes = req.Notes || 'Requested by';
 
-							req.openSeats = req.course.Max - req.Scheduled.Host - req.Scheduled.Other;
+							req.openSeats = req.Course.Max - req.Scheduled.Host - req.Scheduled.Other;
 							req.reqSeats = req.Students.results.length;
 
 							req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
