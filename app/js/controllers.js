@@ -1,6 +1,7 @@
+var search;
 (function () {
 
-	var filters = {}, utils = {}, search;
+	var filters = {}, utils = {};
 
 	/**
 	 *  This is the app-wide collection of custom filters used by the search box
@@ -22,6 +23,51 @@
 			]
 	};
 
+
+	utils.tagHighlight = function (data, tags) {
+
+		var test =
+			[
+			];
+
+		_.each(tags, function (tag, key) {
+
+			_.each(tag, function (t) {
+
+				test.push({
+					id: key + ':' + t,
+					testField: filters.map[key].split('/'),
+					testValue: t
+				});
+
+			});
+
+		});
+
+		_.all(data, function (req) {
+
+			_.each(test, function (t, k) {
+
+				var field, match;
+
+				field = req[t.testField[0]][t.testField[1]] || req[t.testField[0]];
+
+				match = (field == t.testValue);
+
+				if (match) {
+
+					search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
+					delete test[k];
+
+				}
+
+			});
+
+			return (test.length > 0);
+
+		});
+
+	};
 
 	app.controller('user', function($scope, SharePoint) {
 
@@ -174,7 +220,7 @@
 
 						if (tmp || pending === '*') {
 
-							$scope.update.view(tmp);
+							$scope.update.view(tmp, pending);
 
 						}
 
@@ -253,9 +299,30 @@
 
 					_.each(filters.map, function (map, key) {
 
+						var isString = (key === 'm' || key === 'a');
+
 						_.each(tags[key], function (tag) {
 
-							filter.push(map + tag + (map.substr(map.length - 1) === "'" ? "'" : ""));
+							if (isString) {
+
+								filter.push(
+									[
+										map,
+										"eq'",
+										tag,
+										"'"
+									].join(' '));
+
+							} else {
+
+								filter.push(
+									[
+										map,
+										'eq',
+										tag
+									].join(' '));
+
+							}
 
 						});
 
@@ -314,7 +381,6 @@
 				req.end = FTSS.utils.fixDate(schedClass.End);
 
 			} catch (e) {
-				debugger;
 			}
 
 			return req;
@@ -345,8 +411,6 @@
 								].join('/');
 
 							updating = false;
-
-							$scope.update.view(filters.$compile((tags === true) ? null : tags));
 
 						};
 
@@ -388,7 +452,7 @@
 								linker(tags);
 
 
-							}, (instant ? 1 : 500));
+							}, (instant ? 1 : 1000));
 
 						}
 
@@ -629,14 +693,14 @@
 
 		filters.map =
 		{
-			'd': 'Scheduled/UnitId eq ',
-			'm': "Scheduled/Course/MDS eq '",
-			'a': "Scheduled/Course/AFSC eq '",
-			'i': 'Scheduled/InstructorId eq ',
-			'c': 'Scheduled/CourseId eq '
+			'd': 'Scheduled/UnitId',
+			'm': "Scheduled/Course/MDS",
+			'a': "Scheduled/Course/AFSC",
+			'i': 'Scheduled/InstructorId',
+			'c': 'Scheduled/CourseId'
 		};
 
-		$scope.update.view = function (filter) {
+		$scope.update.view = function (filter, tags) {
 			FTSS.utils.log('Request update');
 			$scope.requests =
 				[
@@ -707,6 +771,8 @@
 
 						});
 
+						utils.tagHighlight($scope.requests, tags);
+
 					}
 
 				}, utils.$ajaxFailure);
@@ -739,14 +805,14 @@
 
 		filters.map =
 		{
-			'd': 'UnitId eq ',
-			'm': "Course/MDS eq '",
-			'a': "Course/AFSC eq '",
-			'i': 'InstructorId eq ',
-			'c': 'CourseId eq '
+			'd': 'UnitId',
+			'm': "Course/MDS",
+			'a': "Course/AFSC",
+			'i': 'InstructorId',
+			'c': 'CourseId'
 		};
 
-		$scope.update.view = function (filter) {
+		$scope.update.view = function (filter, tags) {
 
 			FTSS.utils.log('Schedule Update');
 
@@ -775,7 +841,9 @@
 
 			})
 				.then(function (data) {
+
 					FTSS.utils.log('Schedule Loaded');
+
 					$scope.requests = data;
 
 					$scope.count.results = _.keys($scope.requests || {}).length;
@@ -795,6 +863,8 @@
 						utils.$loading(false);
 
 					}
+
+					utils.tagHighlight($scope.requests, tags);
 
 				}, utils.$ajaxFailure);
 
