@@ -178,7 +178,7 @@ app = angular.module('FTSS',
 
 						return {
 							'id': parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
-							'name': $(response.data).find('a#zz15_Menu span').text()
+							'name': $(response.data.replace(/[ ]src=/g, ' data-src=')).find('a#zz15_Menu span').text()
 						}
 
 					});
