@@ -145,7 +145,7 @@ app = angular.module('FTSS',
 				}
 
 				last = stamp;
-				//console.trace();
+
 			}
 
 		}
