@@ -22,6 +22,18 @@
 			]
 	};
 
+
+	app.controller('user', function($scope, SharePoint) {
+
+		SharePoint.user().then(function(user) {
+
+			$scope.userId = user.id;
+			$scope.userName = user.name;
+
+		});
+
+	});
+
 	/**
 	 * The main controller performs the initial caching functions as well as setting up other app-wide $scope objects
 	 */

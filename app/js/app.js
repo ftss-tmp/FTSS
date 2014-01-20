@@ -26,6 +26,7 @@ app = angular.module('FTSS',
 	_internal = {
 		//'baseURL': 'https://sheppard.eis.aetc.af.mil/982TRG/373TRS/Det306/scheduling/_vti_bin/ListData.svc/',
 		'baseURL': 'http://dev/_vti_bin/ListData.svc/',
+		'userURL': 'http://dev/_layouts/userdisp.aspx?Force=True',
 		'debug': true,
 		'offline': true,
 		'noCache': false
@@ -165,6 +166,24 @@ app = angular.module('FTSS',
 		};
 
 		FTSS.SP = {
+
+			'user': function () {
+
+				return $http({
+					'method': 'GET',
+					'cache': true,
+					'url': _internal.userURL
+				})
+					.then(function (response) {
+
+						return {
+							'id': parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
+							'name': $(response.data).find('a#zz15_Menu span').text()
+						}
+
+					});
+
+			},
 
 			'create': function (options) {
 
