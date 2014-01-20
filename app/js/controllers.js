@@ -1,44 +1,41 @@
-var search;
 (function () {
 
-	var filters = {}, utils = {};
+	"use strict";
+
+	var filters = {}, utils = {}, search;
 
 	/**
 	 *  This is the app-wide collection of custom filters used by the search box
 	 */
-	filters.route =
-	{
-		'scheduled':
-			[
-				{'id': "custom:Start ge datetime'TODAY'", 'text': 'Not Started'},
-				{'id': "custom:End le datetime'TODAY'", 'text': 'Completed'},
-				{'id': "custom:(Start le datetime'TODAY' and End ge datetime'TODAY')", 'text': 'In Progress'}
-			],
-		'requests':
-			[
-				{'id': 'custom:Status gt 1', 'text': 'Completed Requests'},
-				{'id': 'custom:Status eq 1', 'text': 'Pending Requests'},
-				{'id': 'custom:Status eq 2', 'text': 'Approved Requests'},
-				{'id': 'custom:Status eq 3', 'text': 'Denied Requests'}
-			]
+	filters.route = {
+		'scheduled': [
+			{'id': "custom:Start ge datetime'TODAY'", 'text': 'Not Started'},
+			{'id': "custom:End le datetime'TODAY'", 'text': 'Completed'},
+			{'id': "custom:(Start le datetime'TODAY' and End ge datetime'TODAY')", 'text': 'In Progress'}
+		],
+		'requests' : [
+			{'id': 'custom:Status gt 1', 'text': 'Completed Requests'},
+			{'id': 'custom:Status eq 1', 'text': 'Pending Requests'},
+			{'id': 'custom:Status eq 2', 'text': 'Approved Requests'},
+			{'id': 'custom:Status eq 3', 'text': 'Denied Requests'}
+		]
 	};
 
 
 	utils.tagHighlight = function (data, tags) {
 
-		var test =
-			[
-			];
+		var test = [
+		];
 
 		_.each(tags, function (tag, key) {
 
 			_.each(tag, function (t) {
 
 				test.push({
-					id: key + ':' + t,
-					testField: filters.map[key].split('/'),
-					testValue: t
-				});
+					          id       : key + ':' + t,
+					          testField: filters.map[key].split('/'),
+					          testValue: t
+				          });
 
 			});
 
@@ -52,7 +49,7 @@ var search;
 
 				field = req[t.testField[0]][t.testField[1]] || req[t.testField[0]];
 
-				match = (field == t.testValue);
+				match = (field === t.testValue);
 
 				if (match) {
 
@@ -69,9 +66,9 @@ var search;
 
 	};
 
-	app.controller('user', function($scope, SharePoint) {
+	app.controller('user', function ($scope, SharePoint) {
 
-		SharePoint.user().then(function(user) {
+		SharePoint.user().then(function (user) {
 
 			$scope.userId = user.id;
 			$scope.userName = user.name;
@@ -113,15 +110,15 @@ var search;
 				case 'empty':
 					utils.$loading(false);
 					msg = {
-						'class': 'warning',
-						'intro': 'Nothing Found!  ',
+						'class'  : 'warning',
+						'intro'  : 'Nothing Found!  ',
 						'message': "There doesn't seem to be anything that matches your request.  Maybe you should add some more tags to your search."
 					};
 					break;
 
 				case 'ready':
 					msg = {
-						'intro': "You're ready to go.  ",
+						'intro'  : "You're ready to go.  ",
 						'message': 'To get started, use the search box below to create a tag list.  The page will update as you add more tags.'
 					};
 
@@ -129,8 +126,8 @@ var search;
 
 			$scope.messages = {
 				'newLine': msg.newLine || 'false',
-				'class': msg.class || 'info',
-				'intro': msg.intro || 'Quick Note:  ',
+				'class'  : msg.class || 'info',
+				'intro'  : msg.intro || 'Quick Note:  ',
 				'message': msg.message || ''
 			};
 
@@ -170,9 +167,7 @@ var search;
 
 						var tmp, customFilters;
 
-						tmp =
-							[
-							];
+						tmp = [];
 
 						customFilters = filters.route[page()];
 
@@ -241,13 +236,11 @@ var search;
 
 			var today, date = new Date();
 
-			today =
-				[
-					date.getFullYear(),
-					('0' + date.getMonth() + 1).slice(-2),
-					('0' + date.getDate()).slice(-2)
-				]
-					.join('-');
+			today = [
+				date.getFullYear(),
+				('0' + date.getMonth() + 1).slice(-2),
+				('0' + date.getDate()).slice(-2)
+			].join('-');
 
 			return function () {
 
@@ -255,7 +248,7 @@ var search;
 
 				_.each(_.flatten(filters.route), function (f) {
 
-					search.removeOption(f.id)
+					search.removeOption(f.id);
 
 				});
 
@@ -287,51 +280,47 @@ var search;
 
 			try {
 
-				var filter =
-					[
-					];
+				var filter = [
+				];
 
 				if (tags) {
 
-					filter = tags.custom ||
-						[
-						];
+					filter = tags.custom || [];
 
 					_.each(filters.map, function (map, key) {
 
-						var isString = (key === 'm' || key === 'a');
+						var isString = (key === 'm' || key === 'a'), fTemp = [];
 
 						_.each(tags[key], function (tag) {
 
 							if (isString) {
 
-								filter.push(
-									[
-										map,
-										"eq'",
-										tag,
-										"'"
-									].join(' '));
+								fTemp.push([
+									            map, "eq'", tag, "'"
+								            ].join(' '));
 
 							} else {
 
-								filter.push(
-									[
-										map,
-										'eq',
-										tag
-									].join(' '));
+								fTemp.push([
+									            map, 'eq', tag
+								            ].join(' '));
 
 							}
 
 						});
 
+						if (fTemp.length) {
+
+							filter.push('(' + fTemp.join(' or ') + ')');
+
+						}
+
 					});
 
 				}
 
-				filter = filter.length > 0 ? filter.join(' or ') : '';
-
+				filter = filter.length > 0 ? filter.join(' and ') : '';
+console.log(filter);
 				return filter;
 
 			} catch (e) {
@@ -348,16 +337,13 @@ var search;
 		 */
 		utils.$ajaxFailure = function (req) {
 			utils.$message({
-				'newLine': true,
-				'class': 'danger',
-				'intro': 'Hmmm, something went wrong:',
-				'message':
-					[
-						this.type,
-						'(' + req.status + ')',
-						this.url
-					].join(' ')
-			});
+				               'newLine': true,
+				               'class'  : 'danger',
+				               'intro'  : 'Hmmm, something went wrong:',
+				               'message': [
+					               this.type, '(' + req.status + ')', this.url
+				               ].join(' ')
+			               });
 		};
 
 		utils.$decorate = function ($scope, req) {
@@ -403,12 +389,9 @@ var search;
 
 							$scope.permaLink = (!tags) ? 'all' : LZString.compressToBase64(JSON.stringify(tags));
 
-							window.location.hash =
-								[
-									'',
-									page(),
-									$scope.permaLink
-								].join('/');
+							window.location.hash = [
+								'', page(), $scope.permaLink
+							].join('/');
 
 							updating = false;
 
@@ -441,9 +424,8 @@ var search;
 
 									var split = v.split(':');
 
-									tags[split[0]] = tags[split[0]] ||
-										[
-										];
+									tags[split[0]] = tags[split[0]] || [
+									];
 
 									tags[split[0]].push(Number(split[1]) || split[1]);
 
@@ -523,7 +505,7 @@ var search;
 
 				$scope.permaLink = $routeParams.link;
 
-				pending = ($routeParams.link == 'all') ? '*' : JSON.parse(LZString.decompressFromBase64($routeParams.link));
+				pending = ($routeParams.link === 'all') ? '*' : JSON.parse(LZString.decompressFromBase64($routeParams.link));
 
 			}
 
@@ -562,117 +544,86 @@ var search;
 		 *
 		 * @type {{labelField: string, valueField: string, hideSelected: boolean, sortField: string, dataAttr: string, optgroupOrder: string[], plugins: string[], onInitialize: 'onInitialize', type: 'type', onChange: 'onChange'}}
 		 */
-		$scope.selectizeOptions =
-		{
-			'labelField': 'text',
-			'valueField': 'id',
-			'hideSelected': true,
-			'sortField': 'text',
-			'dataAttr': 'width',
-			'persist': true,
-			'maxItems': 25,
-			'optgroupOrder':
-				[
-					'',
-					'SMART FILTERS',
-					'UNIT',
-					'AFSC',
-					'MDS',
-					'INSTRUCTOR',
-					'COURSE'
-				],
-			'plugins':
-				[
-					'optgroup_columns',
-					'remove_button'
-				],
-			'onInitialize': utils.selectize.$onInitialize,
-			'type': utils.selectize.$onType,
-			'onChange': utils.selectize.$onChange
+		$scope.selectizeOptions = {
+			'labelField'   : 'text',
+			'valueField'   : 'id',
+			'hideSelected' : true,
+			'sortField'    : 'text',
+			'dataAttr'     : 'width',
+			'persist'      : true,
+			'maxItems'     : 25,
+			'optgroupOrder': [
+				'', 'SMART FILTERS', 'UNIT', 'AFSC', 'MDS', 'INSTRUCTOR', 'COURSE'
+			],
+			'plugins'      : [
+				'optgroup_columns', 'remove_button'
+			],
+			'onInitialize' : utils.selectize.$onInitialize,
+			'type'         : utils.selectize.$onType,
+			'onChange'     : utils.selectize.$onChange
 		};
 
-		SharePoint
-			.read({
+		SharePoint.read({
 
-				'cache': true,
-				'source': 'MasterCourseList',
-				'params': {
-					'$select':
-						[
-							'Id',
-							'PDS',
-							'MDS',
-							'Days',
-							'Hours',
-							'Min',
-							'Max',
-							'AFSC',
-							'Title',
-							'Number'
-						]
-				}
+			                'cache' : true,
+			                'source': 'MasterCourseList',
+			                'params': {
+				                '$select': [
+					                'Id', 'PDS', 'MDS', 'Days', 'Hours', 'Min', 'Max', 'AFSC', 'Title', 'Number'
+				                ]
+			                }
 
-			})
-			.then(function (response) {
+		                }).then(function (response) {
 
-				FTSS.utils.log('MasterCourseList');
+			                        FTSS.utils.log('MasterCourseList');
 
-				$scope.MasterCourseList = response;
+			                        $scope.MasterCourseList = response;
 
-				$scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
-				$scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
+			                        $scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
+			                        $scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
 
-			});
+		                        });
 
 
-		SharePoint
-			.read({
+		SharePoint.read({
 
-				'cache': true,
-				'source': 'Units',
-				'params': {
-					'$select':
-						[
-							'Id',
-							'Base',
-							'Det',
-							'Email',
-							'Phone'
-						]
-				}
+			                'cache' : true,
+			                'source': 'Units',
+			                'params': {
+				                '$select': [
+					                'Id', 'Base', 'Det', 'Email', 'Phone'
+				                ]
+			                }
 
-			})
-			.then(function (response) {
+		                }).then(function (response) {
 
-				FTSS.utils.log('Units');
-				$scope.Units = response;
+			                        FTSS.utils.log('Units');
+			                        $scope.Units = response;
 
-			});
+		                        });
 
-		SharePoint
-			.read({
+		SharePoint.read({
 
-				'cache': true,
-				'source': 'Instructors',
-				'params': {
-					'$expand': 'Instructor'/*,
-					 '$select':
-					 [
-					 'Id',
-					 'InstructorId',
-					 'Instructor/Name',
-					 'Instructor/WorkEMail',             <-- This isn't working on the local development SP copy for some reason...
-					 'Instructor/WorkPhone'
-					 ]*/
-				}
+			                'cache' : true,
+			                'source': 'Instructors',
+			                'params': {
+				                '$expand': 'Instructor'/*,
+				                 '$select':
+				                 [
+				                 'Id',
+				                 'InstructorId',
+				                 'Instructor/Name',
+				                 'Instructor/WorkEMail',             <-- This isn't working on the local development SP copy for some reason...
+				                 'Instructor/WorkPhone'
+				                 ]*/
+			                }
 
-			})
-			.then(function (response) {
+		                }).then(function (response) {
 
-				FTSS.utils.log('Instructors');
-				$scope.Instructors = response;
+			                        FTSS.utils.log('Instructors');
+			                        $scope.Instructors = response;
 
-			});
+		                        });
 
 	});
 
@@ -691,8 +642,7 @@ var search;
 
 		FTSS.utils.log('Request Controller');
 
-		filters.map =
-		{
+		filters.map = {
 			'd': 'Scheduled/UnitId',
 			'm': "Scheduled/Course/MDS",
 			'a': "Scheduled/Course/AFSC",
@@ -702,80 +652,64 @@ var search;
 
 		$scope.update.view = function (filter, tags) {
 			FTSS.utils.log('Request update');
-			$scope.requests =
-				[
-				];
+			$scope.requests = [
+			];
 
 			SharePoint.read({
 
-				'source': 'Requests',
-				'params': {
-					'$filter': filter,
-					'$expand':
-						[
-							'Students',
-							'CreatedBy',
-							'Scheduled/Course'
-						],
-					'$select':
-						[
-							'Id',
-							'Notes',
-							'Status',
-							'CreatedBy/Name',
-							'CreatedBy/WorkEMail',
-							'CreatedBy/WorkPhone',
-							'Students/Name',
-							'Students/WorkEMail',
-							'Students/WorkPhone',
-							'Scheduled/UnitId',
-							'Scheduled/CourseId',
-							'Scheduled/Start',
-							'Scheduled/End',
-							'Scheduled/Host',
-							'Scheduled/Other',
-							'Scheduled/InstructorId'
-						]
-				}
+				                'source': 'Requests',
+				                'params': {
+					                '$filter': filter,
+					                '$expand': [
+						                'Students', 'CreatedBy', 'Scheduled/Course'
+					                ],
+					                '$select': [
+						                'Id', 'Notes', 'Status', 'CreatedBy/Name', 'CreatedBy/WorkEMail',
+						                'CreatedBy/WorkPhone', 'Students/Name', 'Students/WorkEMail',
+						                'Students/WorkPhone', 'Scheduled/UnitId', 'Scheduled/CourseId',
+						                'Scheduled/Start', 'Scheduled/End', 'Scheduled/Host', 'Scheduled/Other',
+						                'Scheduled/InstructorId'
+					                ]
+				                }
 
-			}).then(function (data) {
-					FTSS.utils.log('Request Data Loaded');
-					$scope.requests = data;
+			                }).then(function (data) {
+				                        FTSS.utils.log('Request Data Loaded');
+				                        $scope.requests = data;
 
-					$scope.count.results = _.keys($scope.requests || {}).length;
+				                        $scope.count.results = _.keys($scope.requests || {}).length;
 
-					if ($scope.count.results < 1) {
+				                        if ($scope.count.results < 1) {
 
-						utils.$message('empty');
+					                        utils.$message('empty');
 
-					} else {
+				                        } else {
 
-						_.each($scope.requests, function (req) {
+					                        _.each($scope.requests, function (req) {
 
-							req = utils.$decorate($scope, req);
+						                        req = utils.$decorate($scope, req);
 
-							req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
-							req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
+						                        req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
+						                        req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
 
-							req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
+						                        req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
-							req.notes = req.Notes || 'Requested by';
+						                        req.notes = req.Notes || 'Requested by';
 
-							req.openSeats = req.Course.Max - req.Scheduled.Host - req.Scheduled.Other;
-							req.reqSeats = req.Students.results.length;
+						                        req.openSeats = req.Course.Max - req.Scheduled.Host - req.Scheduled.Other;
+						                        req.reqSeats = req.Students.results.length;
 
-							req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
-							req.reqSeatsText = req.reqSeats + ' Requested Seat' + (req.reqSeats > 1 ? 's' : '');
+						                        req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
+						                        req.reqSeatsText = req.reqSeats + ' Requested Seat' + (req.reqSeats > 1 ? 's' : '');
 
-							utils.$loading(false);
+						                        utils.$loading(false);
 
-						});
+					                        });
 
-						utils.tagHighlight($scope.requests, tags);
+					                        utils.tagHighlight($scope.requests, tags);
 
-					}
+				                        }
 
-				}, utils.$ajaxFailure);
+			                        }, utils.$ajaxFailure);
 
 		}
 
@@ -803,8 +737,7 @@ var search;
 		 'isPaginationEnabled': false
 		 };*/
 
-		filters.map =
-		{
+		filters.map = {
 			'd': 'UnitId',
 			'm': "Course/MDS",
 			'a': "Course/AFSC",
@@ -816,64 +749,52 @@ var search;
 
 			FTSS.utils.log('Schedule Update');
 
-			$scope.requests =
-				[
-				];
+			$scope.requests = [
+			];
 
 			SharePoint.read({
 
-				'source': 'Scheduled',
-				'params': {
-					'$filter': filter,
-					'$expand': 'Course',
-					'$select':
-						[
-							'Id',
-							'UnitId',
-							'CourseId',
-							'Start',
-							'End',
-							'InstructorId',
-							'Host',
-							'Other'
-						]
-				}
+				                'source': 'Scheduled',
+				                'params': {
+					                '$filter': filter,
+					                '$expand': 'Course',
+					                '$select': [
+						                'Id', 'UnitId', 'CourseId', 'Start', 'End', 'InstructorId', 'Host', 'Other'
+					                ]
+				                }
 
-			})
-				.then(function (data) {
+			                }).then(function (data) {
 
-					FTSS.utils.log('Schedule Loaded');
+				                        FTSS.utils.log('Schedule Loaded');
 
-					$scope.requests = data;
+				                        $scope.requests = data;
 
-					$scope.count.results = _.keys($scope.requests || {}).length;
+				                        $scope.count.results = _.keys($scope.requests || {}).length;
 
-					if ($scope.count.results < 1) {
+				                        if ($scope.count.results < 1) {
 
-						utils.$message('empty');
+					                        utils.$message('empty');
 
-					} else {
+				                        } else {
 
-						_.each($scope.requests, function (req) {
+					                        _.each($scope.requests, function (req) {
 
-							req = utils.$decorate($scope, req);
+						                        req = utils.$decorate($scope, req);
 
-						});
+					                        });
 
-						utils.$loading(false);
+					                        utils.$loading(false);
 
-					}
+				                        }
 
-					utils.tagHighlight($scope.requests, tags);
+				                        utils.tagHighlight($scope.requests, tags);
 
-				}, utils.$ajaxFailure);
+			                        }, utils.$ajaxFailure);
 
 		};
 
 	});
 
 
-}
-	()
-	)
-;
+}()
+	);

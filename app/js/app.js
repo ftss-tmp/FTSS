@@ -1,25 +1,23 @@
 var app, FTSS = {};
 
-app = angular.module('FTSS',
-		[
-			'ngRoute',
-			'angular-selectize',
-			'ui.bootstrap'
-		])
-	.directive('onFinishRender', function ($timeout) {
-		return {
-			restrict: 'A',
-			link: function (scope, element, attr) {
-				if (scope.$last === true) {
-					$timeout(function () {
-						scope.$emit(attr.onFinishRender);
-					});
-				}
-			}
-		}
-	});
-
 (function () {
+
+	"use strict";
+
+	app = angular.module('FTSS', [
+			'ngRoute', 'angular-selectize', 'ui.bootstrap'
+		]).directive('onFinishRender', function ($timeout) {
+			             return {
+				             restrict: 'A',
+				             link: function (scope, element, attr) {
+					             if (scope.$last === true) {
+						             $timeout(function () {
+							             scope.$emit(attr.onFinishRender);
+						             });
+					             }
+				             }
+			             };
+		             });
 
 	var _internal, utils = {};
 
@@ -170,28 +168,27 @@ app = angular.module('FTSS',
 			'user': function () {
 
 				return $http({
-					'method': 'GET',
-					'cache': true,
-					'url': _internal.userURL
-				})
-					.then(function (response) {
+					             'method': 'GET',
+					             'cache': true,
+					             'url': _internal.userURL
+				             }).then(function (response) {
 
-						return {
-							'id': parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
-							'name': $(response.data.replace(/[ ]src=/g, ' data-src=')).find('a#zz15_Menu span').text()
-						}
+					                     return {
+						                     'id': parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
+						                     'name': $(response.data.replace(/[ ]src=/g, ' data-src=')).find('a#zz15_Menu span').text()
+					                     }
 
-					});
+				                     });
 
 			},
 
 			'create': function (options) {
 
 				return $http({
-					'method': 'POST',
-					'url': _internal.baseURL + options.source,
-					'data': options.params
-				});
+					             'method': 'POST',
+					             'url': _internal.baseURL + options.source,
+					             'data': options.params
+				             });
 
 			},
 
@@ -208,28 +205,27 @@ app = angular.module('FTSS',
 					}
 
 					return $http({
-						'dataType': 'json',
-						'method': 'GET',
-						'url': _internal.baseURL + opt.source,
-						'params': opt.params || null
-					})
-						.then(function (response) {
+						             'dataType': 'json',
+						             'method': 'GET',
+						             'url': _internal.baseURL + opt.source,
+						             'params': opt.params || null
+					             }).then(function (response) {
 
-							var i = 0, data = response.data.d.results || response.data.d;
+						                     var i = 0, data = response.data.d.results || response.data.d;
 
-							try {
+						                     try {
 
-								data = _.reduce(data, function (o, v) {
-									o[v.Id || i++] = v;
-									return o;
-								}, {});
+							                     data = _.reduce(data, function (o, v) {
+								                     o[v.Id || i++] = v;
+								                     return o;
+							                     }, {});
 
-							} catch (e) {
-							}
+						                     } catch (e) {
+						                     }
 
-							return data;
+						                     return data;
 
-						});
+					                     });
 
 				};
 
@@ -275,32 +271,27 @@ app = angular.module('FTSS',
 
 							if (_internal.offline) {
 
-								callback(
-									JSON.parse(
-										localStorage.getItem('SP_REST_Cache_' + options.source + '_Data')
-									)
-								);
+								callback(JSON.parse(localStorage.getItem('SP_REST_Cache_' + options.source + '_Data')));
 
 							} else {
 
 								getData({
 
-									// The SharePoint list to check against
-									'source': options.source,
+									        // The SharePoint list to check against
+									        'source': options.source,
 
-									// Select only the highest last modified field
-									'params': {
-										'$select': 'Modified',
-										'$orderby': 'Modified desc',
-										'$top': '1'
-									}
+									        // Select only the highest last modified field
+									        'params': {
+										        '$select': 'Modified',
+										        '$orderby': 'Modified desc',
+										        '$top': '1'
+									        }
 
-								})
-									.then(function (data) {
+								        }).then(function (data) {
 
-										checkCache(data[0].Modified, callback);
+									                checkCache(data[0].Modified, callback);
 
-									});
+								                });
 
 							}
 
@@ -389,30 +380,30 @@ app.config(function ($routeProvider) {
 
 		// route for the home page
 		.when('/', {
-			templateUrl: 'partials/home.html',
-			controller: 'homeController'
-		})
+			      templateUrl: 'partials/home.html',
+			      controller: 'homeController'
+		      })
 
 		// route for the requests page
 		.when('/scheduled/:link?', {
-			templateUrl: 'partials/scheduled.html',
-			controller: 'scheduledController'
-		})
+			      templateUrl: 'partials/scheduled.html',
+			      controller: 'scheduledController'
+		      })
 
 		// route for the requests page
 		.when('/requests/:link?', {
-			templateUrl: 'partials/requests.html',
-			controller: 'requestsController'
-		})
+			      templateUrl: 'partials/requests.html',
+			      controller: 'requestsController'
+		      })
 
 		// route for the requests page
 		.when('/requests/:link?', {
-			templateUrl: 'partials/requests.html',
-			controller: 'requestsController'
-		})
+			      templateUrl: 'partials/requests.html',
+			      controller: 'requestsController'
+		      })
 
 		.otherwise({
-			redirectTo: '/'
-		})
+			           redirectTo: '/'
+		           })
 
 });
