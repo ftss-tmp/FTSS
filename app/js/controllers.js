@@ -2,68 +2,43 @@
 
 	"use strict";
 
-	var filters = {}, utils = {}, search;
+	var firstRun = true, filters = {}, utils = {}, search;
 
 	/**
 	 *  This is the app-wide collection of custom filters used by the search box
 	 */
 	filters.route = {
-		'scheduled': [
-			{'id': "custom:Start ge datetime'TODAY'", 'text': 'Not Started'},
-			{'id': "custom:End le datetime'TODAY'", 'text': 'Completed'},
-			{'id': "custom:(Start le datetime'TODAY' and End ge datetime'TODAY')", 'text': 'In Progress'}
-		],
-		'requests' : [
-			{'id': 'custom:Status gt 1', 'text': 'Completed Requests'},
-			{'id': 'custom:Status eq 1', 'text': 'Pending Requests'},
-			{'id': 'custom:Status eq 2', 'text': 'Approved Requests'},
-			{'id': 'custom:Status eq 3', 'text': 'Denied Requests'}
-		]
+		'scheduled':
+			[
+				{'id': "custom:Start ge datetime'TODAY'", 'text': 'Not Started'},
+				{'id': "custom:End le datetime'TODAY'", 'text': 'Completed'},
+				{'id': "custom:(Start le datetime'TODAY' and End ge datetime'TODAY')", 'text': 'In Progress'}
+			],
+		'requests' :
+			[
+				{'id': 'custom:Status gt 1', 'text': 'Completed Requests'},
+				{'id': 'custom:Status eq 1', 'text': 'Pending Requests'},
+				{'id': 'custom:Status eq 2', 'text': 'Approved Requests'},
+				{'id': 'custom:Status eq 3', 'text': 'Denied Requests'}
+			]
 	};
 
+	filters.map = {
+		'scheduled': {
+			'd': 'UnitId',
+			'm': "Course/MDS",
+			'a': "Course/AFSC",
+			'i': 'InstructorId',
+			'c': 'CourseId'
+		},
+		'requests' : {
+			'd': 'Scheduled/UnitId',
+			'm': "Scheduled/Course/MDS",
+			'a': "Scheduled/Course/AFSC",
+			'i': 'Scheduled/InstructorId',
+			'c': 'Scheduled/CourseId'
 
-	utils.tagHighlight = function (data, tags) {
-
-		var test = [
-		];
-
-		_.each(tags, function (tag, key) {
-
-			_.each(tag, function (t) {
-
-				test.push({
-					          id       : key + ':' + t,
-					          testField: filters.map[key].split('/'),
-					          testValue: t
-				          });
-
-			});
-
-		});
-
-		_.all(data, function (req) {
-
-			_.each(test, function (t, k) {
-
-				var field, match;
-
-				field = req[t.testField[0]][t.testField[1]] || req[t.testField[0]];
-
-				match = (field === t.testValue);
-
-				if (match) {
-
-					search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
-					delete test[k];
-
-				}
-
-			});
-
-			return (test.length > 0);
-
-		});
-
+		}
 	};
 
 	app.controller('user', function ($scope, SharePoint) {
@@ -86,15 +61,12 @@
 
 		var page, pending, updating, delaySearch;
 
-		$scope.update = {
-			'view': false
-		};
-
 		page = function () {
 			return  $location.path().split('/')[1];
 		};
 
-		if ($scope.update.view) {
+		if (!firstRun) {
+			firstRun = false;
 			return;
 		}
 
@@ -117,6 +89,7 @@
 					break;
 
 				case 'ready':
+					utils.$loading(false);
 					msg = {
 						'intro'  : "You're ready to go.  ",
 						'message': 'To get started, use the search box below to create a tag list.  The page will update as you add more tags.'
@@ -167,7 +140,9 @@
 
 						var tmp, customFilters;
 
-						tmp = [];
+						tmp =
+							[
+							];
 
 						customFilters = filters.route[page()];
 
@@ -186,7 +161,7 @@
 									if (key === 'custom') {
 
 										valid = _.some(customFilters, function (f) {
-											return f.id === v
+											return f.id === 'custom:' + v;
 										});
 
 									}
@@ -215,7 +190,8 @@
 
 						if (tmp || pending === '*') {
 
-							$scope.update.view(tmp, pending);
+							$scope.tags = pending;
+							$scope.filter = tmp;
 
 						}
 
@@ -223,7 +199,63 @@
 
 					}());
 
+				} else {
+					utils.$message('ready');
 				}
+
+			}
+
+		};
+
+		utils.tagHighlight = function (data) {
+
+			if ($scope.tags !== '*') {
+
+				var test =
+					[
+					], map = filters.map[page()];
+
+				_.each($scope.tags, function (tag, key) {
+
+					_.each(tag, function (t) {
+
+						if (key !== 'custom') {
+
+							test.push({
+								          id       : key + ':' + t,
+								          testField: map[key].split('/'),
+								          testValue: t
+							          });
+
+						}
+
+					});
+
+
+				});
+
+				_.all(data, function (req) {
+
+					_.each(test, function (t, k) {
+
+						var field, match;
+
+						field = req[t.testField[0]][t.testField[1]] || req[t.testField[0]];
+
+						match = (field === t.testValue);
+
+						if (match) {
+
+							search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
+							delete test[k];
+
+						}
+
+					});
+
+					return (test.length > 0);
+
+				});
 
 			}
 
@@ -236,11 +268,12 @@
 
 			var today, date = new Date();
 
-			today = [
-				date.getFullYear(),
-				('0' + date.getMonth() + 1).slice(-2),
-				('0' + date.getDate()).slice(-2)
-			].join('-');
+			today =
+				[
+					date.getFullYear(),
+					('0' + date.getMonth() + 1).slice(-2),
+					('0' + date.getDate()).slice(-2)
+				].join('-');
 
 			return function () {
 
@@ -280,30 +313,42 @@
 
 			try {
 
-				var filter = [
-				];
+				var filter =
+					[
+					], maps = filters.map[page()];
 
 				if (tags) {
 
-					filter = tags.custom || [];
+					filter = tags.custom ||
+						[
+						];
 
-					_.each(filters.map, function (map, key) {
+					_.each(maps, function (map, key) {
 
-						var isString = (key === 'm' || key === 'a'), fTemp = [];
+						var isString = (key === 'm' || key === 'a'), fTemp =
+							[
+							];
 
 						_.each(tags[key], function (tag) {
 
 							if (isString) {
 
-								fTemp.push([
-									            map, "eq'", tag, "'"
-								            ].join(' '));
+								fTemp.push(
+									[
+										map,
+										" eq '",
+										tag.trim(),
+										"'"
+									].join(''));
 
 							} else {
 
-								fTemp.push([
-									            map, 'eq', tag
-								            ].join(' '));
+								fTemp.push(
+									[
+										map,
+										'eq',
+										tag
+									].join(' '));
 
 							}
 
@@ -320,7 +365,7 @@
 				}
 
 				filter = filter.length > 0 ? filter.join(' and ') : '';
-console.log(filter);
+
 				return filter;
 
 			} catch (e) {
@@ -340,9 +385,12 @@ console.log(filter);
 				               'newLine': true,
 				               'class'  : 'danger',
 				               'intro'  : 'Hmmm, something went wrong:',
-				               'message': [
-					               this.type, '(' + req.status + ')', this.url
-				               ].join(' ')
+				               'message':
+					               [
+						               this.type,
+						               '(' + req.status + ')',
+						               this.url
+					               ].join(' ')
 			               });
 		};
 
@@ -377,11 +425,11 @@ console.log(filter);
 
 			'$onChange': function (val, instant) {
 
-				FTSS.utils.log('Selectize Change');
-
 				clearTimeout(delaySearch);
 
 				if (!updating) {
+
+					FTSS.utils.log('Selectize Change');
 
 					if (val instanceof Array && val.length > 0) {
 
@@ -389,9 +437,12 @@ console.log(filter);
 
 							$scope.permaLink = (!tags) ? 'all' : LZString.compressToBase64(JSON.stringify(tags));
 
-							window.location.hash = [
-								'', page(), $scope.permaLink
-							].join('/');
+							window.location.hash =
+								[
+									'',
+									page(),
+									$scope.permaLink
+								].join('/');
 
 							updating = false;
 
@@ -424,8 +475,9 @@ console.log(filter);
 
 									var split = v.split(':');
 
-									tags[split[0]] = tags[split[0]] || [
-									];
+									tags[split[0]] = tags[split[0]] ||
+										[
+										];
 
 									tags[split[0]].push(Number(split[1]) || split[1]);
 
@@ -493,6 +545,8 @@ console.log(filter);
 
 			FTSS.utils.log('Location Change Start');
 
+			$scope.filter = false;
+
 			utils.$loading(true);
 
 		});
@@ -509,13 +563,8 @@ console.log(filter);
 
 			}
 
-		});
+			utils.$initPage();
 
-
-		$scope.$watch('update.view', function (update) {
-			if (update) {
-				utils.$initPage();
-			}
 		});
 
 		/**
@@ -552,12 +601,21 @@ console.log(filter);
 			'dataAttr'     : 'width',
 			'persist'      : true,
 			'maxItems'     : 25,
-			'optgroupOrder': [
-				'', 'SMART FILTERS', 'UNIT', 'AFSC', 'MDS', 'INSTRUCTOR', 'COURSE'
-			],
-			'plugins'      : [
-				'optgroup_columns', 'remove_button'
-			],
+			'optgroupOrder':
+				[
+					'',
+					'SMART FILTERS',
+					'UNIT',
+					'AFSC',
+					'MDS',
+					'INSTRUCTOR',
+					'COURSE'
+				],
+			'plugins'      :
+				[
+					'optgroup_columns',
+					'remove_button'
+				],
 			'onInitialize' : utils.selectize.$onInitialize,
 			'type'         : utils.selectize.$onType,
 			'onChange'     : utils.selectize.$onChange
@@ -568,9 +626,19 @@ console.log(filter);
 			                'cache' : true,
 			                'source': 'MasterCourseList',
 			                'params': {
-				                '$select': [
-					                'Id', 'PDS', 'MDS', 'Days', 'Hours', 'Min', 'Max', 'AFSC', 'Title', 'Number'
-				                ]
+				                '$select':
+					                [
+						                'Id',
+						                'PDS',
+						                'MDS',
+						                'Days',
+						                'Hours',
+						                'Min',
+						                'Max',
+						                'AFSC',
+						                'Title',
+						                'Number'
+					                ]
 			                }
 
 		                }).then(function (response) {
@@ -584,15 +652,19 @@ console.log(filter);
 
 		                        });
 
-
 		SharePoint.read({
 
 			                'cache' : true,
 			                'source': 'Units',
 			                'params': {
-				                '$select': [
-					                'Id', 'Base', 'Det', 'Email', 'Phone'
-				                ]
+				                '$select':
+					                [
+						                'Id',
+						                'Base',
+						                'Det',
+						                'Email',
+						                'Phone'
+					                ]
 			                }
 
 		                }).then(function (response) {
@@ -630,9 +702,6 @@ console.log(filter);
 
 	app.controller('homeController', function ($scope) {
 
-		$scope.update.view = function () {
-		};
-
 		utils.$loading(false);
 
 	});
@@ -642,34 +711,49 @@ console.log(filter);
 
 		FTSS.utils.log('Request Controller');
 
-		filters.map = {
-			'd': 'Scheduled/UnitId',
-			'm': "Scheduled/Course/MDS",
-			'a': "Scheduled/Course/AFSC",
-			'i': 'Scheduled/InstructorId',
-			'c': 'Scheduled/CourseId'
-		};
+		$scope.$watch('filter', function () {
 
-		$scope.update.view = function (filter, tags) {
+			if ($scope.filter === false) {
+				return;
+			}
+
 			FTSS.utils.log('Request update');
-			$scope.requests = [
-			];
+
+			$scope.requests =
+				[
+				];
 
 			SharePoint.read({
 
 				                'source': 'Requests',
 				                'params': {
-					                '$filter': filter,
-					                '$expand': [
-						                'Students', 'CreatedBy', 'Scheduled/Course'
-					                ],
-					                '$select': [
-						                'Id', 'Notes', 'Status', 'CreatedBy/Name', 'CreatedBy/WorkEMail',
-						                'CreatedBy/WorkPhone', 'Students/Name', 'Students/WorkEMail',
-						                'Students/WorkPhone', 'Scheduled/UnitId', 'Scheduled/CourseId',
-						                'Scheduled/Start', 'Scheduled/End', 'Scheduled/Host', 'Scheduled/Other',
-						                'Scheduled/InstructorId'
-					                ]
+					                '$filter': $scope.filter,
+					                '$expand':
+						                [
+							                'Students',
+							                'CreatedBy',
+							                'Scheduled/Course'
+						                ],
+					                '$select':
+						                [
+							                'Id',
+							                'Notes',
+							                'Status',
+							                'Created',
+							                'CreatedBy/Name',
+							                'CreatedBy/WorkEMail',
+							                'CreatedBy/WorkPhone',
+							                'Students/Name',
+							                'Students/WorkEMail',
+							                'Students/WorkPhone',
+							                'Scheduled/UnitId',
+							                'Scheduled/CourseId',
+							                'Scheduled/Start',
+							                'Scheduled/End',
+							                'Scheduled/Host',
+							                'Scheduled/Other',
+							                'Scheduled/InstructorId'
+						                ]
 				                }
 
 			                }).then(function (data) {
@@ -701,24 +785,41 @@ console.log(filter);
 						                        req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
 						                        req.reqSeatsText = req.reqSeats + ' Requested Seat' + (req.reqSeats > 1 ? 's' : '');
 
+						                        req.Created = FTSS.utils.fixDate(req.Created, true);
+
 						                        utils.$loading(false);
 
 					                        });
 
-					                        utils.tagHighlight($scope.requests, tags);
+					                        utils.tagHighlight($scope.requests);
+
+					                        var group1 = _.groupBy($scope.requests, function (req) {
+						                        return req.det.Base + ', Det ' + req.det.Det;
+					                        });
+
+					                        $scope.singleUnit = $scope.tags.d && $scope.tags.d.length < 2;
+
+					                        $scope.groups = {};
+
+					                        _.each(group1, function(g, k) {
+						                        $scope.groups[k] = _.groupBy($scope.requests, function (req) {
+							                        return req.Course.PDS + ' - ' + req.Course.Number;
+						                        });
+					                        });
 
 				                        }
 
 			                        }, utils.$ajaxFailure);
 
-		}
+		});
 
 	});
 
 
 	app.controller('scheduledController', function ($scope, SharePoint) {
 
-		FTSS.utils.log('Schedule Controller')
+		FTSS.utils.log('Schedule Controller');
+
 		/*$scope.requests =
 		 [
 		 ];*/
@@ -737,30 +838,35 @@ console.log(filter);
 		 'isPaginationEnabled': false
 		 };*/
 
-		filters.map = {
-			'd': 'UnitId',
-			'm': "Course/MDS",
-			'a': "Course/AFSC",
-			'i': 'InstructorId',
-			'c': 'CourseId'
-		};
+		$scope.$watch('filter', function () {
 
-		$scope.update.view = function (filter, tags) {
+			if ($scope.filter === false) {
+				return;
+			}
 
 			FTSS.utils.log('Schedule Update');
 
-			$scope.requests = [
-			];
+			$scope.requests =
+				[
+				];
 
 			SharePoint.read({
 
 				                'source': 'Scheduled',
 				                'params': {
-					                '$filter': filter,
+					                '$filter': $scope.filter,
 					                '$expand': 'Course',
-					                '$select': [
-						                'Id', 'UnitId', 'CourseId', 'Start', 'End', 'InstructorId', 'Host', 'Other'
-					                ]
+					                '$select':
+						                [
+							                'Id',
+							                'UnitId',
+							                'CourseId',
+							                'Start',
+							                'End',
+							                'InstructorId',
+							                'Host',
+							                'Other'
+						                ]
 				                }
 
 			                }).then(function (data) {
@@ -787,11 +893,15 @@ console.log(filter);
 
 				                        }
 
-				                        utils.tagHighlight($scope.requests, tags);
+				                        utils.tagHighlight($scope.requests);
+
+				                        $scope.groups = _.groupBy($scope.requests, function (req) {
+					                        return req.Course.MDS;
+				                        });
 
 			                        }, utils.$ajaxFailure);
 
-		};
+		});
 
 	});
 
