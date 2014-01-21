@@ -4,37 +4,43 @@
 </div>
 -->
 
+<div ng-repeat="(mds, group) in groups">
 
-<div class="well {{wellCollapse}}" ng-repeat="r in requests">
+    <h3 style="border-bottom: 1px solid; margin-top:20px; margin-bottom:15px">{{mds}} <span class="pull-right">{{group.length}}</span></h3>
 
-    <h4>{{r.Course.PDS}} - {{r.Course.Title}}
-        <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}<i class="glyphicon glyphicon-calendar"></i></span>
-    </h4>
+    <div class="well {{wellCollapse}}" ng-repeat="r in group">
 
-    <hr class="rollup">
+        <h4>{{r.Course.PDS}} - {{r.Course.Title}}
+            <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}<i
+                    class="glyphicon glyphicon-calendar"></i></span>
+        </h4>
 
-    <div class="rollup">
+        <hr class="rollup">
 
-        <div class="col-lg-6 pull-left">
-            <h4>{{r.Course.Number}}</h4>
-            <h5>{{r.det.Base}} (Detachment {{r.det.Det}})</h5>
-            <i>{{r.instructor}}</i>
+        <div class="rollup">
 
-            <hr>
+            <div class="col-lg-6 pull-left">
+                <h4>{{r.Course.Number}}</h4>
+                <h5>{{r.det.Base}} (Detachment {{r.det.Det}})</h5>
+                <i>{{r.instructor}}</i>
 
-        </div>
-        <div class="col-lg-6 pull-right text-right">
-
-        </div>
-
-        <div class="clearfix"></div>
-
-        <div class="requestActions">
-
-            <div class="pull-right">
+                <hr>
 
             </div>
+            <div class="col-lg-6 pull-right text-right">
+
+            </div>
+
             <div class="clearfix"></div>
+
+            <div class="requestActions">
+
+                <div class="pull-right">
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
         </div>
 
     </div>
