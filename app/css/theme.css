@@ -1114,3 +1114,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-inpu
         width: 50%
     }
 }
+
+.active .pointer {
+    display:block!important;
+}
