@@ -33,10 +33,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">
+        <span class="navbar-brand" href="index.html">
             <i class="glyphicon glyphicon-globe"></i>&nbsp;
-            <span>FTSS 3</span>
-        </a>
+            <span>FTSS 3</span> | Developer Mode
+        </span>
     </div>
     <ul class="nav navbar-nav pull-right hidden-xs">
         <li class="hidden-xs hidden-sm">
@@ -108,11 +108,17 @@
             </a>
         </li>
 
-        <li ng-class="isPage('instructors')">
-            <div class="pointer">
-                <div class="arrow"></div>
-                <div class="arrow_border"></div>
-            </div>
+
+        <li>
+            <a href="#/master-course-list/{{permaLink}}" class="{{loading}}">
+                <i class="glyphicon glyphicon glyphicon-list"></i>
+                <span>Catalog</span>
+                <span class="badge">{{count.results}}</span>
+                <img class="badge" src="img/spinner-small.gif"/>
+            </a>
+        </li>
+
+        <li>
             <a href="#/instructors/{{permaLink}}" class="{{loading}}">
                 <i class="glyphicon glyphicon-user"></i>
                 <span>Instructors</span>
@@ -214,7 +220,7 @@
 
                 <div class="clearfix"></div>
 
-                <hr>
+                <hr style="margin:5px 0 5px">
 
             </div>
 
