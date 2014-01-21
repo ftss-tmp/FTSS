@@ -240,7 +240,21 @@
 
 						var field, match;
 
-						field = req[t.testField[0]][t.testField[1]] || req[t.testField[0]];
+						switch (t.testField.length) {
+
+							case 1:
+								field = req[t.testField[0]];
+								break;
+
+							case 2:
+								field = req[t.testField[0]][t.testField[1]];
+								break;
+
+							default:
+								field = req[t.testField[0]][t.testField[1]][t.testField[2]];
+
+						}
+
 
 						match = (field === t.testValue);
 
@@ -790,6 +804,8 @@
 						                        req.reqSeatsText = req.reqSeats + ' Requested Seat' + (req.reqSeats > 1 ? 's' : '');
 
 						                        req.Created = FTSS.utils.fixDate(req.Created, true);
+
+						                        req.Scheduled.Course = req.Course;
 
 						                        utils.$loading(false);
 
