@@ -4,20 +4,23 @@ var app, FTSS = {};
 
 	"use strict";
 
-	app = angular.module('FTSS', [
-			'ngRoute', 'angular-selectize', 'ui.bootstrap'
-		]).directive('onFinishRender', function ($timeout) {
-			             return {
-				             restrict: 'A',
-				             link: function (scope, element, attr) {
-					             if (scope.$last === true) {
-						             $timeout(function () {
-							             scope.$emit(attr.onFinishRender);
-						             });
-					             }
-				             }
-			             };
-		             });
+	app = angular.module('FTSS',
+	                     [
+		                     'ngRoute',
+		                     'angular-selectize',
+		                     'ui.bootstrap'
+	                     ]).directive('onFinishRender', function ($timeout) {
+		                                  return {
+			                                  restrict: 'A',
+			                                  link    : function (scope, element, attr) {
+				                                  if (scope.$last === true) {
+					                                  $timeout(function () {
+						                                  scope.$emit(attr.onFinishRender);
+					                                  });
+				                                  }
+			                                  }
+		                                  };
+	                                  });
 
 	var _internal, utils = {};
 
@@ -25,7 +28,7 @@ var app, FTSS = {};
 		//'baseURL': 'https://sheppard.eis.aetc.af.mil/982TRG/373TRS/Det306/scheduling/_vti_bin/ListData.svc/',
 		'baseURL': 'http://dev/_vti_bin/ListData.svc/',
 		'userURL': 'http://dev/_layouts/userdisp.aspx?Force=True',
-		'debug': true,
+		'debug'  : true,
 		'offline': true,
 		'noCache': false
 	};
@@ -101,25 +104,21 @@ var app, FTSS = {};
 	 */
 	utils.fixDate = (function () {
 
-		// Load the dateCache from localStorage or create a new one
-		var dCache = JSON.parse(localStorage.getItem('FTSS_dateCache')) || {};
+		var dCache = {};
 
-		// Add a function to _internal.unloadables to save current dateCache back to localStorage on exit
-		/*
-		 _internal.unloadables.push(function () {
-		 localStorage['FTSS_dateCache'] = JSON.stringify(dCache);
-		 });
-		 */
+		return function (date, time) {
 
-		return function (date) {
+			time = time || false;
 
-			if (!dCache[date]) {
+			if (!dCache[date + time]) {
 
-				dCache[date] = new Date(Number(date.replace(/[^\d.]/g, ''))).toLocaleDateString();
+				var tmp = new Date(Number(date.replace(/[^\d.]/g, '')));
+
+				dCache[date + time] = time ? tmp.toLocaleString() : tmp.toLocaleDateString();
 
 			}
 
-			return dCache[date];
+			return dCache[date + time];
 
 		}
 
@@ -169,12 +168,12 @@ var app, FTSS = {};
 
 				return $http({
 					             'method': 'GET',
-					             'cache': true,
-					             'url': _internal.userURL
+					             'cache' : true,
+					             'url'   : _internal.userURL
 				             }).then(function (response) {
 
 					                     return {
-						                     'id': parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
+						                     'id'  : parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
 						                     'name': $(response.data.replace(/[ ]src=/g, ' data-src=')).find('a#zz15_Menu span').text()
 					                     }
 
@@ -186,8 +185,8 @@ var app, FTSS = {};
 
 				return $http({
 					             'method': 'POST',
-					             'url': _internal.baseURL + options.source,
-					             'data': options.params
+					             'url'   : _internal.baseURL + options.source,
+					             'data'  : options.params
 				             });
 
 			},
@@ -206,9 +205,9 @@ var app, FTSS = {};
 
 					return $http({
 						             'dataType': 'json',
-						             'method': 'GET',
-						             'url': _internal.baseURL + opt.source,
-						             'params': opt.params || null
+						             'method'  : 'GET',
+						             'url'     : _internal.baseURL + opt.source,
+						             'params'  : opt.params || null
 					             }).then(function (response) {
 
 						                     var i = 0, data = response.data.d.results || response.data.d;
@@ -267,7 +266,7 @@ var app, FTSS = {};
 
 					return {
 
-						'then': function (callback) {
+						'then'   : function (callback) {
 
 							if (_internal.offline) {
 
@@ -282,9 +281,9 @@ var app, FTSS = {};
 
 									        // Select only the highest last modified field
 									        'params': {
-										        '$select': 'Modified',
+										        '$select' : 'Modified',
 										        '$orderby': 'Modified desc',
-										        '$top': '1'
+										        '$top'    : '1'
 									        }
 
 								        }).then(function (data) {
@@ -296,7 +295,7 @@ var app, FTSS = {};
 							}
 
 						},
-						'catch': function (callback) {
+						'catch'  : function (callback) {
 						},
 						'finally': function (callback) {
 						}
@@ -381,25 +380,25 @@ app.config(function ($routeProvider) {
 		// route for the home page
 		.when('/', {
 			      templateUrl: 'partials/home.html',
-			      controller: 'homeController'
+			      controller : 'homeController'
 		      })
 
 		// route for the requests page
 		.when('/scheduled/:link?', {
 			      templateUrl: 'partials/scheduled.html',
-			      controller: 'scheduledController'
+			      controller : 'scheduledController'
 		      })
 
 		// route for the requests page
 		.when('/requests/:link?', {
 			      templateUrl: 'partials/requests.html',
-			      controller: 'requestsController'
+			      controller : 'requestsController'
 		      })
 
 		// route for the requests page
 		.when('/requests/:link?', {
 			      templateUrl: 'partials/requests.html',
-			      controller: 'requestsController'
+			      controller : 'requestsController'
 		      })
 
 		.otherwise({
