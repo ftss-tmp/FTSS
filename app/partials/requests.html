@@ -1,75 +1,89 @@
-<div ng-repeat="(det, units) in groups">
+<div class="btn-group" ng-show="groupBy">
+    <button class="btn text">GROUP BY:</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'course'">Course</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'status'">Status</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'unit'">Unit</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+</div>
 
-    <h3 style="margin-top:10px; margin-bottom:5px" ng-show="!singleUnit">{{det}}</h3>
+<div ng-repeat="(header, group) in groups" style="margin-bottom: 50px">
 
-    <div ng-repeat="(crs, group) in units">
+    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px">{{header}} <span class="pull-right">{{group.length}}</span>
+    </h3>
 
-        <h3 style="border-bottom: 1px solid; margin-top:20px; margin-bottom:15px">{{crs}} <span class="pull-right">{{group.length}}</span>
-        </h3>
+    <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in group">
 
-        <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in group">
+        <div class="statusBackground">{{r.status}}</div>
 
-            <div class="statusBackground">{{r.status}}</div>
-
-            <h4><i class="glyphicon glyphicon-{{r.icon}}"></i> <span class="text-{{r.openSeatsClass}}">{{r.reqSeatsText}} ({{r.openSeats}} Open)</span>
+        <h4><i class="glyphicon glyphicon-{{r.icon}}" tooltip="{{r.status}}"></i> <span
+                class="text-{{r.openSeatsClass}}">{{r.Course.PDS}} - {{r.reqSeatsText}} ({{r.openSeats}} Open)</span>
             <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
                 <i class="glyphicon glyphicon-calendar"></i></span>
-            </h4>
+        </h4>
 
-            <hr class="rollup">
+        <hr class="rollup">
 
-            <div class="rollup">
+        <div class="rollup">
 
-                <div class="col-lg-6 pull-left">
+            <p class="lead" ng-hide="groupBy=='course'">{{r.Course.Number}}: {{r.Course.Title}}</p>
 
-                    <p>
-                        <i class="glyphicon glyphicon-map-marker"></i>{{r.det.Base}} (Detachment {{r.det.Det}})
-                        <br>
-                        <i class="glyphicon glyphicon-user"></i>{{r.instructor}}
-                    </p>
+            <div class="col-lg-6 pull-left text-lg">
 
-                    <blockquote>
-                        <p style="color:#777">{{r.notes}}</p>
-                        <small><a href="mailto:{{r.CreatedBy.WorkEMail}}{{r.mail}}">{{r.CreatedBy.Name}}
-                            ({{r.CreatedBy.WorkPhone}})</a></small>
-                    </blockquote>
+                <p>
+                    <i class="glyphicon glyphicon-map-marker" tooltip="Location"></i>{{r.det.Base}} (Detachment
+                    {{r.det.Det}})
+                </p>
 
-                    <p>Request Date: {{r.Created}}</p>
+                <p>
+                    <i class="glyphicon glyphicon-user" tooltip="Instructor"></i>{{r.instructor}}
+                </p>
 
+                <p>
+                    <i class="glyphicon glyphicon-inbox" tooltip="Date request submitted"></i>{{r.Created}}
+                </p>
 
-                </div>
-                <div class="col-lg-6 pull-right text-right">
+            </div>
 
-                    <h4>{{r.reqSeatsText}}:</h4>
+            <div class="col-lg-6 pull-right text-right">
 
+                <p ng-repeat="s in r.Students.results">
+                    <i class="glyphicon glyphicon-user" tooltip="Student's Name"></i>&nbsp;{{s.Name}}<br>
+                <span ng-show="s.WorkEMail">
+                    <i class="glyphicon glyphicon-envelope" tooltip="Student's Email"></i>&nbsp;<a
+                        href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.WorkEMail}}</a><br>
+                </span>
+                    <span ng-show="s.WorkPhone">
+                        <i class="glyphicon glyphicon-earphone" tooltip="Student's Phone"></i>&nbsp;{{s.WorkPhone}}
+                    </span>
                     <br>
+                </p>
 
-                    <p ng-repeat="s in r.Students.results">
-                        <i class="glyphicon glyphicon-user"></i>&nbsp;{{s.Name}}<br>
-                <span ng-show="s.WorkEMail"><i class="glyphicon glyphicon-envelope"></i>&nbsp;<a
-                        href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.WorkEMail}}</a><br></span>
-                    <span ng-show="s.WorkPhone"><i
-                            class="glyphicon glyphicon-earphone"></i>&nbsp;{{s.WorkPhone}}<br></span>
-                        <br>
-                    </p>
+            </div>
 
+            <div class="clearfix"></div>
+
+            <div class="well-lg">
+
+                <blockquote>
+                    <p style="color:#777">{{r.notes}}</p>
+                    <small><a href="mailto:{{r.CreatedBy.WorkEMail}}{{r.mail}}">{{r.CreatedBy.Name}}
+                        ({{r.CreatedBy.WorkPhone}})</a></small>
+                </blockquote>
+
+            </div>
+
+            <div class="requestActions">
+                <hr>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
+                            class="glyphicon glyphicon-thumbs-up"></i></span>&nbsp;Approve
+                    </button>
+                    <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
+                            class="glyphicon glyphicon-thumbs-down"></i></span>&nbsp;Deny
+                    </button>
                 </div>
-
                 <div class="clearfix"></div>
-
-                <div class="requestActions">
-                    <hr>
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
-                                class="glyphicon glyphicon-thumbs-up"></i></span>&nbsp;Approve
-                        </button>
-                        <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
-                                class="glyphicon glyphicon-thumbs-down"></i></span>&nbsp;Deny
-                        </button>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-
             </div>
 
         </div>

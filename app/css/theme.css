@@ -1116,5 +1116,23 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-inpu
 }
 
 .active .pointer {
-    display:block!important;
+    display: block !important;
+}
+
+.btn-group .text {
+    background-color: #fff;
+    color: #285e8e;
+    font-weight: 800;
+}
+
+.btn-group .text:hover {
+    cursor: default!important;
+}
+
+.well {
+    font-size: 15px;
+}
+
+.text-lg {
+    font-size: 16px;
 }

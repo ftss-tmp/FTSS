@@ -4,15 +4,23 @@
 </div>
 -->
 
-<div ng-repeat="(mds, group) in groups">
+<div class="btn-group" ng-show="groupBy">
+    <button class="btn text">GROUP BY: </button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'unit'">Unit</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+</div>
 
-    <h3 style="border-bottom: 1px solid; margin-top:20px; margin-bottom:15px">{{mds}} <span class="pull-right">{{group.length}}</span></h3>
+<div ng-repeat="(header, group) in groups">
+
+    <h3 style="border-bottom: 1px solid; margin-top:20px; margin-bottom:15px">{{header}} <span class="pull-right">{{group.length}}</span>
+    </h3>
 
     <div class="well {{wellCollapse}}" ng-repeat="r in group">
 
         <h4>{{r.Course.PDS}} - {{r.Course.Title}}
-            <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}<i
-                    class="glyphicon glyphicon-calendar"></i></span>
+            <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
+                <i class="glyphicon glyphicon-calendar"></i></span>
         </h4>
 
         <hr class="rollup">
@@ -24,8 +32,6 @@
                 <h5>{{r.det.Base}} (Detachment {{r.det.Det}})</h5>
                 <i>{{r.instructor}}</i>
 
-                <hr>
-
             </div>
             <div class="col-lg-6 pull-right text-right">
 
@@ -33,15 +39,24 @@
 
             <div class="clearfix"></div>
 
-            <div class="requestActions">
-
-                <div class="pull-right">
-
-                </div>
-                <div class="clearfix"></div>
-            </div>
-
         </div>
+
+        <div class="requestActions">
+            <hr>
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
+                        class="glyphicon glyphicon-search"></i></span>&nbsp;View Requests
+                </button>
+                <button type="button" class="btn btn-warning btn-labeled"><span class="btn-label"><i
+                        class="glyphicon glyphicon-pencil"></i></span>&nbsp;Edit Class
+                </button>
+                <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
+                        class="glyphicon glyphicon-ban-circle"></i></span>&nbsp;Cancel Class
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
 
     </div>
 

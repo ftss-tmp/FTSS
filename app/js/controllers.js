@@ -414,6 +414,10 @@
 
 				req.end = FTSS.utils.fixDate(schedClass.End);
 
+				req.unit = req.det.Base + ', Det ' + req.det.Det;
+
+				req.course = req.Course.PDS + ' - ' + req.Course.Number;
+
 			} catch (e) {
 			}
 
@@ -793,19 +797,15 @@
 
 					                        utils.tagHighlight($scope.requests);
 
-					                        var group1 = _.groupBy($scope.requests, function (req) {
-						                        return req.det.Base + ', Det ' + req.det.Det;
-					                        });
+					                        $scope.$watch('groupBy', function () {
 
-					                        $scope.singleUnit = $scope.tags.d && $scope.tags.d.length < 2;
-
-					                        $scope.groups = {};
-
-					                        _.each(group1, function(g, k) {
-						                        $scope.groups[k] = _.groupBy($scope.requests, function (req) {
-							                        return req.Course.PDS + ' - ' + req.Course.Number;
+						                        $scope.groups = _.groupBy($scope.requests, function (req) {
+							                        return req.Course[$scope.groupBy] || req[$scope.groupBy];
 						                        });
+
 					                        });
+
+					                        $scope.groupBy = $scope.groupBy || 'course';
 
 				                        }
 
@@ -895,9 +895,15 @@
 
 				                        utils.tagHighlight($scope.requests);
 
-				                        $scope.groups = _.groupBy($scope.requests, function (req) {
-					                        return req.Course.MDS;
+				                        $scope.$watch('groupBy', function () {
+
+					                        $scope.groups = _.groupBy($scope.requests, function (req) {
+						                        return req.Course[$scope.groupBy] || req[$scope.groupBy];
+					                        });
+
 				                        });
+
+				                        $scope.groupBy = $scope.groupBy || 'MDS';
 
 			                        }, utils.$ajaxFailure);
 
