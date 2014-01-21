@@ -5,9 +5,9 @@
 -->
 
 <div class="btn-group" ng-show="groupBy">
-    <button class="btn text">GROUP BY: </button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'unit'">Unit</button>
+    <button class="btn text">GROUP BY:</button>
     <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'unit'">Unit</button>
     <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
 </div>
 
@@ -39,24 +39,26 @@
 
             <div class="clearfix"></div>
 
-        </div>
-
-        <div class="requestActions">
-            <hr>
-            <div class="pull-right">
-                <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
-                        class="glyphicon glyphicon-search"></i></span>&nbsp;View Requests
-                </button>
-                <button type="button" class="btn btn-warning btn-labeled"><span class="btn-label"><i
-                        class="glyphicon glyphicon-pencil"></i></span>&nbsp;Edit Class
-                </button>
-                <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
-                        class="glyphicon glyphicon-ban-circle"></i></span>&nbsp;Cancel Class
-                </button>
+            <div class="requestActions">
+                <hr>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success btn-labeled"><span class="btn-label"><i
+                            class="glyphicon glyphicon-plus"></i></span>&nbsp;Create Request
+                    </button>
+                    <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
+                            class="glyphicon glyphicon-search"></i></span>&nbsp;View Requests
+                    </button>
+                    <button type="button" class="btn btn-warning btn-labeled"><span class="btn-label"><i
+                            class="glyphicon glyphicon-pencil"></i></span>&nbsp;Edit Class
+                    </button>
+                    <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
+                            class="glyphicon glyphicon-trash"></i></span>&nbsp;Cancel Class
+                    </button>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div class="clearfix"></div>
-        </div>
 
+        </div>
 
     </div>
 
