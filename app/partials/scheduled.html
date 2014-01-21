@@ -31,6 +31,11 @@
                 <h4>{{r.Course.Number}}</h4>
                 <h5>{{r.det.Base}} (Detachment {{r.det.Det}})</h5>
                 <i>{{r.instructor}}</i>
+                <p>Host: {{r.Host}}</p>
+                <p>Other: {{r.Other}}</p>
+                <p>Approved: {{r.approvedSeats}}</p>
+                <p>Min: {{r.Course.Min}}</p>
+                <p>Max: {{r.Course.Max}}</p>
 
             </div>
             <div class="col-lg-6 pull-right text-right">
@@ -42,16 +47,16 @@
             <div class="requestActions">
                 <hr>
                 <div class="pull-right">
-                    <button type="button" class="btn btn-success btn-labeled"><span class="btn-label"><i
+                    <button type="button" class="btn btn-success btn-labeled" ng-click="add()"><span class="btn-label"><i
                             class="glyphicon glyphicon-plus"></i></span>&nbsp;Create Request
                     </button>
-                    <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
+                    <button type="button" class="btn btn-primary btn-labeled" ng-click="view(r)"><span class="btn-label"><i
                             class="glyphicon glyphicon-search"></i></span>&nbsp;View Requests
                     </button>
-                    <button type="button" class="btn btn-warning btn-labeled"><span class="btn-label"><i
+                    <button type="button" class="btn btn-warning btn-labeled" ng-click="edit(r.Id)"><span class="btn-label"><i
                             class="glyphicon glyphicon-pencil"></i></span>&nbsp;Edit Class
                     </button>
-                    <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
+                    <button type="button" class="btn btn-danger btn-labeled" ng-click="archive(r.Id)"><span class="btn-label"><i
                             class="glyphicon glyphicon-trash"></i></span>&nbsp;Cancel Class
                     </button>
                 </div>

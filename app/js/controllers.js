@@ -1,7 +1,5 @@
 (function () {
 
-	"use strict";
-
 	var firstRun = true, filters = {}, utils = {}, search;
 
 	/**
@@ -61,16 +59,25 @@
 
 		var page, pending, updating, delaySearch;
 
+		/**
+		 * Returns the current base page
+		 * @returns String page
+		 */
 		page = function () {
 			return  $location.path().split('/')[1];
 		};
 
+		// Only run the mainController the first time the page loads
 		if (!firstRun) {
 			firstRun = false;
 			return;
 		}
 
-		// Messages is used to pass various messages regarding program state to the user (including errors);
+		/**
+		 * User feedback function, provides alerts, errors and general instructions to users
+		 *
+		 * @param Object msg
+		 */
 		utils.$message = function (msg) {
 
 			switch (msg) {
@@ -146,35 +153,59 @@
 
 						customFilters = filters.route[page()];
 
-						if (pending == '*') {
+						if (pending === '*') {
 
 							tmp = pending;
 
 						} else {
 
-							_.each(pending, function (val, key) {
+							if (pending.special) {
 
-								_.each(val, function (v, k) {
+								utils.updateSearch(function () {
 
-									var valid = true;
-
-									if (key === 'custom') {
-
-										valid = _.some(customFilters, function (f) {
-											return f.id === 'custom:' + v;
-										});
-
-									}
-
-									if (valid) {
-										tmp.push(key + ':' + v);
-									} else {
-										val.splice(k, 1);
-									}
+									$scope.noSearch = true;
+									search.disable();
+									search.addOption({
+										                 'id'      : 'custom:' + pending.special,
+										                 'text'    : pending.text || 'Special Lookup',
+										                 'optgroup': 'SMART FILTERS'
+									                 });
+									search.setValue('custom:' + pending.special);
+									$scope.filter = pending.special;
+									$scope.permaLink = '';
 
 								});
 
-							});
+								pending = false;
+								return;
+
+							} else {
+
+								_.each(pending, function (val, key) {
+
+									_.each(val, function (v, k) {
+
+										var valid = true;
+
+										if (key === 'custom') {
+
+											valid = _.some(customFilters, function (f) {
+												return f.id === 'custom:' + v;
+											});
+
+										}
+
+										if (valid) {
+											tmp.push(key + ':' + v);
+										} else {
+											val.splice(k, 1);
+										}
+
+									});
+
+								});
+
+							}
 
 						}
 
@@ -182,28 +213,51 @@
 							delete pending.custom;
 						}
 
-						updating = true;
+						utils.updateSearch(function () {
 
-						search.setValue(tmp);
+							search.setValue(tmp);
 
-						tmp = filters.$compile(pending);
+							tmp = filters.$compile(pending);
 
-						if (tmp || pending === '*') {
+							if (tmp || pending === '*') {
 
-							$scope.tags = pending;
-							$scope.filter = tmp;
+								$scope.tags = pending;
+								$scope.filter = tmp;
 
-						}
+							}
 
-						pending = updating = false;
+						});
+
+						pending = false;
 
 					}());
 
 				} else {
+
+					utils.updateSearch('');
 					utils.$message('ready');
+
 				}
 
 			}
+
+		};
+
+		utils.updateSearch = function (action) {
+
+			updating = true;
+
+			if (typeof action === 'string') {
+
+				search.setValue(action);
+
+			} else {
+
+				action();
+
+			}
+
+			updating = false;
 
 		};
 
@@ -309,7 +363,7 @@
 
 				});
 
-			}
+			};
 
 		}());
 
@@ -432,10 +486,27 @@
 
 				req.course = req.Course.PDS + ' - ' + req.Course.Number;
 
+				req.approvedSeats = _.reduce(schedClass.Approved.results, function (memo, num) {
+					return memo + num.Students.results.length;
+				}, 0);
+
 			} catch (e) {
 			}
 
 			return req;
+
+		};
+
+		utils.permaLink = function (tag, pg) {
+
+			$scope.permaLink = (!tag) ? 'all' : LZString.compressToBase64(JSON.stringify(tag));
+
+			window.location.hash =
+				[
+					'',
+					pg || page(),
+					$scope.permaLink
+				].join('/');
 
 		};
 
@@ -451,33 +522,20 @@
 
 					if (val instanceof Array && val.length > 0) {
 
-						var linker = function (tags) {
-
-							$scope.permaLink = (!tags) ? 'all' : LZString.compressToBase64(JSON.stringify(tags));
-
-							window.location.hash =
-								[
-									'',
-									page(),
-									$scope.permaLink
-								].join('/');
-
-							updating = false;
-
-						};
-
 						if (val.slice(-1)[0] === '*') {
 
 							FTSS.utils.log('Selectize *');
 
-							updating = true;
+							utils.updateSearch(function () {
 
-							if (val.length > 1) {
-								search.setValue('*');
-								search.lock();
-							}
+								if (val.length > 1) {
+									search.setValue('*');
+									search.lock();
+								}
 
-							linker(false);
+								utils.permaLink(false);
+
+							});
 
 						} else {
 
@@ -485,24 +543,25 @@
 
 								FTSS.utils.log('Selectize Filtered');
 
-								updating = true;
+								utils.updateSearch(function () {
 
-								var tags = {};
+									var tags = {};
 
-								_.each(val, function (v) {
+									_.each(val, function (v) {
 
-									var split = v.split(':');
+										var split = v.split(':');
 
-									tags[split[0]] = tags[split[0]] ||
-										[
-										];
+										tags[split[0]] = tags[split[0]] ||
+											[
+											];
 
-									tags[split[0]].push(Number(split[1]) || split[1]);
+										tags[split[0]].push(Number(split[1]) || split[1]);
+
+									});
+
+									utils.permaLink(tags);
 
 								});
-
-								linker(tags);
-
 
 							}, (instant ? 1 : 1000));
 
@@ -562,6 +621,11 @@
 		$scope.$on('$locationChangeStart', function () {
 
 			FTSS.utils.log('Location Change Start');
+
+			if (search) {
+				$scope.noSearch = false;
+				search.enable();
+			}
 
 			$scope.filter = false;
 
@@ -750,7 +814,8 @@
 						                [
 							                'Students',
 							                'CreatedBy',
-							                'Scheduled/Course'
+							                'Scheduled/Course',
+							                'Scheduled/Approved/Students'
 						                ],
 					                '$select':
 						                [
@@ -770,7 +835,8 @@
 							                'Scheduled/End',
 							                'Scheduled/Host',
 							                'Scheduled/Other',
-							                'Scheduled/InstructorId'
+							                'Scheduled/InstructorId',
+							                'Scheduled/Approved/Students/Id'
 						                ]
 				                }
 
@@ -797,7 +863,7 @@
 
 						                        req.notes = req.Notes || 'Requested by';
 
-						                        req.openSeats = req.Course.Max - req.Scheduled.Host - req.Scheduled.Other;
+						                        req.openSeats = req.Course.Max - req.Scheduled.Host - req.Scheduled.Other - req.approvedSeats;
 						                        req.reqSeats = req.Students.results.length;
 
 						                        req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
@@ -821,7 +887,9 @@
 
 					                        });
 
-					                        $scope.groupBy = $scope.groupBy || 'course';
+					                        $scope.showGrouping = !search.isDisabled;
+
+					                        $scope.groupBy = $scope.groupBy || (search.isDisabled ? 'status' : 'course');
 
 				                        }
 
@@ -836,23 +904,18 @@
 
 		FTSS.utils.log('Schedule Controller');
 
-		/*$scope.requests =
-		 [
-		 ];*/
-		/*	$scope.columns =
-		 [
-		 {'label': 'Base', 'map': 'det.Base'},
-		 {'label': 'MDS', 'map': 'course.MDS'},
-		 {'label': 'AFSC', 'map': 'course.AFSC'},
-		 {'label': 'PDS', 'map': 'course.PDS'},
-		 {'label': 'Course', 'map': 'course.CourseNumber'},
-		 {'label': 'Title', 'map': 'course.CourseTitle'}
-		 ];
+		$scope.requests =
+			[
+			];
 
-		 $scope.globalConfig = {
-		 'isGlobalSearchActivated': true,
-		 'isPaginationEnabled': false
-		 };*/
+		$scope.view = function (req) {
+
+			utils.permaLink({
+				                'special': 'ScheduledId eq ' + req.Id,
+				                'text'   : req.Course.PDS + ' on ' + req.start
+			                }, 'requests');
+
+		};
 
 		$scope.$watch('filter', function () {
 
@@ -871,7 +934,11 @@
 				                'source': 'Scheduled',
 				                'params': {
 					                '$filter': $scope.filter,
-					                '$expand': 'Course',
+					                '$expand':
+						                [
+							                'Course',
+							                'Approved/Students'
+						                ],
 					                '$select':
 						                [
 							                'Id',
@@ -881,7 +948,8 @@
 							                'End',
 							                'InstructorId',
 							                'Host',
-							                'Other'
+							                'Other',
+							                'Approved/Students/Id'
 						                ]
 				                }
 
