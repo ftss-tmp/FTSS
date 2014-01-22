@@ -502,7 +502,7 @@
 
 			try {
 
-				var schedClass = req.Scheduled || req;
+				var seats, schedClass = req.Scheduled || req;
 
 				req.Course = $scope.MasterCourseList[schedClass.CourseId];
 
@@ -520,9 +520,15 @@
 
 				req.course = req.Course.PDS + ' - ' + req.Course.Number;
 
-				req.approvedSeats = _.reduce(schedClass.Approved.results, function (memo, num) {
-					return memo + num.Students.results.length;
-				}, 0);
+				seats = _.reduce(schedClass.Requests.results, function (memo, r) {
+					memo[r.Status] += r.Students.results.length;
+					return memo;
+				}, {'1': 0, '2': 0, '3': 0});
+
+				req.approvedSeats = seats[2];
+				req.pendingSeats = seats[1];
+				req.deniedSeats = seats[3];
+				req.requestCount = seats[1] + seats[2] + seats[3];
 
 				req.openSeats = req.Course.Max - schedClass.Host - schedClass.Other - req.approvedSeats;
 
@@ -851,7 +857,7 @@
 							                'Students',
 							                'CreatedBy',
 							                'Scheduled/Course',
-							                'Scheduled/Approved/Students'
+							                'Scheduled/Requests/Students'
 						                ],
 					                '$select':
 						                [
@@ -872,7 +878,8 @@
 							                'Scheduled/Host',
 							                'Scheduled/Other',
 							                'Scheduled/InstructorId',
-							                'Scheduled/Approved/Students/Id'
+							                'Scheduled/Requests/Status',
+							                'Scheduled/Requests/Students/Id'
 						                ]
 				                }
 
@@ -903,7 +910,6 @@
 						                        req.reqSeats = req.Students.results.length;
 
 						                        req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
-						                        req.reqSeatsText = req.reqSeats + ' Requested Seat' + (req.reqSeats > 1 ? 's' : '');
 
 						                        req.Created = FTSS.utils.fixDate(req.Created, true);
 
@@ -970,11 +976,10 @@
 				                'source': 'Scheduled',
 				                'params': {
 					                '$filter': $scope.filter,
-					                '$top': 20,
 					                '$expand':
 						                [
 							                'Course',
-							                'Approved/Students'
+							                'Requests/Students'
 						                ],
 					                '$select':
 						                [
@@ -986,7 +991,8 @@
 							                'InstructorId',
 							                'Host',
 							                'Other',
-							                'Approved/Students/Id'
+							                'Requests/Status',
+							                'Requests/Students/Id'
 						                ]
 				                }
 
@@ -1025,7 +1031,7 @@
 						                        req.availability = {
 							                        'success': 'Open Seats',
 							                        'warning': 'No Open Seats',
-							                        'danger': 'Seat Limit Exceeded'
+							                        'danger' : 'Seat Limit Exceeded'
 						                        }[req.openSeatsClass];
 
 					                        });

@@ -96,7 +96,11 @@
                         <td>Maximum</td>
                         <td class="text-center bold">{{r.Course.Max}}</td>
                     </tr>
-                    <tr style="border-top:2px solid;" class="bold">
+                    <tr style="border-top:2px solid;">
+                        <td>Pending</td>
+                        <td class="text-center bold">{{r.pendingSeats}}</td>
+                    </tr>
+                    <tr class="bold">
                         <td>Available</td>
                         <td class="text-center">{{r.openSeats}}</td>
                     </tr>
@@ -120,6 +124,7 @@
                     </button>
                     <button type="button"
                             class="btn btn-primary btn-labeled"
+                            ng-show="r.requestCount > 0"
                             ng-click="view(r)">
                         <span class="btn-label">
                             <i class="glyphicon glyphicon-search"></i>
