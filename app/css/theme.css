@@ -111,12 +111,6 @@ input[disabled], textarea[disabled], input[readonly], textarea[readonly] {
     color: #b1b1b1
 }
 
-input:-moz-placeholder, textarea:-moz-placeholder {
-    color: #9ba0a5;
-    font-family: "Open Sans", Arial;
-    font-size: 13px
-}
-
 .input-group input, .input-group input, .input-group .uneditable-input, .input-group .uneditable-input {
     border: 1px solid #d6e2eb
 }
@@ -211,52 +205,6 @@ input:-moz-placeholder, textarea:-moz-placeholder {
     border-left-color: #212b36;
     border-right-color: #212b36;
     color: #3b9ff3
-}
-
-.table thead {
-    border-top: 1px solid #dee3ea
-}
-
-.table-hover tbody tr:hover > td, .table-hover tbody tr:hover > th {
-    background-color: #f5fafc
-}
-
-.table th.sortable {
-    cursor: pointer
-}
-
-.table thead th {
-    border-bottom: 0 !important;
-    font-size: 11px;
-    font-weight: 700;
-    padding-bottom: 20px !important;
-    padding-top: 5px !important;
-    position: relative;
-    text-transform: uppercase;
-    vertical-align: top !important
-}
-
-.table td {
-    border-top-color: #edf2f7 !important;
-    color: #526273;
-    vertical-align: middle !important
-}
-
-.table th.align-right, .table td.align-right {
-    padding-right: 10px !important;
-    text-align: right
-}
-
-table tr.first td {
-    border-top: 0 none
-}
-
-table th span.line {
-    border-left: 1px solid #dee3ea;
-    height: 10px;
-    left: -8px;
-    position: absolute;
-    top: 0
 }
 
 .modal-backdrop.in {
@@ -1100,21 +1048,6 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-inpu
     }
 }
 
-@media max-width 822px {
-
-    .navbar-inverse input.search {
-        display: none
-    }
-}
-
-@media max-width 767px {
-
-    #main-stats .stat {
-        float: left;
-        width: 50%
-    }
-}
-
 .active .pointer {
     display: block !important;
 }
@@ -1126,7 +1059,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-inpu
 }
 
 .btn-group .text:hover {
-    cursor: default!important;
+    cursor: default !important;
 }
 
 .well {
@@ -1138,10 +1071,40 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-inpu
 }
 
 .items.disabled {
-    border:none;
+    border: none;
     font-weight: 800;
 }
 
 .disabled .remove {
-    display: none!important;
+    display: none !important;
+}
+
+h4 .badge {
+    position: relative;
+    top: -.5px;
+    left: 0px;
+    font-size: inherit;
+}
+
+.availSeats {
+    margin:-1px 0 0;
+    font-size:inherit;
+    padding:0 8px;
+    opacity: 1!important;
+}
+
+table th {
+    text-transform: uppercase;
+}
+
+.bold {
+    font-weight: 800;
+}
+
+.well .rollupOnly {
+    display:none;
+}
+
+.well.collapsed .rollupOnly {
+    display: inline;
 }

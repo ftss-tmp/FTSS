@@ -9,6 +9,7 @@
     <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
     <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'unit'">Unit</button>
     <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'availability'">Open Seats</button>
 </div>
 
 <div ng-repeat="(header, group) in groups">
@@ -18,27 +19,89 @@
 
     <div class="well {{wellCollapse}}" ng-repeat="r in group">
 
-        <h4>{{r.Course.PDS}} - {{r.Course.Title}}
-            <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
-                <i class="glyphicon glyphicon-calendar"></i></span>
+        <h4>
+            <span class="btn btn-{{r.openSeatsClass}} availSeats" disabled>{{r.openSeats}} Open</span>
+            <span class="rollupOnly">{{r.Course.PDS}} - {{r.Course.Number}}</span>
+            <span class="pull-right" style="letter-spacing: .1em">
+                {{r.start}} - {{r.end}}
+                <i class="glyphicon glyphicon-calendar"></i>
+            </span>
         </h4>
 
         <hr class="rollup">
 
         <div class="rollup">
 
-            <div class="col-lg-6 pull-left">
-                <h4>{{r.Course.Number}}</h4>
-                <h5>{{r.det.Base}} (Detachment {{r.det.Det}})</h5>
-                <i>{{r.instructor}}</i>
-                <p>Host: {{r.Host}}</p>
-                <p>Other: {{r.Other}}</p>
-                <p>Approved: {{r.approvedSeats}}</p>
-                <p>Min: {{r.Course.Min}}</p>
-                <p>Max: {{r.Course.Max}}</p>
+
+            <div class="col-lg-9 pull-left">
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <th colspan="2">{{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Location</td>
+                        <td class="bold">{{r.det.Base}} (Detachment {{r.det.Det}})</td>
+                    </tr>
+                    <tr>
+                        <td>Instructor</td>
+                        <td class="bold">{{r.instructor}}</td>
+                    </tr>
+                    <tr>
+                        <td>MDS</td>
+                        <td class="bold">{{r.Course.MDS}}</td>
+                    </tr>
+                    <tr>
+                        <td>AFSC</td>
+                        <td class="bold">{{r.Course.AFSC}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Days</td>
+                        <td class="bold">{{r.Course.Days}}</td>
+                    </tr>
+                    <tr>
+                        <td>Hours</td>
+                        <td class="bold">{{r.Course.Hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
 
             </div>
-            <div class="col-lg-6 pull-right text-right">
+            <div class="col-lg-2 pull-right text-right">
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <th colspan="2" class="text-right">TRAINING SEATS</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Host</td>
+                        <td class="text-center bold">{{r.Host}}</td>
+                    </tr>
+                    <tr>
+                        <td>Other</td>
+                        <td class="text-center bold">{{r.Other}}</td>
+                    </tr>
+                    <tr>
+                        <td>Approved</td>
+                        <td class="text-center bold">{{r.approvedSeats}}</td>
+                    </tr>
+                    <tr style="border-top:2px solid;">
+                        <td>Minimum</td>
+                        <td class="text-center bold">{{r.Course.Min}}</td>
+                    </tr>
+                    <tr>
+                        <td>Maximum</td>
+                        <td class="text-center bold">{{r.Course.Max}}</td>
+                    </tr>
+                    <tr style="border-top:2px solid;" class="bold">
+                        <td>Available</td>
+                        <td class="text-center">{{r.openSeats}}</td>
+                    </tr>
+                    </tbody>
+                </table>
 
             </div>
 
@@ -47,17 +110,34 @@
             <div class="requestActions">
                 <hr>
                 <div class="pull-right">
-                    <button type="button" class="btn btn-success btn-labeled" ng-click="add()"><span class="btn-label"><i
-                            class="glyphicon glyphicon-plus"></i></span>&nbsp;Create Request
+                    <button type="button"
+                            class="btn btn-success btn-labeled"
+                            ng-click="add()"
+                            ng-show="r.openSeats > 0">
+                        <span class="btn-label">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </span>&nbsp;Request Seats
                     </button>
-                    <button type="button" class="btn btn-primary btn-labeled" ng-click="view(r)"><span class="btn-label"><i
-                            class="glyphicon glyphicon-search"></i></span>&nbsp;View Requests
+                    <button type="button"
+                            class="btn btn-primary btn-labeled"
+                            ng-click="view(r)">
+                        <span class="btn-label">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </span>&nbsp;View Requests
                     </button>
-                    <button type="button" class="btn btn-warning btn-labeled" ng-click="edit(r.Id)"><span class="btn-label"><i
-                            class="glyphicon glyphicon-pencil"></i></span>&nbsp;Edit Class
+                    <button type="button"
+                            class="btn btn-warning btn-labeled"
+                            ng-click="edit(r.Id)">
+                        <span class="btn-label">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </span>&nbsp;Edit Class
                     </button>
-                    <button type="button" class="btn btn-danger btn-labeled" ng-click="archive(r.Id)"><span class="btn-label"><i
-                            class="glyphicon glyphicon-trash"></i></span>&nbsp;Cancel Class
+                    <button type="button"
+                            class="btn btn-danger btn-labeled"
+                            ng-click="archive(r.Id)">
+                        <span class="btn-label">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </span>&nbsp;Cancel Class
                     </button>
                 </div>
                 <div class="clearfix"></div>
