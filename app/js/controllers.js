@@ -243,6 +243,11 @@
 
 		};
 
+		/**
+		 * Wrapper to handle search box value updates without triggering the onChange() event
+		 *
+		 * @param {function|string} [action] - calls the function or sets search to the given value if string
+		 */
 		utils.updateSearch = function (action) {
 
 			updating = true;
@@ -261,81 +266,105 @@
 
 		};
 
+		/**
+		 * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
+		 *
+		 * @param {Array} [data] - the data returned from SharePoint.read()
+		 */
 		utils.tagHighlight = function (data) {
 
-			if ($scope.tags !== '*') {
+			try {
 
-				var test =
-					[
-					], map = filters.map[page()];
+				// Do not highlight the "Find Everything" tag
+				if ($scope.tags !== '*') {
 
-				_.each($scope.tags, function (tag, key) {
+					var test, map;
 
-					_.each(tag, function (t) {
+					test =
+						[
+						];
+					map = filters.map[page()];
 
-						if (key !== 'custom') {
+					// First, generate the array of tags to test against
+					_.each($scope.tags, function (tag, key) {
 
-							test.push({
-								          id       : key + ':' + t,
-								          testField: map[key].split('/'),
-								          testValue: t
-							          });
+						_.each(tag, function (t) {
 
-						}
+							if (key !== 'custom') {
+
+								test.push({
+									          id       : key + ':' + t,
+									          testField: map[key].split('/'),
+									          testValue: t
+								          });
+
+							}
+
+						});
+
 
 					});
 
+					// Perform tests against all data using the test[] already created, _.all() stops once all tags are marked (if applicable)
+					_.all(data, function (req) {
 
-				});
+						// Must use _.each() in case a data item matches multiple tags
+						_.each(test, function (t, k) {
 
-				_.all(data, function (req) {
+							var field;
 
-					_.each(test, function (t, k) {
+							// In order to handle nested values (up to 2), switch on the t.testField.length
+							switch (t.testField.length) {
 
-						var field, match;
+								case 1:
+									field = req[t.testField[0]];
+									break;
 
-						switch (t.testField.length) {
+								case 2:
+									field = req[t.testField[0]][t.testField[1]];
+									break;
 
-							case 1:
-								field = req[t.testField[0]];
-								break;
+								default:
+									field = req[t.testField[0]][t.testField[1]][t.testField[2]];
 
-							case 2:
-								field = req[t.testField[0]][t.testField[1]];
-								break;
+							}
 
-							default:
-								field = req[t.testField[0]][t.testField[1]][t.testField[2]];
+							/**
+							 *  If field and testValue match, add Matched class and delete test-- we shouldn't touch the DOM
+							 *  from a controller but for performance reasons, this is much faster than relying on
+							 *  AngularJS.
+							 */
+							if (field === t.testValue) {
 
-						}
+								search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
+								delete test[k];
 
+							}
 
-						match = (field === t.testValue);
+						});
 
-						if (match) {
-
-							search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
-							delete test[k];
-
-						}
+						// Always test to ensure there are still tags to test against, otherwise exit the loop
+						return (test.length > 0);
 
 					});
 
-					return (test.length > 0);
+				}
 
-				});
-
+			} catch (e) {
+				FTSS.utils.log(e);
 			}
 
 		};
 
 		/**
-		 * This function handles updating the custom filter list when the view is chaned
+		 * When the view is updated, this will remove custom filters and then add the custom filters for this view
+		 * as defined by filters.route[page()].
 		 */
 		filters.$add = (function () {
 
 			var today, date = new Date();
 
+			// Store today's value throughout the app's lifecycle as it will be used numerous times
 			today =
 				[
 					date.getFullYear(),
@@ -343,6 +372,7 @@
 					('0' + date.getDate()).slice(-2)
 				].join('-');
 
+			// return the real function for filters.$add now that we have today cached in a closure
 			return function () {
 
 				FTSS.utils.log('Add Filters');
@@ -353,6 +383,10 @@
 
 				});
 
+				/**
+				 *  For simplicitie's sake, the keyword TODAY is replaced with a SP-compatible date value and
+				 *  optgroup is added to make the custom filters show up in the right area of the dropdown
+				 */
 				_.each(filters.route[page()], function (filter) {
 
 					filter.id = filter.id.replace(/TODAY/g, today);
@@ -489,6 +523,8 @@
 				req.approvedSeats = _.reduce(schedClass.Approved.results, function (memo, num) {
 					return memo + num.Students.results.length;
 				}, 0);
+
+				req.openSeats = req.Course.Max - schedClass.Host - schedClass.Other - req.approvedSeats;
 
 			} catch (e) {
 			}
@@ -857,13 +893,13 @@
 						                        req = utils.$decorate($scope, req);
 
 						                        req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
+
 						                        req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
 
 						                        req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
 						                        req.notes = req.Notes || 'Requested by';
 
-						                        req.openSeats = req.Course.Max - req.Scheduled.Host - req.Scheduled.Other - req.approvedSeats;
 						                        req.reqSeats = req.Students.results.length;
 
 						                        req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
@@ -934,6 +970,7 @@
 				                'source': 'Scheduled',
 				                'params': {
 					                '$filter': $scope.filter,
+					                '$top': 20,
 					                '$expand':
 						                [
 							                'Course',
@@ -971,23 +1008,43 @@
 
 						                        req = utils.$decorate($scope, req);
 
+						                        switch (true) {
+							                        case (req.openSeats > 0):
+								                        req.openSeatsClass = 'success';
+								                        break;
+
+							                        case (req.openSeats === 0):
+								                        req.openSeatsClass = 'warning';
+								                        break;
+
+							                        case(req.openSeats < 0):
+								                        req.openSeatsClass = 'danger';
+								                        break;
+						                        }
+
+						                        req.availability = {
+							                        'success': 'Open Seats',
+							                        'warning': 'No Open Seats',
+							                        'danger': 'Seat Limit Exceeded'
+						                        }[req.openSeatsClass];
+
 					                        });
 
 					                        utils.$loading(false);
 
-				                        }
+					                        utils.tagHighlight($scope.requests);
 
-				                        utils.tagHighlight($scope.requests);
+					                        $scope.$watch('groupBy', function () {
 
-				                        $scope.$watch('groupBy', function () {
+						                        $scope.groups = _.groupBy($scope.requests, function (req) {
+							                        return req.Course[$scope.groupBy] || req[$scope.groupBy];
+						                        });
 
-					                        $scope.groups = _.groupBy($scope.requests, function (req) {
-						                        return req.Course[$scope.groupBy] || req[$scope.groupBy];
 					                        });
 
-				                        });
+					                        $scope.groupBy = $scope.groupBy || 'MDS';
 
-				                        $scope.groupBy = $scope.groupBy || 'MDS';
+				                        }
 
 			                        }, utils.$ajaxFailure);
 
