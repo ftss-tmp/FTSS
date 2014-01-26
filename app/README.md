@@ -109,7 +109,7 @@ fetch the changes and merge them into your project with git.
         app.js          --> application
         controllers.js  --> application controllers
         directives.js   --> application directives
-        filters.js      --> custom angular filters
+        ftss-filters.js      --> custom angular filters
         services.js     --> custom angular services
       lib/              --> angular and 3rd party javascript libraries
         angular/

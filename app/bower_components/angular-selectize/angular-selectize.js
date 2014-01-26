@@ -5,10 +5,6 @@
 
 	angular.module('angular-selectize').directive('selectize', function ($timeout) {
 
-		$(document).on('mouseenter', '.selectize-control .item', function() {
-			this.title = this.innerText;
-		});
-
 		return {
 			// Restrict it to be an attribute in this case
 			restrict: 'A',

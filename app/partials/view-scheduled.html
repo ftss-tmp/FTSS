@@ -35,7 +35,7 @@
 
             <div class="col-lg-9 pull-left">
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-split">
                     <thead>
                     <th colspan="2">{{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}</th>
                     </thead>
@@ -71,7 +71,7 @@
             </div>
             <div class="col-lg-2 pull-right text-right">
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-split">
                     <thead>
                     <th colspan="2" class="text-right">TRAINING SEATS</th>
                     </thead>
@@ -116,7 +116,7 @@
                 <div class="pull-right">
                     <button type="button"
                             class="btn btn-success btn-labeled"
-                            ng-click="add()"
+                            ng-click="add(r)"
                             ng-show="r.openSeats > 0">
                         <span class="btn-label">
                             <i class="glyphicon glyphicon-plus"></i>

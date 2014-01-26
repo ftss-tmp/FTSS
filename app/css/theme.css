@@ -880,7 +880,7 @@ html, body {
     max-width: 500px
 }
 
-.selectize-input .item {
+#tagBox .selectize-input .item {
     max-width: 175px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -918,10 +918,6 @@ html, body {
     padding-top: 0
 }
 
-.btn {
-    margin-bottom: 10px
-}
-
 .nav-stacked > li {
     float: none
 }
@@ -946,7 +942,7 @@ img.badge {
     top: 7px
 }
 
-.active a.wait img.badge {
+.wait .active a img.badge {
     display: block !important
 }
 
@@ -995,7 +991,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-inpu
     display: none
 }
 
-.requestApproved .requestActions, .requestDenied .requestActions, .collapsed .rollup, a.wait span.badge, a img.badge {
+.requestApproved .requestActions, .requestDenied .requestActions, .collapsed .rollup, .wait a span.badge, a img.badge {
     display: none !important
 }
 
@@ -1107,4 +1103,17 @@ table th {
 
 .well.collapsed .rollupOnly {
     display: inline;
+}
+
+.table.table-split tr td:first-child{
+    text-align: right;
+    border-right: 1px solid rgb(221,221,221);
+}
+
+#requestSeats .item {
+    background: none!important;
+    color: #000!important;
+    border-bottom: 1px solid #428bca;
+    margin-bottom: 10px;
+    width:97%;
 }

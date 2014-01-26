@@ -1,26 +1,22 @@
-var app, FTSS = {};
+/*global _, $, angular */
+
+var app, FTSS;
 
 (function () {
 
 	"use strict";
 
+	/**
+	 * Creat the Angular module & declare dependencies
+	 *
+	 * @type {module}
+	 */
 	app = angular.module('FTSS',
 	                     [
 		                     'ngRoute',
 		                     'angular-selectize',
 		                     'ui.bootstrap'
-	                     ]).directive('onFinishRender', function ($timeout) {
-		                                  return {
-			                                  restrict: 'A',
-			                                  link    : function (scope, element, attr) {
-				                                  if (scope.$last === true) {
-					                                  $timeout(function () {
-						                                  scope.$emit(attr.onFinishRender);
-					                                  });
-				                                  }
-			                                  }
-		                                  };
-	                                  });
+	                     ]);
 
 	var _internal, utils = {};
 
@@ -28,10 +24,14 @@ var app, FTSS = {};
 		//'baseURL': 'https://sheppard.eis.aetc.af.mil/982TRG/373TRS/Det306/scheduling/_vti_bin/ListData.svc/',
 		'baseURL': 'http://dev/_vti_bin/ListData.svc/',
 		'userURL': 'http://dev/_layouts/userdisp.aspx?Force=True',
+		//'pplURL' : 'https://cs3.eis.af.mil/_vti_bin/ListData.svc/UserInformationList',
+		'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
 		'debug'  : true,
 		'offline': true,
 		'noCache': false
 	};
+
+	FTSS = {};
 
 	FTSS.utils = utils;
 
@@ -53,7 +53,7 @@ var app, FTSS = {};
 
 			try {
 
-				delete item['__metadata'];
+				delete item.__metadata;
 
 			} catch (e) {
 
@@ -92,7 +92,7 @@ var app, FTSS = {};
 		return {
 			'data': translated,
 			'json': JSON.stringify(translated).replace(_internal.baseURL, '')
-		}
+		};
 
 	};
 
@@ -120,20 +120,20 @@ var app, FTSS = {};
 
 			return dCache[date + time];
 
-		}
+		};
 
 	}());
 
 
 	utils.log = (function () {
 
-		var last = (new Date).getTime();
+		var last = (new Date()).getTime();
 
 		return function (data, noStamp) {
 
 			if (_internal.debug && console) {
 
-				var stamp = (new Date).getTime();
+				var stamp = (new Date()).getTime();
 
 				if (noStamp) {
 					console.info(data);
@@ -145,7 +145,8 @@ var app, FTSS = {};
 
 			}
 
-		}
+		};
+
 	}());
 
 
@@ -164,7 +165,35 @@ var app, FTSS = {};
 
 		FTSS.SP = {
 
-			'user': function () {
+			'people': (function () {
+
+				var last =
+					[
+					];
+
+				return function (search) {
+
+
+					return $http({
+						             'dataType': 'json',
+						             'method'  : 'GET',
+						             'cache'   : true,
+						             'url'     : _internal.pplURL,
+						             'params'  : {
+							             '$select': 'Id,Name',
+							             '$filter': "startswith(Name,'" + search + "')",
+							             '$top'   : 5
+						             }
+					             }).then(function (response) {
+
+						                     return _.toArray(response.data.d);
+
+					                     });
+
+				};
+
+			}()),
+			'user'  : function () {
 
 				return $http({
 					             'method': 'GET',
@@ -175,7 +204,7 @@ var app, FTSS = {};
 					                     return {
 						                     'id'  : parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
 						                     'name': $(response.data.replace(/[ ]src=/g, ' data-src=')).find('a#zz15_Menu span').text()
-					                     }
+					                     };
 
 				                     });
 
@@ -283,7 +312,7 @@ var app, FTSS = {};
 									        'params': {
 										        '$select' : 'Modified',
 										        '$orderby': 'Modified desc',
-										        '$top'    : '1'
+										        '$top'    : 1
 									        }
 
 								        }).then(function (data) {
@@ -295,114 +324,58 @@ var app, FTSS = {};
 							}
 
 						},
-						'catch'  : function (callback) {
+						'catch'  : function () {
 						},
-						'finally': function (callback) {
+						'finally': function () {
 						}
 
-					}
+					};
 
 
 				}
 
 			}
 
-		}
+		};
 
 		return FTSS.SP;
 	});
 
 
 }());
-/*
 
- function asdf(options) {
-
- console.time(options.source);
-
- // If caching is enabled, first run fn.cache()
- if (options.cache) {
-
- return _internal.fn.cache(options);
-
- } else {
-
-
- // Use AngularJS $http() if passed; otherwise, just use jQuery's $.ajax()
- options.http = options.http || $.ajax;
-
- //  Return the options.http() function for AngularJS promises to work properly
- return options.http({
- 'method': 'GET',
- 'dataType': 'json',
- 'url': _internal.baseURL + options.source,
- 'data': options.params || null,
- 'params': options.params || null
- })
-
- */
-/*	// On success, log and trim the data and pass to options.success()
- .success(function (data) {
-
-
-
- })
- */
-/*
- .then(function (response) {
-
- var data = response.data.d;
-
- console.timeEnd(options.source);
- utils.log(data);
-
- // Send the data through the reduce() function first
- if (options.success) {
- options.success(_internal.fn.reduce(data), options);
- }
-
- return
- [
- _internal.fn.reduce(data).data,
- options
- ];
-
- })
-
- */
 
 /*
  * The AngularJS Router will be used to handle various page mappings and links to the HTML Partials for FTSS
  */
 app.config(function ($routeProvider) {
-	$routeProvider
 
-		// route for the home page
-		.when('/', {
-			      templateUrl: 'partials/home.html',
-			      controller : 'homeController'
-		      })
+	"use strict";
 
-		// route for the requests page
-		.when('/scheduled/:link?', {
-			      templateUrl: 'partials/scheduled.html',
-			      controller : 'scheduledController'
-		      })
+	var routes =
+		[
+			'home',
+			'scheduled',
+			'requests',
+			'instructors',
+			'students',
+			'catalog',
+			'error'
+		];
 
-		// route for the requests page
-		.when('/requests/:link?', {
-			      templateUrl: 'partials/requests.html',
-			      controller : 'requestsController'
-		      })
+	_.each(routes, function (route) {
 
-		// route for the requests page
-		.when('/requests/:link?', {
-			      templateUrl: 'partials/requests.html',
-			      controller : 'requestsController'
-		      })
+		$routeProvider.when('/' + route + '/:link?', {
 
-		.otherwise({
-			           redirectTo: '/'
-		           })
+			'templateUrl': 'partials/view-' + route + '.html',
+			'controller' : route + 'Controller'
+
+		});
+
+	});
+
+	$routeProvider.otherwise({
+		                         redirectTo: '/error'
+	                         });
 
 });
