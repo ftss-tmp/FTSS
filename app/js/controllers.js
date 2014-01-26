@@ -1,43 +1,10 @@
+/*global _, $, jQuery, FTSS, app, angular, LZString */
+
 (function () {
 
-	var firstRun = true, filters = {}, utils = {}, search;
+	"use strict";
 
-	/**
-	 *  This is the app-wide collection of custom filters used by the search box
-	 */
-	filters.route = {
-		'scheduled':
-			[
-				{'id': "custom:Start ge datetime'TODAY'", 'text': 'Not Started'},
-				{'id': "custom:End le datetime'TODAY'", 'text': 'Completed'},
-				{'id': "custom:(Start le datetime'TODAY' and End ge datetime'TODAY')", 'text': 'In Progress'}
-			],
-		'requests' :
-			[
-				{'id': 'custom:Status gt 1', 'text': 'Completed Requests'},
-				{'id': 'custom:Status eq 1', 'text': 'Pending Requests'},
-				{'id': 'custom:Status eq 2', 'text': 'Approved Requests'},
-				{'id': 'custom:Status eq 3', 'text': 'Denied Requests'}
-			]
-	};
-
-	filters.map = {
-		'scheduled': {
-			'd': 'UnitId',
-			'm': "Course/MDS",
-			'a': "Course/AFSC",
-			'i': 'InstructorId',
-			'c': 'CourseId'
-		},
-		'requests' : {
-			'd': 'Scheduled/UnitId',
-			'm': "Scheduled/Course/MDS",
-			'a': "Scheduled/Course/AFSC",
-			'i': 'Scheduled/InstructorId',
-			'c': 'Scheduled/CourseId'
-
-		}
-	};
+	var firstRun = true, filters, utils = {}, search;
 
 	app.controller('user', function ($scope, SharePoint) {
 
@@ -57,13 +24,13 @@
 
 		FTSS.utils.log('Main Controller');
 
-		var page, pending, updating, delaySearch;
+		var pending, updating, delaySearch;
 
 		/**
 		 * Returns the current base page
 		 * @returns String page
 		 */
-		page = function () {
+		FTSS.page = function () {
 			return  $location.path().split('/')[1];
 		};
 
@@ -72,6 +39,8 @@
 			firstRun = false;
 			return;
 		}
+
+		filters = FTSS.filters($scope);
 
 		/**
 		 * User feedback function, provides alerts, errors and general instructions to users
@@ -117,14 +86,18 @@
 
 			utils.$message(false);
 
-			if (loading) {
-				document.body.style.cursor = $scope.loading = 'wait';
-				if (search) {
-					search.close();
-					search.blur();
+			if ($scope.loading !== loading) {
+
+				if (loading) {
+					document.body.style.cursor = $scope.loading = 'wait';
+					if (search) {
+						search.close();
+						search.blur();
+					}
+				} else {
+					document.body.style.cursor = $scope.loading = '';
 				}
-			} else {
-				document.body.style.cursor = $scope.loading = '';
+
 			}
 
 		};
@@ -151,7 +124,7 @@
 							[
 							];
 
-						customFilters = filters.route[page()];
+						customFilters = filters.route[FTSS.page()];
 
 						if (pending === '*') {
 
@@ -283,7 +256,7 @@
 					test =
 						[
 						];
-					map = filters.map[page()];
+					map = filters.map[FTSS.page()];
 
 					// First, generate the array of tags to test against
 					_.each($scope.tags, function (tag, key) {
@@ -356,127 +329,6 @@
 
 		};
 
-		/**
-		 * When the view is updated, this will remove custom filters and then add the custom filters for this view
-		 * as defined by filters.route[page()].
-		 */
-		filters.$add = (function () {
-
-			var today, date = new Date();
-
-			// Store today's value throughout the app's lifecycle as it will be used numerous times
-			today =
-				[
-					date.getFullYear(),
-					('0' + date.getMonth() + 1).slice(-2),
-					('0' + date.getDate()).slice(-2)
-				].join('-');
-
-			// return the real function for filters.$add now that we have today cached in a closure
-			return function () {
-
-				FTSS.utils.log('Add Filters');
-
-				_.each(_.flatten(filters.route), function (f) {
-
-					search.removeOption(f.id);
-
-				});
-
-				/**
-				 *  For simplicitie's sake, the keyword TODAY is replaced with a SP-compatible date value and
-				 *  optgroup is added to make the custom filters show up in the right area of the dropdown
-				 */
-				_.each(filters.route[page()], function (filter) {
-
-					filter.id = filter.id.replace(/TODAY/g, today);
-
-					filter.optgroup = 'SMART FILTERS';
-
-					search.addOption(filter);
-
-				});
-
-			};
-
-		}());
-
-		/**
-		 * Filter Compile Function
-		 *
-		 * Converts user-selected tags{} into the SharePoint friendly filter query
-		 *
-		 * @param tags Object
-		 * @returns {*}
-		 */
-		filters.$compile = function (tags) {
-
-			FTSS.utils.log('Compile Tags');
-
-			try {
-
-				var filter =
-					[
-					], maps = filters.map[page()];
-
-				if (tags) {
-
-					filter = tags.custom ||
-						[
-						];
-
-					_.each(maps, function (map, key) {
-
-						var isString = (key === 'm' || key === 'a'), fTemp =
-							[
-							];
-
-						_.each(tags[key], function (tag) {
-
-							if (isString) {
-
-								fTemp.push(
-									[
-										map,
-										" eq '",
-										tag.trim(),
-										"'"
-									].join(''));
-
-							} else {
-
-								fTemp.push(
-									[
-										map,
-										'eq',
-										tag
-									].join(' '));
-
-							}
-
-						});
-
-						if (fTemp.length) {
-
-							filter.push('(' + fTemp.join(' or ') + ')');
-
-						}
-
-					});
-
-				}
-
-				filter = filter.length > 0 ? filter.join(' and ') : '';
-
-				return filter;
-
-			} catch (e) {
-
-				return '';
-
-			}
-
-		};
 
 		/**
 		 *
@@ -546,7 +398,7 @@
 			window.location.hash =
 				[
 					'',
-					pg || page(),
+					pg || FTSS.page(),
 					$scope.permaLink
 				].join('/');
 
@@ -647,7 +499,7 @@
 		 * @returns {string}
 		 */
 		$scope.isPage = function (link) {
-			return link === (page() || 'home') ? 'active' : '';
+			return link === (FTSS.page() || 'home') ? 'active' : '';
 		};
 
 		/**
@@ -824,8 +676,8 @@
 	});
 
 
-	app.controller('homeController', function ($scope) {
-
+	app.controller('homeController', function () {
+debugger;
 		utils.$loading(false);
 
 	});
@@ -941,14 +793,80 @@
 
 	});
 
+	app.controller('requestSeats', function ($scope, $modalInstance, SharePoint, req) {
 
-	app.controller('scheduledController', function ($scope, SharePoint) {
+		$scope.loaded = true;
+		$scope.class = req;
+		$scope.seatCount = 0;
+
+		/**
+		 * The Selectize init options
+		 *
+		 * @type {{labelField: string, valueField: string, hideSelected: boolean, sortField: string, dataAttr: string, optgroupOrder: string[], plugins: string[], onInitialize: 'onInitialize', type: 'type', onChange: 'onChange'}}
+		 */
+		$scope.selectizeOptions = {
+			'labelField' : 'Name',
+			'valueField' : 'Id',
+			'sortField'  : 'Name',
+			'searchField': 'Name',
+			'persist'    : false,
+			'maxItems'   : req.openSeats,
+			'create'     : false,
+			'plugins'    :
+				[
+					'remove_button'
+				],
+			'onChange'   : function (val) {
+				$scope.seatCount = val && val.length || 0;
+			},
+			'load'       : function (query, callback) {
+
+				//	if (query.indexOf(', ') > 1) {                      <-- only limit queries on the production server
+
+				SharePoint.people(query).then(callback);
+
+				//	}
+
+			}
+		};
+
+		$scope.submit = function () {
+			$modalInstance.close();
+		};
+
+		$scope.cancel = $modalInstance.dismiss;
+
+	});
+
+
+	app.controller('scheduledController', function ($scope, SharePoint, $modal) {
 
 		FTSS.utils.log('Schedule Controller');
 
 		$scope.requests =
 			[
 			];
+
+		$scope.add = function (req) {
+
+			$modal.open({
+
+				            'templateUrl': 'partials/modal-request-seats.html',
+				            'controller' : 'requestSeats',
+				            'backdrop'   : 'static',
+				            'resolve'    : {
+					            'req': function () {
+						            return req;
+					            }
+				            }
+
+			            }).result.then(function (data) {
+				                           debugger;
+				                           $scope.selected = data;
+			                           });
+
+
+		};
 
 		$scope.view = function (req) {
 

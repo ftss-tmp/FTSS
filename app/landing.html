@@ -68,88 +68,15 @@
 
 <!-- sidebar -->
 <div id="sidebar-nav">
-    <ul id="dashboard-menu">
+    <ul id="dashboard-menu" class="{{loading}}">
 
-        <li ng-class="isPage('home')">
-            <div class="pointer">
-                <div class="arrow"></div>
-                <div class="arrow_border"></div>
-            </div>
-            <a href="#" class="{{loading}}">
-                <i class="glyphicon glyphicon-home"></i>
-                <span>Home</span>
-                <img class="badge" src="img/spinner-small.gif"/>
-            </a>
-        </li>
+        <nav-link link="home" name="Home" icon="home"></nav-link>
+        <nav-link link="scheduled" name="Classes" icon="calendar"></nav-link>
+        <nav-link link="requests" name="Requests" icon="time"></nav-link>
+        <nav-link link="catalog" name="Catlog" icon="list"></nav-link>
+        <nav-link link="instructors" name="Instructors" icon="user"></nav-link>
+        <nav-link link="students" name="Students" icon="user"></nav-link>
 
-        <li ng-class="isPage('scheduled')">
-            <div class="pointer">
-                <div class="arrow"></div>
-                <div class="arrow_border"></div>
-            </div>
-            <a href="#/scheduled/{{permaLink}}" class="{{loading}}">
-                <i class="glyphicon glyphicon-calendar"></i>
-                <span>Classes</span>
-                <span class="badge">{{count.results}}</span>
-                <img class="badge" src="img/spinner-small.gif"/>
-            </a>
-        </li>
-
-        <li ng-class="isPage('requests')">
-            <div class="pointer">
-                <div class="arrow"></div>
-                <div class="arrow_border"></div>
-            </div>
-            <a href="#/requests/{{permaLink}}" class="{{loading}}">
-                <i class="glyphicon glyphicon-time"></i>
-                <span>Requests</span>
-                <span class="badge">{{count.results}}</span>
-                <img class="badge" src="img/spinner-small.gif"/>
-            </a>
-        </li>
-
-
-        <li>
-            <a href="#/master-course-list/{{permaLink}}" class="{{loading}}">
-                <i class="glyphicon glyphicon glyphicon-list"></i>
-                <span>Catalog</span>
-                <span class="badge">{{count.results}}</span>
-                <img class="badge" src="img/spinner-small.gif"/>
-            </a>
-        </li>
-
-        <li>
-            <a href="#/instructors/{{permaLink}}" class="{{loading}}">
-                <i class="glyphicon glyphicon-user"></i>
-                <span>Instructors</span>
-                <span class="badge">{{count.results}}</span>
-                <img class="badge" src="img/spinner-small.gif"/>
-            </a>
-        </li>
-
-        <!--
-                <li class="active">
-
-                    <a href="index.html">
-                        <i class="icon-home"></i>
-                        <span>Home</span>
-                    </a>
-                </li>
-
-
-                <li>
-                    <a class="dropdown-toggle" href="#">
-                        <i class="icon-share-alt"></i>
-                        <span>Extras</span>
-                        <i class="icon-chevron-down"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="code-editor.html">Code editor</a></li>
-                        <li><a href="grids.html">Grids</a></li>
-                        <li><a href="signin.html">Sign in</a></li>
-                        <li><a href="signup.html">Sign up</a></li>
-                    </ul>
-                </li>-->
     </ul>
 </div>
 <!-- end sidebar -->
@@ -163,7 +90,7 @@
             <div ng-show="loaded && !isPage('home')">
 
                 <div class="col-lg-12 no-pad">
-                    <div class="col-lg-11">
+                    <div class="col-lg-11" id="tagBox">
 
                         <select
                                 class="hide"
@@ -240,6 +167,8 @@
 
 </div>
 <script src="js/app.js"></script>
+<script src="js/directives.js"></script>
+<script src="js/ftss-filters.js"></script>
 <script src="js/controllers.js"></script>
 
 </body>

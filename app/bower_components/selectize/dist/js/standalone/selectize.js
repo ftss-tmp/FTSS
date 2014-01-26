@@ -35,7 +35,7 @@
 	 */
 	var Sifter = function(items, settings) {
 		this.items = items;
-		this.settings = settings || {diacritics: true};
+		this.settings = settings || {diacritics: false};
 	};
 
 	/**
@@ -1637,7 +1637,10 @@
 			var $wrapper = self.$wrapper.addClass('loading');
 
 			self.loading++;
+
+
 			fn.apply(self, [function(results) {
+
 				self.loading = Math.max(self.loading - 1, 0);
 				if (results && results.length) {
 					self.addOption(results);

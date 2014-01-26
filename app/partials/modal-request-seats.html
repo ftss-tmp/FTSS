@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 style="font-variant: small-caps"><i class="glyphicon glyphicon-book"></i>{{class.Course.Number}} SEAT REQUEST</h3>
+</div>
+<div class="modal-body" id="requestSeats">
+
+    <p class="lead">
+        <ng-pluralize
+                count="class.openSeats"
+                when="{1:'There is only one seat available', 'other':'There are {} seats available'}"
+                ></ng-pluralize>
+        for the {{class.start}} class.
+    </p>
+
+    <br>
+
+    <div>
+        <h4><i class="glyphicon glyphicon-user"></i>Requested Student(s)</h4>
+        <select selectize="selectizeOptions" multiple></select>
+        <span class="help-block">Type the name of each student as displayed in MS Outlook:  Doe, John A.  The number of students requested will update automatically.</span>
+    </div>
+
+    <br>
+
+    <div>
+        <h4><i class="glyphicon glyphicon-pencil"></i>Request Notes</h4>
+        <textarea class="form-control" rows="3"></textarea>
+        <span class="help-block">Optional, use to add any notes to your request for the FTD.</span>
+    </div>
+
+    <br>
+
+    <h4 ng-show="seatCount > 0">You are requesting <b ng-pluralize count="seatCount" when="{1:'one seat','other':'{} seats'}"></b>.</h4>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" ng-click="submit()">Submit</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
