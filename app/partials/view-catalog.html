@@ -1,0 +1,57 @@
+<div class="btn-group" ng-show="groupBy">
+    <button class="btn text">GROUP BY:</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+</div>
+
+<div ng-repeat="(header, group) in groups" class="{{wellCollapse}}">
+
+    <h3 style="border-bottom: 1px solid; margin-top:20px; margin-bottom:15px">{{header}} <span class="pull-right">{{group.length}}</span>
+    </h3>
+
+
+    <table class="table table-striped table-expanded table-hover group{{groupBy}} rollup">
+        <thead>
+        <th>Course</th>
+        <th class="MDS" style="width:125px">MDS</th>
+        <th class="AFSC" style="width:125px">AFSC</th>
+        <th style="width:125px">Length</th>
+        <th style="width:150px">Actions</th>
+        </thead>
+        <tbody>
+
+        <tr ng-repeat="r in group">
+            <td style="text-transform: uppercase">
+                <b>{{r.PDS}}</b> - {{r.Number}}<br><span class="peek">{{r.Title}}</span>
+            </td>
+            <td class="MDS"><b>{{r.MDS}}</b></td>
+            <td class="AFSC"><b>{{r.AFSC}}</b></td>
+            <td>
+                Days: <b>{{r.Days}}</b><br><span class="peek">Hours: <b>{{r.Hours}}</b></span>
+            </td>
+            <td>
+                <button type="button"
+                        class="btn btn-sm btn-info btn-muted"
+                        ng-click="view(r.Id)">
+                    <i class="fa fa-search"></i>
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-warning btn-muted"
+                        ng-click="edit(r.Id)">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-danger btn-muted"
+                        ng-click="archive(r.Id)">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</div>
+
+</div>

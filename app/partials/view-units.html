@@ -1,0 +1,28 @@
+<table class="table table-striped table-expanded table-hover">
+    <thead>
+    <th>Base</th>
+    <th>Detachment</th>
+    <th>Email</th>
+    <th>Actions</th>
+    </thead>
+    <tbody>
+
+    <tr ng-repeat="r in requests">
+        <td><b>{{r.Base}}</b></td>
+        <td><b>{{r.Det}}</b></td>
+        <td><b>{{r.Email}}</b></td>
+        <td>
+            <button type="button"
+                    class="btn btn-sm btn-info btn-muted"
+                    ng-click="view(r.Id)">
+                <i class="fa fa-search"></i>
+            </button>
+            <button type="button"
+                    class="btn btn-sm btn-warning btn-muted"
+                    ng-click="edit(r.Id)">
+                <i class="fa fa-pencil"></i>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>

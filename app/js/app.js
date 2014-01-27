@@ -355,11 +355,13 @@ app.config(function ($routeProvider) {
 	var routes =
 		[
 			'home',
+			'requirements',
 			'scheduled',
 			'requests',
 			'instructors',
 			'students',
 			'catalog',
+			'units',
 			'error'
 		];
 
