@@ -348,49 +348,6 @@
 			               });
 		};
 
-		utils.$decorate = function ($scope, req) {
-
-			FTSS.utils.log('Decorate', true);
-
-			try {
-
-				var seats, schedClass = req.Scheduled || req;
-
-				req.Course = $scope.MasterCourseList[schedClass.CourseId];
-
-				req.det = $scope.Units[schedClass.UnitId];
-
-				req.instructor = $scope.Instructors[schedClass.InstructorId].Instructor || {};
-
-				req.instructor = req.instructor.Name || 'No Instructor Identified';
-
-				req.start = FTSS.utils.fixDate(schedClass.Start);
-
-				req.end = FTSS.utils.fixDate(schedClass.End);
-
-				req.unit = req.det.Base + ', Det ' + req.det.Det;
-
-				req.course = req.Course.PDS + ' - ' + req.Course.Number;
-
-				seats = _.reduce(schedClass.Requests.results, function (memo, r) {
-					memo[r.Status] += r.Students.results.length;
-					return memo;
-				}, {'1': 0, '2': 0, '3': 0});
-
-				req.approvedSeats = seats[2];
-				req.pendingSeats = seats[1];
-				req.deniedSeats = seats[3];
-				req.requestCount = seats[1] + seats[2] + seats[3];
-
-				req.openSeats = req.Course.Max - schedClass.Host - schedClass.Other - req.approvedSeats;
-
-			} catch (e) {
-			}
-
-			return req;
-
-		};
-
 		utils.permaLink = function (tag, pg) {
 
 			$scope.permaLink = (!tag) ? 'all' : LZString.compressToBase64(JSON.stringify(tag));
@@ -472,7 +429,7 @@
 			'$onInitialize': function () {
 				$('.hide').removeClass('hide');
 
-				search = this;
+				FTSS.search = search = this;
 
 				utils.$initPage();
 
@@ -597,87 +554,98 @@
 			'onChange'     : utils.selectize.$onChange
 		};
 
-		SharePoint.read({
+		SharePoint.read(FTSS.models.catalog).then(function (response) {
 
-			                'cache' : true,
-			                'source': 'MasterCourseList',
-			                'params': {
-				                '$select':
-					                [
-						                'Id',
-						                'PDS',
-						                'MDS',
-						                'Days',
-						                'Hours',
-						                'Min',
-						                'Max',
-						                'AFSC',
-						                'Title',
-						                'Number'
-					                ]
-			                }
+			FTSS.utils.log('MasterCourseList');
 
-		                }).then(function (response) {
+			$scope.MasterCourseList = response;
 
-			                        FTSS.utils.log('MasterCourseList');
+			$scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
+			$scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
 
-			                        $scope.MasterCourseList = response;
+		});
 
-			                        $scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
-			                        $scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
+		SharePoint.read(FTSS.models.units).then(function (response) {
 
-		                        });
+			FTSS.utils.log('Units');
+			$scope.Units = response;
 
-		SharePoint.read({
+		});
 
-			                'cache' : true,
-			                'source': 'Units',
-			                'params': {
-				                '$select':
-					                [
-						                'Id',
-						                'Base',
-						                'Det',
-						                'Email',
-						                'Phone'
-					                ]
-			                }
+		SharePoint.read(FTSS.models.instructors).then(function (response) {
 
-		                }).then(function (response) {
+			FTSS.utils.log('Instructors');
+			$scope.Instructors = response;
 
-			                        FTSS.utils.log('Units');
-			                        $scope.Units = response;
-
-		                        });
-
-		SharePoint.read({
-
-			                'cache' : true,
-			                'source': 'Instructors',
-			                'params': {
-				                '$expand': 'Instructor'/*,
-				                 '$select':
-				                 [
-				                 'Id',
-				                 'InstructorId',
-				                 'Instructor/Name',
-				                 'Instructor/WorkEMail',             <-- This isn't working on the local development SP copy for some reason...
-				                 'Instructor/WorkPhone'
-				                 ]*/
-			                }
-
-		                }).then(function (response) {
-
-			                        FTSS.utils.log('Instructors');
-			                        $scope.Instructors = response;
-
-		                        });
+		});
 
 	});
 
+	utils.$decorate = function ($scope, req) {
+
+		FTSS.utils.log('Decorate', true);
+
+		try {
+
+			var seats, schedClass = req.Scheduled || req;
+
+			req.Course = $scope.MasterCourseList[schedClass.CourseId];
+
+			req.det = $scope.Units[schedClass.UnitId];
+
+			req.instructor = $scope.Instructors[schedClass.InstructorId].Instructor || {};
+
+			req.instructor = req.instructor.Name || 'No Instructor Identified';
+
+			req.start = FTSS.utils.fixDate(schedClass.Start);
+
+			req.end = FTSS.utils.fixDate(schedClass.End);
+
+			req.unit = req.det.Base + ', Det ' + req.det.Det;
+
+			req.course = req.Course.PDS + ' - ' + req.Course.Number;
+
+			seats = _.reduce(schedClass.Requests.results, function (memo, r) {
+				memo[r.Status] += r.Students.results.length;
+				return memo;
+			}, {'1': 0, '2': 0, '3': 0});
+
+			req.approvedSeats = seats[2];
+			req.pendingSeats = seats[1];
+			req.deniedSeats = seats[3];
+			req.requestCount = seats[1] + seats[2] + seats[3];
+
+			req.openSeats = req.Course.Max - schedClass.Host - schedClass.Other - req.approvedSeats;
+
+		} catch (e) {
+		}
+
+		return req;
+
+	};
+
+	utils.initData = function ($scope, data) {
+
+		$scope.requests = data;
+
+		$scope.count.results = _.keys($scope.requests || {}).length;
+
+		if ($scope.count.results < 1) {
+
+			utils.$message('empty');
+
+			return false;
+
+		} else {
+
+			return true;
+
+		}
+	};
+
 
 	app.controller('homeController', function () {
-debugger;
+
 		utils.$loading(false);
 
 	});
@@ -687,107 +655,66 @@ debugger;
 
 		FTSS.utils.log('Request Controller');
 
-		$scope.$watch('filter', function () {
+		$scope.$watch('filter', function (filter) {
 
-			if ($scope.filter === false) {
+			if (filter === false) {
 				return;
 			}
 
 			FTSS.utils.log('Request update');
 
-			$scope.requests =
-				[
-				];
+			$scope.requests = null;
 
-			SharePoint.read({
+			var model = FTSS.models.requests;
+			model.params.$filter = filter;
 
-				                'source': 'Requests',
-				                'params': {
-					                '$filter': $scope.filter,
-					                '$expand':
-						                [
-							                'Students',
-							                'CreatedBy',
-							                'Scheduled/Course',
-							                'Scheduled/Requests/Students'
-						                ],
-					                '$select':
-						                [
-							                'Id',
-							                'Notes',
-							                'Status',
-							                'Created',
-							                'CreatedBy/Name',
-							                'CreatedBy/WorkEMail',
-							                'CreatedBy/WorkPhone',
-							                'Students/Name',
-							                'Students/WorkEMail',
-							                'Students/WorkPhone',
-							                'Scheduled/UnitId',
-							                'Scheduled/CourseId',
-							                'Scheduled/Start',
-							                'Scheduled/End',
-							                'Scheduled/Host',
-							                'Scheduled/Other',
-							                'Scheduled/InstructorId',
-							                'Scheduled/Requests/Status',
-							                'Scheduled/Requests/Students/Id'
-						                ]
-				                }
+			SharePoint.read(model).then(function (data) {
 
-			                }).then(function (data) {
-				                        FTSS.utils.log('Request Data Loaded');
-				                        $scope.requests = data;
+				FTSS.utils.log('Request Data Loaded');
 
-				                        $scope.count.results = _.keys($scope.requests || {}).length;
+				if (utils.initData($scope, data)) {
 
-				                        if ($scope.count.results < 1) {
+					_.each($scope.requests, function (req) {
 
-					                        utils.$message('empty');
+						req = utils.$decorate($scope, req);
 
-				                        } else {
+						req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
 
-					                        _.each($scope.requests, function (req) {
+						req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
 
-						                        req = utils.$decorate($scope, req);
+						req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
-						                        req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
+						req.notes = req.Notes || 'Requested by';
 
-						                        req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
+						req.reqSeats = req.Students.results.length;
 
-						                        req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
+						req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
 
-						                        req.notes = req.Notes || 'Requested by';
+						req.Created = FTSS.utils.fixDate(req.Created, true);
 
-						                        req.reqSeats = req.Students.results.length;
+						req.Scheduled.Course = req.Course;
 
-						                        req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
+						utils.$loading(false);
 
-						                        req.Created = FTSS.utils.fixDate(req.Created, true);
+					});
 
-						                        req.Scheduled.Course = req.Course;
+					utils.tagHighlight($scope.requests);
 
-						                        utils.$loading(false);
+					$scope.$watch('groupBy', function () {
 
-					                        });
+						$scope.groups = _.groupBy($scope.requests, function (req) {
+							return req.Course[$scope.groupBy] || req[$scope.groupBy];
+						});
 
-					                        utils.tagHighlight($scope.requests);
+					});
 
-					                        $scope.$watch('groupBy', function () {
+					$scope.showGrouping = !search.isDisabled;
 
-						                        $scope.groups = _.groupBy($scope.requests, function (req) {
-							                        return req.Course[$scope.groupBy] || req[$scope.groupBy];
-						                        });
+					$scope.groupBy = $scope.groupBy || (search.isDisabled ? 'status' : 'course');
 
-					                        });
+				}
 
-					                        $scope.showGrouping = !search.isDisabled;
-
-					                        $scope.groupBy = $scope.groupBy || (search.isDisabled ? 'status' : 'course');
-
-				                        }
-
-			                        }, utils.$ajaxFailure);
+			}, utils.$ajaxFailure);
 
 		});
 
@@ -838,14 +765,86 @@ debugger;
 
 	});
 
+	app.controller('catalogController', function ($scope, SharePoint) {
+
+		FTSS.utils.log('Catalog Controller');
+
+		$scope.$watch('filter', function (filter) {
+
+
+			if (filter === false) {
+				return;
+			}
+
+			FTSS.utils.log('Catalog Update');
+
+			$scope.requests = null;
+
+			SharePoint.read(FTSS.models.catalog).then(function (data) {
+
+				FTSS.utils.log('Catalog Loaded');
+
+				if (utils.initData($scope, data)) {
+
+					utils.$loading(false);
+
+					utils.tagHighlight($scope.requests);
+
+					$scope.$watch('groupBy', function () {
+
+						$scope.groups = _.groupBy($scope.requests, function (req) {
+							return req[$scope.groupBy];
+						});
+
+					});
+
+					$scope.groupBy = $scope.groupBy || 'MDS';
+
+				}
+
+			}, utils.$ajaxFailure);
+
+		});
+
+	});
+
+	app.controller('unitsController', function ($scope, SharePoint) {
+
+		FTSS.utils.log('Units Controller');
+
+		$scope.$watch('filter', function (filter) {
+
+			if (filter === false) {
+				return;
+			}
+
+			FTSS.utils.log('Units Update');
+
+			$scope.requests = null;
+
+			SharePoint.read(FTSS.models.units).then(function (data) {
+
+				FTSS.utils.log('Units Loaded');
+
+				if (utils.initData($scope, data)) {
+
+					utils.$loading(false);
+
+					utils.tagHighlight($scope.requests);
+
+				}
+
+			}, utils.$ajaxFailure);
+
+		});
+
+	});
 
 	app.controller('scheduledController', function ($scope, SharePoint, $modal) {
 
 		FTSS.utils.log('Schedule Controller');
 
-		$scope.requests =
-			[
-			];
+		$scope.requests = null;
 
 		$scope.add = function (req) {
 
@@ -877,100 +876,68 @@ debugger;
 
 		};
 
-		$scope.$watch('filter', function () {
+		$scope.$watch('filter', function (filter) {
 
-			if ($scope.filter === false) {
+			if (filter === false) {
 				return;
 			}
 
 			FTSS.utils.log('Schedule Update');
 
-			$scope.requests =
-				[
-				];
+			$scope.requests = null;
 
-			SharePoint.read({
+			var model = FTSS.models.scheduled;
+			model.params.$filter = filter;
 
-				                'source': 'Scheduled',
-				                'params': {
-					                '$filter': $scope.filter,
-					                '$expand':
-						                [
-							                'Course',
-							                'Requests/Students'
-						                ],
-					                '$select':
-						                [
-							                'Id',
-							                'UnitId',
-							                'CourseId',
-							                'Start',
-							                'End',
-							                'InstructorId',
-							                'Host',
-							                'Other',
-							                'Requests/Status',
-							                'Requests/Students/Id'
-						                ]
-				                }
+			SharePoint.read(model).then(function (data) {
 
-			                }).then(function (data) {
+				FTSS.utils.log('Schedule Loaded');
 
-				                        FTSS.utils.log('Schedule Loaded');
+				if (utils.initData($scope, data)) {
 
-				                        $scope.requests = data;
+					_.each($scope.requests, function (req) {
 
-				                        $scope.count.results = _.keys($scope.requests || {}).length;
+						req = utils.$decorate($scope, req);
 
-				                        if ($scope.count.results < 1) {
+						switch (true) {
+							case (req.openSeats > 0):
+								req.openSeatsClass = 'success';
+								break;
 
-					                        utils.$message('empty');
+							case (req.openSeats === 0):
+								req.openSeatsClass = 'warning';
+								break;
 
-				                        } else {
+							case(req.openSeats < 0):
+								req.openSeatsClass = 'danger';
+								break;
+						}
 
-					                        _.each($scope.requests, function (req) {
+						req.availability = {
+							'success': 'Open Seats',
+							'warning': 'No Open Seats',
+							'danger' : 'Seat Limit Exceeded'
+						}[req.openSeatsClass];
 
-						                        req = utils.$decorate($scope, req);
+					});
 
-						                        switch (true) {
-							                        case (req.openSeats > 0):
-								                        req.openSeatsClass = 'success';
-								                        break;
+					utils.$loading(false);
 
-							                        case (req.openSeats === 0):
-								                        req.openSeatsClass = 'warning';
-								                        break;
+					utils.tagHighlight($scope.requests);
 
-							                        case(req.openSeats < 0):
-								                        req.openSeatsClass = 'danger';
-								                        break;
-						                        }
+					$scope.$watch('groupBy', function () {
 
-						                        req.availability = {
-							                        'success': 'Open Seats',
-							                        'warning': 'No Open Seats',
-							                        'danger' : 'Seat Limit Exceeded'
-						                        }[req.openSeatsClass];
+						$scope.groups = _.groupBy($scope.requests, function (req) {
+							return req.Course[$scope.groupBy] || req[$scope.groupBy];
+						});
 
-					                        });
+					});
 
-					                        utils.$loading(false);
+					$scope.groupBy = $scope.groupBy || 'MDS';
 
-					                        utils.tagHighlight($scope.requests);
+				}
 
-					                        $scope.$watch('groupBy', function () {
-
-						                        $scope.groups = _.groupBy($scope.requests, function (req) {
-							                        return req.Course[$scope.groupBy] || req[$scope.groupBy];
-						                        });
-
-					                        });
-
-					                        $scope.groupBy = $scope.groupBy || 'MDS';
-
-				                        }
-
-			                        }, utils.$ajaxFailure);
+			}, utils.$ajaxFailure);
 
 		});
 
