@@ -16,10 +16,10 @@
 
         <div class="statusBackground">{{r.status}}</div>
 
-        <h4><i class="glyphicon glyphicon-{{r.icon}}" tooltip="{{r.status}}"></i> <span
+        <h4><i class="fa fa-{{r.icon}}" tooltip="{{r.status}}"></i> <span
                 class="text-{{r.openSeatsClass}}">{{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)</span>
             <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
-                <i class="glyphicon glyphicon-calendar"></i></span>
+                <i class="fa fa-calendar"></i></span>
         </h4>
 
         <hr class="rollup">
@@ -31,16 +31,16 @@
             <div class="col-lg-6 pull-left text-lg">
 
                 <p>
-                    <i class="glyphicon glyphicon-map-marker" tooltip="Location"></i>{{r.det.Base}} (Detachment
+                    <i class="fa fa-map-marker" tooltip="Location"></i>{{r.det.Base}} (Detachment
                     {{r.det.Det}})
                 </p>
 
                 <p>
-                    <i class="glyphicon glyphicon-user" tooltip="Instructor"></i>{{r.instructor}}
+                    <i class="fa fa-user" tooltip="Instructor"></i>{{r.instructor}}
                 </p>
 
                 <p>
-                    <i class="glyphicon glyphicon-inbox" tooltip="Date request submitted"></i>{{r.Created}}
+                    <i class="fa fa-inbox" tooltip="Date request submitted"></i>{{r.Created}}
                 </p>
 
             </div>
@@ -48,13 +48,13 @@
             <div class="col-lg-6 pull-right text-right">
 
                 <p ng-repeat="s in r.Students.results">
-                    <i class="glyphicon glyphicon-user" tooltip="Student's Name"></i>&nbsp;{{s.Name}}<br>
+                    <i class="fa fa-group" tooltip="Student's Name"></i>&nbsp;{{s.Name}}<br>
                 <span ng-show="s.WorkEMail">
-                    <i class="glyphicon glyphicon-envelope" tooltip="Student's Email"></i>&nbsp;<a
+                    <i class="fa fa-envelope" tooltip="Student's Email"></i>&nbsp;<a
                         href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.WorkEMail}}</a><br>
                 </span>
                     <span ng-show="s.WorkPhone">
-                        <i class="glyphicon glyphicon-earphone" tooltip="Student's Phone"></i>&nbsp;{{s.WorkPhone}}
+                        <i class="fa fa-earphone" tooltip="Student's Phone"></i>&nbsp;{{s.WorkPhone}}
                     </span>
                     <br>
                 </p>
@@ -77,10 +77,10 @@
                 <hr>
                 <div class="pull-right">
                     <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
-                            class="glyphicon glyphicon-thumbs-up"></i></span>&nbsp;Approve
+                            class="fa fa-thumbs-up"></i></span>&nbsp;Approve
                     </button>
                     <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
-                            class="glyphicon glyphicon-thumbs-down"></i></span>&nbsp;Deny
+                            class="fa fa-thumbs-down"></i></span>&nbsp;Deny
                     </button>
                 </div>
                 <div class="clearfix"></div>

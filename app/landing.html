@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.css">
     <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.bootstrap3.css">
@@ -14,7 +15,7 @@
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script type="text/javascript" src="bower_components/smart-table/Smart-Table.debug.js"></script>
+    <!--<script type="text/javascript" src="bower_components/smart-table/Smart-Table.debug.js"></script>-->
     <script type="text/javascript" src="bower_components/selectize/dist/js/standalone/selectize.js"></script>
     <script type="text/javascript" src="bower_components/angular-selectize/angular-selectize.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
@@ -34,7 +35,7 @@
             <span class="icon-bar"></span>
         </button>
         <span class="navbar-brand" href="index.html">
-            <i class="glyphicon glyphicon-globe"></i>&nbsp;
+            <i class="fa fa-globe"></i>&nbsp;
             <span>FTSS 3</span> | Developer Mode
         </span>
     </div>
@@ -68,14 +69,18 @@
 
 <!-- sidebar -->
 <div id="sidebar-nav">
-    <ul id="dashboard-menu" class="{{loading}}">
+    <ul id="dashboard-menu" class="{{loading}}" ng-cloak>
 
         <nav-link link="home" name="Home" icon="home"></nav-link>
+        <li><h4>FTD TRAINING</h4></li>
+        <nav-link link="requirements" name="Needs" icon="list-ol"></nav-link>
         <nav-link link="scheduled" name="Classes" icon="calendar"></nav-link>
-        <nav-link link="requests" name="Requests" icon="time"></nav-link>
-        <nav-link link="catalog" name="Catlog" icon="list"></nav-link>
+        <nav-link link="requests" name="Requests" icon="inbox"></nav-link>
+        <li><h4>FTSS SETUP</h4></li>
+        <nav-link link="catalog" name="Catalog" icon="archive"></nav-link>
+        <nav-link link="units" name="Units" icon="building-o"></nav-link>
         <nav-link link="instructors" name="Instructors" icon="user"></nav-link>
-        <nav-link link="students" name="Students" icon="user"></nav-link>
+        <nav-link link="students" name="Students" icon="group"></nav-link>
 
     </ul>
 </div>
@@ -136,11 +141,12 @@
                     </div>
 
                     <div class="col-lg-1 no-pad">
-                        <button type="button" class="btn btn-default btn-sm" ng-click="reset()" ng-hide="noSearch">
-                            <span class="glyphicon glyphicon-repeat"></span>
+                        <button type="button" class="btn btn-default" ng-click="reset()" ng-hide="noSearch">
+                            <span class="fa fa-undo"></span>
                         </button>
-                        <button type="button" class="btn btn-default btn-sm" ng-click="collapse()">
-                            <span class="glyphicon glyphicon-resize-vertical"></span>
+                        <button type="button" class="btn btn-default {{wellCollapse}}" ng-click="collapse()" id="toggleExpand">
+                            <span class="fa fa-expand"></span>
+                            <span class="fa fa-compress"></span>
                         </button>
                     </div>
                 </div>
@@ -169,6 +175,7 @@
 <script src="js/app.js"></script>
 <script src="js/directives.js"></script>
 <script src="js/ftss-filters.js"></script>
+<script src="js/ftss-models.js"></script>
 <script src="js/controllers.js"></script>
 
 </body>

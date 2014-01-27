@@ -24,7 +24,7 @@
             <span class="rollupOnly">{{r.Course.PDS}} - {{r.Course.Number}}</span>
             <span class="pull-right" style="letter-spacing: .1em">
                 {{r.start}} - {{r.end}}
-                <i class="glyphicon glyphicon-calendar"></i>
+                <i class="fa fa-calendar"></i>
             </span>
         </h4>
 
@@ -119,7 +119,7 @@
                             ng-click="add(r)"
                             ng-show="r.openSeats > 0">
                         <span class="btn-label">
-                            <i class="glyphicon glyphicon-plus"></i>
+                            <i class="fa fa-plus"></i>
                         </span>&nbsp;Request Seats
                     </button>
                     <button type="button"
@@ -127,21 +127,21 @@
                             ng-show="r.requestCount > 0"
                             ng-click="view(r)">
                         <span class="btn-label">
-                            <i class="glyphicon glyphicon-search"></i>
+                            <i class="fa fa-search"></i>
                         </span>&nbsp;View Requests
                     </button>
                     <button type="button"
                             class="btn btn-warning btn-labeled"
                             ng-click="edit(r.Id)">
                         <span class="btn-label">
-                            <i class="glyphicon glyphicon-pencil"></i>
+                            <i class="fa fa-pencil"></i>
                         </span>&nbsp;Edit Class
                     </button>
                     <button type="button"
                             class="btn btn-danger btn-labeled"
                             ng-click="archive(r.Id)">
                         <span class="btn-label">
-                            <i class="glyphicon glyphicon-trash"></i>
+                            <i class="fa fa-trash-o"></i>
                         </span>&nbsp;Cancel Class
                     </button>
                 </div>
