@@ -46,7 +46,6 @@
 			'a': "Scheduled/Course/AFSC",
 			'i': 'Scheduled/InstructorId',
 			'c': 'Scheduled/CourseId'
-
 		}
 	};
 
@@ -70,31 +69,27 @@
 		// return the real function for filters.$add now that we have today cached in a closure
 		return function () {
 
-			if (FTSS.search) {
+			FTSS.utils.log('Add Filters');
 
-				FTSS.utils.log('Add Filters');
+			_.each(_.flatten(filters.route), function (f) {
 
-				_.each(_.flatten(filters.route), function (f) {
+				FTSS.search.removeOption(f.id);
 
-					FTSS.search.removeOption(f.id);
+			});
 
-				});
+			/**
+			 *  For simplicitie's sake, the keyword TODAY is replaced with a SP-compatible date value and
+			 *  optgroup is added to make the custom filters show up in the right area of the dropdown
+			 */
+			_.each(filters.route[FTSS.page()], function (filter) {
 
-				/**
-				 *  For simplicitie's sake, the keyword TODAY is replaced with a SP-compatible date value and
-				 *  optgroup is added to make the custom filters show up in the right area of the dropdown
-				 */
-				_.each(filters.route[FTSS.page()], function (filter) {
+				filter.id = filter.id.replace(/TODAY/g, today);
 
-					filter.id = filter.id.replace(/TODAY/g, today);
+				filter.optgroup = 'SMART FILTERS';
 
-					filter.optgroup = 'SMART FILTERS';
+				FTSS.search.addOption(filter);
 
-					FTSS.search.addOption(filter);
-
-				});
-
-			}
+			});
 
 		};
 
