@@ -1,4 +1,4 @@
-/*global _, $, jQuery, FTSS, app, angular, LZString */
+/*global _, $, FTSS, app, LZString */
 
 (function () {
 
@@ -426,15 +426,6 @@
 				}
 			},
 
-			'$onInitialize': function () {
-				$('.hide').removeClass('hide');
-
-				FTSS.search = search = this;
-
-				utils.$initPage();
-
-			},
-
 			'$onType': function () {
 				clearTimeout(delaySearch);
 			},
@@ -501,27 +492,6 @@
 		});
 
 		/**
-		 * Watch for the completion of all the search box cache lookups & rendering prior to triggering $scope.loaded
-		 */
-		(function () {
-
-			var rCount = 0;
-
-			$scope.$on('rendered', function () {
-
-				if (++rCount > 4) {
-
-					FTSS.utils.log('Caches Loaded');
-
-					$scope.loaded = true;
-
-				}
-
-			});
-
-		}());
-
-		/**
 		 * The Selectize init options
 		 *
 		 * @type {{labelField: string, valueField: string, hideSelected: boolean, sortField: string, dataAttr: string, optgroupOrder: string[], plugins: string[], onInitialize: 'onInitialize', type: 'type', onChange: 'onChange'}}
@@ -533,12 +503,11 @@
 			'sortField'    : 'text',
 			'dataAttr'     : 'width',
 			'persist'      : true,
-			'maxItems'     : 25,
 			'optgroupOrder':
 				[
 					'',
 					'SMART FILTERS',
-					'UNIT',
+					'DETACHMENT',
 					'AFSC',
 					'MDS',
 					'INSTRUCTOR',
@@ -549,35 +518,113 @@
 					'optgroup_columns',
 					'remove_button'
 				],
-			'onInitialize' : utils.selectize.$onInitialize,
 			'type'         : utils.selectize.$onType,
-			'onChange'     : utils.selectize.$onChange
+			'onChange'     : utils.selectize.$onChange,
+			'onInitialize' : function () {
+
+				$('.hide').removeClass('hide');
+
+				FTSS.search = search = this;
+
+				var loaded = (function () {
+
+					var count = 0;
+
+					return function (data, title, text) {
+
+						var id = title.toLowerCase().charAt(0) + ':';
+
+						if (typeof text !== 'function') {
+							text = function (v) {
+								return v;
+							};
+						}
+
+						search.addOptionGroup(title, {
+							'label': title,
+							'value': title
+						});
+
+						search.addOption(_.map(data, function (v) {
+
+							return {
+								'id'      : id + (v.Id || v),
+								'optgroup': title,
+								'text'    : text(v)
+							};
+
+						}));
+
+
+						if (++count > 4) {
+
+							$scope.loaded = true;
+							utils.$initPage();
+
+						}
+
+					};
+
+				}());
+
+				SharePoint.read(FTSS.models.catalog).then(function (response) {
+
+					FTSS.utils.log('MasterCourseList');
+
+					$scope.MasterCourseList = response;
+
+					$scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
+					$scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
+
+					loaded($scope.MasterCourseList, 'COURSE', function (v) {
+						return
+						[
+							v.PDS,
+							v.Number,
+							v.Title,
+							v.MDS,
+							v.AFSC
+						].join(' / ');
+					});
+
+					loaded($scope.MDS, 'MDS');
+
+					loaded($scope.AFSC, 'AFSC');
+
+				});
+
+				SharePoint.read(FTSS.models.units).then(function (response) {
+
+					FTSS.utils.log('Units');
+					$scope.Units = response;
+
+					loaded(response, 'DETACHMENT', function (v) {
+						return
+						[
+							v.Base,
+							' (Det. ',
+							v.Det,
+							')'
+						].join('');
+					});
+
+				});
+
+				SharePoint.read(FTSS.models.instructors).then(function (response) {
+
+					FTSS.utils.log('Instructors');
+					$scope.Instructors = response;
+
+					loaded(response, 'INSTRUCTOR', function (v) {
+
+						return  v.Instructor.Name;
+
+					});
+
+				});
+
+			}
 		};
-
-		SharePoint.read(FTSS.models.catalog).then(function (response) {
-
-			FTSS.utils.log('MasterCourseList');
-
-			$scope.MasterCourseList = response;
-
-			$scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
-			$scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
-
-		});
-
-		SharePoint.read(FTSS.models.units).then(function (response) {
-
-			FTSS.utils.log('Units');
-			$scope.Units = response;
-
-		});
-
-		SharePoint.read(FTSS.models.instructors).then(function (response) {
-
-			FTSS.utils.log('Instructors');
-			$scope.Instructors = response;
-
-		});
 
 	});
 
@@ -626,9 +673,9 @@
 
 	utils.initData = function ($scope, data) {
 
-		$scope.requests = data;
+		$scope.data = data;
 
-		$scope.count.results = _.keys($scope.requests || {}).length;
+		$scope.count.results = _.keys($scope.data || {}).length;
 
 		if ($scope.count.results < 1) {
 
@@ -653,34 +700,26 @@
 
 	app.controller('requestsController', function ($scope, SharePoint) {
 
-		FTSS.utils.log('Request Controller');
-
 		$scope.$watch('filter', function (filter) {
 
 			if (filter === false) {
 				return;
 			}
 
-			FTSS.utils.log('Request update');
-
-			$scope.requests = null;
-
 			var model = FTSS.models.requests;
 			model.params.$filter = filter;
 
 			SharePoint.read(model).then(function (data) {
 
-				FTSS.utils.log('Request Data Loaded');
-
 				if (utils.initData($scope, data)) {
 
-					_.each($scope.requests, function (req) {
+					_.each($scope.data, function (req) {
 
 						req = utils.$decorate($scope, req);
 
 						req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
 
-						req.icon = {'1': 'time', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
+						req.icon = {'1': 'clock-o', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
 
 						req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
@@ -698,11 +737,11 @@
 
 					});
 
-					utils.tagHighlight($scope.requests);
+					utils.tagHighlight($scope.data);
 
 					$scope.$watch('groupBy', function () {
 
-						$scope.groups = _.groupBy($scope.requests, function (req) {
+						$scope.groups = _.groupBy($scope.data, function (req) {
 							return req.Course[$scope.groupBy] || req[$scope.groupBy];
 						});
 
@@ -778,8 +817,6 @@
 
 			FTSS.utils.log('Catalog Update');
 
-			$scope.requests = null;
-
 			SharePoint.read(FTSS.models.catalog).then(function (data) {
 
 				FTSS.utils.log('Catalog Loaded');
@@ -788,13 +825,15 @@
 
 					utils.$loading(false);
 
-					utils.tagHighlight($scope.requests);
+					utils.tagHighlight($scope.data);
 
 					$scope.$watch('groupBy', function () {
 
-						$scope.groups = _.groupBy($scope.requests, function (req) {
+						$scope.groups = _.groupBy($scope.data, function (req) {
 							return req[$scope.groupBy];
 						});
+
+						$scope.sort();
 
 					});
 
@@ -820,8 +859,6 @@
 
 			FTSS.utils.log('Units Update');
 
-			$scope.requests = null;
-
 			SharePoint.read(FTSS.models.units).then(function (data) {
 
 				FTSS.utils.log('Units Loaded');
@@ -830,7 +867,9 @@
 
 					utils.$loading(false);
 
-					utils.tagHighlight($scope.requests);
+					utils.tagHighlight($scope.data);
+
+					$scope.sort();
 
 				}
 
@@ -843,8 +882,6 @@
 	app.controller('scheduledController', function ($scope, SharePoint, $modal) {
 
 		FTSS.utils.log('Schedule Controller');
-
-		$scope.requests = null;
 
 		$scope.add = function (req) {
 
@@ -884,8 +921,6 @@
 
 			FTSS.utils.log('Schedule Update');
 
-			$scope.requests = null;
-
 			var model = FTSS.models.scheduled;
 			model.params.$filter = filter;
 
@@ -895,7 +930,7 @@
 
 				if (utils.initData($scope, data)) {
 
-					_.each($scope.requests, function (req) {
+					_.each($scope.data, function (req) {
 
 						req = utils.$decorate($scope, req);
 
@@ -923,11 +958,11 @@
 
 					utils.$loading(false);
 
-					utils.tagHighlight($scope.requests);
+					utils.tagHighlight($scope.data);
 
 					$scope.$watch('groupBy', function () {
 
-						$scope.groups = _.groupBy($scope.requests, function (req) {
+						$scope.groups = _.groupBy($scope.data, function (req) {
 							return req.Course[$scope.groupBy] || req[$scope.groupBy];
 						});
 
