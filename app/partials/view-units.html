@@ -1,25 +1,26 @@
+
 <table class="table table-striped table-expanded table-hover">
     <thead>
-    <th>Base</th>
-    <th>Detachment</th>
-    <th>Email</th>
+    <th sorter="Base"></th>
+    <th sorter="Det" text="Detachment" default></th>
+    <th sorter="Email"></th>
     <th>Actions</th>
     </thead>
     <tbody>
 
-    <tr ng-repeat="r in requests">
-        <td><b>{{r.Base}}</b></td>
-        <td><b>{{r.Det}}</b></td>
-        <td><b>{{r.Email}}</b></td>
+    <tr ng-repeat="unit in data">
+        <td><b>{{unit.Base}}</b></td>
+        <td><b>{{unit.Det}}</b></td>
+        <td><b>{{unit.Email}}</b></td>
         <td>
             <button type="button"
                     class="btn btn-sm btn-info btn-muted"
-                    ng-click="view(r.Id)">
+                    ng-click="view(unit.Id)">
                 <i class="fa fa-search"></i>
             </button>
             <button type="button"
                     class="btn btn-sm btn-warning btn-muted"
-                    ng-click="edit(r.Id)">
+                    ng-click="edit(unit.Id)">
                 <i class="fa fa-pencil"></i>
             </button>
         </td>
