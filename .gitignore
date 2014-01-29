@@ -3,3 +3,16 @@ Caches/
 .idea/
 fonts/
 app/bower_components/
+app/bower_components
+app/bower_components/angular
+app/bower_components/angular-selectize/angular-selectize.js
+
+app/bower_components/angular/angular.js
+
+app/bower_components/angular/angular.min.js
+
+app/bower_components/angular/angular.min.js.gzip
+
+app/bower_components/angular/angular.min.js.map
+
+bower.json
