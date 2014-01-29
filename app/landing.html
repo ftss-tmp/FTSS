@@ -101,41 +101,10 @@
                                 class="hide"
                                 selectize="selectizeOptions"
                                 multiple placeholder="Click or type to add search terms" style="width:100%">
-
                             <optgroup label="">
                                 <option value="*">Find EVERYTHING for this page (this could take a minute)</option>
                             </optgroup>
-
-                            <optgroup label="SMART FILTERS">
-                            </optgroup>
-
-                            <optgroup label="UNIT">
-                                <option ng-repeat="u in Units" value="d:{{u.Id}}" on-finish-render="rendered">{{u.Base}}
-                                    (Det.
-                                    {{u.Det}})
-                                </option>
-                            </optgroup>
-
-                            <optgroup label="AFSC">
-                                <option ng-repeat="a in AFSC" value="a:{{a}}" on-finish-render="rendered">{{a}}</option>
-                            </optgroup>
-
-                            <optgroup label="MDS">
-                                <option ng-repeat="m in MDS" value="m:{{m}}" on-finish-render="rendered">{{m}}</option>
-                            </optgroup>
-
-                            <optgroup label="INSTRUCTOR">
-                                <option ng-repeat="i in Instructors" value="i:{{i.Id}}" on-finish-render="rendered">
-                                    {{i.Instructor.Name}}
-                                </option>
-                            </optgroup>
-
-                            <optgroup label="COURSE">
-                                <option ng-repeat="c in MasterCourseList" value="c:{{c.Id}}"
-                                        on-finish-render="rendered">
-                                    {{c.PDS}} - {{c.Number}} / {{c.Title}} / {{c.MDS}} / {{c.AFSC}}
-                                </option>
-                            </optgroup>
+                            <optgroup label="SMART FILTERS"></optgroup>
                         </select>
 
                     </div>
@@ -144,7 +113,8 @@
                         <button type="button" class="btn btn-default" ng-click="reset()" ng-hide="noSearch">
                             <span class="fa fa-undo"></span>
                         </button>
-                        <button type="button" class="btn btn-default {{wellCollapse}}" ng-click="collapse()" id="toggleExpand">
+                        <button type="button" class="btn btn-default {{wellCollapse}}" ng-click="collapse()"
+                                id="toggleExpand">
                             <span class="fa fa-expand"></span>
                             <span class="fa fa-compress"></span>
                         </button>
@@ -173,6 +143,7 @@
 
 </div>
 <script src="js/app.js"></script>
+<script src="js/icons.js"></script>
 <script src="js/directives.js"></script>
 <script src="js/ftss-filters.js"></script>
 <script src="js/ftss-models.js"></script>
