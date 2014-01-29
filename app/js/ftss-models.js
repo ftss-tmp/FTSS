@@ -50,15 +50,15 @@
 			'cache' : true,
 			'source': 'Instructors',
 			'params': {
-				'$expand': 'Instructor'/*,
-				 '$select':
-				 [
-				 'Id',
-				 'InstructorId',
-				 'Instructor/Name',
-				 'Instructor/WorkEMail',             <-- This isn't working on the local development SP copy for some reason...
-				 'Instructor/WorkPhone'
-				 ]*/
+				'$expand': 'Instructor',
+				'$select':
+					[
+						'Id',
+						'InstructorId',
+						'Instructor/Name',
+						'Instructor/WorkEMail',
+						'Instructor/WorkPhone'
+					]
 			}
 
 		},
