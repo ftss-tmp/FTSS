@@ -6,10 +6,10 @@
 
 <div class="btn-group" ng-show="groupBy">
     <button class="btn text">GROUP BY:</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'unit'">Unit</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'availability'">Open Seats</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'unit'">Unit</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'availability'">Open Seats</button>
 </div>
 
 <div ng-repeat="(header, group) in groups">
@@ -23,7 +23,7 @@
             <span class="btn btn-{{r.openSeatsClass}} availSeats" disabled>{{r.openSeats}} Open</span>
             <span class="rollupOnly">{{r.Course.PDS}} - {{r.Course.Number}}</span>
             <span class="pull-right" style="letter-spacing: .1em">
-                {{r.start}} - {{r.end}}
+                {{r.start}} {{r.start}} - {{r.end}}
                 <i class="fa fa-calendar"></i>
             </span>
         </h4>
@@ -115,7 +115,7 @@
                 <hr>
                 <div class="pull-right">
                     <button type="button"
-                            class="btn btn-success btn-labeled"
+                            class="btn btn-success btn-labeled btn-muted"
                             ng-click="add(r)"
                             ng-show="r.openSeats > 0">
                         <span class="btn-label">
@@ -123,7 +123,7 @@
                         </span>&nbsp;Request Seats
                     </button>
                     <button type="button"
-                            class="btn btn-primary btn-labeled"
+                            class="btn btn-primary btn-labeled btn-muted"
                             ng-show="r.requestCount > 0"
                             ng-click="view(r)">
                         <span class="btn-label">
@@ -131,14 +131,14 @@
                         </span>&nbsp;View Requests
                     </button>
                     <button type="button"
-                            class="btn btn-warning btn-labeled"
+                            class="btn btn-warning btn-labeled btn-muted"
                             ng-click="edit(r.Id)">
                         <span class="btn-label">
                             <i class="fa fa-pencil"></i>
                         </span>&nbsp;Edit Class
                     </button>
                     <button type="button"
-                            class="btn btn-danger btn-labeled"
+                            class="btn btn-danger btn-labeled btn-muted"
                             ng-click="archive(r.Id)">
                         <span class="btn-label">
                             <i class="fa fa-trash-o"></i>

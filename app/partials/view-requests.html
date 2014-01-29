@@ -1,25 +1,28 @@
 <div class="btn-group" ng-show="groupBy && showGrouping">
     <button class="btn text">GROUP BY:</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'course'">Course</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'status'">Status</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'unit'">Unit</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'course'">Course</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'status'">Status</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'unit'">Unit</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
 </div>
 
-<div ng-repeat="(header, group) in groups" style="margin-bottom: 50px">
+<div ng-repeat="group in groups" style="margin-bottom: 50px">
 
-    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px">{{header}} <span class="pull-right">{{group.length}}</span>
+    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px">{header} <span class="pull-right">{{group.length}}</span>
     </h3>
 
-    <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in group">
+    <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in group track by r.Id">
 
         <div class="statusBackground">{{r.status}}</div>
 
-        <h4><i class="fa fa-{{r.icon}}" tooltip="{{r.status}}"></i> <span
-                class="text-{{r.openSeatsClass}}">{{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)</span>
+        <h4>
+            <span class="btn btn-{{r.openSeatsClass}} availSeats" disabled>
+                <i class="fa fa-{{r.icon}}" tooltip="{{r.status}}"></i>
+            </span>
+            <span class="text-{{r.openSeatsClass}}">{{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)</span>
             <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
-                <i class="fa fa-calendar"></i></span>
+                <icon path="calendar_range" />
         </h4>
 
         <hr class="rollup">
@@ -31,12 +34,11 @@
             <div class="col-lg-6 pull-left text-lg">
 
                 <p>
-                    <i class="fa fa-map-marker" tooltip="Location"></i>{{r.det.Base}} (Detachment
-                    {{r.det.Det}})
+                    <i class="fa fa-map-marker" tooltip="Location"></i>{{r.det.Base}} (Detachment {{r.det.Det}})
                 </p>
 
                 <p>
-                    <i class="fa fa-user" tooltip="Instructor"></i>{{r.instructor}}
+                    <icon path="instructor" hover="Instructor" />{{r.instructor}}
                 </p>
 
                 <p>
@@ -47,12 +49,9 @@
 
             <div class="col-lg-6 pull-right text-right">
 
-                <p ng-repeat="s in r.Students.results">
-                    <i class="fa fa-group" tooltip="Student's Name"></i>&nbsp;{{s.Name}}<br>
-                <span ng-show="s.WorkEMail">
-                    <i class="fa fa-envelope" tooltip="Student's Email"></i>&nbsp;<a
-                        href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.WorkEMail}}</a><br>
-                </span>
+                <p ng-repeat="s in r.Students.results | limitTo:5">
+                    <icon path="student_hand" hover="Requested Student" />
+                    <a href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.Name}}</a><br>
                     <span ng-show="s.WorkPhone">
                         <i class="fa fa-earphone" tooltip="Student's Phone"></i>&nbsp;{{s.WorkPhone}}
                     </span>
@@ -76,10 +75,10 @@
             <div class="requestActions">
                 <hr>
                 <div class="pull-right">
-                    <button type="button" class="btn btn-primary btn-labeled"><span class="btn-label"><i
+                    <button type="button" class="btn btn-success btn-labeled btn-muted"><span class="btn-label"><i
                             class="fa fa-thumbs-up"></i></span>&nbsp;Approve
                     </button>
-                    <button type="button" class="btn btn-danger btn-labeled"><span class="btn-label"><i
+                    <button type="button" class="btn btn-danger btn-labeled btn-muted"><span class="btn-label"><i
                             class="fa fa-thumbs-down"></i></span>&nbsp;Deny
                     </button>
                 </div>

@@ -1,7 +1,15 @@
 <div class="btn-group" ng-show="groupBy">
     <button class="btn text">GROUP BY:</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
-    <button type="button" class="btn btn-primary" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+</div>
+
+<div class="btn-group">
+    <button class="btn text">SORT BY:</button>
+    <button type="button" class="btn btn-link" sorter="PDS" text="Course" default></button>
+    <button type="button" class="btn btn-link" sorter="MDS"></button>
+    <button type="button" class="btn btn-link" sorter="AFSC"></button>
+    <button type="button" class="btn btn-link" sorter="Hours" text="Length"></button>
 </div>
 
 <div ng-repeat="(header, group) in groups" class="{{wellCollapse}}">
@@ -12,10 +20,10 @@
 
     <table class="table table-striped table-expanded table-hover group{{groupBy}} rollup">
         <thead>
-        <th>Course</th>
-        <th class="MDS" style="width:125px">MDS</th>
-        <th class="AFSC" style="width:125px">AFSC</th>
-        <th style="width:125px">Length</th>
+        <th class="sorter-PDS">Course</th>
+        <th class="MDS sorter-MDS" style="width:125px">MDS</th>
+        <th class="AFSC sorter-AFSC" style="width:125px">AFSC</th>
+        <th style="width:125px" class="sorter-Hours">Length</th>
         <th style="width:150px">Actions</th>
         </thead>
         <tbody>
