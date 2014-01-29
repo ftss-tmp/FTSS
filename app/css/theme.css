@@ -736,7 +736,7 @@ html, body {
 .well .statusBackground {
     bottom: -30px;
     font-size: 120px;
-    opacity: .1;
+    opacity: .25;
     position: absolute;
     right: 5px;
     text-transform: uppercase
@@ -744,17 +744,18 @@ html, body {
 
 .requestPending .statusBackground {
     bottom: 50px;
-    color: #31708f
+    color: #5bc0de;
 }
 
-.requestApproved * {
-    color: #3c763d !important
+.requestApproved .statusBackground {
+    color: #5cb85c !important
 }
 
-.requestDenied * {
-    color: #a94442 !important
+.requestDenied .statusBackground {
+    color: #d9534f !important
 }
 
+/*
 .requestApproved hr {
     border-color: #3c763d
 }
@@ -770,20 +771,14 @@ html, body {
 .requestDenied {
     background-color: #ebcccc
 }
+*/
 
-[data-value= *
-
-]
-{
-    color: #428bca !important
-;
+[data-value="*"] {
+    color: #428bca !important;
     font-weight: 800
 }
 
-[data-value= *
-
-]
-.active {
+[data-value="*"].active {
     color: #fff !important
 }
 
@@ -827,15 +822,15 @@ html, body {
 }
 
 .optgroup.course.count-5 {
-    width: 315px
+    width: 450px
 }
 
 .optgroup.course.count-4 {
-    width: 400px
+    width: 500px
 }
 
 .optgroup.course.count-3 {
-    width: 500px
+    width: 550px
 }
 
 .popover {
@@ -1100,20 +1095,24 @@ table th {
     display: none;
 }
 
-.table-hover tbody tr:not(:hover) .btn-muted {
+.table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
     color: #111;
     background-color: #eee;
     border-color: #bbb;
 }
 
+.well:not(:hover) a {
+    color: #555;
+}
+
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
     background-color: #f5fafc;
-    color:#428bca;
+    color: #428bca;
 }
 
-.table-expanded tr td{
-    padding: 15px 10px 15px!important;
+.table-expanded tr td {
+    padding: 15px 10px 15px !important;
 }
 
 td .peek {
@@ -1122,4 +1121,21 @@ td .peek {
 
 tr:hover td .peek {
     display: inline;
+}
+
+.requestDenied h4, .requestApproved h4 {
+    color: #000 !important;
+}
+
+.icon {
+    height:1.1em;
+    margin-right: .25em;
+}
+
+th.active {
+    background-color: transparent!important;
+    font-weight: 800;
+    background: none;
+    border-bottom: 1px solid;
+    color:#d58512;
 }
