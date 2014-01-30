@@ -7,9 +7,17 @@
     <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
 </div>
 
-<div ng-repeat="group in groups" style="margin-bottom: 50px">
+<div class="btn-group" ng-cloak>
+    <button class="btn text">SORT BY:</button>
+    <button type="button" class="btn btn-link" sorter="status" text="Status" default></button>
+    <button type="button" class="btn btn-link" sorter="course" text="Course"></button>
+    <button type="button" class="btn btn-link" sorter="unit" text="Unit"></button>
+    <button type="button" class="btn btn-link" sorter="AFSC"></button>
+</div>
 
-    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px">{header} <span class="pull-right">{{group.length}}</span>
+<div ng-repeat="(header, group) in groups" style="margin-bottom: 50px">
+
+    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px">{{header}} <span class="pull-right">{{group.length}}</span>
     </h3>
 
     <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in group track by r.Id">
