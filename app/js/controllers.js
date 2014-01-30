@@ -22,8 +22,6 @@
 	 */
 	app.controller('mainController', function ($scope, $location, SharePoint, $routeParams) {
 
-		FTSS.utils.log('Main Controller');
-
 		var pending, updating, delaySearch;
 
 		/**
@@ -105,8 +103,6 @@
 		utils.$initPage = function () {
 
 			if ($scope.loaded) {
-
-				FTSS.utils.log('Init Page');
 
 				filters.$add();
 
@@ -369,13 +365,9 @@
 
 				if (!updating) {
 
-					FTSS.utils.log('Selectize Change');
-
 					if (val instanceof Array && val.length > 0) {
 
 						if (val.slice(-1)[0] === '*') {
-
-							FTSS.utils.log('Selectize *');
 
 							utils.updateSearch(function () {
 
@@ -391,8 +383,6 @@
 						} else {
 
 							delaySearch = setTimeout(function () {
-
-								FTSS.utils.log('Selectize Filtered');
 
 								utils.updateSearch(function () {
 
@@ -462,8 +452,6 @@
 		 */
 		$scope.$on('$locationChangeStart', function () {
 
-			FTSS.utils.log('Location Change Start');
-
 			if (search) {
 				$scope.noSearch = false;
 				search.enable();
@@ -476,8 +464,6 @@
 		});
 
 		$scope.$on('$routeChangeSuccess', function () {
-
-			FTSS.utils.log('Route Change Success');
 
 			if ($routeParams.link) {
 
@@ -569,22 +555,20 @@
 
 				SharePoint.read(FTSS.models.catalog).then(function (response) {
 
-					FTSS.utils.log('MasterCourseList');
-
 					$scope.MasterCourseList = response;
 
 					$scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
 					$scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
 
 					loaded($scope.MasterCourseList, 'COURSE', function (v) {
-						return
-						[
-							v.PDS,
-							v.Number,
-							v.Title,
-							v.MDS,
-							v.AFSC
-						].join(' / ');
+						return (
+							[
+								v.PDS,
+								v.Number,
+								v.Title,
+								v.MDS,
+								v.AFSC
+							].join(' / '));
 					});
 
 					loaded($scope.MDS, 'MDS');
@@ -595,24 +579,22 @@
 
 				SharePoint.read(FTSS.models.units).then(function (response) {
 
-					FTSS.utils.log('Units');
 					$scope.Units = response;
 
 					loaded(response, 'DETACHMENT', function (v) {
-						return
-						[
-							v.Base,
-							' (Det. ',
-							v.Det,
-							')'
-						].join('');
+						return (
+							[
+								v.Base,
+								' (Det. ',
+								v.Det,
+								')'
+							].join(''));
 					});
 
 				});
 
 				SharePoint.read(FTSS.models.instructors).then(function (response) {
 
-					FTSS.utils.log('Instructors');
 					$scope.Instructors = response;
 
 					loaded(response, 'INSTRUCTOR', function (v) {
@@ -630,8 +612,6 @@
 
 	utils.$decorate = function ($scope, req) {
 
-		FTSS.utils.log('Decorate', true);
-
 		try {
 
 			var seats, schedClass = req.Scheduled || req;
@@ -643,6 +623,9 @@
 			req.instructor = $scope.Instructors[schedClass.InstructorId].Instructor || {};
 
 			req.instructor = req.instructor.Name || 'No Instructor Identified';
+
+			req.photo = $scope.Instructors[schedClass.InstructorId].Attachments.results;
+			req.photo = req.photo.length ? req.photo[0].__metadata.media_src : '';
 
 			req.start = FTSS.utils.fixDate(schedClass.Start);
 
@@ -806,8 +789,6 @@
 
 	app.controller('catalogController', function ($scope, SharePoint) {
 
-		FTSS.utils.log('Catalog Controller');
-
 		$scope.$watch('filter', function (filter) {
 
 
@@ -815,11 +796,8 @@
 				return;
 			}
 
-			FTSS.utils.log('Catalog Update');
-
 			SharePoint.read(FTSS.models.catalog).then(function (data) {
 
-				FTSS.utils.log('Catalog Loaded');
 
 				if (utils.initData($scope, data)) {
 
@@ -849,19 +827,13 @@
 
 	app.controller('unitsController', function ($scope, SharePoint) {
 
-		FTSS.utils.log('Units Controller');
-
 		$scope.$watch('filter', function (filter) {
 
 			if (filter === false) {
 				return;
 			}
 
-			FTSS.utils.log('Units Update');
-
 			SharePoint.read(FTSS.models.units).then(function (data) {
-
-				FTSS.utils.log('Units Loaded');
 
 				if (utils.initData($scope, data)) {
 
@@ -879,9 +851,44 @@
 
 	});
 
-	app.controller('scheduledController', function ($scope, SharePoint, $modal) {
+	app.controller('instructorsController', function ($scope, SharePoint) {
 
-		FTSS.utils.log('Schedule Controller');
+		$scope.$watch('filter', function (filter) {
+
+			if (filter === false) {
+				return;
+			}
+
+			SharePoint.read(FTSS.models.instructors).then(function (data) {
+
+				if (utils.initData($scope, data)) {
+
+					_.each($scope.data, function (d) {
+
+						d.photo = d.Attachments.results;
+						d.photo = d.photo.length ? d.photo[0].__metadata.media_src : '';
+
+						d.Unit = $scope.Units[d.UnitId];
+						d.Det = d.Unit.Det;
+						d.Name = d.Instructor.Name;
+
+					});
+
+					utils.$loading(false);
+
+					utils.tagHighlight($scope.data);
+
+					$scope.sort();
+
+				}
+
+			}, utils.$ajaxFailure);
+
+		});
+
+	});
+
+	app.controller('scheduledController', function ($scope, SharePoint, $modal) {
 
 		$scope.add = function (req) {
 
@@ -919,14 +926,10 @@
 				return;
 			}
 
-			FTSS.utils.log('Schedule Update');
-
 			var model = FTSS.models.scheduled;
 			model.params.$filter = filter;
 
 			SharePoint.read(model).then(function (data) {
-
-				FTSS.utils.log('Schedule Loaded');
 
 				if (utils.initData($scope, data)) {
 
