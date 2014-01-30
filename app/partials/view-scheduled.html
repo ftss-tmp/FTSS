@@ -32,14 +32,18 @@
 
         <div class="rollup">
 
-
-            <div class="col-lg-9 pull-left">
+            <div class="col-lg-8 pull-left">
 
                 <table class="table table-split">
                     <thead>
-                    <th colspan="2">{{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}</th>
+                    <th colspan="3">{{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}</th>
                     </thead>
                     <tbody>
+                    <tr ng-show="r.photo">
+                        <td rowspan="7" colspan="1" style="border-right: none;width:20%">
+                            <img ng-src="{{r.photo}}" class="img-rounded grayscale" style="height:215px"/>
+                        </td>
+                    </tr>
                     <tr>
                         <td>Location</td>
                         <td class="bold">{{r.det.Base}} (Detachment {{r.det.Det}})</td>
