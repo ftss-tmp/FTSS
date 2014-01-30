@@ -50,14 +50,17 @@
 			'cache' : true,
 			'source': 'Instructors',
 			'params': {
-				'$expand': 'Instructor',
+				'$expand': 'Instructor,Attachments',
 				'$select':
 					[
 						'Id',
+						'UnitId',
+						'AFSC',
 						'InstructorId',
 						'Instructor/Name',
 						'Instructor/WorkEMail',
-						'Instructor/WorkPhone'
+						'Instructor/WorkPhone',
+					    'Attachments/Name'
 					]
 			}
 
