@@ -83,7 +83,7 @@
 
 					var sorter = function (data) {
 
-						return last ? _.sortBy(data, field).reverse() : _.sortBy(data, field);
+						return last ? _.sortBy(data, field) : _.sortBy(data, field).reverse();
 
 					};
 
@@ -104,7 +104,7 @@
 					}
 
 					$el.addClass('active').siblings().removeClass('active');
-					$('.sorter-'+field).addClass('active').siblings().removeClass('active');
+					$('.sorter-' + field).addClass('active').siblings().removeClass('active');
 
 				};
 
