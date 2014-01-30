@@ -69,8 +69,6 @@
 		// return the real function for filters.$add now that we have today cached in a closure
 		return function () {
 
-			FTSS.utils.log('Add Filters');
-
 			_.each(_.flatten(filters.route), function (f) {
 
 				FTSS.search.removeOption(f.id);
@@ -104,8 +102,6 @@
 	 * @returns {*}
 	 */
 	filters.$compile = function (tags) {
-
-		FTSS.utils.log('Compile Tags');
 
 		try {
 
