@@ -1,0 +1,31 @@
+
+<table class="table table-striped table-expanded table-hover">
+    <thead>
+    <th></th>
+    <th sorter="Name" default></th>
+    <th sorter="Det" text="Unit"></th>
+    <th sorter="AFSC"></th>
+    <th>Actions</th>
+    </thead>
+    <tbody>
+
+    <tr ng-repeat="instructor in data">
+        <td><img ng-show="instructor.photo" ng-src="{{instructor.photo}}" class="img-polaroid" style="height:100px" /></td>
+        <td><b>{{instructor.Name}}</b></td>
+        <td><b>{{instructor.Unit.Base}} (Det. {{instructor.Det}})</b></td>
+        <td><b>{{instructor.AFSC}}</b></td>
+        <td>
+            <button type="button"
+                    class="btn btn-sm btn-info btn-muted"
+                    ng-click="view(instructor.Id)">
+                <i class="fa fa-search"></i>
+            </button>
+            <button type="button"
+                    class="btn btn-sm btn-warning btn-muted"
+                    ng-click="edit(instructor.Id)">
+                <i class="fa fa-pencil"></i>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
