@@ -27,7 +27,7 @@ var app, FTSS;
 		//'pplURL' : 'https://cs3.eis.af.mil/_vti_bin/ListData.svc/UserInformationList',
 		'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
 		'debug'  : true,
-		'offline': true,
+		'offline': false,
 		'noCache': false
 	};
 

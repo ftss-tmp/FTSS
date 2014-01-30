@@ -916,7 +916,7 @@ i.fa {
 }
 
 .item.matched {
-    background-color: #428bca !important;
+    background-color: #5cb85c !important;
     color: #FFF !important
 }
 
@@ -1103,6 +1103,12 @@ table th {
 
 .well:not(:hover) a {
     color: #555;
+}
+
+.well:not(:hover) .grayscale{
+    filter: url(filters.svg#grayscale); /* Firefox 3.5+ */
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(1);
 }
 
 .table-hover tbody tr:hover > td,
