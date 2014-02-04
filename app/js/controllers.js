@@ -1,10 +1,11 @@
 /*global _, $, FTSS, app, LZString */
 
+
 (function () {
 
 	"use strict";
 
-	var firstRun = true, filters, utils = {}, search;
+	var firstRun = true, filters, utils = {}, search, caches = {};
 
 	app.controller('user', function ($scope, SharePoint) {
 
@@ -514,7 +515,7 @@
 
 				var loaded = (function () {
 
-					var count = 0;
+					var count = 0, CACHE_COUNT = 4;
 
 					return function (data, title, text) {
 
@@ -541,8 +542,7 @@
 
 						}));
 
-
-						if (++count > 4) {
+						if (++count > CACHE_COUNT) {
 
 							$scope.loaded = true;
 							utils.$initPage();
@@ -555,12 +555,12 @@
 
 				SharePoint.read(FTSS.models.catalog).then(function (response) {
 
-					$scope.MasterCourseList = response;
+					caches.MasterCourseList = response;
 
-					$scope.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
-					$scope.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
+					caches.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
+					caches.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
 
-					loaded($scope.MasterCourseList, 'COURSE', function (v) {
+					loaded(caches.MasterCourseList, 'COURSE', function (v) {
 						return (
 							[
 								v.PDS,
@@ -571,15 +571,15 @@
 							].join(' / '));
 					});
 
-					loaded($scope.MDS, 'MDS');
+					loaded(caches.MDS, 'MDS');
 
-					loaded($scope.AFSC, 'AFSC');
+					loaded(caches.AFSC, 'AFSC');
 
 				});
 
 				SharePoint.read(FTSS.models.units).then(function (response) {
 
-					$scope.Units = response;
+					caches.Units = response;
 
 					loaded(response, 'DETACHMENT', function (v) {
 						return (
@@ -595,17 +595,63 @@
 
 				SharePoint.read(FTSS.models.instructors).then(function (response) {
 
-					$scope.Instructors = response;
+					caches.Instructors = response;
 
-					loaded(response, 'INSTRUCTOR', function (v) {
+					SharePoint.read(FTSS.models.bios).then(function (bios) {
 
-						return  v.Instructor.Name;
+						_.each(bios, function (img) {
 
+							var i = parseInt(img.Name.split('.')[0], 10);
+
+							caches.Instructors[i].bio = img.__metadata.media_src;
+
+						});
+
+						loaded(response, 'INSTRUCTOR', function (v) {
+
+							return  v.Instructor.Name;
+
+						});
 					});
+
 
 				});
 
 			}
+		};
+
+		watcher = function () {
+
+
+			function getWatchCount(scope, scopeHash) {
+				// default for scopeHash
+				if (scopeHash === undefined) {
+					scopeHash = {};
+				}
+
+				// make sure scope is defined and we haven't already processed this scope
+				if (!scope || scopeHash[scope.$id] !== undefined) {
+					return 0;
+				}
+
+				var watchCount = 0;
+
+				if (scope.$$watchers) {
+					watchCount = scope.$$watchers.length;
+				}
+				scopeHash[scope.$id] = watchCount;
+
+				// get the counts of children and sibling scopes
+				// we only need childHead and nextSibling (not childTail or prevSibling)
+				watchCount += getWatchCount(scope.$$childHead, scopeHash);
+				watchCount += getWatchCount(scope.$$nextSibling, scopeHash);
+
+				return watchCount;
+			}
+
+			return getWatchCount($scope);
+
+
 		};
 
 	});
@@ -616,16 +662,13 @@
 
 			var seats, schedClass = req.Scheduled || req;
 
-			req.Course = $scope.MasterCourseList[schedClass.CourseId];
+			req.Course = caches.MasterCourseList[schedClass.CourseId];
 
-			req.det = $scope.Units[schedClass.UnitId];
+			req.det = caches.Units[schedClass.UnitId];
 
-			req.instructor = $scope.Instructors[schedClass.InstructorId].Instructor || {};
+			req.Instructor = caches.Instructors[schedClass.InstructorId] || {};
 
-			req.instructor = req.instructor.Name || 'No Instructor Identified';
-
-			req.photo = $scope.Instructors[schedClass.InstructorId].Attachments.results;
-			req.photo = req.photo.length ? req.photo[0].__metadata.media_src : '';
+			req.instructor = req.Instructor.Instructor.Name || 'No Instructor Identified';
 
 			req.start = FTSS.utils.fixDate(schedClass.Start);
 
@@ -656,9 +699,7 @@
 
 	utils.initData = function ($scope, data) {
 
-		$scope.data = data;
-
-		$scope.count.results = _.keys($scope.data || {}).length;
+		$scope.count.results = _.keys(data || {}).length;
 
 		if ($scope.count.results < 1) {
 
@@ -668,7 +709,7 @@
 
 		} else {
 
-			return true;
+			return data;
 
 		}
 	};
@@ -694,9 +735,11 @@
 
 			SharePoint.read(model).then(function (data) {
 
-				if (utils.initData($scope, data)) {
+				data = utils.initData($scope, data);
 
-					_.each($scope.data, function (req) {
+				if (data) {
+
+					_.each(data, function (req) {
 
 						req = utils.$decorate($scope, req);
 
@@ -720,17 +763,15 @@
 
 					});
 
-					utils.tagHighlight($scope.data);
+					utils.tagHighlight(data);
 
 					$scope.$watch('groupBy', function () {
 
-						$scope.groups = _.groupBy($scope.data, function (req) {
+						$scope.groups = _.groupBy(data, function (req) {
 							return req.Course[$scope.groupBy] || req[$scope.groupBy];
 						});
 
 					});
-
-					$scope.showGrouping = !search.isDisabled;
 
 					$scope.groupBy = $scope.groupBy || (search.isDisabled ? 'status' : 'course');
 
@@ -798,16 +839,19 @@
 
 			SharePoint.read(FTSS.models.catalog).then(function (data) {
 
+				data = utils.initData($scope, data);
 
-				if (utils.initData($scope, data)) {
+				if (data) {
 
 					utils.$loading(false);
 
-					utils.tagHighlight($scope.data);
+					utils.tagHighlight(
+
+					);
 
 					$scope.$watch('groupBy', function () {
 
-						$scope.groups = _.groupBy($scope.data, function (req) {
+						$scope.groups = _.groupBy(data, function (req) {
 							return req[$scope.groupBy];
 						});
 
@@ -835,7 +879,9 @@
 
 			SharePoint.read(FTSS.models.units).then(function (data) {
 
-				if (utils.initData($scope, data)) {
+				$scope.data = utils.initData($scope, data);
+
+				if ($scope.data) {
 
 					utils.$loading(false);
 
@@ -855,34 +901,25 @@
 
 		$scope.$watch('filter', function (filter) {
 
-			if (filter === false) {
-				return;
+			$scope.data = utils.initData($scope, caches.Instructors);
+
+			if ($scope.data) {
+
+				_.each($scope.data, function (d) {
+
+					d.Unit = caches.Units[d.UnitId];
+					d.Det = d.Unit.Det;
+					d.Name = d.Instructor.Name;
+
+				});
+
+				utils.$loading(false);
+
+				utils.tagHighlight($scope.data);
+
+				$scope.sort();
+
 			}
-
-			SharePoint.read(FTSS.models.instructors).then(function (data) {
-
-				if (utils.initData($scope, data)) {
-
-					_.each($scope.data, function (d) {
-
-						d.photo = d.Attachments.results;
-						d.photo = d.photo.length ? d.photo[0].__metadata.media_src : '';
-
-						d.Unit = $scope.Units[d.UnitId];
-						d.Det = d.Unit.Det;
-						d.Name = d.Instructor.Name;
-
-					});
-
-					utils.$loading(false);
-
-					utils.tagHighlight($scope.data);
-
-					$scope.sort();
-
-				}
-
-			}, utils.$ajaxFailure);
 
 		});
 
@@ -931,9 +968,11 @@
 
 			SharePoint.read(model).then(function (data) {
 
-				if (utils.initData($scope, data)) {
+				data = utils.initData($scope, data);
 
-					_.each($scope.data, function (req) {
+				if (data) {
+
+					_.each(data, function (req) {
 
 						req = utils.$decorate($scope, req);
 
@@ -961,13 +1000,15 @@
 
 					utils.$loading(false);
 
-					utils.tagHighlight($scope.data);
+					utils.tagHighlight(data);
 
 					$scope.$watch('groupBy', function () {
 
-						$scope.groups = _.groupBy($scope.data, function (req) {
+						$scope.groups = _.groupBy(data, function (req) {
 							return req.Course[$scope.groupBy] || req[$scope.groupBy];
 						});
+
+						$scope.sort();
 
 					});
 
