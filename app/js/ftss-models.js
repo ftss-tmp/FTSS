@@ -6,6 +6,16 @@
 
 	FTSS.models = {
 
+		'bios': {
+
+			'cache' : true,
+			'source': 'Bios',
+			'params': {
+				'$select': 'Name'
+			}
+
+		},
+
 		'catalog': {
 
 			'cache' : true,
@@ -50,7 +60,7 @@
 			'cache' : true,
 			'source': 'Instructors',
 			'params': {
-				'$expand': 'Instructor,Attachments',
+				'$expand': 'Instructor',
 				'$select':
 					[
 						'Id',
@@ -59,8 +69,7 @@
 						'InstructorId',
 						'Instructor/Name',
 						'Instructor/WorkEMail',
-						'Instructor/WorkPhone',
-					    'Attachments/Name'
+						'Instructor/WorkPhone'
 					]
 			}
 
