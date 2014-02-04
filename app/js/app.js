@@ -18,6 +18,30 @@ var app, FTSS;
 		                     'ui.bootstrap'
 	                     ]);
 
+
+	app.filter('search', function ($filter) {
+		return function (items, text) {
+
+			if (!text || text.length === 0) {
+				return items;
+			}
+
+			// split search text on space
+			var searchTerms = text.split(' ');
+
+			// search for single terms.
+			// this reduces the item list step by step
+			searchTerms.forEach(function (term) {
+				if (term && term.length) {
+					items = $filter('filter')(items, term);
+				}
+			});
+
+			return items;
+		};
+	});
+
+
 	var _internal, utils = {};
 
 	_internal = {
@@ -27,7 +51,7 @@ var app, FTSS;
 		//'pplURL' : 'https://cs3.eis.af.mil/_vti_bin/ListData.svc/UserInformationList',
 		'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
 		'debug'  : true,
-		'offline': false,
+		'offline': true,
 		'noCache': false
 	};
 
