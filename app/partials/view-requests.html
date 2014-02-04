@@ -1,36 +1,45 @@
-<div class="btn-group" ng-show="groupBy && showGrouping">
-    <button class="btn text">GROUP BY:</button>
-    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'course'">Course</button>
-    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'status'">Status</button>
-    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'unit'">Unit</button>
-    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
-    <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
-</div>
+<div class="clearfix" ng-show="groupBy">
 
-<div class="btn-group" ng-cloak>
-    <button class="btn text">SORT BY:</button>
-    <button type="button" class="btn btn-link" sorter="status" text="Status" default></button>
-    <button type="button" class="btn btn-link" sorter="course" text="Course"></button>
-    <button type="button" class="btn btn-link" sorter="unit" text="Unit"></button>
-    <button type="button" class="btn btn-link" sorter="AFSC"></button>
+    <div class="btn-group">
+        <button class="btn text">GROUP BY:</button>
+        <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'course'">Course</button>
+        <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'status'">Status</button>
+        <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'unit'">Unit</button>
+        <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'MDS'">MDS</button>
+        <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
+    </div>
+
+    <div class="btn-group" ng-cloak>
+        <button class="btn text">SORT BY:</button>
+        <button type="button" class="btn btn-link" sorter="status" text="Status" default></button>
+        <button type="button" class="btn btn-link" sorter="course" text="Course"></button>
+        <button type="button" class="btn btn-link" sorter="unit" text="Unit"></button>
+        <button type="button" class="btn btn-link" sorter="AFSC"></button>
+    </div>
+
+    <div class="pull-right">
+        <input type="search" class="search" ng-model="searchText.$"/>
+    </div>
+
 </div>
 
 <div ng-repeat="(header, group) in groups" style="margin-bottom: 50px">
 
-    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px">{{header}} <span class="pull-right">{{group.length}}</span>
+    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px" ng-show="filtered.length">{{header}} <span
+            class="pull-right">{{filtered.length}}<span ng-hide="filtered.length == group.length">  of {{group.length}}</span></span>
     </h3>
 
-    <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in group track by r.Id">
+    <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in filtered = (group | search:searchText.$)">
 
         <div class="statusBackground">{{r.status}}</div>
 
         <h4>
             <span class="btn btn-{{r.openSeatsClass}} availSeats" disabled>
-                <i class="fa fa-{{r.icon}}" tooltip="{{r.status}}"></i>
+                <i class="fa fa-{{r.icon}}" title="{{r.status}}"></i>
             </span>
             <span class="text-{{r.openSeatsClass}}">{{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)</span>
             <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
-                <icon path="calendar_range" />
+                <icon path="calendar_range"/>
         </h4>
 
         <hr class="rollup">
@@ -42,26 +51,27 @@
             <div class="col-lg-6 pull-left text-lg">
 
                 <p>
-                    <i class="fa fa-map-marker" tooltip="Location"></i>{{r.det.Base}} (Detachment {{r.det.Det}})
+                    <i class="fa fa-map-marker" title="Location"></i>{{r.det.Base}} (Detachment {{r.det.Det}})
                 </p>
 
                 <p>
-                    <icon path="instructor" hover="Instructor" />{{r.instructor}}
+                    <icon path="instructor" hover="Instructor"/>
+                    {{r.instructor}}
                 </p>
 
                 <p>
-                    <i class="fa fa-inbox" tooltip="Date request submitted"></i>{{r.Created}}
+                    <i class="fa fa-inbox" title="Date request submitted"></i>{{r.Created}}
                 </p>
 
             </div>
 
             <div class="col-lg-6 pull-right text-right">
 
-                <p ng-repeat="s in r.Students.results | limitTo:5">
-                    <icon path="student_hand" hover="Requested Student" />
+                <p ng-repeat="s in r.Students.results">
+                    <icon path="student_hand" hover="Requested Student"/>
                     <a href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.Name}}</a><br>
                     <span ng-show="s.WorkPhone">
-                        <i class="fa fa-earphone" tooltip="Student's Phone"></i>&nbsp;{{s.WorkPhone}}
+                        <i class="fa fa-earphone" title="Student's Phone"></i>&nbsp;{{s.WorkPhone}}
                     </span>
                     <br>
                 </p>
