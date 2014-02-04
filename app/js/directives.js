@@ -1,21 +1,8 @@
-/*global _, $, jQuery, FTSS, app, angular */
+/*global _, $, FTSS, app */
 
 (function () {
 
 	"use strict";
-
-	app.directive('onFinishRender', function ($timeout) {
-		return {
-			restrict: 'A',
-			link    : function (scope, element, attr) {
-				if (scope.$last === true) {
-					$timeout(function () {
-						scope.$emit(attr.onFinishRender);
-					});
-				}
-			}
-		};
-	});
 
 	app.directive('navLink', function () {
 		return {
@@ -51,19 +38,134 @@
 		return {
 			'restrict': 'E',
 			'replace' : true,
-			'template': '<img ng-src="{{icon}}" class="icon" title="{{hover}}"/>',
-			'scope'   : {
-				'path' : '@',
-				'hover': '@'
-			},
-			'link'    : function ($scope) {
+			'scope'   : {},
+			'link'    : function ($scope, $el, $attrs) {
 
-				$scope.icon = FTSS.icons[$scope.path];
+				$el[0].outerHTML ='<img src="' + FTSS.icons[$attrs.path] + '" class="icon" title="' + $attrs.hover + '"/>';
 
 			}
 		};
 
 	});
+
+	app.directive('photo', function () {
+
+		return {
+			'restrict': 'E',
+			'replace' : true,
+			'scope'   : {},
+			'link'    : function ($scope, $el, $attrs) {
+
+				if ($attrs.data) {
+
+					var size =  $attrs.size || '100px';
+
+					$el[0].outerHTML ='<div class="circle-img" style="width:' + size + ';height:' + size + '"><img src="' + $attrs.data + '" /></div>';
+
+				} else {
+
+					$el.remove();
+
+				}
+
+			}
+		};
+
+	});
+
+	app.directive('noWatch', function ($timeout) {
+
+		return {
+			'restrict': 'A',
+			'link'    : function ($scope) {
+
+				$timeout(function() {
+					$scope.$$watchers = [];
+				});
+
+			}
+		};
+
+	});
+
+	/*
+
+	 // Version for IE8 compatibility without PIE
+	 app.directive('photo', function () {
+
+	 return {
+	 'restrict': 'E',
+	 'replace' : true,
+	 'template': '<div ng-if="bio" class="circle-img" style="width:{{size}};height:{{size}}"><img ng-src="{{bio}}" /><img class="circle-img-border white" ng-src="{{icons.bio_mask_white}}"/><img class="circle-img-border alt"  ng-src="{{icons.bio_mask_alt}}"/><img class="circle-img-border blue"  ng-src="{{icons.bio_mask_blue}}"/></div>',
+	 'scope'   : {},
+	 'link'    : function ($scope, $el, $attrs) {
+
+	 $scope.bio = $attrs.data;
+	 $scope.size = $attrs.size || '100px';
+	 $scope.icons = FTSS.icons;
+
+	 }
+	 };
+
+	 });*/
+
+	app.directive('ngOnce', function () {
+		return {
+			restrict  : 'EA',
+			priority  : 500,
+			transclude: true,
+			template  : '<div ng-transclude></div>',
+			compile   : function () {
+
+				return function postLink(scope) {
+
+				};
+			}
+		};
+	});
+
+	app.directive('leanRepeat', function ($compile) {
+		return {
+			//priority: 2000,
+			//restrict: 'A', // This is implicit
+			replace: true,
+			//template: "<tr ng-repeat='{{ngRepeatExp}}' ng-class-even=\"'even'\" ng-transclude></tr>"
+			link   : function ($scope, $element, $attr) {
+
+				var match, m1, m2, template, valueIdentifier, keyIdentifier;
+				match = $attr.leanRepeat.split(' in ');
+
+				m1 = match[1];
+				m2 = match[0];
+
+				match = m2.match(/^(?:([\$\w]+)|\(([\$\w]+)\s*,\s*([\$\w]+)\))$/);
+
+				valueIdentifier = match[3] || match[1];
+				keyIdentifier = match[2] || m2;
+
+				template = $element.html();
+
+				$element.empty();
+
+				_.each($scope[m1], function (val, key) {
+
+					var tmp = $scope.$new();
+
+					tmp[keyIdentifier] = key;
+					tmp[valueIdentifier] = val;
+
+					$element.append($compile(template)(tmp));
+
+				});
+				/*
+				 var unwatch = $scope.$watch(m1, function() {});
+
+				 unwatch();*/
+
+			}
+		};
+	});
+
 
 	app.directive('sorter', function () {
 
@@ -110,12 +212,14 @@
 
 				if ($attrs.hasOwnProperty('default')) {
 
+					$el.addClass('active');
+
 					$parent.sort = $scope.sort;
 
 				}
 
 			}
-		}
+		};
 
 	});
 
