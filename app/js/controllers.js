@@ -1,5 +1,6 @@
 /*global _, $, FTSS, app, LZString */
 
+var watcher;
 
 (function () {
 
@@ -9,12 +10,7 @@
 
 	app.controller('user', function ($scope, SharePoint) {
 
-		SharePoint.user().then(function (user) {
-
-			$scope.userId = user.id;
-			$scope.userName = user.name;
-
-		});
+		SharePoint.user($scope);
 
 	});
 
@@ -603,7 +599,8 @@
 
 							var i = parseInt(img.Name.split('.')[0], 10);
 
-							caches.Instructors[i].bio = img.__metadata.media_src;
+//							caches.Instructors[i].bio = img.__metadata.media_src;
+							caches.Instructors[i].bio = 'http://dev/_layouts/bios/' + img.Name;
 
 						});
 
