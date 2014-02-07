@@ -2,6 +2,12 @@
 
 var app, FTSS;
 
+if (!String.prototype.trim) {
+	String.prototype.trim = function () {
+		return this.replace(/^\s+|\s+$/g, '');
+	};
+}
+
 (function () {
 
 	"use strict";
@@ -191,10 +197,6 @@ var app, FTSS;
 
 			'people': (function () {
 
-				var last =
-					[
-					];
-
 				return function (search) {
 
 
@@ -217,7 +219,28 @@ var app, FTSS;
 				};
 
 			}()),
-			'user'  : function () {
+			'user'  : function ($scope, sField) {
+
+				var scopeField = sField || 'user';
+
+				try {
+
+					var data = localStorage.getItem('SP_REST_USER');
+
+					if (data) {
+
+						data = JSON.parse(data);
+
+						if (new Date().getTime() - data.updated < 2592000000) {
+
+							$scope[scopeField] = data;
+
+						}
+
+					}
+
+				} catch (e) {
+				}
 
 				return $http({
 					             'method': 'GET',
@@ -225,10 +248,29 @@ var app, FTSS;
 					             'url'   : _internal.userURL
 				             }).then(function (response) {
 
-					                     return {
-						                     'id'  : parseInt(response.data.match(/userId\:[\d]*/)[0].split(':')[1], 10),
-						                     'name': $(response.data.replace(/[ ]src=/g, ' data-src=')).find('a#zz15_Menu span').text()
+					                     var data, html;
+
+					                     data = {
+						                     'id'     : parseInt(response.data.match(/_spuserid=(\d+);/i)[1], 10),
+						                     'updated': new Date().getTime()
 					                     };
+
+					                     html = $(response.data.replace(/[ ]src=/g, ' data-src='));
+
+					                     html.find('#SPFieldText').each(function () {
+
+						                     var field1, field2;
+
+						                     field1 = this.innerHTML.match(/FieldName\=\"(.*)\"/i)[1];
+						                     field2 = this.innerHTML.match(/FieldInternalName\=\"(.*)\"/i)[1];
+
+						                     data[field1] = data[field2] = this.innerText.trim();
+
+					                     });
+
+					                     localStorage.SP_REST_USER = JSON.stringify(data);
+
+					                     $scope[scopeField] = data;
 
 				                     });
 
