@@ -860,7 +860,7 @@ html, body {
     text-transform: uppercase
 }
 
-.well.collapsed {
+.collapsed .well {
     margin-bottom: 5px;
     padding: 0 15px
 }
@@ -1027,10 +1027,6 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-inpu
     font-size: 15px;
 }
 
-.text-lg {
-    font-size: 16px;
-}
-
 .items.disabled {
     border: none;
     font-weight: 800;
@@ -1066,13 +1062,22 @@ table th {
     display: none;
 }
 
-.well.collapsed .rollupOnly {
+.collapsed .well .rollupOnly {
     display: inline;
 }
 
 .table.table-split tr td:first-child {
     text-align: right;
     border-right: 1px solid rgb(221, 221, 221);
+    letter-spacing: .2em;
+}
+
+.table.table-split tr td:first-child + td {
+    font-weight: 700;
+}
+
+.table.no-border * {
+    border:none!important;
 }
 
 #requestSeats .item {
@@ -1135,8 +1140,7 @@ tr:hover td .peek {
 }
 
 .icon {
-    height: 1.1em;
-    margin-right: .25em;
+    margin:-.25em .3em 0;
 }
 
 .searching h3, .searching thead {
@@ -1167,14 +1171,18 @@ th.active {
     color: #d58512;
 }
 
-.circle-img {
+.mask-img {
     position: relative;
     overflow: hidden;
-    border-radius: 50%;
     box-shadow: #666 0px 2px 3px;
+    border-radius: 3%;
 }
 
-.circle-img img {
+.mask-img.circle {
+    border-radius: 50%;
+}
+
+.mask-img img {
     position: absolute;
     width: 100%;
     left: 0;
