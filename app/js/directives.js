@@ -41,7 +41,12 @@
 			'scope'   : {},
 			'link'    : function ($scope, $el, $attrs) {
 
-				$el[0].outerHTML ='<img src="' + FTSS.icons[$attrs.path] + '" class="icon" title="' + $attrs.hover + '"/>';
+				var size, title;
+
+				size = $attrs.size || '1.1em';
+				title = $attrs.hover || '';
+
+				$el[0].outerHTML ='<img src="' + FTSS.icons[$attrs.path] + '" style="height:' + size + '" class="icon" title="' + title + '"/>';
 
 			}
 		};
@@ -58,9 +63,13 @@
 
 				if ($attrs.data) {
 
-					var size =  $attrs.size || '100px';
+					var size, shape, height;
 
-					$el[0].outerHTML ='<div class="circle-img" style="width:' + size + ';height:' + size + '"><img src="' + $attrs.data + '" /></div>';
+					size =  $attrs.size || '100px';
+					shape = $attrs.shape || 'circle';
+					height = (shape === 'circle') ? ';height:' + size  : ';height:185px';
+
+					$el[0].outerHTML ='<div class="mask-img ' + shape + '" style="width:' + size + height + ';"><img src="' + $attrs.data + '" /></div>';
 
 				} else {
 
