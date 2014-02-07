@@ -8,7 +8,7 @@
         <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'availability'">Open Seats</button>
     </div>
 
-    <div class="btn-group" ng-cloak>
+    <div class="btn-group">
         <button class="btn text">SORT BY:</button>
         <button type="button" class="btn btn-link" sorter="Start" text="Start Date" default></button>
         <button type="button" class="btn btn-link" sorter="course" text="Course"></button>
@@ -55,33 +55,33 @@
                         <tbody>
                         <tr ng-show="r.Instructor.bio">
                             <td rowspan="7" colspan="1" style="border-right: none;width:175px;padding-top: 20px">
-                                <photo size="150px" data="{{r.Instructor.bio}}"/>
+                                <photo size="150px" shape="rectangle" class="img-rounded" data="{{r.Instructor.bio}}"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Location</td>
-                            <td class="bold">{{r.det.Base}} (Detachment {{r.det.Det}})</td>
+                            <td>{{r.det.Base}} (Detachment {{r.det.Det}})</td>
                         </tr>
                         <tr>
                             <td>Instructor</td>
-                            <td class="bold">{{r.instructor}}</td>
+                            <td>{{r.instructor}}</td>
                         </tr>
                         <tr>
                             <td>MDS</td>
-                            <td class="bold">{{r.Course.MDS}}</td>
+                            <td>{{r.Course.MDS}}</td>
                         </tr>
                         <tr>
                             <td>AFSC</td>
-                            <td class="bold">{{r.Course.AFSC}}</td>
+                            <td>{{r.Course.AFSC}}</td>
                         </tr>
 
                         <tr>
                             <td>Days</td>
-                            <td class="bold">{{r.Course.Days}}</td>
+                            <td>{{r.Course.Days}}</td>
                         </tr>
                         <tr>
                             <td>Hours</td>
-                            <td class="bold">{{r.Course.Hours}}</td>
+                            <td>{{r.Course.Hours}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -96,29 +96,29 @@
                         <tbody>
                         <tr>
                             <td>Host</td>
-                            <td class="text-center bold">{{r.Host}}</td>
+                            <td class="text-center">{{r.Host}}</td>
                         </tr>
                         <tr>
                             <td>Other</td>
-                            <td class="text-center bold">{{r.Other}}</td>
+                            <td class="text-center">{{r.Other}}</td>
                         </tr>
                         <tr>
                             <td>Approved</td>
-                            <td class="text-center bold">{{r.approvedSeats}}</td>
+                            <td class="text-center">{{r.approvedSeats}}</td>
                         </tr>
                         <tr style="border-top:2px solid;">
                             <td>Minimum</td>
-                            <td class="text-center bold">{{r.Course.Min}}</td>
+                            <td class="text-center">{{r.Course.Min}}</td>
                         </tr>
                         <tr>
                             <td>Maximum</td>
-                            <td class="text-center bold">{{r.Course.Max}}</td>
+                            <td class="text-center">{{r.Course.Max}}</td>
                         </tr>
                         <tr style="border-top:2px solid;">
                             <td>Pending</td>
-                            <td class="text-center bold">{{r.pendingSeats}}</td>
+                            <td class="text-center">{{r.pendingSeats}}</td>
                         </tr>
-                        <tr class="bold">
+                        <tr>
                             <td>Available</td>
                             <td class="text-center">{{r.openSeats}}</td>
                         </tr>

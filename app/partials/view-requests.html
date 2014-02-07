@@ -9,7 +9,7 @@
         <button type="button" class="btn btn-link" ng-model="groupBy" btn-radio="'AFSC'">AFSC</button>
     </div>
 
-    <div class="btn-group" ng-cloak>
+    <div class="btn-group">
         <button class="btn text">SORT BY:</button>
         <button type="button" class="btn btn-link" sorter="status" text="Status" default></button>
         <button type="button" class="btn btn-link" sorter="course" text="Course"></button>
@@ -23,84 +23,104 @@
 
 </div>
 
-<div ng-repeat="(header, group) in groups" style="margin-bottom: 50px">
+<div class="{{wellCollapse}}">
 
-    <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px" ng-show="filtered.length">{{header}} <span
-            class="pull-right">{{filtered.length}}<span ng-hide="filtered.length == group.length">  of {{group.length}}</span></span>
-    </h3>
+    <div ng-repeat="(header, group) in groups" style="margin-bottom: 50px">
 
-    <div class="well request{{r.status}} {{wellCollapse}}" ng-repeat="r in filtered = (group | search:searchText.$)">
+        <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px" ng-show="filtered.length">
+            {{header}} <span
+                class="pull-right">{{filtered.length}}<span
+                ng-hide="filtered.length == group.length">  of {{group.length}}</span></span>
+        </h3>
 
-        <div class="statusBackground">{{r.status}}</div>
+        <div class="well request{{r.status}}" ng-class="{'true':'expanded'}"
+             ng-repeat="r in filtered = (group | search:searchText.$)">
 
-        <h4>
+            <div class="statusBackground">{{r.status}}</div>
+
+            <h4 ng-click="r.expand = !r.expand">
             <span class="btn btn-{{r.openSeatsClass}} availSeats" disabled>
                 <i class="fa fa-{{r.icon}}" title="{{r.status}}"></i>
             </span>
-            <span class="text-{{r.openSeatsClass}}">{{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)</span>
+                <span class="text-{{r.openSeatsClass}}">{{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)</span>
             <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
                 <icon path="calendar_range"/>
-        </h4>
+            </span>
+            </h4>
 
-        <hr class="rollup">
+            <hr class="rollup">
 
-        <div class="rollup">
+            <div class="rollup">
 
-            <p class="lead" ng-hide="groupBy=='course'">{{r.Course.Number}}: {{r.Course.Title}}</p>
+                <p class="lead" ng-hide="groupBy=='course'">{{r.Course.Number}}: {{r.Course.Title}}</p>
 
-            <div class="col-lg-6 pull-left text-lg">
+                <div class="col-lg-7 pull-left">
 
-                <p>
-                    <i class="fa fa-map-marker" title="Location"></i>{{r.det.Base}} (Detachment {{r.det.Det}})
-                </p>
+                    <table class="table table-split no-border">
+                        <tbody>
+                        <tr>
+                            <td style="width:150px">Location</td>
+                            <td style="width:10px">
+                                <icon path="location"/>
+                            </td>
+                            <td><b>{{r.det.Base}} (Detachment {{r.det.Det}})</b></td>
+                        </tr>
+                        <tr>
+                            <td>Instructor</td>
+                            <td>
+                                <icon path="instructor"/>
+                            </td>
+                            <td><b>{{r.instructor}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Requested</td>
+                            <td>
+                                <icon path="sent"/>
+                            </td>
+                            <td><b>{{r.Created}}</b></td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                <p>
-                    <icon path="instructor" hover="Instructor"/>
-                    {{r.instructor}}
-                </p>
+                </div>
 
-                <p>
-                    <i class="fa fa-inbox" title="Date request submitted"></i>{{r.Created}}
-                </p>
+                <div class="col-lg-5 pull-right text-right">
 
-            </div>
-
-            <div class="col-lg-6 pull-right text-right">
-
-                <p ng-repeat="s in r.Students.results">
-                    <icon path="student_hand" hover="Requested Student"/>
-                    <a href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.Name}}</a><br>
+                    <p ng-repeat="s in r.Students.results" style="margin-bottom: 10px">
+                        <icon path="student_hand" hover="Requested Student"/>
+                        <a href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.Name}}</a><br>
                     <span ng-show="s.WorkPhone">
                         <i class="fa fa-earphone" title="Student's Phone"></i>&nbsp;{{s.WorkPhone}}
                     </span>
-                    <br>
-                </p>
+                    </p>
 
-            </div>
-
-            <div class="clearfix"></div>
-
-            <div class="well-lg">
-
-                <blockquote>
-                    <p style="color:#777">{{r.notes}}</p>
-                    <small><a href="mailto:{{r.CreatedBy.WorkEMail}}{{r.mail}}">{{r.CreatedBy.Name}}
-                        ({{r.CreatedBy.WorkPhone}})</a></small>
-                </blockquote>
-
-            </div>
-
-            <div class="requestActions">
-                <hr>
-                <div class="pull-right">
-                    <button type="button" class="btn btn-success btn-labeled btn-muted"><span class="btn-label"><i
-                            class="fa fa-thumbs-up"></i></span>&nbsp;Approve
-                    </button>
-                    <button type="button" class="btn btn-danger btn-labeled btn-muted"><span class="btn-label"><i
-                            class="fa fa-thumbs-down"></i></span>&nbsp;Deny
-                    </button>
                 </div>
+
                 <div class="clearfix"></div>
+
+                <div style="padding-left:24px">
+
+                    <blockquote>
+                        <p style="color:#777">{{r.notes}}</p>
+                        <small><a href="mailto:{{r.CreatedBy.WorkEMail}}{{r.mail}}">{{r.CreatedBy.Name}}
+                            ({{r.CreatedBy.WorkPhone}})</a></small>
+                    </blockquote>
+
+                </div>
+
+                <div class="requestActions">
+                    <hr>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-success btn-labeled btn-muted"><span class="btn-label"><i
+                                class="fa fa-thumbs-up"></i></span>&nbsp;Approve
+                        </button>
+                        <button type="button" class="btn btn-danger btn-labeled btn-muted"><span class="btn-label"><i
+                                class="fa fa-thumbs-down"></i></span>&nbsp;Deny
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
             </div>
 
         </div>
