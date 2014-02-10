@@ -41,13 +41,30 @@
 			'scope'   : {},
 			'link'    : function ($scope, $el, $attrs) {
 
-				var size, title;
+				var size, title, icon;
 
 				size = $attrs.size || '1.1em';
 				title = $attrs.hover || '';
+				icon = FTSS.icons[$attrs.path];
 
-				$el[0].outerHTML ='<img src="' + FTSS.icons[$attrs.path] + '" style="height:' + size + '" class="icon" title="' + title + '"/>';
+				if (icon) {
 
+					$el[0].outerHTML = '<img src="' + FTSS.icons[$attrs.path] + '" style="height:' + size + '" class="icon" title="' + title + '"/>';
+
+				} else {
+
+					$el.remove();
+
+				}
+
+				/*var svg, size, title;
+
+				 size = parseInt($attrs.size, 10) || 20;
+				 title = $attrs.hover || '';
+
+				 svg = new Raphael($el[0], size, size);
+
+				 svg.add(FTSS.icons[$attrs.path]);*/
 			}
 		};
 
@@ -65,11 +82,11 @@
 
 					var size, shape, height;
 
-					size =  $attrs.size || '100px';
+					size = $attrs.size || '100px';
 					shape = $attrs.shape || 'circle';
-					height = (shape === 'circle') ? ';height:' + size  : ';height:185px';
+					height = (shape === 'circle') ? ';height:' + size : ';height:185px';
 
-					$el[0].outerHTML ='<div class="mask-img ' + shape + '" style="width:' + size + height + ';"><img src="' + $attrs.data + '" /></div>';
+					$el[0].outerHTML = '<div class="mask-img ' + shape + '" style="width:' + size + height + ';"><img src="' + $attrs.data + '" /></div>';
 
 				} else {
 
@@ -88,8 +105,10 @@
 			'restrict': 'A',
 			'link'    : function ($scope) {
 
-				$timeout(function() {
-					$scope.$$watchers = [];
+				$timeout(function () {
+					$scope.$$watchers =
+						[
+						];
 				});
 
 			}

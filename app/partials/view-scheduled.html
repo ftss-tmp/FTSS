@@ -17,7 +17,7 @@
     </div>
 
     <div class="pull-right">
-        <input type="search" class="search" ng-model="searchText.$"/>
+        <input type="search" class="search" ng-model="searchText.$" placeholder="Search this page..."/>
     </div>
 
 </div>
@@ -29,7 +29,8 @@
 
         <h3
                 style="border-bottom: 1px solid; margin-top:20px; margin-bottom:15px"
-                ng-show="filtered.length">{{header}} <span class="pull-right">{{filtered.length}}<span ng-hide="filtered.length == group.length"> of {{group.length}}</span></span>
+                ng-show="filtered.length">{{header}} <span class="pull-right">{{filtered.length}}<span
+                ng-hide="filtered.length == group.length"> of {{group.length}}</span></span>
         </h3>
 
         <div class="well" ng-repeat="r in filtered = (group | search:searchText.$)">
@@ -38,7 +39,7 @@
                 <span class="rollupOnly">{{r.Course.PDS}} - {{r.Course.Number}}</span>
             <span class="pull-right" style="letter-spacing: .1em">
                 {{r.start}} {{r.start}} - {{r.end}}
-                <i class="fa fa-calendar"></i>
+                <icon path="calendar_range"></icon>
             </span>
             </h4>
 
@@ -50,7 +51,7 @@
 
                     <table class="table table-split">
                         <thead>
-                        <th colspan="3">{{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}</th>
+                        <th colspan="3" class="truncate">{{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}</th>
                         </thead>
                         <tbody>
                         <tr ng-show="r.Instructor.bio">
@@ -131,36 +132,28 @@
 
                 <div class="requestActions">
                     <hr>
-                    <div class="pull-right">
+                    <div class="pull-right invert">
                         <button type="button"
                                 class="btn btn-success btn-labeled btn-muted"
                                 ng-click="add(r)"
                                 ng-show="r.openSeats">
-                        <span class="btn-label">
-                            <i class="fa fa-plus"></i>
-                        </span>&nbsp;Request Seats
+                        <span class="btn-label"><icon path="add"></icon></span>&nbsp;Request Seats
                         </button>
                         <button type="button"
                                 class="btn btn-primary btn-labeled btn-muted"
                                 ng-show="r.requestCount"
                                 ng-click="view(r)">
-                        <span class="btn-label">
-                            <i class="fa fa-search"></i>
-                        </span>&nbsp;View Requests
+                        <span class="btn-label"><icon path="view"></icon></span>&nbsp;View Requests
                         </button>
                         <button type="button"
                                 class="btn btn-warning btn-labeled btn-muted"
                                 ng-click="edit(r.Id)">
-                        <span class="btn-label">
-                            <i class="fa fa-pencil"></i>
-                        </span>&nbsp;Edit Class
+                            <span class="btn-label"><icon path="edit"></icon></span>&nbsp;Edit Class
                         </button>
                         <button type="button"
                                 class="btn btn-danger btn-labeled btn-muted"
                                 ng-click="archive(r.Id)">
-                        <span class="btn-label">
-                            <i class="fa fa-trash-o"></i>
-                        </span>&nbsp;Cancel Class
+                            <span class="btn-label"><icon path="delete"></icon></span>&nbsp;Cancel Class
                         </button>
                     </div>
                     <div class="clearfix"></div>
