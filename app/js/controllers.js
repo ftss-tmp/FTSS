@@ -742,7 +742,7 @@ var watcher;
 
 						req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
 
-						req.icon = {'1': 'clock-o', '2': 'thumbs-up', '3': 'thumbs-down'}[req.Status];
+						req.icon = {'1': 'time', '2': 'approve', '3': 'deny'}[req.Status];
 
 						req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
@@ -755,6 +755,14 @@ var watcher;
 						req.Created = FTSS.utils.fixDate(req.Created, true);
 
 						req.Scheduled.Course = req.Course;
+
+						var response = req.Response ? req.Response.split('|') : [];
+
+						req.responseName = response.shift() || '';
+
+						console.log(req.responseName);
+
+						req.responseText = response.join('|');
 
 						utils.$loading(false);
 
