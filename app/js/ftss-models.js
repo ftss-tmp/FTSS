@@ -83,7 +83,8 @@
 					[
 						'Students',
 						'CreatedBy',
-					    'Scheduled'
+						'Scheduled/Course',
+						'Scheduled/Requests/Students'
 					],
 				'$select':
 					[
@@ -104,7 +105,9 @@
 						'Scheduled/End',
 						'Scheduled/Host',
 						'Scheduled/Other',
-						'Scheduled/InstructorId'
+						'Scheduled/InstructorId',
+						'Scheduled/Requests/Status',
+						'Scheduled/Requests/Students/Id'
 					]
 			}
 
