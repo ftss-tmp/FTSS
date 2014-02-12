@@ -1,0 +1,51 @@
+<div class="clearfix">
+
+    <div class="pull-right">
+        <input type="search" class="search" ng-model="searchText.$"/>
+    </div>
+
+</div>
+
+
+<div ng-repeat="(header, group) in groups" ng-show="filtered.length">
+
+    <div ng-if="filtered.length" ng-once>
+
+        <h3 style="border-bottom: 1px solid; margin-top:5px; margin-bottom:15px">
+            {{header}} <span
+                class="pull-right">{{filtered.length}}<span
+                ng-if="filtered.length < group.length">  of {{group.length}}</span></span>
+        </h3>
+
+    </div>
+
+    <table class="table table-striped table-expanded table-hover">
+        <thead>
+        <th sorter="Base"></th>
+        <th sorter="Det" text="Detachment" default></th>
+        <th sorter="Email"></th>
+        <th>Actions</th>
+        </thead>
+        <tbody>
+
+        <tr ng-repeat="unit in filtered = (group | search:searchText.$)">
+            <td><b>{{unit.Base}}</b></td>
+            <td>{{unit.Det}}</td>
+            <td><a href="{{unit.Email}}">{{unit.Email}}</a></td>
+            <td class="invert" ng-once>
+                <button type="button"
+                        class="btn btn-sm btn-info btn-muted"
+                        ng-click="view(unit.Id)">
+                    <icon path="graph"></icon>
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-warning btn-muted"
+                        ng-click="edit(unit.Id)">
+                    <icon path="edit"></icon>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
