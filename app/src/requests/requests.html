@@ -1,4 +1,4 @@
-<div class="clearfix" ng-show="groupBy">
+<div class="clearfix" ng-show="groupBy" id="sort-group-search">
 
     <div class="btn-group">
         <button class="btn text">GROUP BY:</button>
@@ -45,7 +45,9 @@
             <div class="statusBackground">{{r.status}}</div>
 
             <h4 ng-click="r.expand = !r.expand">
-                <icon path="{{r.icon}}"></icon>
+                <span class="btn btn-{{r.iconClass}} invertSimple" style="opacity: 1;" disabled><icon
+                        path="{{r.icon}}"></icon></span>
+
                 {{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)
             <span class="pull-right" style="letter-spacing: .1em">{{r.start}} - {{r.end}}
                 <icon path="calendar_range"></icon>
@@ -89,20 +91,14 @@
                                 <icon path="comments"></icon>
                             </td>
                             <td class="bold">
-                                <button popover="{{r.notes}}"
-                                        popover-append-to-body="true"
-                                        popover-placement="right"
-                                        popover-trigger="mouseenter"
-                                        popover-title="{{r.CreatedBy.Name}} ({{r.CreatedBy.WorkPhone}})"
+                                <button hover="{{r.CreatedBy.Name}} ({{r.CreatedBy.WorkPhone}})"
+                                        data-content="{{r.Notes}}"
                                         class="btn btn-link btn-inline btn-muted">By Requester
                                 </button>
                                 <span ng-if="r.responseText">
                                     &nbsp;-&nbsp;
-                                    <button popover="{{r.responseText}}"
-                                            popover-append-to-body="true"
-                                            popover-placement="right"
-                                            popover-trigger="mouseenter"
-                                            popover-title="{{r.responseName}}"
+                                    <button hover="{{r.responseName}}"
+                                            data-content="{{r.responseText}}"
                                             class="btn btn-link btn-inline btn-muted">FTD Response
                                     </button>
                                 </span>
@@ -113,9 +109,9 @@
 
                 </div>
 
-                <div class="col-lg-5 pull-right text-right">
+                <div class="col-lg-5 pull-right text-right" style="margin-top: 10px">
 
-                    <p ng-repeat="s in r.Students.results" style="margin-bottom: 10px" class="bold truncate">
+                    <p ng-repeat="s in r.Students.results" style="margin-bottom: 10px" class="truncate">
                         <icon path="student_hand" hover="Requested Student"></icon>
                         <a href="mailto:{{s.WorkEMail}}{{r.mail}}">{{s.Name}}</a><br>
                         <span ng-show="s.WorkPhone">{{s.WorkPhone}}</span>
