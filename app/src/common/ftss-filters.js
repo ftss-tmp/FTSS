@@ -111,15 +111,13 @@
 
 			if (tags) {
 
-				filter = tags.custom ||
-					[
-					];
+				tags.custom = tags.custom || [];
+
+				filter = tags.custom.length ? [tags.custom.join(' or ')] : [];
 
 				_.each(maps, function (map, key) {
 
-					var isString = (key === 'm' || key === 'a'), fTemp =
-						[
-						];
+					var isString = (key === 'm' || key === 'a'), fTemp = [];
 
 					_.each(tags[key], function (tag) {
 
