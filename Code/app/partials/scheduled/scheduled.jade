@@ -1,0 +1,93 @@
+#sort-group-search.clearfix(ng-show='count > 0')
+    .pull-right
+        input.search(type='search', ng-model='searchText.$', placeholder='Search this page...')
+
+div(class='{{wellCollapse}}')
+    div(ng-repeat='(header, group) in groups')
+        h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
+            | {{header}}
+            span.pull-right {{group.length}}
+        .well(ng-repeat='r in group', ng-once='')
+            h4
+                span(class='btn btn-{{r.openSeatsClass}} availSeats(disabled="")') {{r.openSeats}} Open
+                span.rollupOnly {{r.Course.PDS}} - {{r.Course.Number}}
+                span.pull-right(style='letter-spacing: .1em')
+                    | {{r.start}} - {{r.end}}
+                    icon(path='calendar_range')
+            hr.rollup
+            .rollup
+                .col-lg-8.pull-left
+                    table.table.table-split
+                        thead
+                            tr
+                                th.truncate(colspan='3') {{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}
+                        tbody
+                            tr(ng-show='r.Instructor.Photo')
+                                td(rowspan='7', colspan='1', style='border-right: none;width:175px;padding-top: 20px')
+                                    photo.img-rounded(size='150px', shape='rectangle', data='r.Instructor')
+                            tr
+                                td Location
+                                td {{r.det.Base}} (Detachment {{r.det.Det}})
+                            tr
+                                td Instructor
+                                td {{r.instructor}}
+                            tr
+                                td MDS
+                                td {{r.Course.MDS}}
+                            tr
+                                td AFSC
+                                td {{r.Course.AFSC}}
+                            tr
+                                td Days
+                                td {{r.Course.Days}}
+                            tr
+                                td Hours
+                                td {{r.Course.Hours}}
+                .col-lg-2.pull-right.text-right
+                    table.table.table-split
+                        thead
+                            tr
+                                th.text-right(colspan='2') TRAINING SEATS
+                        tbody
+                            tr
+                                td Host
+                                td.text-center {{r.Host}}
+                            tr
+                                td Other
+                                td.text-center {{r.Other}}
+                            tr
+                                td Approved
+                                td.text-center {{r.approvedSeats}}
+                            tr(style='border-top:2px solid;')
+                                td Minimum
+                                td.text-center {{r.Course.Min}}
+                            tr
+                                td Maximum
+                                td.text-center {{r.Course.Max}}
+                            tr(style='border-top:2px solid;')
+                                td Pending
+                                td.text-center {{r.pendingSeats}}
+                            tr
+                                td Available
+                                td.text-center {{r.openSeats}}
+                .clearfix
+                .requestActions
+                    hr
+                    .pull-right.invert
+                        button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='r.openSeats')
+                            span.btn-label
+                                icon(path='add')
+                            | Request Seats
+                        button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='r.requestCount', ng-click='view(r)')
+                            span.btn-label
+                                icon(path='search')
+                            | View Requests
+                        button.btn.btn-warning.btn-labeled.btn-muted(type='button', ng-click='edit(r)')
+                            span.btn-label
+                                icon(path='edit')
+                            | Edit Class
+                        button.btn.btn-danger.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
+                            span.btn-label
+                                icon(path='delete')
+                            | Cancel Class
+                    .clearfix

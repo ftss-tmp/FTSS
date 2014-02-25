@@ -1,0 +1,29 @@
+div(class='{{wellCollapse}}')
+    div(ng-repeat='(header, group) in groups')
+        h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px')
+            | {{header}}
+            span.pull-right {{group.length}}
+        table.table.table-striped.table-expanded.table-hover.rollup
+            thead
+                tr
+                    th
+                    th Instructor
+                    th Unit
+                    th AFSC
+                    th Actions
+            tbody
+                tr.middle(ng-repeat='instructor in group')
+                    td(class='{{running(instructor)}}')
+                        photo(size='75px', data='instructor', force='true')
+                    td
+                        updated instructor
+                        b {{instructor.Name}}
+                    td
+                        b {{instructor.UnitLong}}
+                    td
+                        b {{instructor.AFSC}}
+                    td.invert(ng-once='')
+                        button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='view(instructor)')
+                            icon(path='graph_pie')
+                        button.btn.btn-sm.btn-warning.btn-muted(type='button', ng-click='edit(instructor)')
+                            icon(path='edit')

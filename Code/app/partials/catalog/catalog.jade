@@ -1,0 +1,40 @@
+div(class='{{wellCollapse}}')
+    div(ng-repeat='(header, group) in groups')
+        h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
+            | {{header}}
+            span.pull-right {{group.length}}
+        table.table.table-striped.table-expanded.table-hover.group{{groupBy}}.rollup
+            thead(ng-class='{slim:(count > 1 && group.length == 1)}')
+                tr
+                    th Course
+                    th.MDS MDS
+                    th.AFSC AFSC
+                    th.HOURS Length
+                    th.ACTIONS Actions
+            tbody
+                tr(ng-repeat='r in group')
+                    td.PDS(style='text-transform: uppercase')
+                        b {{r.PDS}}
+                        | - {{r.Number}}
+                        span.pull-right(ng-if='r.Units', hover='{{r.PDS}} is taught by {{r.Units.length}} FTDs:', content='{{r.units}}', style='margin-right: 15px;')
+                            icon(path='instructor')
+                        br
+                        span.peek {{r.Title}}
+                    td.MDS
+                        b {{r.MDS}}
+                    td.AFSC
+                        b {{r.AFSC}}
+                    td.HOURS
+                        | Days:
+                        b {{r.Days}}
+                        br
+                        span.peek
+                            | Hours:
+                            b {{r.Hours}}
+                    td.ACTIONS.invert(ng-once='')
+                        button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='view(r.Id)')
+                            icon(path='search')
+                        button.btn.btn-sm.btn-warning.btn-muted(type='button', ng-click='edit(r.Id)')
+                            icon(path='edit')
+                        button.btn.btn-sm.btn-danger.btn-muted(type='button', ng-click='archive(r.Id)')
+                            icon(path='delete')

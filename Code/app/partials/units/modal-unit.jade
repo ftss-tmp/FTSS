@@ -1,0 +1,48 @@
+form(name='modal')
+    .modal-header
+        h3
+            icon(path='location')
+            | {{unit.Squadron}}/Det {{unit.Det}}
+    .modal-body
+        .row
+            .col-lg-5
+                h4
+                    b Base
+                input.form-control(ng-model='unit.Base', type='text', explain='Type the installation name.', show='left', required='')
+            .col-lg-4
+            .col-lg-3
+                h4
+                    b Detachment
+                input.form-control(ng-model='unit.Det', type='number', min='201', max='399', explain='Type the detachment number as 2XX or 3XX.<example>373 TRS/Det 6 is 306.</example>', show='right', required='')
+        br
+        .row
+            .col-lg-12
+                h5
+                    b FTD Production Control E-mail
+                input.form-control(ng-model='unit.Email', type='email', explain='This email address will be used to<br>send any FTD communications from FTSS.<br>Try to use an organizational box if possible.', show='left', required='')
+        br
+        br
+        .row
+            .col-lg-12(explain='Add all the courses taught by Det {{unit.Det}}, they will be listed by PDS.', show='right')
+                h5
+                    b Courses Taught
+                select(selectize='selectizeUnits', ng-model='unit.Courses', multiple='')
+        .row(style='height: 25px')
+        .row.alert.alert-danger(ng-if='!unit.Base || !unit.Det')
+            icon(path='alert')
+            | Please ensure you enter a valid base and detachment number.
+        .row.alert.alert-danger(ng-if='error')
+            icon(path='alert')
+            | {{error}}
+    .modal-footer
+        .sending(ng-show='submitted')
+            spinner(size='2em')
+            | Please wait, sending data...
+        button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='modal.$invalid || !modal.$dirty || submitted')
+            span.btn-label
+                icon(path='upload')
+            | Submit
+        button.btn.btn-default(ng-click='cancel()') Cancel
+//
+   Created by jeffmccoy on 2/24/14.
+
