@@ -1,0 +1,33 @@
+.modal-header
+    h3(style='font-variant: small-caps')
+        icon(path='sent')
+        | {{class.Course.Number}} SEAT REQUEST
+#requestSeats.modal-body
+    p.lead
+        ng-pluralize(count='class.openSeats', when='{1:"There is only one seat available", "other":"There are {} seats available"}')
+        | for the {{class.start}} class.
+    br
+    div(explain='Search for students to add to the request.<example>Please ensure you have already loaded these students into FTSS.</example>', show='right')
+        h4
+            icon(path='students')
+            | Requested Student(s)
+        select(selectize='selectizeOptions', multiple)
+
+    br
+    div(explain='Leave any comments for the FTD or MAJCOM as applicable (optional).', show='right')
+        h4
+            i.fa.fa-comment
+            | Request Comments
+        textarea.form-control.animate(msd-elastic='\n', ng-model='comments')
+
+    br
+    h4.pull-right(ng-show='seatCount > 0')
+        i.fa.fa-info-circle
+        | You are requesting
+        b(ng-pluralize, count='seatCount', when='{1:"one seat","other":"{} seats"}')
+        | .
+.modal-footer
+    button.btn.btn-success(ng-click='submit()', ng-disabled='seatCount < 1')
+        i.fa.fa-upload
+        | Submit
+    button.btn.btn-default(ng-click='cancel()') Cancel

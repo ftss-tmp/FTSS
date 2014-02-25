@@ -1,0 +1,190 @@
+/*global utils, FTSS, _, caches, angular */
+
+FTSS.ng.controller(
+
+	'unitsController',
+
+	[
+		'$scope',
+		'SharePoint',
+		function ($scope, SharePoint) {
+
+			var self = FTSS.controller($scope, {
+				'sort' : 'Base',
+				'group': 'Squadron',
+
+				'grouping': {
+					'Squadron': 'Squadron'
+				},
+
+				'sorting': {
+					'Base': 'Base',
+					'Det' : 'Detachment'
+				}
+
+			});
+
+			$scope.edit = function (data) {
+
+				utils.modal({
+					            'templateUrl': '/partials/modal-unit.html',
+
+					            'controller':
+						            [
+							            '$scope',
+							            '$modalInstance',
+							            function ($scope, $modalInstance) {
+
+								            $scope.unit = angular.copy(data);
+
+								            $scope.selectizeUnits = {
+
+									            'valueField'  : 'Id',
+									            'labelField'  : 'PDS',
+									            'searchField' :
+										            [
+											            'PDS',
+											            'Number',
+											            'Title',
+											            'MDS',
+											            'AFSC'
+										            ],
+									            'sortField'   : 'PDS',
+									            'options'     : caches.MasterCourseList,
+									            'create'      : false,
+									            'plugins'     :
+										            [
+											            'remove_button'
+										            ],
+									            'render'      : {
+										            'option': function (item) {
+
+											            return '<div style="margin-bottom:10px"><h5><b>' + item.PDS + ' - ' + item.Number + '</b></h5>' +
+
+												            '<small>' + item.Title + '</small></div>';
+
+										            }
+
+									            },
+									            /*'onChange'    : function (val) {
+									             $scope.unit.Courses = val.join('|').replace(/"/g, '');
+									             },*/
+									            'onInitialize': function () {
+										            this.setValue(_(data.CoursesMap).pluck('Id'));
+									            }
+
+								            };
+
+								            $scope.submit = function () {
+
+									            $scope.submitted = true;
+
+									            var send = {
+										            '__metadata': $scope.unit.__metadata,
+										            'Base'      : $scope.unit.Base,
+										            'Det'       : $scope.unit.Det,
+										            'Courses'   : $scope.unit.Courses.join('|'),
+										            'cache'     : true
+									            };
+
+									            SharePoint.update(send).then(function (resp) {
+
+										            if (resp.status === 204) {
+
+											            $scope.unit.__metadata.etag = resp.headers('etag');
+											            $scope.unit.updated = true;
+
+											            self.data[data.Id] = angular.copy($scope.unit);
+											            self.process();
+											            $modalInstance.close();
+
+										            }
+
+									            }, utils.$ajaxFailure);
+								            };
+								            $scope.cancel = $modalInstance.dismiss;
+
+							            }
+						            ]
+				            });
+
+			};
+
+			self
+
+				.bind('loaded')
+
+				.then(function () {
+
+					      SharePoint
+
+						      .read(FTSS.models.units)
+
+						      .then(function (data) {
+
+							            // Attach all the instructors to this unit
+							            _(caches.Instructors).each(function (i) {
+
+								            var d = data[i.UnitId].Instructors = data[i.UnitId].Instructors ||
+									            [
+									            ];
+
+								            d.push(i.Instructor.Name);
+
+							            });
+
+							            self
+
+								            .initialize(data)
+
+								            .then(function (unit) {
+
+									                  // Flatten Instructors into string after sorting
+									                  if (_.isArray(unit.Instructors)) {
+										                  unit.InstructorsCount = unit.Instructors.length;
+
+										                  unit.Instructors =
+
+											                  unit.Instructors
+
+												                  .sort()
+
+												                  .join('<br>')
+
+												                  .replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+									                  }
+
+									                  unit.Squadron = unit.Det < 300 ? '372 TRS' : '373 TRS';
+
+									                  if (unit.Courses) {
+
+										                  var courses = unit.Courses.split ? unit.Courses.split('|') : unit.Courses;
+
+										                  // Add all the course data to each unit for searching
+										                  unit.CoursesMap = _(courses).map(function (c) {
+
+											                  return caches.MasterCourseList[c];
+
+										                  });
+
+										                  // Flattened string (yes this is HTML in a controller :-( for Hover
+										                  unit.CoursesHover = _(unit.CoursesMap).map(function (c) {
+
+											                  if (unit.CoursesMap.length > 10) {
+												                  return '<div class="col-lg-4" hover="' + c.Title + '" show="left"><b>' + c.PDS + '</b>: ' + c.Number + '</div>';
+											                  } else {
+												                  return '<dt class="tiny">' + c.PDS + '</dt><dd>' + c.Number + '<br><small class="truncate">' + c.Title + '</small></dd>';
+											                  }
+
+										                  }).join('');
+
+									                  }
+
+								                  });
+
+						            }, utils.$ajaxFailure);
+
+				      });
+
+		}
+	]);
