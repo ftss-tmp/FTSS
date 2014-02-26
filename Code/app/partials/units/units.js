@@ -40,36 +40,17 @@ FTSS.ng.controller(
 								            $scope.selectizeUnits = {
 
 									            'valueField'  : 'Id',
-									            'labelField'  : 'PDS',
-									            'searchField' :
-										            [
-											            'PDS',
-											            'Number',
-											            'Title',
-											            'MDS',
-											            'AFSC'
-										            ],
-									            'sortField'   : 'PDS',
-									            'options'     : caches.MasterCourseList,
+									            'labelField'  : 'label',
+									            'searchField' : 'text',
+									            'sortField'   : 'text',
+									            'options'     : FTSS.selectize.COURSE,
 									            'create'      : false,
 									            'plugins'     :
 										            [
 											            'remove_button'
 										            ],
-									            'render'      : {
-										            'option': function (item) {
-
-											            return '<div style="margin-bottom:10px"><h5><b>' + item.PDS + ' - ' + item.Number + '</b></h5>' +
-
-												            '<small>' + item.Title + '</small></div>';
-
-										            }
-
-									            },
-									            /*'onChange'    : function (val) {
-									             $scope.unit.Courses = val.join('|').replace(/"/g, '');
-									             },*/
 									            'onInitialize': function () {
+
 										            this.setValue(_(data.CoursesMap).pluck('Id'));
 									            }
 
@@ -125,11 +106,13 @@ FTSS.ng.controller(
 							            // Attach all the instructors to this unit
 							            _(caches.Instructors).each(function (i) {
 
-								            var d = data[i.UnitId].Instructors = data[i.UnitId].Instructors ||
+								            var u = data[i.UnitId];
+
+								            u.Instructors = u.Instructors ||
 									            [
 									            ];
 
-								            d.push(i.Instructor.Name);
+								            u.Instructors.push(i.label);
 
 							            });
 
@@ -141,6 +124,7 @@ FTSS.ng.controller(
 
 									                  // Flatten Instructors into string after sorting
 									                  if (_.isArray(unit.Instructors)) {
+
 										                  unit.InstructorsCount = unit.Instructors.length;
 
 										                  unit.Instructors =
@@ -149,9 +133,8 @@ FTSS.ng.controller(
 
 												                  .sort()
 
-												                  .join('<br>')
+												                  .join('<br>');
 
-												                  .replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
 									                  }
 
 									                  unit.Squadron = unit.Det < 300 ? '372 TRS' : '373 TRS';

@@ -1,0 +1,60 @@
+
+.well a, td a {
+    border-bottom: 1px dotted
+}
+
+.well hr {
+    border-color: #333
+}
+
+.well a:hover {
+    border-bottom: 1px solid;
+    text-decoration: none
+}
+
+.well .statusBackground {
+    bottom: -40px;
+    font-size: 120px;
+    opacity: .25;
+    position: absolute;
+    right: 5px;
+    text-transform: uppercase;
+    color: #ddd;
+}
+
+.well {
+    font-size: 15px;
+}
+
+.well .rollupOnly {
+    display: none;
+}
+
+.collapsed .well .rollupOnly {
+    display: inline;
+}
+
+.well a {
+    color: #555;
+}
+
+.well:hover a {
+    color: #428bca;
+}
+.well:hover .requestStats {
+    display: block;
+}
+
+
+.well h4 {
+    text-transform: uppercase
+}
+
+.collapsed .well {
+    margin-bottom: 5px;
+    padding: 0 15px
+}
+
+.collapsed h4 {
+    font-weight: 100
+}

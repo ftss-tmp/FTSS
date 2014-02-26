@@ -1,0 +1,37 @@
+
+
+.popover {
+    max-width: 50%;
+    z-index: 9999 !important
+}
+
+.popover h3 {
+    font-weight: 800;
+}
+
+.pop-div .popover-content {
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
+.popover-content dd {
+    line-height: 1.1em;
+    margin-bottom: 10px;
+}
+
+.popover.no-arrow .arrow {
+    display: none;
+}
+
+.popover .icon {
+    float: left;
+    font-size: 2em;
+}
+
+
+.popover example {
+    display: block;
+    margin-top: 4px;
+    font-size: .85em;
+    font-style: italic;
+}

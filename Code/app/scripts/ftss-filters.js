@@ -83,6 +83,8 @@
 			 */
 			_.each(filters.route(), function (filter) {
 
+				filter.label = filter.text;
+
 				filter.id = filter.id.replace(/TODAY/g, today);
 
 				filter.optgroup = 'SMART FILTERS';

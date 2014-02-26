@@ -1,0 +1,118 @@
+
+.optgroup .option {
+    margin: 0 !important;
+    overflow: hidden;
+    padding: 2px 8px !important;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.optgroup.smartfilters {
+    border-bottom: 1px solid;
+    height: auto !important;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    width: 100%
+}
+
+.optgroup.smartfilters .option {
+    float: left;
+    font-weight: 800;
+    margin-left: 5px !important;
+    padding-right: 15px;
+    font-style: italic;
+}
+
+.optgroup.unit {
+    width: 20%
+}
+
+.optgroup.afsc {
+    width: 10%;
+}
+
+.optgroup.afsc .option, .optgroup.mds .option  {
+    font-weight: 800;
+}
+
+.optgroup.mds {
+    width: 10%
+}
+
+.optgroup.instructor.count-5, .optgroup.instructor.count-4, .optgroup.instructor.count-3, .optgroup.instructor.count-2 {
+    width: 20%
+}
+
+.optgroup.course.count-5 {
+    width: 35%
+}
+
+.optgroup.course.count-4 {
+    width: 40%
+}
+
+.optgroup.course.count-3 {
+    width: 45%
+}
+
+
+#tagBox .selectize-input .item, .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+#tagBox .selectize-input .item {
+    max-width: 175px;
+}
+
+#tagBox .selectize-input input {
+    top: -0.4em;
+    font-size: 1.2em;
+}
+
+#searchContainer.tagBox #searchBox, #searchContainer #tagBox {
+    display: none;
+}
+
+#searchContainer #searchBox, #searchContainer.tagBox #tagBox {
+    display: block;
+}
+
+.item {
+    background-color: #fcfcfc !important;
+    color: #aaa !important
+}
+
+.item.matched {
+    background-color: #eaeaea !important;
+    color: #000 !important;
+    font-weight: 800;
+}
+
+.item:hover {
+    background-color: #5bc0de !important;
+    color: #FFF !important;
+}
+
+
+.item small, .item em {
+    display: none!important;
+}
+
+.item b {
+    font-weight: normal;
+}
+
+.option h5 {
+    font-weight: 800;
+}
+
+.option em {
+    font-style: normal;
+}
+
+.option right {
+    display: inline-block;
+    float: right;
+}

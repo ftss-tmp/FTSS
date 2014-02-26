@@ -5,7 +5,7 @@
  * @type {{}}
  */
 
-var FTSS = {}, utils = {}, caches = {}, watcher;
+var FTSS = {}, utils = {}, caches = {};
 
 (function () {
 

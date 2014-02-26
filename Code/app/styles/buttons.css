@@ -1,0 +1,40 @@
+
+.btn-label {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px 0 0 3px;
+    display: inline-block;
+    left: -12px;
+    padding: 6px 12px;
+    position: relative
+}
+
+.btn-labeled {
+    padding-bottom: 0;
+    padding-top: 0
+}
+
+.btn-group .text {
+    background-color: #fff;
+    color: #285e8e;
+    font-weight: 800;
+}
+
+.btn-group .text:hover {
+    cursor: default !important;
+}
+
+.btn .icon {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.btn-inline {
+    padding: 0;
+    font-size: inherit;
+    background: none !important;
+}
+
+.btn {
+    margin-right: .25em;
+}
+
