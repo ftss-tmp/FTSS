@@ -3,7 +3,7 @@ div(class='{{wellCollapse}}')
         h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
-        table.table.table-striped.table-expanded.table-hover.group{{groupBy}}.rollup
+        table(class='table table-striped table-expanded table-hover group{{groupBy}} rollup')
             thead(ng-class='{slim:(count > 1 && group.length == 1)}')
                 tr
                     th Course

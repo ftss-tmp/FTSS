@@ -1,0 +1,20 @@
+.pagination > li > a, .pagination > li > span {
+    font-weight: 600
+}
+
+.pagination.inverse a, .pagination.inverse span {
+    background-color: #333e4a;
+    border-color: #333e4a #566676;
+    color: #fff
+}
+
+.pagination.inverse a:hover, .pagination.inverse span:hover {
+    background-color: #000
+}
+
+.pagination.inverse > li.active > a {
+    background-color: #212b36;
+    border-left-color: #212b36;
+    border-right-color: #212b36;
+    color: #3b9ff3
+}

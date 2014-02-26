@@ -1,0 +1,26 @@
+header.navbar.navbar-inverse(role='banner')
+    .navbar-header
+        button#menu-toggler.navbar-toggle(type='button', data-toggle='collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        span.navbar-brand
+            icon(path='aflogo', size='1.65em')
+            span FTSS 3
+            | | Developer Mode
+    ul.nav.navbar-nav.pull-right.hidden-xs
+        li.dropdown(ng-controller='user')
+            a.dropdown-toggle.hidden-xs.hidden-sm(href='#', data-toggle='dropdown', ng-once='')
+                | {{user.Name}}
+                b.caret
+            ul.dropdown-menu
+                li
+                    a(href='personal-info.html') Personal info
+                li
+                    a(href='#') Account settings
+                li
+                    a(href='#') Billing
+        li.settings.hidden-xs.hidden-sm
+            a(href='signin.html', role='button')
+                i.icon-share-alt

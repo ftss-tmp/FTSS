@@ -1,0 +1,92 @@
+
+.table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.table.table-split tr td:first-child {
+    text-align: right;
+    border-right: 1px solid rgb(221, 221, 221);
+    letter-spacing: .2em;
+}
+
+.table.table-split tr td:first-child + td {
+    font-weight: 700;
+}
+
+.table.no-border * {
+    border: none !important;
+}
+
+.table-center * {
+    text-align: center;
+}
+
+.table thead.slim th {
+    display: none;
+}
+
+
+.table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
+    color: #111;
+    background-color: #eee;
+    border-color: #bbb;
+}
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+    background-color: #f5fafc;
+    color: #428bca;
+    fill:#428bca!important;
+    stroke:#428bca!important;
+}
+
+.table-expanded tr td {
+    padding: 15px 10px 15px !important;
+}
+
+td .peek {
+    visibility: hidden;
+}
+
+tr:hover td .peek {
+    visibility: visible;
+}
+
+.table-tiny {
+    display: block;
+    line-height: 20px;
+    margin: -15px;
+    float: left;
+    width: 33%;
+    font-size: .85em;
+}
+
+.table-tiny th {
+    text-align: center;
+}
+
+.table-tiny td {
+    border-top: 1px solid rgb(221, 221, 221);
+    padding: 5px 13px;
+    text-align: center;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.middle td {
+    vertical-align: middle !important;
+}
+
+table th {
+    text-transform: uppercase;
+}
+th.active {
+    background-color: transparent !important;
+    font-weight: 800;
+    background: none;
+    border-bottom: 1px solid;
+    color: #d58512;
+}

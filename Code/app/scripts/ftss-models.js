@@ -3,6 +3,9 @@
 /**
  * FTSS Models
  *
+ * 		'$inlinecount': 'allpages',
+ *      '$top'        : 25,
+ *
  */
 (function () {
 

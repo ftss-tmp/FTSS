@@ -27,7 +27,7 @@
 			}
 		]);
 
-	init = function() {
+	init = function () {
 
 	};
 
@@ -483,13 +483,14 @@
 				 * The Selectize init options
 				 *
 				 * @type {{labelField: string, valueField: string, hideSelected: boolean, sortField: string, dataAttr: string, optgroupOrder: string[], plugins: string[],
-		 * ialize: 'onInitialize', type: 'type', onChange: 'onChange'}}
+		         * ialize: 'onInitialize', type: 'type', onChange: 'onChange'}}
 				 */
 				$scope.selectizeOptions = {
-					'labelField'   : 'text',
+					'labelField'   : 'label',
 					'valueField'   : 'id',
 					'hideSelected' : true,
 					'sortField'    : 'text',
+					'searchField'  : 'text',
 					'dataAttr'     : 'width',
 					'persist'      : true,
 					'optgroupOrder':
@@ -518,6 +519,8 @@
 
 							var count = 0, CACHE_COUNT = 4;
 
+							FTSS.selectize = {};
+
 							return function (data, title, text) {
 
 								var id = title.toLowerCase().charAt(0) + ':';
@@ -528,20 +531,26 @@
 									};
 								}
 
+								FTSS.selectize[title] = _.map(data, function (v) {
+
+									var Id = (v.Id || v), txt = text(v);
+
+									return {
+										'Id'      : Id,
+										'id'      : id + Id,
+										'optgroup': title,
+										'text'    : txt,
+										'label'   : v.label || txt
+									};
+
+								});
+
 								search.addOptionGroup(title, {
 									'label': title,
 									'value': title
 								});
 
-								search.addOption(_.map(data, function (v) {
-
-									return {
-										'id'      : id + (v.Id || v),
-										'optgroup': title,
-										'text'    : text(v)
-									};
-
-								}));
+								search.addOption(FTSS.selectize[title]);
 
 								if (++count > CACHE_COUNT) {
 
@@ -554,112 +563,155 @@
 
 						}());
 
-						SharePoint.read(FTSS.models.catalog).then(function (response) {
+						SharePoint
 
-							caches.MasterCourseList = response;
+							.read(FTSS.models.catalog)
 
-							caches.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
-							caches.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
+							.then(function (response) {
 
-							loaded(caches.MasterCourseList, 'COURSE', function (v) {
-								return (
-									[
-										v.PDS,
-										v.Number,
-										v.Title,
-										v.MDS,
-										v.AFSC
-									].join(' / '));
-							});
+								      // Add MCL to Caches object
+								      caches.MasterCourseList = response;
 
-							loaded(caches.MDS, 'MDS');
+								      // Pull unique AFSC list from MCL & copy to Caches
+								      caches.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
 
-							loaded(caches.AFSC, 'AFSC');
+								      // Pull unqiue MDS list from MCL & copy to Caches
+								      caches.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
 
-						});
+								      // Add MCL to Selectize with row callback
+								      loaded(caches.MasterCourseList, 'COURSE', function (v) {
 
-						SharePoint.read(FTSS.models.units).then(function (response) {
+									      /**
+									       * Generates string format for dropdown display
+									       *
+									       * "<div><h5>U2I<em> - J4AMP2A6X6 A41B</em></h5><small>U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS</small></div>"
+									       *
+									       * @type {*|string}
+									       */
+									      v.label =
+										      [
+											      '<div><h5>',
+											      v.PDS,
+											      '<em> - ',
+											      v.Number,
+											      '</em></h5>',
+											      '<small>',
+											      v.Title,
+											      '</small></div>'
+										      ].join('');
 
-							caches.Units = response;
+									      /**
+									       * Generates string format for full-text search
+									       *
+									       * "U2I / J4AMP2A6X6 A41B / U-2S ELECTRICAL AND ENVIRONMENTAL SYSTEMS / U-2 / 2A6X6"
+									       *
+									       * @type {*|string}
+									       */
+									      v.text =
+										      [
+											      v.PDS,
+											      v.Number,
+											      v.Title,
+											      v.MDS,
+											      v.AFSC
+										      ].join(' / ');
 
-							loaded(response, 'DETACHMENT', function (v) {
+									      return v.text;
+								      });
 
-								v.Squadron = v.Det < 300 ? '372 TRS' : '373 TRS';
+								      // Add MDS to Selectize
+								      loaded(caches.MDS, 'MDS');
 
-								v.LongName =
-									[
-										v.Base,
-										' (Det. ',
-										v.Det,
-										')'
-									].join('');
+								      // Add AFSC to Selectize
+								      loaded(caches.AFSC, 'AFSC');
 
-								return v.LongName;
-							});
+							      });
 
-						});
+						SharePoint
 
-						SharePoint.read(FTSS.models.instructors).then(function (response) {
+							.read(FTSS.models.units)
 
-							caches.Instructors = response;
+							.then(function (response) {
 
-							loaded(response, 'INSTRUCTOR', function (v) {
+								      // Add Units to Caches object
+								      caches.Units = response;
 
-								return  v.Instructor.Name;
+								      // Add Units to Selectize with row callback
+								      loaded(response, 'DETACHMENT', function (v) {
 
-							});
+									      // Use Det # to determine squadron 2XX for 372 TRS / 3XX for 373 TRS
+									      v.Squadron = v.Det < 300 ? '372 TRS' : '373 TRS';
 
-						});
+									      /**
+									       * Generates string for label full-text search
+									       *
+									       * "Nellis 213 372 TRS 372trsdet13.pro@nellis.af.mil"
+									       *
+									       * @type {*|string}
+									       */
+									      v.text =
+										      [
+											      v.Base,
+											      v.Det,
+											      v.Squadron,
+											      v.Email
+										      ].join(' ');
+
+									      /**
+									       * Generates string for Selectize display
+									       *
+									       * "Nellis<em> (Det. 213)</em>"
+									       *
+									       * @type {*|string}
+									       */
+									      v.label =
+										      [
+											      '<b>',
+											      v.Base,
+											      '</b><right>&nbsp;(Det ',
+											      v.Det,
+											      ')</right>'
+										      ].join('');
+
+									      /**
+									       * Generates LongName property for use throughout app
+									       *
+									       * "Nellis (Det. 213)"
+									       *
+									       * @type {*|string}
+									       */
+									      v.LongName =
+										      [
+											      v.Base,
+											      ' (Det. ',
+											      v.Det,
+											      ')'
+										      ].join('');
+
+									      return v.text;
+								      });
+
+							      });
+
+						SharePoint
+
+							.read(FTSS.models.instructors)
+
+							.then(function (response) {
+
+								      caches.Instructors = response;
+
+								      loaded(response, 'INSTRUCTOR', function (v) {
+
+									      v.label = v.Instructor.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+
+									      return  v.Instructor.Name;
+
+								      });
+
+							      });
 
 					}
-				};
-
-
-				watcher = function () {
-
-					var watchers =
-						[
-						];
-
-					function getWatchCount(scope, scopeHash) {
-						// default for scopeHash
-						if (scopeHash === undefined) {
-							scopeHash = {};
-						}
-
-						// make sure scope is defined and we haven't already processed this scope
-						if (!scope || scopeHash[scope.$id] !== undefined) {
-							return 0;
-						}
-
-						var watchCount = 0;
-
-						if (scope.$$watchers) {
-							watchers.push(_.map(scope.$$watchers, function (exp) {
-								return exp.exp.exp || exp.exp;
-							}));
-
-							watchCount = scope.$$watchers.length;
-						}
-						scopeHash[scope.$id] = watchCount;
-
-						// get the counts of children and sibling scopes
-						// we only need childHead and nextSibling (not childTail or prevSibling)
-						watchCount += getWatchCount(scope.$$childHead, scopeHash);
-						watchCount += getWatchCount(scope.$$nextSibling, scopeHash);
-
-						return watchCount;
-					}
-
-
-					var ret =
-						[
-							watchers,
-							getWatchCount($scope)
-						];
-
-					return ret;
-
 				};
 
 			}

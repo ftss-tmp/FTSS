@@ -1,0 +1,32 @@
+
+
+.modal-dialog .item h5, .item.active h5 {
+    color: #FFF !important;
+    background: none !important;
+}
+
+.modal-dialog .multi .item {
+    color: #FFF !important;
+    background: #444 !important;
+    margin-bottom: 2px !important;
+}
+
+.modal-dialog .alert-danger {
+    margin-bottom: -20px !important;
+    padding: 5px !important;
+}
+
+.modal-dialog .sending {
+    float: left;
+    font-size: 1.25em;
+    font-weight: 800;
+    color: #555;
+}
+
+.modal-dialog .sending div {
+    display: inline;
+}
+
+.modal-dialog input {
+    width: 100%;
+}

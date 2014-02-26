@@ -1,0 +1,71 @@
+
+body.menu {
+    overflow-x: hidden
+}
+
+body.menu #content {
+    margin-left: 165px;
+    position: fixed;
+    width: 850px
+}
+
+body.menu #sidebar-nav {
+    border-right: 0;
+    box-shadow: none;
+    left: 0;
+    position: absolute
+}
+
+.header {
+    margin-bottom: 60px
+}
+
+.header h1, .header h2, .header h3, .header h4, .header h5 {
+    float: left;
+    margin-top: 5px
+}
+
+#pad-wrapper {
+    margin-top: 15px;
+    padding: 0 25px
+}
+
+#content {
+    background: #fff;
+    border-bottom: 1px solid #dae3e9;
+    border-left: 1px solid #dae3e9;
+    border-radius: 0 0 0 5px;
+    bottom: 0;
+    box-shadow: -3px 3px 3px -2px #f1f1f3;
+    left: 0;
+    margin-bottom: 0;
+    margin-left: 177px;
+    min-height: 620px;
+    min-width: 400px;
+    overflow: auto;
+    padding-bottom: 50px;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    transition: margin-left .3s ease
+}
+
+#wrap {
+    height: auto;
+    margin: 0 auto -60px;
+    min-height: 100%;
+    padding: 0 0 60px
+}
+
+#wrap > .container {
+    padding: 60px 15px 0
+}
+
+.page-header {
+    margin-top: 0
+}
+
+#footer > .container {
+    padding-left: 15px;
+    padding-right: 15px
+}
