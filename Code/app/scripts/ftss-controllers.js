@@ -9,7 +9,7 @@
  * @param opts
  * @returns {{$scope: *, bind: 'bind', initialize: 'initialize', process: 'process', scheduledClass: 'scheduledClass', postProcess: 'postProcess'}}
  */
-FTSS.controller = function ($scope, opts) {
+FTSS.controller = function ($scope, SharePoint, opts) {
 
 	$scope.$parent.tagBox = opts.tagBox || false;
 
@@ -17,13 +17,15 @@ FTSS.controller = function ($scope, opts) {
 
 	$scope.$parent.sorting = opts.sorting || false;
 
-	var process, actions = {
+	var model, process, actions = {
 
 		'$scope': $scope,
 
 		'bind': function (prop) {
 
 			var single = (prop === 'loaded');
+
+			model = angular.copy(FTSS.models[opts.model]);
 
 			return {
 				'then': function (callback) {
@@ -34,7 +36,15 @@ FTSS.controller = function ($scope, opts) {
 
 							actions.reload = function () {
 
-								callback(watch);
+								if (prop === 'filter') {
+									model.params.$filter = watch;
+								}
+
+								SharePoint
+
+									.read(model)
+
+									.then(callback);
 
 							};
 
@@ -46,7 +56,6 @@ FTSS.controller = function ($scope, opts) {
 
 						}
 					});
-
 
 				}
 			};
@@ -237,6 +246,54 @@ FTSS.controller = function ($scope, opts) {
 				utils.$loading(false);
 
 			}
+
+		},
+
+		'update': function (scope, $modalInstance) {
+
+			return function () {
+
+				scope.submitted = true;
+
+				var old, fields, send = {};
+
+				old = actions.data[scope.data.Id];
+
+				fields = angular.copy(model.params.$select);
+				delete fields.Id;
+
+				_(fields).each(function (field) {
+
+					var data = scope.data[field];
+
+					if (old[field] && old[field] !== data) {
+
+						send[field] = data;
+
+					}
+
+				});
+
+				send.cache = true;
+				send.__metadata = scope.data.__metadata
+
+				SharePoint.update(send).then(function (resp) {
+
+					if (resp.status === 204) {
+
+						scope.data.__metadata.etag = resp.headers('etag');
+						scope.data.updated = true;
+
+						actions.data[scope.data.Id] = angular.copy(scope.data);
+						actions.process();
+
+						$modalInstance.close();
+
+					}
+
+				}, utils.$ajaxFailure);
+
+			};
 
 		}
 

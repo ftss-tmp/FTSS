@@ -83,10 +83,3 @@ tr:hover td .peek {
 table th {
     text-transform: uppercase;
 }
-th.active {
-    background-color: transparent !important;
-    font-weight: 800;
-    background: none;
-    border-bottom: 1px solid;
-    color: #d58512;
-}

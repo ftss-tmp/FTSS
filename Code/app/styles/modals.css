@@ -1,13 +1,19 @@
 
 
-.modal-dialog .item h5, .item.active h5 {
+.item:hover * {
     color: #FFF !important;
-    background: none !important;
+    /*background: none !important;*/
+}
+
+.modal-dialog .item {
+    color:#000!important;
 }
 
 .modal-dialog .multi .item {
-    color: #FFF !important;
-    background: #444 !important;
+
+
+    /*color: #FFF !important;
+    background: #444 !important;*/
     margin-bottom: 2px !important;
 }
 
@@ -29,4 +35,13 @@
 
 .modal-dialog input {
     width: 100%;
+}
+
+.modal-dialog .well {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.modal-dialog .row h4 {
+    margin-bottom: 3px;
 }

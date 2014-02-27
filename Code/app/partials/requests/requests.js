@@ -9,7 +9,7 @@ FTSS.ng.controller(
 		'SharePoint',
 		function ($scope, SharePoint) {
 
-			var self = FTSS.controller($scope, {
+			var self = FTSS.controller($scope, SharePoint, {
 				'sort' : 'status',
 				'group': 'course',
 
@@ -28,7 +28,8 @@ FTSS.ng.controller(
 					'course'     : 'Course',
 					'unit'       : 'Unit',
 					'Course.AFSC': 'AFSC'
-				}
+				},
+				'model'  : 'requests'
 
 			});
 
@@ -36,56 +37,46 @@ FTSS.ng.controller(
 
 				.bind('filter')
 
-				.then(function (filter) {
+				.then(function (data) {
 
-					      var model = FTSS.models.requests;
-					      model.params.$filter = filter;
+					      self
 
-					      SharePoint
+						      .initialize(data)
 
-						      .read(model)
+						      .then(function (req) {
 
-						      .then(function (data) {
+							            self.scheduledClass(req);
 
-							            self
+							            req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
 
-								            .initialize(data)
+							            req.icon = {'1': 'time', '2': 'approve', '3': 'deny'}[req.Status];
 
-								            .then(function (req) {
+							            req.iconClass = {'1': 'info', '2': 'success', '3': 'danger'}[req.Status];
 
-									                  self.scheduledClass(req);
+							            req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
 
-									                  req.status = {'1': 'Pending', '2': 'Approved', '3': 'Denied'}[req.Status];
+							            req.reqSeats = req.Students.results.length;
 
-									                  req.icon = {'1': 'time', '2': 'approve', '3': 'deny'}[req.Status];
+							            req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
 
-									                  req.iconClass = {'1': 'info', '2': 'success', '3': 'danger'}[req.Status];
+							            req.Created = FTSS.utils.fixDate(req.Created, true);
 
-									                  req.mail = '?subject=' + encodeURIComponent('FTD Registration (' + req.Course.Title + ')') + '&body=' + encodeURIComponent(req.start + ' - ' + req.end + '\n' + req.det.Base);
+							            req.Scheduled.Course = req.Course;
 
-									                  req.reqSeats = req.Students.results.length;
+							            try {
 
-									                  req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
+								            var response = req.Response.split('|');
 
-									                  req.Created = FTSS.utils.fixDate(req.Created, true);
+								            req.responseName = response.shift() || '';
 
-									                  req.Scheduled.Course = req.Course;
+								            req.responseText = response.join('|') || 'Requester left no comments';
 
-									                  try {
+							            } catch (e) {
 
-										                  var response = req.Response.split('|');
+							            }
 
-										                  req.responseName = response.shift() || '';
+						            });
 
-										                  req.responseText = response.join('|') || 'Requester left no comments';
-
-									                  } catch (e) {
-
-									                  }
-
-								                  });
-
-						            }, utils.$ajaxFailure);
 
 				      });
 

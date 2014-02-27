@@ -77,7 +77,7 @@ FTSS.ng.controller(
 
 			};
 
-			var self = FTSS.controller($scope, {
+			var self = FTSS.controller($scope, SharePoint, {
 				'sort' : 'Start',
 				'group': 'Course.MDS',
 
@@ -95,7 +95,8 @@ FTSS.ng.controller(
 					'course'     : 'Course',
 					'unit'       : 'Unit',
 					'Course.AFSC': 'AFSC'
-				}
+				},
+				'model'  : 'scheduled'
 
 			});
 
@@ -103,48 +104,37 @@ FTSS.ng.controller(
 
 				.bind('filter')
 
-				.then(function (filter) {
+				.then(function (data) {
 
-					      var model = FTSS.models.scheduled;
-					      model.params.$filter = filter;
+					      self
 
-					      SharePoint
+						      .initialize(data)
 
-						      .read(model)
+						      .then(function (req) {
 
-						      .then(function (data) {
+							            self.scheduledClass(req);
 
-							            self
+							            switch (true) {
+								            case (req.openSeats > 0):
+									            req.openSeatsClass = 'success';
+									            break;
 
-								            .initialize(data)
+								            case (req.openSeats === 0):
+									            req.openSeatsClass = 'warning';
+									            break;
 
-								            .then(function (req) {
+								            case(req.openSeats < 0):
+									            req.openSeatsClass = 'danger';
+									            break;
+							            }
 
-									                  self.scheduledClass(req);
+							            req.availability = {
+								            'success': 'Open Seats',
+								            'warning': 'No Open Seats',
+								            'danger' : 'Seat Limit Exceeded'
+							            }[req.openSeatsClass];
 
-									                  switch (true) {
-										                  case (req.openSeats > 0):
-											                  req.openSeatsClass = 'success';
-											                  break;
-
-										                  case (req.openSeats === 0):
-											                  req.openSeatsClass = 'warning';
-											                  break;
-
-										                  case(req.openSeats < 0):
-											                  req.openSeatsClass = 'danger';
-											                  break;
-									                  }
-
-									                  req.availability = {
-										                  'success': 'Open Seats',
-										                  'warning': 'No Open Seats',
-										                  'danger' : 'Seat Limit Exceeded'
-									                  }[req.openSeatsClass];
-
-								                  });
-
-						            }, utils.$ajaxFailure);
+						            });
 
 				      });
 

@@ -1,36 +1,38 @@
-.modal-header
-    h4(hover='<div>[icon=info]</div>Rank, unit and contact info are pulled from AFNET; contact the ESD to make changes', show='right')
-        icon(path='instructor')
-        | {{instructor.Name}}
-.modal-body
-    .row
-        .col-lg-4(style='margin-left:5%')
-            photo.img-rounded(size='150px', shape='rectangle', data='instructor')
-        .col-lg-7
-            h5
-                b Assigned Unit
-            div(explain='Choose {{firstName}}"s unit from the list.', show='right')
-                select(selectize='selectizeUnits', ng-model='instructor.UnitId')
-            br
-            h5
-                b Current AFSC
-            div(explain='Type in {{firstName}}"s AFSC or choose one from the list.', show='right')
-                select(selectize='selectizeAFSC', ng-model='instructor.AFSC')
-    .row(style='height: 25px')
-    .row.alert.alert-danger(ng-if='!instructor.UnitId')
-        icon(path='alert')
-        | You must choose {{firstName}}'s&nbsp;
-        b assigned unit
-        | .
-    .row.alert.alert-danger(ng-if='error')
-        icon(path='alert')
-        | {{error}}
-.modal-footer
-    .sending(ng-if='submitted')
-        spinner(size='2em')
-        | Please wait, sending data...
-    button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='!instructor.UnitId || submitted')
-        span.btn-label
-            icon(path='upload')
-        | Submit
-    button.btn.btn-default(ng-click='cancel()') Cancel
+form.form-horizontal(name='modal')
+
+    .modal-header
+        h4(hover='<div>[icon=info]</div>Rank, unit and contact info are pulled from AFNET; contact the ESD to make changes', show='right')
+            icon(path='instructor')
+            | {{data.Name}}
+
+    .modal-body
+
+        .row
+
+            .col-lg-4(style='margin-left:5%')
+                photo.img-rounded(size='150px', shape='rectangle', data='data')
+
+            .col-lg-7
+                h5
+                    b Assigned Unit
+                div(explain='Choose {{firstName}}"s unit from the list.', show='right')
+                    select(selectize='selectizeUnits')
+                br
+                h5
+                    b Current AFSC
+                div(explain='Type in {{firstName}}"s AFSC or choose one from the list.', show='right')
+                    select(selectize='selectizeAFSC')
+
+        .row(style='height: 25px')
+
+        .row.alert.alert-danger(ng-if='!data.UnitId')
+            icon(path='alert')
+            | You must choose {{firstName}}'s&nbsp;
+            b assigned unit
+            | .
+
+        .row.alert.alert-danger(ng-if='error')
+            icon(path='alert')
+            | {{error}}
+
+    ng-include(src='"/partials/modal-footer.html"')

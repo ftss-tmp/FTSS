@@ -69,3 +69,11 @@ body.menu #sidebar-nav {
     padding-left: 15px;
     padding-right: 15px
 }
+
+.no-left-pad {
+    padding-left: 0!important;
+}
+
+.no-right-pad {
+    padding-right: 0!important;
+}

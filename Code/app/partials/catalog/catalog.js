@@ -1,4 +1,4 @@
-/*global app, utils, FTSS, _, Sifter */
+/*global utils, FTSS, _, caches, angular */
 
 FTSS.ng.controller(
 
@@ -9,7 +9,7 @@ FTSS.ng.controller(
 		'SharePoint',
 		function ($scope, SharePoint) {
 
-			var self = FTSS.controller($scope, {
+			var self = FTSS.controller($scope, SharePoint, {
 				'sort' : 'PDS',
 				'group': 'MDS',
 
@@ -23,56 +23,75 @@ FTSS.ng.controller(
 					'MDS'  : 'MDS',
 					'AFSC' : 'AFSC',
 					'Hours': 'Length'
-				}
+				},
+				'model'  : 'catalog'
 
 			});
+
+			$scope.edit = function (data) {
+
+				utils.modal({
+					            'templateUrl': '/partials/modal-catalog.html',
+
+					            'controller':
+						            [
+							            '$scope',
+							            '$modalInstance',
+							            function ($scope, $modalInstance) {
+
+								            $scope.data = angular.copy(data);
+
+								            $scope.selectizeAFSC = FTSS.dropdowns.AFSC($scope);
+								            $scope.selectizeMDS = FTSS.dropdowns.MDS($scope);
+
+								            $scope.submit = self.update($scope, $modalInstance);
+
+								            $scope.cancel = $modalInstance.dismiss;
+
+							            }
+						            ]
+				            });
+
+			};
 
 			self
 
 				.bind('loaded')
 
-				.then(function () {
+				.then(function (data) {
 
-					      SharePoint
+					      _(caches.Units).each(function (u) {
 
-						      .read(FTSS.models.catalog)
+						      if (u.Courses) {
 
-						      .then(function (data) {
+							      _(u.Courses.split('|')).each(function (c) {
 
-							            _(caches.Units).each(function (u) {
+								      var d = data[c].Units = data[c].Units ||
+									      [
+									      ];
 
-								            if (u.Courses) {
+								      d.push(u.LongName);
 
-									            _(u.Courses.split('|')).each(function (c) {
+							      });
 
-										            var d = data[c].Units = data[c].Units ||
-											            [
-											            ];
-
-										            d.push(u.LongName);
-
-									            });
-
-								            }
+						      }
 
 
-							            });
+					      });
 
-							            self
+					      self
 
-								            .initialize(data)
+						      .initialize(data)
 
-								            .then(function (d) {
+						      .then(function (d) {
 
-									                  if (d.Units) {
-										                  d.units = d.Units.sort().join('<br>');
-									                  }
+							            if (d.Units) {
+								            d.units = d.Units.sort().join('<br>');
+							            }
 
-								                  });
+						            });
 
-						            }, utils.$ajaxFailure);
 
 				      });
-
 		}
 	]);

@@ -38,3 +38,10 @@
     margin-right: .25em;
 }
 
+.btn:hover {
+    box-shadow: #666 0px 2px 3px;
+}
+
+.btn-link {
+    box-shadow: none !important;
+}

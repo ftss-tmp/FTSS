@@ -489,8 +489,6 @@
 					'labelField'   : 'label',
 					'valueField'   : 'id',
 					'hideSelected' : true,
-					'sortField'    : 'text',
-					'searchField'  : 'text',
 					'dataAttr'     : 'width',
 					'persist'      : true,
 					'optgroupOrder':
