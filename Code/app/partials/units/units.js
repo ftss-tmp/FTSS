@@ -9,7 +9,7 @@ FTSS.ng.controller(
 		'SharePoint',
 		function ($scope, SharePoint) {
 
-			var self = FTSS.controller($scope, {
+			var self = FTSS.controller($scope, SharePoint, {
 				'sort' : 'Base',
 				'group': 'Squadron',
 
@@ -20,7 +20,9 @@ FTSS.ng.controller(
 				'sorting': {
 					'Base': 'Base',
 					'Det' : 'Detachment'
-				}
+				},
+
+				'model': 'units'
 
 			});
 
@@ -35,54 +37,12 @@ FTSS.ng.controller(
 							            '$modalInstance',
 							            function ($scope, $modalInstance) {
 
-								            $scope.unit = angular.copy(data);
+								            $scope.data = angular.copy(data);
 
-								            $scope.selectizeUnits = {
+								            $scope.selectizeCourses = FTSS.dropdowns.MasterCourseList($scope);
 
-									            'valueField'  : 'Id',
-									            'labelField'  : 'label',
-									            'searchField' : 'text',
-									            'sortField'   : 'text',
-									            'options'     : FTSS.selectize.COURSE,
-									            'create'      : false,
-									            'plugins'     :
-										            [
-											            'remove_button'
-										            ],
-									            'onInitialize': function () {
+								            $scope.submit = self.update($scope, $modalInstance);
 
-										            this.setValue(_(data.CoursesMap).pluck('Id'));
-									            }
-
-								            };
-
-								            $scope.submit = function () {
-
-									            $scope.submitted = true;
-
-									            var send = {
-										            '__metadata': $scope.unit.__metadata,
-										            'Base'      : $scope.unit.Base,
-										            'Det'       : $scope.unit.Det,
-										            'Courses'   : $scope.unit.Courses.join('|'),
-										            'cache'     : true
-									            };
-
-									            SharePoint.update(send).then(function (resp) {
-
-										            if (resp.status === 204) {
-
-											            $scope.unit.__metadata.etag = resp.headers('etag');
-											            $scope.unit.updated = true;
-
-											            self.data[data.Id] = angular.copy($scope.unit);
-											            self.process();
-											            $modalInstance.close();
-
-										            }
-
-									            }, utils.$ajaxFailure);
-								            };
 								            $scope.cancel = $modalInstance.dismiss;
 
 							            }
@@ -95,77 +55,63 @@ FTSS.ng.controller(
 
 				.bind('loaded')
 
-				.then(function () {
+				.then(function (data) {
 
-					      SharePoint
+					      // Attach all the instructors to this unit
+					      _(caches.Instructors).each(function (i) {
 
-						      .read(FTSS.models.units)
+						      var u = data[i.UnitId];
 
-						      .then(function (data) {
+						      u.Instructors = u.Instructors ||
+							      [
+							      ];
 
-							            // Attach all the instructors to this unit
-							            _(caches.Instructors).each(function (i) {
+						      u.Instructors.push(i.label);
 
-								            var u = data[i.UnitId];
+					      });
 
-								            u.Instructors = u.Instructors ||
-									            [
-									            ];
+					      self
 
-								            u.Instructors.push(i.label);
+						      .initialize(data)
 
-							            });
+						      .then(function (unit) {
 
-							            self
+							            // Flatten Instructors into string after sorting
+							            if (_.isArray(unit.Instructors)) {
 
-								            .initialize(data)
+								            unit.InstructorsCount = unit.Instructors.length;
 
-								            .then(function (unit) {
+								            unit.Instructors = unit.Instructors.sort().join('<br>');
 
-									                  // Flatten Instructors into string after sorting
-									                  if (_.isArray(unit.Instructors)) {
+							            }
 
-										                  unit.InstructorsCount = unit.Instructors.length;
+							            unit.Squadron = unit.Det < 300 ? '372 TRS' : '373 TRS';
 
-										                  unit.Instructors =
+							            if (unit.Courses) {
 
-											                  unit.Instructors
+								            var courses = unit.Courses.split ? unit.Courses.split('|') : unit.Courses;
 
-												                  .sort()
+								            // Add all the course data to each unit for searching
+								            unit.CoursesMap = _(courses).map(function (c) {
 
-												                  .join('<br>');
+									            return caches.MasterCourseList[c];
 
-									                  }
+								            });
 
-									                  unit.Squadron = unit.Det < 300 ? '372 TRS' : '373 TRS';
+								            // Flattened string (yes this is HTML in a controller :-( for Hover
+								            unit.CoursesHover = _(unit.CoursesMap).map(function (c) {
 
-									                  if (unit.Courses) {
+									            if (unit.CoursesMap.length > 10) {
+										            return '<div class="col-lg-4" hover="' + c.Title + '" show="left"><b>' + c.PDS + '</b>: ' + c.Number + '</div>';
+									            } else {
+										            return '<dt class="tiny">' + c.PDS + '</dt><dd>' + c.Number + '<br><small class="truncate">' + c.Title + '</small></dd>';
+									            }
 
-										                  var courses = unit.Courses.split ? unit.Courses.split('|') : unit.Courses;
+								            }).join('');
 
-										                  // Add all the course data to each unit for searching
-										                  unit.CoursesMap = _(courses).map(function (c) {
+							            }
 
-											                  return caches.MasterCourseList[c];
-
-										                  });
-
-										                  // Flattened string (yes this is HTML in a controller :-( for Hover
-										                  unit.CoursesHover = _(unit.CoursesMap).map(function (c) {
-
-											                  if (unit.CoursesMap.length > 10) {
-												                  return '<div class="col-lg-4" hover="' + c.Title + '" show="left"><b>' + c.PDS + '</b>: ' + c.Number + '</div>';
-											                  } else {
-												                  return '<dt class="tiny">' + c.PDS + '</dt><dd>' + c.Number + '<br><small class="truncate">' + c.Title + '</small></dd>';
-											                  }
-
-										                  }).join('');
-
-									                  }
-
-								                  });
-
-						            }, utils.$ajaxFailure);
+						            });
 
 				      });
 

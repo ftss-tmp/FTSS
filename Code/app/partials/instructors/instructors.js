@@ -9,7 +9,7 @@ FTSS.ng.controller(
 		'SharePoint',
 		function ($scope, SharePoint) {
 
-			var self = FTSS.controller($scope, {
+			var self = FTSS.controller($scope, SharePoint, {
 
 				'sort' : 'Name',
 				'group': 'UnitLong',
@@ -23,7 +23,8 @@ FTSS.ng.controller(
 				'sorting': {
 					'Name': 'Name',
 					'AFSC': 'AFSC'
-				}
+				},
+				'model'  : 'instructors'
 
 			});
 
@@ -38,61 +39,15 @@ FTSS.ng.controller(
 							            '$modalInstance',
 							            function ($scope, $modalInstance) {
 
-								            $scope.instructor = angular.copy(data);
+								            $scope.data = angular.copy(data);
 
 								            $scope.firstName = data.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
 
-								            $scope.selectizeUnits = {
+								            $scope.selectizeUnits = FTSS.dropdowns.Units($scope);
 
-									            'maxItems'   : 1,
-									            'valueField' : 'Id',
-									            'labelField' : 'LongName',
-									            'searchField': 'LongName',
-									            'sortField'  : 'LongName',
-									            'options'    : caches.Units,
-									            'create'     : false
+								            $scope.selectizeAFSC = FTSS.dropdowns.AFSC($scope);
 
-								            };
-
-								            $scope.selectizeAFSC = {
-
-									            'maxItems' : 1,
-									            'sortField': 'text',
-									            'options'  : _(caches.AFSC).map(function (afsc) {
-										            return {'value': afsc, 'text': afsc};
-									            }),
-									            'create'   : true
-
-								            };
-
-								            $scope.submit = function () {
-
-									            $scope.submitted = true;
-
-									            var send = {
-										            '__metadata': $scope.instructor.__metadata,
-										            'UnitId'    : $scope.instructor.UnitId,
-										            'AFSC'      : $scope.instructor.AFSC,
-										            'Photo'     : $scope.instructor.Photo,
-										            'cache'     : true
-									            };
-
-									            SharePoint.update(send).then(function (resp) {
-
-										            if (resp.status === 204) {
-
-											            $scope.instructor.__metadata.etag = resp.headers('etag');
-											            $scope.instructor.updated = true;
-
-											            self.data[data.Id] = angular.copy($scope.instructor);
-											            self.process();
-
-											            $modalInstance.close();
-
-										            }
-
-									            }, utils.$ajaxFailure);
-								            };
+								            $scope.submit = self.update($scope, $modalInstance);
 
 								            $scope.cancel = $modalInstance.dismiss;
 
@@ -106,28 +61,21 @@ FTSS.ng.controller(
 
 				.bind('loaded')
 
-				.then(function () {
+				.then(function (data) {
 
-					      SharePoint
+					      self
 
-						      .read(FTSS.models.instructors)
+						      .initialize(data)
 
-						      .then(function (data) {
+						      .then(function (d) {
 
-							            self
-
-								            .initialize(data)
-
-								            .then(function (d) {
-
-									                  d.Unit = caches.Units[d.UnitId];
-									                  d.Det = d.Unit.Det;
-									                  d.Name = d.Instructor.Name;
-									                  d.UnitLong = d.Unit.LongName;
-
-								                  });
+							            d.Unit = caches.Units[d.UnitId];
+							            d.Det = d.Unit.Det;
+							            d.Name = d.Instructor.Name;
+							            d.UnitLong = d.Unit.LongName;
 
 						            });
+
 
 				      });
 

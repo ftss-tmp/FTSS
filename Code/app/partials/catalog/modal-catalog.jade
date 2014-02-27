@@ -1,0 +1,93 @@
+form.form-horizontal(name='modal')
+
+    .modal-header
+        h3
+            icon(path='books')
+            | {{data.PDS}} - {{data.Number}}
+
+    .modal-body
+
+        h4
+            icon(path='search')
+            | Course Identifiers
+        .row.well.well-sm
+
+            .col-lg-2
+                h5 PDS
+                input.form-control(ng-model='data.PDS', type='text', explain='Some explanation.....', show='left', required)
+
+            .col-lg-4
+                h5 MDS
+                select(selectize='selectizeMDS', required)
+
+            .col-lg-6
+                h5 Number
+                input.form-control(ng-model='data.Number', type='text', explain='Some explanation.....', show='right', required)
+
+
+        br
+
+        h4
+            icon(path='text')
+            | Course Description
+        .row.well.well-sm
+
+            .col-lg-3
+                h5 AFSC
+                select(selectize='selectizeAFSC', required)
+
+            .col-lg-9
+                h5 Title
+                input.form-control(ng-model='data.Title', explain='Another explanation....', show='right', required)
+
+
+        br
+
+        .row
+
+            .col-lg-7
+                h4
+                    icon(path='time')
+                    | Course Length
+                .col-lg-5.no-pad
+                    .input-group
+                        input.form-control(ng-model='data.Days', type='number', explain='Another explanation....', show='left', min='1', max='120', required)
+                        .input-group-addon Days
+
+                .col-lg-1.no-pad &nbsp;
+
+                .col-lg-5.no-pad
+                    .input-group
+                        input.form-control(ng-model='data.Hours', type='number', explain='Another explanation....', show='right', min='8', max='999', required)
+                        .input-group-addon Hrs
+
+                .col-lg-1.no-pad &nbsp;
+
+            .col-lg-5
+                h4
+                    icon(path='student_hand')
+                    | Course Seat Limits
+                .col-lg-5.no-pad
+                    .input-group
+                        input.form-control(ng-model='data.Min', type='number', explain='Another explanation....', show='left', min='1', max='9', required)
+                        .input-group-addon Min
+
+                .col-lg-1.no-pad &nbsp;
+
+                .col-lg-6.no-pad
+                    .input-group
+                        input.form-control(ng-model='data.Max', type='number', explain='Another explanation....', show='right', min='1', max='99', required)
+                        .input-group-addon Max
+
+
+        .row(style='height: 25px')
+
+        .row.alert.alert-danger(ng-if='!data.PDS || !data.MDS')
+            icon(path='alert')
+            | All fields are required.
+
+        .row.alert.alert-danger(ng-if='error')
+            icon(path='alert')
+            | {{error}}
+
+    ng-include(src='"/partials/modal-footer.html"')

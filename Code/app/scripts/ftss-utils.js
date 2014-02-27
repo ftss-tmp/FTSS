@@ -1,4 +1,4 @@
-/*global utils, _, app */
+/*global utils, FTSS */
 
 /**
  * Misc utilities
@@ -51,9 +51,7 @@ utils.modal = (function () {
 
 			.open({
 				      'templateUrl': opts.templateUrl,
-				      'controller' : opts.controller,
-				      'backdrop'   : 'static',
-				      'keyboard'   : false
+				      'controller' : opts.controller
 			      });
 
 	};
