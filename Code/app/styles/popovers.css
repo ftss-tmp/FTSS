@@ -41,3 +41,8 @@
 .popover.frozen .arrow {
     border-bottom-color: #428bca;
 }
+
+[hover]:hover:not(.btn) {
+    border-bottom:1px dotted;
+    margin-bottom:-1px;
+}

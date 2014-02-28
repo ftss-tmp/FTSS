@@ -26,30 +26,10 @@ FTSS.ng.controller(
 
 			});
 
-			$scope.edit = function (data) {
-
-				utils.modal({
-					            'templateUrl': '/partials/modal-unit.html',
-
-					            'controller':
-						            [
-							            '$scope',
-							            '$modalInstance',
-							            function ($scope, $modalInstance) {
-
-								            $scope.data = angular.copy(data);
-
-								            $scope.selectizeCourses = FTSS.dropdowns.MasterCourseList($scope);
-
-								            $scope.submit = self.update($scope, $modalInstance);
-
-								            $scope.cancel = $modalInstance.dismiss;
-
-							            }
-						            ]
-				            });
-
-			};
+			$scope.edit = self.edit(
+				[
+					'MasterCourseList'
+				]);
 
 			self
 

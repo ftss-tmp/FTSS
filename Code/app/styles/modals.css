@@ -1,20 +1,26 @@
 
-
 .item:hover * {
     color: #FFF !important;
     /*background: none !important;*/
 }
 
 .modal-dialog .item {
-    color:#000!important;
+    color: #000 !important;
 }
 
-.modal-dialog .multi .item {
+.modal-dialog .multi .item, .modal-dialog .multi .item * {
 
-
-    /*color: #FFF !important;
-    background: #444 !important;*/
+    color: #FFF !important;
+    background: #777 !important;
     margin-bottom: 2px !important;
+}
+
+.modal-dialog .multi .item a {
+    color: #aaa !important;
+}
+
+.modal-dialog .multi .item a:hover {
+    color: #fff !important;
 }
 
 .modal-dialog .alert-danger {
@@ -44,4 +50,29 @@
 
 .modal-dialog .row h4 {
     margin-bottom: 3px;
+}
+
+.modal-dialog input, .modal-dialog .selectize-input {
+    font-weight: 700;
+}
+
+.input-group-selectize {
+    margin-bottom: -5px;
+}
+
+.input-group .selectize-input {
+    border-color: #e3e3e3;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-group {
+    width: 100% !important;
+}
+
+.light-bottom {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+    padding-bottom: 4px;
+    background-image:         linear-gradient(to bottom, #fff, #f4f4f4); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
 }

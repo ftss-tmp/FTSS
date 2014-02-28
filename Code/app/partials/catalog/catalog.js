@@ -28,31 +28,11 @@ FTSS.ng.controller(
 
 			});
 
-			$scope.edit = function (data) {
-
-				utils.modal({
-					            'templateUrl': '/partials/modal-catalog.html',
-
-					            'controller':
-						            [
-							            '$scope',
-							            '$modalInstance',
-							            function ($scope, $modalInstance) {
-
-								            $scope.data = angular.copy(data);
-
-								            $scope.selectizeAFSC = FTSS.dropdowns.AFSC($scope);
-								            $scope.selectizeMDS = FTSS.dropdowns.MDS($scope);
-
-								            $scope.submit = self.update($scope, $modalInstance);
-
-								            $scope.cancel = $modalInstance.dismiss;
-
-							            }
-						            ]
-				            });
-
-			};
+			$scope.edit = self.edit(
+				[
+					'AFSC',
+					'MDS'
+				]);
 
 			self
 
