@@ -1,17 +1,21 @@
 div(class='{{wellCollapse}}')
+
     div(ng-repeat='(header, group) in groups')
-        h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px')
+
+        h3(style='border-bottom: 1px solid; margin-top:5px')
             | {{header}}
             span.pull-right {{group.length}}
-        table.table.table-striped.table-expanded.table-hover.rollup
+
+        table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
+
             thead
                 tr
                     th
-                    th Base
-                    th Detachment
-                    th Email
-                    th Details
-                    th Actions
+                    th.w15 Base
+                    th.w10 Detachment
+                    th.w50 Email
+                    th.w15 Details
+                    th.w10 Actions
             tbody
                 tr(ng-repeat='unit in group')
                     td
@@ -19,8 +23,8 @@ div(class='{{wellCollapse}}')
                     td
                         b {{unit.Base}}
                     td {{unit.Det}}
-                    td
-                        a(href='{{unit.Email}}') {{unit.Email}}
+                    td.lowercase
+                        a(href='mailto:{{unit.Email}}?subject=FTSS') {{unit.Email}}
                     td
                         span(ng-if='unit.CoursesHover', hover='There are {{unit.CoursesMap.length}} courses taught at Det {{unit.Det}}:', content='<dl class="dl-horizontal">{{unit.CoursesHover}}</dl>', style='padding:5px')
                             icon(path='books')

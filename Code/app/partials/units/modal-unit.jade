@@ -12,19 +12,30 @@ form(name='modal')
             .col-lg-5
                 h4
                     b Base
-                input.form-control(ng-model='data.Base', type='text', explain='Type the installation name.', show='left', required)
+                .input-group
+                    .input-group-addon
+                        icon(path='location_small')
+                    input.form-control(ng-model='data.Base', type='text', required)
+
             .col-lg-4
             .col-lg-3
                 h4
                     b Detachment
-                input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='Type the detachment number as 2XX or 3XX.<example>373 TRS/Det 6 is 306.</example>', show='right', required)
+                .input-group
+                    .input-group-addon
+                        icon(path='hash')
+                    input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='Type the detachment number as 2XX or 3XX.<example>373 TRS/Det 6 is 306.</example>', show='right', required)
         br
 
         .row
             .col-lg-12
                 h5
                     b FTD Production Supervisor E-mail
-                input.form-control(ng-model='data.Email', type='email', explain='This email address will be used to<br>send any FTD communications from FTSS.<br>Try to use an organizational box if possible.', show='left', required)
+                .input-group
+                    .input-group-addon
+                        icon(path='envelope')
+                    input.form-control(ng-model='data.Email', type='email', explain='This email address will be used to<br>send any FTD communications from FTSS.<br>Try to use an organizational box if possible.', show='right', required)
+
         br
         br
 

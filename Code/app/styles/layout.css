@@ -71,9 +71,45 @@ body.menu #sidebar-nav {
 }
 
 .no-left-pad {
-    padding-left: 0!important;
+    padding-left: 0 !important;
 }
 
 .no-right-pad {
-    padding-right: 0!important;
+    padding-right: 0 !important;
+}
+
+.w5 {
+    width: 5%;
+}
+
+.w10 {
+    width: 10%;
+}
+
+.w15 {
+    width: 15%;
+}
+
+.w20 {
+    width: 20%
+}
+
+.w25 {
+    width: 25%
+}
+
+.w30 {
+    width: 30%;
+}
+
+.w45 {
+    width:45%;
+}
+
+.w50 {
+    width:50%;
+}
+
+.w60 {
+    width:60%;
 }

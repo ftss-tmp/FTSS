@@ -23,3 +23,14 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
     font-style: italic;
     margin-left: 15px
 }
+
+a {
+    border-bottom: 1px dotted;
+}
+
+a:hover {
+    border-bottom: 1px solid;
+}
+a, a:hover {
+    text-decoration: none;
+}

@@ -66,8 +66,11 @@
     max-width: 175px;
 }
 
-#tagBox .selectize-input input {
+#tagBox .selectize-input.has-items input {
     top: -0.4em;
+}
+
+#tagBox .selectize-input input {
     font-size: 1.2em;
 }
 
@@ -124,4 +127,8 @@
 .selectize-dropdown .active {
     color: #ffffff!important;
     background-color: #5bc0de;
+}
+
+.item a, .item a:hover {
+    border:none;
 }
