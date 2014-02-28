@@ -1,5 +1,4 @@
 
-
 .popover {
     max-width: 50%;
     z-index: 9999 !important
@@ -28,10 +27,17 @@
     font-size: 2em;
 }
 
-
 .popover example {
     display: block;
     margin-top: 4px;
     font-size: .85em;
     font-style: italic;
+}
+
+.popover.frozen {
+    border:2px solid #428bca;
+}
+
+.popover.frozen .arrow {
+    border-bottom-color: #428bca;
 }

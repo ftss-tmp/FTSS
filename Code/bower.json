@@ -1,30 +1,30 @@
 {
-	"name"        : "angular-brunch-seed",
-	"repo"        : "scotch/angular-brunch-seed",
-	"version"     : "0.3.0",
-	"main"        : "_public/js/app.js",
-	"ignore"      :
-		[
-			"**/.*",
-			"node_modules",
-			"components"
-		],
-	"dependencies": {
-		"jquery"           : "~2.1.0",
-		"underscore"       : "~1.6.0",
-		"lz-string"        : "*",
-		"sifter"           : "~0.3.1",
-		"microplugin"      : "~0.0.3",
-		"selectize"        : "~0.8.5",
-		"angular-bootstrap": "~0.10.0",
-		"angular"          : "1.2.5",
-		"angular-route"    : "1.2.5",
-		"angular-elastic"  : "~2.3.1",
-		"angular-selectize": "*"
-	},
-	"overrides"   : {
-		"angular-mocks": {
-			"main": "README.md"
-		}
-	}
+  "name": "angular-brunch-seed",
+  "repo": "scotch/angular-brunch-seed",
+  "version": "0.3.0",
+  "main": "_public/js/app.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "underscore": "~1.6.0",
+    "lz-string": "*",
+    "sifter": "~0.3.1",
+    "microplugin": "~0.0.3",
+    "selectize": "~0.8.5",
+    "angular-bootstrap": "~0.10.0",
+    "angular": "1.2.5",
+    "angular-route": "1.2.5",
+    "angular-elastic": "~2.3.1",
+    "angular-selectize": "*",
+    "StickyTableHeaders": "~0.1.7"
+  },
+  "overrides": {
+    "angular-mocks": {
+      "main": "README.md"
+    }
+  }
 }

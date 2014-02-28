@@ -7,124 +7,151 @@
 
 	'use strict';
 
-	(function () {
+	var popover = {
 
-		var popover = {
+		/**
+		 * Internal data parser that converts [icon=someicon] into the SVG icon form FTSS.icons:
+		 *
+		 * [icon=info] => <div class="icon icon-info"><svg>...</svg></div>
+		 *
+		 * @param content
+		 * @returns string
+		 */
+		'icon': function (content) {
 
-			'icon': function (content) {
+			var svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="100%" ';
 
-				var svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="100%" ';
+			return content.replace(/\[icon\=([a-z]+)\]/g, function (match, icon) {
+				return '<div class="icon icon-' + icon + '">' + svg + FTSS.icons[icon] + '</div>';
+			});
 
-				return content.replace(/\[icon\=([a-z]+)\]/g, function (match, icon) {
-					return '<div class="icon icon-' + icon + '">' + svg + FTSS.icons[icon] + '</div>';
-				});
+		},
 
-			},
+		/**
+		 *
+		 */
+		'enter': function () {
 
-			'enter': function () {
+			var $el = $(this), title, content;
 
-				var $el = $(this), title, content;
+			$el[0].hover = setTimeout(function () {
 
-				setTimeout(function () {
+				if (!$el.data('freeze')) {
 
-					if (!$el.data('freeze')) {
+					if (!$el.data('bs.popover')) {
 
-						if (!$el.data('bs.popover')) {
+						content = $el.attr('content');
 
-							content = $el.attr('content');
-
-							if (content) {
-								title = $el.attr('hover') || $el.attr('explain');
-							} else {
-								content = $el.attr('hover') || $el.attr('explain');
-							}
-
-							content = popover.icon(content);
-
-							$el.popover({
-								            'trigger'  : 'manual',
-								            'html'     : true,
-								            'title'    : title,
-								            'content'  : content,
-								            'placement': $el.attr('show') || 'auto'
-							            });
-
+						if (content) {
+							title = $el.attr('hover') || $el.attr('explain');
+						} else {
+							content = $el.attr('hover') || $el.attr('explain');
 						}
 
-						$el.popover('show');
+						content = popover.icon(content);
 
-
-						if (typeof $el.attr('no-arrow') === 'string') {
-
-							$el.data('bs.popover').$tip.addClass('no-arrow');
-
-						}
+						$el.popover({
+							            'trigger'  : 'manual',
+							            'html'     : true,
+							            'title'    : title,
+							            'content'  : content,
+							            'placement': $el.attr('show') || 'auto'
+						            });
 
 					}
 
-				}, 100);
+					$el.popover('show');
 
-			},
 
-			'exit': function () {
+					if (typeof $el.attr('no-arrow') === 'string') {
 
-				var self = $(this);
-
-				setTimeout(function () {
-
-					if (self.data('freeze') !== true) {
-
-						popover.clear(self);
+						$el.data('bs.popover').$tip.addClass('no-arrow');
 
 					}
 
-				}, 150);
+				}
 
-			},
+			}, 750);
 
-			'toggle': function () {
+		},
 
-				var self, tip;
+		/**
+		 *
+		 */
+		'exit': function () {
 
-				self = $(this);
-				tip = self.data('bs.popover').$tip;
+			var $el = $(this);
 
-				self.addClass('frozen');
-				tip.addClass('frozen');
+			setTimeout(function () {
 
-				self.data('freeze', true);
+				clearTimeout($el[0].hover);
 
-				$('body *').not('.popover, .popover *').one('click', function () {
-					popover.clear(self, tip);
-				});
+				if ($el.data('freeze') !== true) {
 
-			},
+					popover.clear($el);
 
-			'clear': function (self, tip) {
+				}
 
-				tip = tip || self.data('bs.popover').$tip;
+			}, 150);
 
-				self.removeClass('frozen');
-				self.popover('hide');
-				self.data('freeze', false);
+		},
+
+		/**
+		 *
+		 */
+		'toggle': function () {
+
+			var $el, tip;
+
+			$el = $(this);
+			tip = $el.data('bs.popover').$tip;
+
+			$el.addClass('frozen');
+			tip.addClass('frozen');
+
+			$el.data('freeze', true);
+
+			$('body *').not('.popover, .popover *').one('click', function () {
+				popover.clear($el, tip);
+			});
+
+		},
+
+		/**
+		 *
+		 * @param self
+		 * @param tip
+		 */
+		'clear': function (self, tip) {
+
+			var obj = self.data('bs.popover');
+
+			self.removeClass('frozen');
+			self.popover('hide');
+			self.data('freeze', false);
+
+			if (obj) {
+
+				tip = tip || obj.$tip;
 				tip.removeClass('frozen');
 
 			}
-		};
 
+		}
+	};
 
-		$(document)
+	// Use jQuery on() to bind to future elemnts
+	$(document)
 
-			.on('click', '[hover]', popover.toggle)
+		// Bind to the click event of element with the [hover] attribute
+		.on('click', '[hover]', popover.toggle)
 
-			.on('mouseenter', '[hover]', popover.enter)
+		.on('mouseenter', '[hover]', popover.enter)
 
-			.on('focusin', '[explain]', popover.enter)
+		.on('focusin', '[explain]', popover.enter)
 
-			.on('mouseleave', '[hover]', popover.exit)
+		.on('mouseleave', '[hover]', popover.exit)
 
-			.on('focusout', '[explain]', popover.exit);
-
-	}());
+		.on('focusout', '[explain]', popover.exit);
 
 }());
