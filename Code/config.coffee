@@ -16,25 +16,7 @@ exports.config =
       order :
         before: [
           'bower_components/jquery/dist/jquery.js',
-          'bower_components/underscore/underscore.js',
-          "bower_components/lz-string/libs/lz-string-1.3.3.js",
-          "bower_components/sifter/sifter.js",
-          "bower_components/microplugin/src/microplugin.js",
-
-          "bower_components/angular/angular.js",
-          "bower_components/angular-route/angular-route.js",
-          "bower_components/angular-elastic/elastic.js",
-          "bower_components/angular-selectize/angular-selectize.js",
-          "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
-
-          'app/scripts/ftss-init.js',
-          'app/scripts/ftss-icons.js',
-          'app/scripts/ftss-utils.js',
-          'app/scripts/ftss-filters.js',
-          'app/scripts/ftss-models.js',
-          'app/scripts/ftss-directives.js',
-          'app/scripts/ftss-main-controller.js',
-          'app/scripts/ftss-controllers.js'
+          'app/scripts/ftss-init.js'
         ]
 
     stylesheets:

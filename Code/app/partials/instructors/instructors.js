@@ -1,4 +1,4 @@
-/*global angular, utils, caches, FTSS, _ */
+/*global caches, FTSS */
 
 FTSS.ng.controller(
 
@@ -28,34 +28,11 @@ FTSS.ng.controller(
 
 			});
 
-			$scope.edit = function (data) {
-
-				utils.modal({
-					            'templateUrl': '/partials/modal-instructor.html',
-
-					            'controller':
-						            [
-							            '$scope',
-							            '$modalInstance',
-							            function ($scope, $modalInstance) {
-
-								            $scope.data = angular.copy(data);
-
-								            $scope.firstName = data.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
-
-								            $scope.selectizeUnits = FTSS.dropdowns.Units($scope);
-
-								            $scope.selectizeAFSC = FTSS.dropdowns.AFSC($scope);
-
-								            $scope.submit = self.update($scope, $modalInstance);
-
-								            $scope.cancel = $modalInstance.dismiss;
-
-							            }
-						            ]
-				            });
-
-			};
+			$scope.edit = self.edit(
+				[
+					'Units',
+					'AFSC'
+				]);
 
 			self
 
@@ -73,6 +50,7 @@ FTSS.ng.controller(
 							            d.Det = d.Unit.Det;
 							            d.Name = d.Instructor.Name;
 							            d.UnitLong = d.Unit.LongName;
+							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
 
 						            });
 

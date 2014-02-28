@@ -7,64 +7,75 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        h4
+        .input-group
+            .input-group-addon
+                input(ng-model='data.CAFMCL', type='checkbox')
+            input.form-control-static On the CAF/MCL?
+
+        h4.light-bottom
             icon(path='search')
             | Course Identifiers
-        .row.well.well-sm
 
-            .col-lg-2
-                h5 PDS
-                input.form-control(ng-model='data.PDS', type='text', explain='Some explanation.....', show='left', required)
+        .row
+            .col-lg-3
+                .input-group
+                    .input-group-addon(style='width:55%') PDS
+                    input.form-control(ng-model='data.PDS', type='text', explain='Some explanation.....', show='right', required)
+
+            .col-lg-5
+                .input-group
+                    .input-group-addon MDS
+                    .input-group-selectize
+                        select(selectize='selectizeMDS', required)
 
             .col-lg-4
-                h5 MDS
-                select(selectize='selectizeMDS', required)
+                .input-group
+                    .input-group-addon AFSC
+                    .input-group-selectize
+                        select(selectize='selectizeAFSC', required)
 
-            .col-lg-6
-                h5 Number
-                input.form-control(ng-model='data.Number', type='text', explain='Some explanation.....', show='right', required)
+        .clearfix(style='height:1em')
 
+        .row
+            .col-lg-8
+                .input-group
+                    .input-group-addon Number
+                    input.form-control(ng-model='data.Number', type='text', explain='Some explanation.....', show='right', required)
+
+            .col-lg-4
+                .input-group
+                    .input-group-addon IMDS
+                    input.form-control(ng-model='data.IMDS', type='text', explain='This is the IMDS course code (optional).', show='right')
+
+        .clearfix(style='height:1em')
+
+        .row
+            .col-lg-12
+                .input-group
+                    .input-group-addon(style='width:11.5%') Title
+                    input.form-control(ng-model='data.Title', explain='Another explanation....', show='right', required)
 
         br
-
-        h4
-            icon(path='text')
-            | Course Description
-        .row.well.well-sm
-
-            .col-lg-3
-                h5 AFSC
-                select(selectize='selectizeAFSC', required)
-
-            .col-lg-9
-                h5 Title
-                input.form-control(ng-model='data.Title', explain='Another explanation....', show='right', required)
-
-
         br
 
         .row
 
-            .col-lg-7
-                h4
+            .col-lg-6
+                h4.light-bottom
                     icon(path='time')
                     | Course Length
-                .col-lg-5.no-pad
+                .col-lg-6.no-pad
                     .input-group
                         input.form-control(ng-model='data.Days', type='number', explain='Another explanation....', show='left', min='1', max='120', required)
                         .input-group-addon Days
 
-                .col-lg-1.no-pad &nbsp;
-
-                .col-lg-5.no-pad
+                .col-lg-5.no-pad.pull-right
                     .input-group
-                        input.form-control(ng-model='data.Hours', type='number', explain='Another explanation....', show='right', min='8', max='999', required)
+                        input.form-control(ng-model='data.Hours', type='number', explain='Another explanation....', show='left', min='8', max='999', required)
                         .input-group-addon Hrs
 
-                .col-lg-1.no-pad &nbsp;
-
-            .col-lg-5
-                h4
+            .col-lg-5.pull-right
+                h4.light-bottom
                     icon(path='student_hand')
                     | Course Seat Limits
                 .col-lg-5.no-pad
@@ -72,11 +83,9 @@ form.form-horizontal(name='modal')
                         input.form-control(ng-model='data.Min', type='number', explain='Another explanation....', show='left', min='1', max='9', required)
                         .input-group-addon Min
 
-                .col-lg-1.no-pad &nbsp;
-
-                .col-lg-6.no-pad
+                .col-lg-6.no-pad.pull-right
                     .input-group
-                        input.form-control(ng-model='data.Max', type='number', explain='Another explanation....', show='right', min='1', max='99', required)
+                        input.form-control(ng-model='data.Max', type='number', explain='Another explanation....', show='left', min='1', max='99', required)
                         .input-group-addon Max
 
 

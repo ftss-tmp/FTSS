@@ -310,6 +310,45 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 
 		},
 
+		'edit': function (callback) {
+
+			return function (data) {
+
+				utils.modal(
+
+					{
+						'templateUrl': '/partials/modal-' + opts.model + '.html',
+
+						'controller':
+							[
+								'$scope',
+								'$modalInstance',
+								function (scope, $modalInstance) {
+
+									scope.data = angular.copy(data);
+									scope.submit = actions.update(scope, $modalInstance);
+									scope.cancel = $modalInstance.dismiss;
+
+									switch (typeof callback) {
+										case 'function':
+											callback(scope);
+											break;
+
+										case 'object':
+											_(callback).each(function (select) {
+												scope['selectize' + select] = FTSS.dropdowns[select](scope);
+											});
+									}
+
+								}
+							]
+					}
+
+				);
+			};
+
+		},
+
 		/**
 		 * Performs our update to the SP model.  Sends only changes to the server for efficiency and handles update response
 		 *

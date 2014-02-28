@@ -29,7 +29,9 @@
 						'Max',
 						'AFSC',
 						'Title',
-						'Number'
+						'Number',
+					    'IMDS',
+					    'CAFMCL'
 					]
 			}
 
