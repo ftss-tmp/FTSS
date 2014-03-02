@@ -12,18 +12,26 @@ div(class='{{wellCollapse}}')
                     th.w10 AFSC
                     th.w10 Actions
             tbody
-                tr.middle(ng-repeat='instructor in group')
+                tr.middle(ng-repeat='instructor in group', ng-class='{archived:instructor.Archived}')
+
                     td(class='{{running(instructor)}}')
-                        photo(size='75px', data='instructor', force='true')
+                        photo(size='75px', data='instructor', force='true', ng-if='!instructor.Archived')
                     td
                         updated instructor
-                        b {{instructor.Name}}
+                        b
+                            span(ng-if='instructor.Archived')
+                                | ***ARCHIVED INSTRUCTOR***&nbsp;
+                            | {{instructor.Name}}
                     td
                         b {{instructor.UnitLong}}
                     td
                         b {{instructor.AFSC}}
-                    td.invert(ng-once='')
-                        button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='view(instructor)')
+                    td.invert()
+                        button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view(instructor)')
                             icon(path='graph_pie')
-                        button.btn.btn-sm.btn-warning.btn-muted(type='button', ng-click='edit(instructor)')
+                        button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(instructor)')
                             icon(path='edit')
+                        button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(instructor)', hover='Archive this instructor')
+                            icon(path='delete')
+                        button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(instructor)', hover='Restore this instructor', show='left')
+                            icon(path='undo')

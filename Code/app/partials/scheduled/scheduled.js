@@ -11,9 +11,35 @@ FTSS.ng.controller(
 		'SharePoint',
 		function ($scope, SharePoint) {
 
-			$scope.edit = function (data) {
-				console.log(data);
-			};
+			var self = FTSS.controller($scope, SharePoint, {
+				'sort' : 'Start',
+				'group': 'Course.MDS',
+
+				'tagBox': true,
+
+				'grouping': {
+					'Course.MDS'  : 'MDS',
+					'unit'        : 'Unit',
+					'Course.AFSC' : 'AFSC',
+					'availability': 'Open Seats'
+				},
+
+				'sorting': {
+					'Start'      : 'Start Date',
+					'course'     : 'Course',
+					'unit'       : 'Unit',
+					'Course.AFSC': 'AFSC'
+				},
+
+				'model'  : 'scheduled',
+
+				'edit': [
+					'MasterCourseList',
+				    'Instructors',
+				    'Units'
+				]
+
+			});
 
 			$scope.add = function (data) {
 
@@ -76,29 +102,6 @@ FTSS.ng.controller(
 				                }, 'requests');
 
 			};
-
-			var self = FTSS.controller($scope, SharePoint, {
-				'sort' : 'Start',
-				'group': 'Course.MDS',
-
-				'tagBox': true,
-
-				'grouping': {
-					'Course.MDS'  : 'MDS',
-					'unit'        : 'Unit',
-					'Course.AFSC' : 'AFSC',
-					'availability': 'Open Seats'
-				},
-
-				'sorting': {
-					'Start'      : 'Start Date',
-					'course'     : 'Course',
-					'unit'       : 'Unit',
-					'Course.AFSC': 'AFSC'
-				},
-				'model'  : 'scheduled'
-
-			});
 
 			self
 

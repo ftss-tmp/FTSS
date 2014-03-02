@@ -4,120 +4,115 @@
 
 	"use strict";
 
-	FTSS.dropdowns = {
+	var dropdown = function (scope, opts) {
 
-		'MasterCourseList': function (scope) {
+		var loaded;
 
-			var loaded, data = scope.data;
+		return _(opts).defaults(
 
-			return {
-
-				'options'     : FTSS.selectize.COURSE,
+			{
+				'maxItems'    : 1,
+				'options'     : FTSS.selectize[opts.select],
 				'create'      : false,
-				'plugins'     :
-					[
-						'remove_button'
-					],
+				'hideSelected': true,
 				'onChange'    : function (val) {
-
-					val = val ||
-						[
-						];
-					data.CoursesCount = val.length;
-					data.Courses = val.length ? val.join('|') : null;
+					scope.data[opts.field] = val;
 
 					scope.clean = !loaded;
 
 					if (!loaded) {
 						loaded = true;
 					}
+				},
+				'onInitialize': function () {
+					this.setValue(scope.data[opts.field]);
+				}
+			});
+
+	};
+
+	FTSS.dropdowns = {
+
+		'MasterCourseList': function (scope) {
+
+			var loaded;
+
+			return dropdown(scope, {
+
+				'select'      : 'COURSE',
+				'plugins'     :
+					[
+						'remove_button'
+					],
+				'maxItems'    : 999,
+				'onChange'    : function (val) {
+
+					if (val.map) {
+
+						scope.data.Courses_JSON = val.map(Number);
+
+						scope.data.CoursesCount = val.length;
+
+						scope.clean = !loaded;
+
+						if (!loaded) {
+							loaded = true;
+						}
+
+					}
 
 				},
 				'onInitialize': function () {
-					this.setValue(_(data.CoursesMap).pluck('Id'));
+					this.setValue(_(scope.data.CoursesMap).pluck('Id'));
 				}
 
-			};
+			});
 
 		},
 
 		'AFSC': function (scope) {
 
-			var loaded, data = scope.data;
+			return dropdown(scope, {
 
-			return {
+				'select': 'AFSC',
+				'field' : 'AFSC'
 
-				'maxItems'    : 1,
-				'options'     : FTSS.selectize.AFSC,
-				'create'      : false,
-				'onChange'    : function (val) {
-					data.AFSC = val;
-
-					scope.clean = !loaded;
-
-					if (!loaded) {
-						loaded = true;
-					}
-				},
-				'onInitialize': function () {
-					this.setValue(data.AFSC);
-				}
-			};
+			});
 
 		},
 
 		'MDS': function (scope) {
 
-			var loaded, data = scope.data;
+			return dropdown(scope, {
 
-			return {
+				'select': 'MDS',
+				'field' : 'MDS'
 
-				'maxItems'    : 1,
-				'options'     : FTSS.selectize.MDS,
-				'create'      : true,
-				'onChange'    : function (val) {
-					data.MDS = val;
-
-					scope.clean = !loaded;
-
-					if (!loaded) {
-						loaded = true;
-					}
-				},
-				'onInitialize': function () {
-					this.setValue(data.MDS);
-				}
-
-			};
+			});
 
 		},
 
 		'Units': function (scope) {
 
-			var loaded, data = scope.data;
+			return dropdown(scope, {
 
-			return {
+				'select': 'DETACHMENT',
+				'field' : 'UnitId'
 
-				'maxItems'    : 1,
-				'options'     : FTSS.selectize.DETACHMENT,
-				'create'      : false,
-				'onChange'    : function (val) {
-					data.UnitId = val;
+			});
 
-					scope.clean = !loaded;
+		},
 
-					if (!loaded) {
-						loaded = true;
-					}
-				},
-				'onInitialize': function () {
-					this.setValue(data.UnitId);
-				}
+		'Instructors': function (scope) {
 
-			};
+			return dropdown(scope, {
+
+				'select': 'INSTRUCTOR',
+				'field' : 'InstructorId'
+
+			});
 
 		}
-
 
 	};
 

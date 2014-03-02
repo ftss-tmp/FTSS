@@ -24,15 +24,16 @@ FTSS.ng.controller(
 					'Name': 'Name',
 					'AFSC': 'AFSC'
 				},
-				'model'  : 'instructors'
+				'model'  : 'instructors',
+
+				'edit':
+					[
+						'Units',
+						'AFSC'
+					]
 
 			});
 
-			$scope.edit = self.edit(
-				[
-					'Units',
-					'AFSC'
-				]);
 
 			self
 

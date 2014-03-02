@@ -7,14 +7,9 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        .input-group
-            .input-group-addon
-                input(ng-model='data.CAFMCL', type='checkbox')
-            input.form-control-static On the CAF/MCL?
-
         h4.light-bottom
             icon(path='search')
-            | Course Identifiers
+            | Course Identifiers & Description
 
         .row
             .col-lg-3
@@ -88,8 +83,21 @@ form.form-horizontal(name='modal')
                         input.form-control(ng-model='data.Max', type='number', explain='Another explanation....', show='left', min='1', max='99', required)
                         .input-group-addon Max
 
+        br
+        br
 
-        .row(style='height: 25px')
+        .col-lg-4.pull-right.switch-wrapper
+
+            label.switch-light.switch-android
+                input(ng-model='data.CAFMCL', type='checkbox')
+                span
+                    em CAF/MCL
+                    span &#x2717;
+                    span &#x2713;
+                a
+
+        br
+        br
 
         .row.alert.alert-danger(ng-if='!data.PDS || !data.MDS')
             icon(path='alert')

@@ -273,7 +273,6 @@ dt.tiny + dd {
 .uppercase {
     text-transform: uppercase;
 }
-
 .lowercase {
     text-transform: lowercase;
 }

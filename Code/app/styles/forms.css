@@ -1,0 +1,9 @@
+.input-group.disabled .input-group-addon {
+    background: none;
+    border: none;
+}
+
+.input-group.disabled input {
+    font-weight: normal;
+    color: #555;
+}

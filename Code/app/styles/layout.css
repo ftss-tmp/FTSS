@@ -90,6 +90,10 @@ body.menu #sidebar-nav {
     width: 15%;
 }
 
+.w17 {
+    width: 17%;
+}
+
 .w20 {
     width: 20%
 }
@@ -103,13 +107,21 @@ body.menu #sidebar-nav {
 }
 
 .w45 {
-    width:45%;
+    width: 45%;
 }
 
 .w50 {
-    width:50%;
+    width: 50%;
+}
+
+.w55 {
+    width: 55%
 }
 
 .w60 {
-    width:60%;
+    width: 60%;
+}
+
+.w65 {
+    width: 65%;
 }

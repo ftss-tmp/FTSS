@@ -32,6 +32,7 @@
     color: #111;
     background-color: #eee;
     border-color: #bbb;
+    opacity: .2;
 }
 
 .table-hover tbody tr:hover > td,
@@ -86,4 +87,17 @@ table th {
 
 table thead.tableFloatingHeaderOriginal {
     background: #fff;
+}
+
+tr.archived td {
+    text-decoration: line-through;
+    color:#bbb;
+}
+
+tr.archived .btn.archive {
+    visibility: visible;
+}
+
+tr.archived .btn.no-archive,.btn.archive {
+    visibility: hidden;
 }

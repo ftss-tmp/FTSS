@@ -22,14 +22,13 @@ FTSS.ng.controller(
 					'Det' : 'Detachment'
 				},
 
-				'model': 'units'
+				'model': 'units',
+
+				'edit': [
+					'MasterCourseList'
+				]
 
 			});
-
-			$scope.edit = self.edit(
-				[
-					'MasterCourseList'
-				]);
 
 			self
 
@@ -67,16 +66,20 @@ FTSS.ng.controller(
 
 							            unit.Squadron = unit.Det < 300 ? '372 TRS' : '373 TRS';
 
-							            if (unit.Courses) {
-
-								            var courses = unit.Courses.split ? unit.Courses.split('|') : unit.Courses;
+							            if (unit.Courses_JSON) {
 
 								            // Add all the course data to each unit for searching
-								            unit.CoursesMap = _(courses).map(function (c) {
+								            unit.CoursesMap = _.chain(unit.Courses_JSON)
 
-									            return caches.MasterCourseList[c];
+									            .map(function (c) {
 
-								            });
+										                 return caches.MasterCourseList[c] || false;
+
+									                 })
+
+									            .compact()
+
+									            .value();
 
 								            // Flattened string (yes this is HTML in a controller :-( for Hover
 								            unit.CoursesHover = _(unit.CoursesMap).map(function (c) {

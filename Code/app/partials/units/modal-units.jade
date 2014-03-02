@@ -2,7 +2,7 @@ form(name='modal')
 
     .modal-header
         h3
-            icon(path='location')
+            icon location
             | {{data.Squadron}}/Det {{data.Det}}
 
     .modal-body
@@ -13,7 +13,7 @@ form(name='modal')
                     b Base
                 .input-group
                     .input-group-addon
-                        icon(path='location_small')
+                        icon location_small
                     input.form-control(ng-model='data.Base', type='text', required)
 
             .col-lg-4
@@ -22,7 +22,7 @@ form(name='modal')
                     b Detachment
                 .input-group
                     .input-group-addon
-                        icon(path='hash')
+                        icon hash
                     input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='Type the detachment number as 2XX or 3XX.<example>373 TRS/Det 6 is 306.</example>', show='right', required)
         br
 
@@ -32,7 +32,7 @@ form(name='modal')
                     b FTD Production Supervisor E-mail
                 .input-group
                     .input-group-addon
-                        icon(path='envelope')
+                        icon envelope
                     input.form-control(ng-model='data.Email', type='email', explain='This email address will be used to<br>send any FTD communications from FTSS.<br>Try to use an organizational box if possible.', show='right', required)
 
         br
@@ -41,18 +41,18 @@ form(name='modal')
         .row
             .col-lg-12(explain='Add all the courses taught by Det {{data.Det}}, they will be listed by PDS.', show='right')
                 h4
-                    icon(path='instructor')
+                    icon instructor
                     b {{data.CoursesCount}} Courses Taught
                 select(selectize='selectizeMasterCourseList', multiple='', required)
 
         .row(style='height: 25px')
 
         .row.alert.alert-danger(ng-if='!data.Base || !data.Det')
-            icon(path='alert')
+            icon alert
             | Please ensure you enter a valid base and detachment number.
 
         .row.alert.alert-danger(ng-if='error')
-            icon(path='alert')
+            icon alert
             | {{error}}
 
     ng-include(src='"/partials/modal-footer.html"')

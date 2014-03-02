@@ -31,7 +31,8 @@
 						'Title',
 						'Number',
 					    'IMDS',
-					    'CAFMCL'
+					    'CAFMCL',
+					    'Archived'
 					]
 			}
 
@@ -49,7 +50,7 @@
 						'Det',
 						'Email',
 						'Phone',
-					    'Courses'
+					    'Courses_JSON'
 					]
 			}
 
@@ -70,7 +71,8 @@
 						'Instructor/Name',
 						'Instructor/WorkEMail',
 						'Instructor/WorkPhone',
-					    'Photo'
+					    'Photo',
+					    'Archived'
 					]
 			}
 
