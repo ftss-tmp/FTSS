@@ -1,4 +1,4 @@
-/*global utils, FTSS, _, caches, angular */
+/*global utils, FTSS, _, caches */
 
 FTSS.ng.controller(
 
@@ -10,6 +10,7 @@ FTSS.ng.controller(
 		function ($scope, SharePoint) {
 
 			var self = FTSS.controller($scope, SharePoint, {
+
 				'sort' : 'PDS',
 				'group': 'MDS',
 
@@ -24,15 +25,15 @@ FTSS.ng.controller(
 					'AFSC' : 'AFSC',
 					'Hours': 'Length'
 				},
-				'model'  : 'catalog'
 
-			});
+				'model': 'catalog',
 
-			$scope.edit = self.edit(
-				[
+				'edit': [
 					'AFSC',
 					'MDS'
-				]);
+				]
+
+			});
 
 			self
 
@@ -42,7 +43,7 @@ FTSS.ng.controller(
 
 					      _(caches.Units).each(function (u) {
 
-						      if (u.Courses) {
+						      try {
 
 							      _(u.Courses.split('|')).each(function (c) {
 
@@ -54,6 +55,8 @@ FTSS.ng.controller(
 
 							      });
 
+						      } catch (e) {
+
 						      }
 
 
@@ -64,6 +67,8 @@ FTSS.ng.controller(
 						      .initialize(data)
 
 						      .then(function (d) {
+
+							            d.CAFMCL = d.CAFMCL || false;
 
 							            if (d.Units) {
 								            d.units = d.Units.sort().join('<br>');

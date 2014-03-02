@@ -11,24 +11,25 @@ div(class='{{wellCollapse}}')
             thead(ng-class='{slim:(count > 1 && group.length == 1)}')
                 tr
                     th
-                    th.w50 Course
+                    th.w55 Course
                     th.w10 MDS
                     th.w10 AFSC
                     th.w15 Length
-                    th.w15 Actions
+                    th.w10 Actions
 
             tbody
-                tr(ng-repeat='r in group')
+                tr(ng-repeat='r in group', ng-class='{archived:r.Archived}')
                     td
                         updated r
                     td(style='text-transform: uppercase')
                         b {{r.PDS}}
                         |&nbsp;-&nbsp;{{r.Number}}&nbsp;
                         span(ng-if='r.IMDS')
-                            |({{r.IMDS}})
+                            |(IMDS: {{r.IMDS}})
 
-                        span.pull-right(ng-if='r.Units', hover='{{r.PDS}} is taught by {{r.Units.length}} FTDs:', content='{{r.units}}', style='margin-right: 15px;')
+                        span.pull-right(ng-if='r.Units && !r.Archived', hover='{{r.PDS}} is taught by {{r.Units.length}} FTDs:', content='{{r.units}}', style='margin-right: 15px;')
                             icon(path='instructor')
+                        span.pull-right(ng-if='r.Archived', style='margin-right:10%') *** ARCHIVED COURSE ***
                         br
                         span.peek {{r.Title}}
                     td
@@ -43,9 +44,9 @@ div(class='{{wellCollapse}}')
                             | Hours:&nbsp;
                             b {{r.Hours}}
                     td.invert(ng-once='')
-                        button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='view(r.Id)')
-                            icon(path='search')
-                        button.btn.btn-sm.btn-warning.btn-muted(type='button', ng-click='edit(r)')
+                        button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(r)', hover='Edit this course data')
                             icon(path='edit')
-                        button.btn.btn-sm.btn-danger.btn-muted(type='button', ng-click='archive(r.Id)')
+                        button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(r)', hover='Archive this course')
                             icon(path='delete')
+                        button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(r)', hover='Restore this course', show='left')
+                            icon(path='undo')

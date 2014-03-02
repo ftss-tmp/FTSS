@@ -60,7 +60,7 @@
 				var size, icon, classes, style, hover;
 
 				size = $attrs.size || '1.25em';
-				icon = FTSS.icons[$attrs.path];
+				icon = FTSS.icons[$attrs.path || $el[0].innerText];
 				classes = ($el[0].className || '') + ' icon icon-' + $attrs.path;
 				style = 'style="height:' + size + ';width:' + size;
 				hover = $attrs.hover ? '" hover="' + $attrs.hover + '" ' : '" ';
@@ -155,7 +155,7 @@
 
 					size = $attrs.size || '100px';
 					shape = $attrs.shape || 'circle';
-					height = (shape === 'circle') ? ';height:' + size : ';height:185px';
+					height = (shape === 'circle' || shape === 'square') ? ';height:' + size : ';height:185px';
 					path = data.Photo ? 'bios/' + data.Id + '.jpg' : noPhoto;
 
 					$el[0].outerHTML = '<div class="mask-img ' + shape + '" style="width:' + size + height + ';"><img src="' + path + '" /></div>';

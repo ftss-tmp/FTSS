@@ -13,17 +13,33 @@ form.form-horizontal(name='modal')
                 photo.img-rounded(size='150px', shape='rectangle', data='data')
 
             .col-lg-7
-                h5
-                    b Assigned Unit
-                div(explain='Choose {{firstName}}"s unit from the list.', show='right')
-                    select(selectize='selectizeUnits')
-                br
-                h5
-                    b Current AFSC
-                div(explain='Type in {{firstName}}"s AFSC or choose one from the list.', show='right')
-                    select(selectize='selectizeAFSC')
 
-        .row(style='height: 25px')
+                .input-group.disabled
+                    .input-group-addon.w17
+                        icon envelope
+                    input.form-control(disabled, ng-model='data.Instructor.WorkEMail')
+
+                br
+
+                .input-group.disabled
+                    .input-group-addon.w17
+                        icon phone
+                    input.form-control(disabled, ng-model='data.Instructor.WorkPhone')
+
+                br
+
+                .input-group
+                    .input-group-addon.w17 Unit
+                    .input-group-selectize(explain='Choose {{data.firstName}}&#39;s unit from the list.', show='right')
+                        select(selectize='selectizeUnits')
+
+                br
+
+                .input-group
+                    .input-group-addon AFSC
+                    .input-group-selectize(explain='Type in {{data.firstName}}&#39;s AFSC or choose one from the list.', show='right')
+                        select(selectize='selectizeAFSC')
+
 
         .row.alert.alert-danger(ng-if='!data.UnitId')
             icon(path='alert')

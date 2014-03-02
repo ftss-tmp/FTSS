@@ -271,6 +271,14 @@ var FTSS = {}, utils = {}, caches = {};
 						                delete scope.cache;
 					                }
 
+					                _(scope).each(function (s, field) {
+
+						                if (field.indexOf('_JSON')) {
+							                scope[field] = JSON.stringify(s);
+						                }
+
+					                });
+
 					                return $http({
 						                             'method' : 'POST',
 						                             'url'    : meta.uri,
@@ -306,16 +314,48 @@ var FTSS = {}, utils = {}, caches = {};
 
 							                .then(function (response) {
 
-								                      var i = 0, data = response.data.d.results || response.data.d;
+								                      var i = 0, data = response.data.d.results || response.data.d, decoder, json =
+									                      [
+									                      ];
 
-								                      try {
+								                      if (data.length) {
 
-									                      data = _.reduce(data, function (o, v) {
-										                      o[v.Id || i++] = v;
-										                      return o;
-									                      }, {});
+									                      _.chain(data[0])
 
-								                      } catch (e) {
+										                      .keys()
+
+										                      .each(function (f) {
+											                            if (f.indexOf('_JSON') > 1) {
+												                            json.push(f);
+											                            }
+										                            });
+
+									                      if (json.length) {
+
+										                      decoder = function (v) {
+
+											                      _(json).each(function (field) {
+
+												                      v[field] = JSON.parse(v[field]);
+
+											                      });
+
+											                      return v;
+
+										                      };
+
+									                      }
+
+									                      try {
+
+										                      data = _.reduce(data, function (o, v) {
+											                      o[v.Id || i++] = json ? decoder(v) : v;
+											                      return o;
+										                      }, {});
+
+									                      } catch (e) {
+									                      }
+
 								                      }
 
 								                      return data;

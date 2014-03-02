@@ -1,0 +1,38 @@
+form.form-horizontal(name='modal')
+
+    .modal-header
+        h3
+            icon(path='calendar_range')
+            | Scheduled Class
+
+    .modal-body
+
+        .input-group
+            .input-group-addon Course
+            .input-group-selectize
+                select(selectize='selectizeMasterCourseList', required)
+
+        br
+
+        .input-group
+            .input-group-addon Unit
+            .input-group-selectize
+                select(selectize='selectizeUnits', required)
+        br
+
+        .input-group
+            .input-group-addon Instructor
+            .input-group-selectize
+                select(selectize='selectizeInstructors')
+
+        br
+
+        .row.alert.alert-danger(ng-if='!data.PDS || !data.MDS')
+            icon(path='alert')
+            | All fields are required.
+
+        .row.alert.alert-danger(ng-if='error')
+            icon(path='alert')
+            | {{error}}
+
+    ng-include(src='"/partials/modal-footer.html"')

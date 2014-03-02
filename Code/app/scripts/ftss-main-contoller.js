@@ -519,37 +519,53 @@
 
 							FTSS.selectize = {};
 
+							/**
+							 * Processing recieved data and adds to FTSS.selectize as well as the searchBox
+							 */
 							return function (data, title, text) {
 
+								// create the serachBox value of type:Id for eventual filter mapping
 								var id = title.toLowerCase().charAt(0) + ':';
 
-								if (typeof text !== 'function') {
-									text = function (v) {
-										return v;
-									};
-								}
+								FTSS.selectize[title] = _.chain(data)
 
-								FTSS.selectize[title] = _.map(data, function (v) {
+									// Run the reject Archived operation a second time as some lists will place in caches but not selectize
+									.reject(function (d) {
 
-									var Id = (v.Id || v), txt = text(v);
+										        return (d.Archived === true);
 
-									return {
-										'Id'      : Id,
-										'id'      : id + Id,
-										'optgroup': title,
-										'text'    : txt,
-										'label'   : v.label || txt
-									};
+									        })
 
-								});
+									.map(function (v) {
 
+										     var Id, txt;
+
+										     Id = (v.Id || v);
+										     txt = text && text.call ? text(v) : v;
+
+										     return {
+											     'Id'      : Id,
+											     'id'      : id + Id,
+											     'optgroup': title,
+											     'text'    : txt,
+											     'label'   : v.label || txt
+										     };
+
+									     })
+
+									// _.chain() requires value() to get the resultant dataset
+									.value();
+
+								// Add the option group (header) to our searchBox
 								search.addOptionGroup(title, {
 									'label': title,
 									'value': title
 								});
 
+								// Add the options to our searchBox
 								search.addOption(FTSS.selectize[title]);
 
+								// Keep track of our async loads and fire once they are all done (not using $q.all())
 								if (++count > CACHE_COUNT) {
 
 									$scope.loaded = true;
@@ -567,8 +583,12 @@
 
 							.then(function (response) {
 
-								      // Add MCL to Caches object
-								      caches.MasterCourseList = response;
+								      // Add MCL to Caches object if it not Archived
+								      caches.MasterCourseList = _(response).reject(function (d) {
+
+									      return (d.Archived === true);
+
+								      });
 
 								      // Pull unique AFSC list from MCL & copy to Caches
 								      caches.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));

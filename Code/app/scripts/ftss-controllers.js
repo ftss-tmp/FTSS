@@ -44,6 +44,14 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 			// Copy the model to a local variable for reuse without affecting the original model
 			model = angular.copy(FTSS.models[opts.model]);
 
+			// Bind archive() to all scopes as it will only be called if specified in the view anyway
+			$scope.archive = actions.archive;
+
+			// Pass opts.edit to actions.edit for binding to the scope
+			if (opts.edit) {
+				$scope.edit = actions.edit(opts.edit);
+			}
+
 			// Return the promise, then()
 			return {
 				'then': function (callback) {
@@ -349,6 +357,46 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 
 		},
 
+		'archive': function (data) {
+
+			// Double check that this model can actually perform this action
+			if (data && data.hasOwnProperty('Archived')) {
+
+				var send = {
+					'Archived'  : !data.Archived,
+					'__metadata': data.__metadata,
+					'cache'     : true
+				};
+
+				// Call SharePoint.update() with our data and handle the success/failure response
+				SharePoint.update(send).then(function (resp) {
+
+					// HTTP 204 is the status given for a successful update, there will be no body
+					if (resp.status === 204) {
+
+						// Update the etag so we can rewrite this data again during the session if we want
+						data.__metadata.etag = resp.headers('etag');
+
+						data.Archived = !data.Archived;
+
+						// Copy the updated back to the original dataset
+						actions.data[data.Id] = angular.copy(data);
+
+						// Call actions.process() to reprocess the data by our controllers
+						actions.process();
+
+					}
+
+				}, utils.$ajaxFailure);
+
+			} else {
+
+				FTSS.utils.log('Invalid call to Archive()');
+
+			}
+
+		},
+
 		/**
 		 * Performs our update to the SP model.  Sends only changes to the server for efficiency and handles update response
 		 *
@@ -376,8 +424,8 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 
 					var data = scope.data[field];
 
-					// First check for valid fields as the model includes expanded data that should not be updated
-					if (old[field] && old[field] !== data) {
+					// First check for valid fields as the model includes expanded and temporary that can not be sent
+					if (old.hasOwnProperty(field) && old[field] !== data) {
 
 						send[field] = data;
 

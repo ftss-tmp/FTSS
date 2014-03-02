@@ -12,6 +12,11 @@ html(lang='en', ng-app='FTSS')
 
     body(ng-controller='mainController')
 
+        //
+            $.getJSON('https://api.flickr.com/services/feeds/photos_public.gne?id=39513508@N06&format=json&jsoncallback=?',function(resp) {
+            resp.items[Math.floor(Math.random()*resp.items.length)].media.m.replace('_m.', '_c_d.')});
+            img#bg(src='http://farm4.staticflickr.com/3803/12770661193_5ed0d1ca23_c_d.jpg', style='position: absolute;min-width: 100%;min-height: 100%;opacity: .2;')
+
         ng-include(src='"/partials/topbar.html"')
         ng-include(src='"/partials/leftbar.html"')
 

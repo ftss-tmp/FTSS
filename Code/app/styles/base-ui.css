@@ -24,13 +24,18 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
     margin-left: 15px
 }
 
-a {
+a, a:hover, a:active, a:focus {
+    outline: 0!important;
+}
+
+a, a:hover {
+    text-decoration: none;
+}
+
+#mainView a {
     border-bottom: 1px dotted;
 }
 
-a:hover {
+#mainView a:hover {
     border-bottom: 1px solid;
-}
-a, a:hover {
-    text-decoration: none;
 }

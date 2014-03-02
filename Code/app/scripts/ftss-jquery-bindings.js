@@ -7,7 +7,7 @@
 
 	'use strict';
 
-	var popover = {
+	var timeout, popover = {
 
 		/**
 		 * Internal data parser that converts [icon=someicon] into the SVG icon form FTSS.icons:
@@ -34,9 +34,11 @@
 
 			var $el = $(this), title, content;
 
-			$el[0].hover = setTimeout(function () {
+			timeout = setTimeout(function () {
 
 				if (!$el.data('freeze')) {
+
+					$('.popover').remove();
 
 					if (!$el.data('bs.popover')) {
 
@@ -62,7 +64,6 @@
 
 					$el.popover('show');
 
-
 					if (typeof $el.attr('no-arrow') === 'string') {
 
 						$el.data('bs.popover').$tip.addClass('no-arrow');
@@ -80,19 +81,17 @@
 		 */
 		'exit': function () {
 
+			clearTimeout(timeout);
+
 			var $el = $(this);
 
-			setTimeout(function () {
+			clearTimeout(timeout);
 
-				clearTimeout($el[0].hover);
+			if ($el.data('freeze') !== true) {
 
-				if ($el.data('freeze') !== true) {
+				popover.clear($el);
 
-					popover.clear($el);
-
-				}
-
-			}, 150);
+			}
 
 		},
 
@@ -104,16 +103,25 @@
 			var $el, tip;
 
 			$el = $(this);
-			tip = $el.data('bs.popover').$tip;
 
-			$el.addClass('frozen');
-			tip.addClass('frozen');
+			if ($el.hasClass('btn')) {
 
-			$el.data('freeze', true);
+				popover.clear($el);
 
-			$('body *').not('.popover, .popover *').one('click', function () {
-				popover.clear($el, tip);
-			});
+			} else {
+
+				tip = $el.data('bs.popover').$tip;
+
+				$el.addClass('frozen');
+				tip.addClass('frozen');
+
+				$el.data('freeze', true);
+
+				$('body *').not('.popover, .popover *').one('click', function () {
+					popover.clear($el);
+				});
+
+			}
 
 		},
 
@@ -122,7 +130,9 @@
 		 * @param self
 		 * @param tip
 		 */
-		'clear': function (self, tip) {
+		'clear': function (self) {
+
+			clearTimeout(timeout);
 
 			var obj = self.data('bs.popover');
 
@@ -132,8 +142,7 @@
 
 			if (obj) {
 
-				tip = tip || obj.$tip;
-				tip.removeClass('frozen');
+				obj.$tip.removeClass('frozen');
 
 			}
 
