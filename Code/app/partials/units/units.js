@@ -22,11 +22,7 @@ FTSS.ng.controller(
 					'Det' : 'Detachment'
 				},
 
-				'model': 'units',
-
-				'edit': [
-					'MasterCourseList'
-				]
+				'model': 'units'
 
 			});
 

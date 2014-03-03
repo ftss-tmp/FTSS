@@ -19,7 +19,6 @@
     "angular": "1.2.5",
     "angular-route": "1.2.5",
     "angular-elastic": "~2.3.1",
-    "angular-selectize": "*",
     "StickyTableHeaders": "~0.1.7",
     "css-toggle-switch": "~2.1.4"
   },

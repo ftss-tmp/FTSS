@@ -14,7 +14,7 @@ div(class='{{wellCollapse}}')
                 | {{r.Course.PDS}} - {{r.reqSeats}} Requested ({{r.openSeats}} Open)
                 span.pull-right(style='letter-spacing: .1em')
                     | {{r.start}} - {{r.end}}
-                    icon(path='calendar_range')
+                    icon calendar_range
             hr.rollup
             .rollup
                 p.lead(ng-hide='groupBy=="course"') {{r.Course.Number}}: {{r.Course.Title}}
@@ -24,24 +24,24 @@ div(class='{{wellCollapse}}')
                             tr
                                 td(style='width:150px') Location
                                 td(style='width:10px')
-                                    icon(path='location')
+                                    icon location
                                 td
                                     b {{r.det.Base}} (Detachment {{r.det.Det}})
                             tr
                                 td Instructor
                                 td
-                                    icon(path='instructor')
+                                    icon instructor
                                 td.truncate.bold {{r.instructor}}
                             tr
                                 td Requested
                                 td
-                                    icon(path='sent')
+                                    icon sent
                                 td
                                     b {{r.Created}}
                             tr
                                 td Comments
                                 td
-                                    icon(path='comments')
+                                    icon comments
                                 td.bold
                                     button.btn.btn-link.btn-inline.btn-muted(hover='{{r.CreatedBy.Name}} ({{r.CreatedBy.WorkPhone}})', content='{{r.Notes}}')
                                         | By Requester
@@ -51,7 +51,7 @@ div(class='{{wellCollapse}}')
                                             | FTD Response
                 .col-lg-5.pull-right.text-right(style='margin-top: 10px')
                     p.truncate(ng-repeat='s in r.Students.results', style='margin-bottom: 10px')
-                        icon(path='student_hand', hover='Requested Student')
+                        icon student_hand
                         a(href='mailto:{{s.WorkEMail}}{{r.mail}}') {{s.Name}}
                         br
                         span(ng-show='s.WorkPhone') {{s.WorkPhone}}
@@ -93,10 +93,10 @@ div(class='{{wellCollapse}}')
                     .pull-right
                         button.btn.btn-success.btn-labeled.btn-muted(type='button')
                             span.btn-label.invert
-                                icon(path='approve')
+                                icon approve
                             | Approve
                         button.btn.btn-danger.btn-labeled.btn-muted(type='button')
                             span.btn-label.invert
-                                icon(path='deny')
+                                icon deny
                             | Deny
                     .clearfix

@@ -103,6 +103,11 @@
     display: none!important;
 }
 
+.show-em .item em {
+    display: inline!important;
+    font-style: normal;
+}
+
 .item b {
     font-weight: normal;
 }

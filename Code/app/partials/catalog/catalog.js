@@ -26,12 +26,7 @@ FTSS.ng.controller(
 					'Hours': 'Length'
 				},
 
-				'model': 'catalog',
-
-				'edit': [
-					'AFSC',
-					'MDS'
-				]
+				'model': 'catalog'
 
 			});
 
@@ -45,7 +40,7 @@ FTSS.ng.controller(
 
 						      try {
 
-							      _(u.Courses.split('|')).each(function (c) {
+							      _(u.Courses).each(function (c) {
 
 								      var d = data[c].Units = data[c].Units ||
 									      [

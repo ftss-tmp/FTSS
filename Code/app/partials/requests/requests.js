@@ -1,4 +1,4 @@
-/*global utils, FTSS, _ */
+/*global FTSS */
 
 FTSS.ng.controller(
 

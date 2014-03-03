@@ -2,6 +2,6 @@
 
 FTSS.ng.controller('homeController', function () {
 
-	utils.$loading(false);
+	utils.loading(false);
 
 });

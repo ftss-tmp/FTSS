@@ -28,7 +28,7 @@ div(class='{{wellCollapse}}')
                             |(IMDS: {{r.IMDS}})
 
                         span.pull-right(ng-if='r.Units && !r.Archived', hover='{{r.PDS}} is taught by {{r.Units.length}} FTDs:', content='{{r.units}}', style='margin-right: 15px;')
-                            icon(path='instructor')
+                            icon instructor
                         span.pull-right(ng-if='r.Archived', style='margin-right:10%') *** ARCHIVED COURSE ***
                         br
                         span.peek {{r.Title}}
@@ -44,9 +44,9 @@ div(class='{{wellCollapse}}')
                             | Hours:&nbsp;
                             b {{r.Hours}}
                     td.invert(ng-once='')
-                        button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(r)', hover='Edit this course data')
-                            icon(path='edit')
-                        button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(r)', hover='Archive this course')
-                            icon(path='delete')
-                        button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(r)', hover='Restore this course', show='left')
-                            icon(path='undo')
+                        button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(r)', hover='course-button-edit')
+                            icon edit
+                        button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(r)', hover='course-button-archive')
+                            icon delete
+                        button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(r)', hover='course-button-restore', show='left')
+                            icon reset

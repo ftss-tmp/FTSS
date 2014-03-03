@@ -31,13 +31,7 @@ FTSS.ng.controller(
 					'Course.AFSC': 'AFSC'
 				},
 
-				'model'  : 'scheduled',
-
-				'edit': [
-					'MasterCourseList',
-				    'Instructors',
-				    'Units'
-				]
+				'model'  : 'scheduled'
 
 			});
 

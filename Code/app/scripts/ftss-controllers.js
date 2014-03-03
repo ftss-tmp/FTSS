@@ -48,9 +48,7 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 			$scope.archive = actions.archive;
 
 			// Pass opts.edit to actions.edit for binding to the scope
-			if (opts.edit) {
-				$scope.edit = actions.edit(opts.edit);
-			}
+			$scope.edit = actions.edit(opts.edit);
 
 			// Return the promise, then()
 			return {
@@ -312,7 +310,7 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 
 				});
 
-				utils.$loading(false);
+				FTSS.loaded();
 
 			}
 
@@ -337,15 +335,8 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 									scope.submit = actions.update(scope, $modalInstance);
 									scope.cancel = $modalInstance.dismiss;
 
-									switch (typeof callback) {
-										case 'function':
-											callback(scope);
-											break;
-
-										case 'object':
-											_(callback).each(function (select) {
-												scope['selectize' + select] = FTSS.dropdowns[select](scope);
-											});
+									if (callback) {
+										callback(scope);
 									}
 
 								}

@@ -2,28 +2,31 @@ form.form-horizontal(name='modal')
 
     .modal-header
         h3
-            icon(path='calendar_range')
-            | Scheduled Class
+            icon calendar_range
+            | Scheduled Class Update
 
     .modal-body
 
         .input-group
-            .input-group-addon Course
-            .input-group-selectize
-                select(selectize='selectizeMasterCourseList', required)
+            .input-group-addon
+                icon books
+            .input-group-selectize.show-em
+                select(selectize='MasterCourseList', required)
 
         br
 
         .input-group
-            .input-group-addon Unit
+            .input-group-addon
+                icon location_small
             .input-group-selectize
-                select(selectize='selectizeUnits', required)
+                select(selectize='Units', required)
         br
 
         .input-group
-            .input-group-addon Instructor
+            .input-group-addon
+                icon instructor
             .input-group-selectize
-                select(selectize='selectizeInstructors')
+                select(selectize='Instructors')
 
         br
 

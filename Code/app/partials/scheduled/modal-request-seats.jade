@@ -1,20 +1,20 @@
 .modal-header
     h3(style='font-variant: small-caps')
-        icon(path='sent')
+        icon sent
         | {{class.Course.Number}} SEAT REQUEST
 #requestSeats.modal-body
     p.lead
         ng-pluralize(count='class.openSeats', when='{1:"There is only one seat available", "other":"There are {} seats available"}')
         | for the {{class.start}} class.
     br
-    div(explain='Search for students to add to the request.<example>Please ensure you have already loaded these students into FTSS.</example>', show='right')
+    div(explain='request-seats-students', show='right')
         h4
-            icon(path='students')
+            icon students
             | Requested Student(s)
         select(selectize='selectizeOptions', multiple)
 
     br
-    div(explain='Leave any comments for the FTD or MAJCOM as applicable (optional).', show='right')
+    div(explain='request-seats-comments', show='right')
         h4
             i.fa.fa-comment
             | Request Comments

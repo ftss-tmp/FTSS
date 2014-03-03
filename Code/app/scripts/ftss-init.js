@@ -21,7 +21,6 @@ var FTSS = {}, utils = {}, caches = {};
 	FTSS.ng = angular.module('FTSS',
 	                         [
 		                         'ngRoute',
-		                         'angular-selectize',
 		                         'ui.bootstrap',
 		                         'monospaced.elastic',
 		                         'partials'
@@ -138,6 +137,7 @@ var FTSS = {}, utils = {}, caches = {};
 					console.info(data);
 				} else {
 					console.log(stamp, data, stamp - last);
+					console.trace();
 				}
 
 				last = stamp;
@@ -273,7 +273,7 @@ var FTSS = {}, utils = {}, caches = {};
 
 					                _(scope).each(function (s, field) {
 
-						                if (field.indexOf('_JSON')) {
+						                if (field.indexOf('_JSON') > 0) {
 							                scope[field] = JSON.stringify(s);
 						                }
 

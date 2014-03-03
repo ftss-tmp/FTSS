@@ -89,9 +89,10 @@ table thead.tableFloatingHeaderOriginal {
     background: #fff;
 }
 
-tr.archived td {
+tr.archived:not(:hover) * {
     text-decoration: line-through;
     color:#bbb;
+    font-weight: normal!important;
 }
 
 tr.archived .btn.archive {

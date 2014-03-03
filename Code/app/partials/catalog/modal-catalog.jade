@@ -2,32 +2,32 @@ form.form-horizontal(name='modal')
 
     .modal-header
         h3
-            icon(path='books')
+            icon books
             | {{data.PDS}} - {{data.Number}}
 
     .modal-body
 
         h4.light-bottom
-            icon(path='search')
+            icon search
             | Course Identifiers & Description
 
         .row
             .col-lg-3
                 .input-group
                     .input-group-addon(style='width:55%') PDS
-                    input.form-control(ng-model='data.PDS', type='text', explain='Some explanation.....', show='right', required)
+                    input.form-control(ng-model='data.PDS', type='text', explain='catalog-edit-pds', show='right', required)
 
             .col-lg-5
                 .input-group
                     .input-group-addon MDS
                     .input-group-selectize
-                        select(selectize='selectizeMDS', required)
+                        select(selectize='MDS', required)
 
             .col-lg-4
                 .input-group
                     .input-group-addon AFSC
                     .input-group-selectize
-                        select(selectize='selectizeAFSC', required)
+                        select(selectize='AFSC', required)
 
         .clearfix(style='height:1em')
 
@@ -35,12 +35,12 @@ form.form-horizontal(name='modal')
             .col-lg-8
                 .input-group
                     .input-group-addon Number
-                    input.form-control(ng-model='data.Number', type='text', explain='Some explanation.....', show='right', required)
+                    input.form-control(ng-model='data.Number', type='text', explain='catalog-edit-number', show='right', required)
 
             .col-lg-4
                 .input-group
                     .input-group-addon IMDS
-                    input.form-control(ng-model='data.IMDS', type='text', explain='This is the IMDS course code (optional).', show='right')
+                    input.form-control(ng-model='data.IMDS', type='text', explain='catalog-edit-imds', show='right')
 
         .clearfix(style='height:1em')
 
@@ -48,7 +48,7 @@ form.form-horizontal(name='modal')
             .col-lg-12
                 .input-group
                     .input-group-addon(style='width:11.5%') Title
-                    input.form-control(ng-model='data.Title', explain='Another explanation....', show='right', required)
+                    input.form-control(ng-model='data.Title', explain='catalog-edit-title', show='right', required)
 
         br
         br
@@ -57,30 +57,30 @@ form.form-horizontal(name='modal')
 
             .col-lg-6
                 h4.light-bottom
-                    icon(path='time')
+                    icon time
                     | Course Length
                 .col-lg-6.no-pad
                     .input-group
-                        input.form-control(ng-model='data.Days', type='number', explain='Another explanation....', show='left', min='1', max='120', required)
+                        input.form-control(ng-model='data.Days', type='number', explain='catalog-edit-days', show='left', min='1', max='120', required)
                         .input-group-addon Days
 
                 .col-lg-5.no-pad.pull-right
                     .input-group
-                        input.form-control(ng-model='data.Hours', type='number', explain='Another explanation....', show='left', min='8', max='999', required)
+                        input.form-control(ng-model='data.Hours', type='number', explain='catalog-edit-hours', show='left', min='8', max='999', required)
                         .input-group-addon Hrs
 
             .col-lg-5.pull-right
                 h4.light-bottom
-                    icon(path='student_hand')
+                    icon student_hand
                     | Course Seat Limits
                 .col-lg-5.no-pad
                     .input-group
-                        input.form-control(ng-model='data.Min', type='number', explain='Another explanation....', show='left', min='1', max='9', required)
+                        input.form-control(ng-model='data.Min', type='number', explain='catalog-edit-min', show='left', min='1', max='9', required)
                         .input-group-addon Min
 
                 .col-lg-6.no-pad.pull-right
                     .input-group
-                        input.form-control(ng-model='data.Max', type='number', explain='Another explanation....', show='left', min='1', max='99', required)
+                        input.form-control(ng-model='data.Max', type='number', explain='catalog-edit-max', show='left', min='1', max='99', required)
                         .input-group-addon Max
 
         br
@@ -100,11 +100,11 @@ form.form-horizontal(name='modal')
         br
 
         .row.alert.alert-danger(ng-if='!data.PDS || !data.MDS')
-            icon(path='alert')
+            icon alert
             | All fields are required.
 
         .row.alert.alert-danger(ng-if='error')
-            icon(path='alert')
+            icon alert
             | {{error}}
 
     ng-include(src='"/partials/modal-footer.html"')

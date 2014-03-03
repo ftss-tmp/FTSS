@@ -1,8 +1,8 @@
 form.form-horizontal(name='modal')
 
     .modal-header
-        h4(hover='<div>[icon=info]</div>Rank, unit and contact info are pulled from AFNET; contact the ESD to make changes', show='right')
-            icon(path='instructor')
+        h4(hover='instructors-edit-helpdesk-message', show='right')
+            icon instructor
             | {{data.Name}}
 
     .modal-body
@@ -30,25 +30,25 @@ form.form-horizontal(name='modal')
 
                 .input-group
                     .input-group-addon.w17 Unit
-                    .input-group-selectize(explain='Choose {{data.firstName}}&#39;s unit from the list.', show='right')
-                        select(selectize='selectizeUnits')
+                    .input-group-selectize(explain='instructors-edit-unit', show='right')
+                        select(selectize='Units')
 
                 br
 
                 .input-group
                     .input-group-addon AFSC
-                    .input-group-selectize(explain='Type in {{data.firstName}}&#39;s AFSC or choose one from the list.', show='right')
-                        select(selectize='selectizeAFSC')
+                    .input-group-selectize(explain='instructors-edit-afsc', show='right')
+                        select(selectize='AFSC')
 
 
         .row.alert.alert-danger(ng-if='!data.UnitId')
-            icon(path='alert')
+            icon alert
             | You must choose {{firstName}}'s&nbsp;
             b assigned unit
             | .
 
         .row.alert.alert-danger(ng-if='error')
-            icon(path='alert')
+            icon alert
             | {{error}}
 
     ng-include(src='"/partials/modal-footer.html"')

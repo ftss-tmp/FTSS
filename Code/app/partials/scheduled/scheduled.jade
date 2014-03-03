@@ -7,13 +7,13 @@ div(class='{{wellCollapse}}')
         h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
-        .well(ng-repeat='r in group', ng-once='')
+        .well(ng-repeat='r in group', ng-once)
             h4
                 span(class='btn btn-{{r.openSeatsClass}} availSeats(disabled="")') {{r.openSeats}} Open
                 span.rollupOnly {{r.Course.PDS}} - {{r.Course.Number}}
                 span.pull-right(style='letter-spacing: .1em')
                     | {{r.start}} - {{r.end}}
-                    icon(path='calendar_range')
+                    icon calendar_range
             hr.rollup
             .rollup
                 .col-lg-8.pull-left
@@ -76,18 +76,18 @@ div(class='{{wellCollapse}}')
                     .pull-right.invert
                         button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='r.openSeats')
                             span.btn-label
-                                icon(path='add')
+                                icon add
                             | Request Seats
                         button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='r.requestCount', ng-click='view(r)')
                             span.btn-label
-                                icon(path='search')
+                                icon search
                             | View Requests
                         button.btn.btn-warning.btn-labeled.btn-muted(type='button', ng-click='edit(r)')
                             span.btn-label
-                                icon(path='edit')
+                                icon edit
                             | Edit Class
                         button.btn.btn-danger.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
                             span.btn-label
-                                icon(path='delete')
+                                icon delete
                             | Cancel Class
                     .clearfix
