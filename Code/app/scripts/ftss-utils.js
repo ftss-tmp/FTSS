@@ -50,6 +50,8 @@ utils.modal = (function () {
 		modal
 
 			.open({
+				      'backdrop'   : 'static',
+				      'keyboard'   : true,
 				      'templateUrl': opts.templateUrl,
 				      'controller' : opts.controller
 			      });
@@ -57,3 +59,170 @@ utils.modal = (function () {
 	};
 
 }());
+
+
+/**
+ * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
+ *
+ * @param {Array} [data] - the data returned from SharePoint.read()
+ */
+utils.tagHighlight = function (data) {
+
+	try {
+
+		var test, map;
+
+		test =
+		[
+		];
+		map = FTSS.filters.map();
+
+		// First, generate the array of tags to test against
+		_.each(FTSS.tags, function (tag, key) {
+
+			_.each(tag, function (t) {
+
+				if (key !== 'custom') {
+
+					test.push({
+						          id       : key + ':' + t,
+						          testField: map[key].split('/'),
+						          testValue: t
+					          });
+
+				}
+
+			});
+
+
+		});
+
+		// Perform tests against all data using the test[] already created, _.all() stops once all tags are marked (if applicable)
+		_.all(data, function (req) {
+
+			// Must use _.each() in case a data item matches multiple tags
+			_.each(test, function (t, k) {
+
+				var field;
+
+				// In order to handle nested values (up to 2), switch on the t.testField.length
+				switch (t.testField.length) {
+
+					case 1:
+						field = req[t.testField[0]];
+						break;
+
+					case 2:
+						field = req[t.testField[0]][t.testField[1]];
+						break;
+
+					default:
+						field = req[t.testField[0]][t.testField[1]][t.testField[2]];
+
+				}
+
+				/**
+				 *  If field and testValue match, add Matched class and delete test-- we shouldn't touch the DOM
+				 *  from a controller but for performance reasons, this is much faster than relying on
+				 *  AngularJS.
+				 */
+				if (field === t.testValue) {
+
+					FTSS.search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
+					delete test[k];
+
+				}
+
+			});
+
+			// Always test to ensure there are still tags to test against, otherwise exit the loop
+			return (test.length > 0);
+
+		});
+
+	} catch (e) {
+		FTSS.utils.log(e);
+	}
+
+};
+
+/**
+ * Wrapper to handle search box value updates without triggering the onChange() event
+ *
+ * @param {function|string} [action] - calls the function or sets search to the given value if string
+ */
+utils.updateSearch = function (action) {
+
+	FTSS.updating = true;
+
+	if (typeof action === 'string') {
+
+		FTSS.search.setValue(action);
+
+	} else {
+
+		action();
+
+	}
+
+	FTSS.updating = false;
+
+};
+
+/**
+ * Handles the page loading indicators (mouse & spinner)
+ *
+ * @param loading
+ */
+utils.loading = (function () {
+
+	var loader = $('#content')[0], loadingState;
+
+	return function (loading) {
+
+		try {
+
+			utils.$message(false);
+
+			if (loadingState !== loading) {
+
+				if (loading) {
+					document.body.style.cursor = loader.className = 'wait';
+					if (FTSS.search) {
+						FTSS.search.close();
+						FTSS.search.blur();
+					}
+				} else {
+					document.body.style.cursor = loader.className = '';
+				}
+
+				loadingState = loading;
+
+			}
+
+		} catch (e) {
+
+		}
+
+	};
+
+}());
+
+
+/**
+ *
+ * @param req
+ */
+utils.$ajaxFailure = function (req) {
+	utils.$message({
+		               'newLine': true,
+		               'class'  : 'danger',
+		               'intro'  : 'Hmmm, something went wrong:',
+		               'message':
+			               [
+				               this.type,
+				               '(' + req.status + ')',
+				               this.url
+			               ].join(' ')
+	               });
+};

@@ -24,13 +24,7 @@ FTSS.ng.controller(
 					'Name': 'Name',
 					'AFSC': 'AFSC'
 				},
-				'model'  : 'instructors',
-
-				'edit':
-					[
-						'Units',
-						'AFSC'
-					]
+				'model'  : 'instructors'
 
 			});
 

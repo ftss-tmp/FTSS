@@ -13,6 +13,30 @@
 
 	FTSS.ng.directive(
 
+		'selectize',
+		[
+			'$timeout',
+			'SharePoint',
+			function ($timeout, SharePoint) {
+				return {
+					// Restrict it to be an attribute in this case
+					restrict: 'A',
+					// responsible for registering DOM listeners as well as updating the DOM
+					link    : function (scope, element, attrs) {
+						$timeout(function () {
+
+							var opts = FTSS.dropdowns[attrs.selectize](scope, SharePoint);
+
+							$(element).selectize(opts);
+
+						});
+					}
+				};
+			}
+		]);
+
+	FTSS.ng.directive(
+
 		'navLink',
 
 		[
@@ -31,17 +55,17 @@
 
 						$scope.navigate = function () {
 							window.location.hash =
-								[
-									'',
-									$scope.link,
-									$scope.$parent.permaLink
-								].join('/');
+							[
+								'',
+								$scope.link,
+								$scope.$parent.permaLink
+							].join('/');
 						};
 
 						$timeout(function () {
 							$scope.$$watchers =
-								[
-								];
+							[
+							];
 						}, 1);
 
 					}
@@ -60,7 +84,7 @@
 				var size, icon, classes, style, hover;
 
 				size = $attrs.size || '1.25em';
-				icon = FTSS.icons[$attrs.path || $el[0].innerText];
+				icon = FTSS.icons[$attrs.path || $el[0].textContent];
 				classes = ($el[0].className || '') + ' icon icon-' + $attrs.path;
 				style = 'style="height:' + size + ';width:' + size;
 				hover = $attrs.hover ? '" hover="' + $attrs.hover + '" ' : '" ';

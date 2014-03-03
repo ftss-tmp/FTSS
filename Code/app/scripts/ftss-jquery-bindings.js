@@ -21,9 +21,13 @@
 
 			var svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="100%" ';
 
-			return content.replace(/\[icon\=([a-z]+)\]/g, function (match, icon) {
-				return '<div class="icon icon-' + icon + '">' + svg + FTSS.icons[icon] + '</div>';
-			});
+			return content
+
+				.replace(/\[icon\=([a-z]+)\]/g,
+
+			             function (match, icon) {
+				             return '<div class="icon icon-' + icon + '">' + svg + FTSS.icons[icon] + '</div>';
+			             });
 
 		},
 
@@ -48,17 +52,26 @@
 							title = $el.attr('hover') || $el.attr('explain');
 						} else {
 							content = $el.attr('hover') || $el.attr('explain');
+							content = FTSS.messages[content] || content;
 						}
 
-						content = popover.icon(content);
+						if (content) {
 
-						$el.popover({
-							            'trigger'  : 'manual',
-							            'html'     : true,
-							            'title'    : title,
-							            'content'  : content,
-							            'placement': $el.attr('show') || 'auto'
-						            });
+							content = popover.icon(content);
+
+							$el.popover(
+
+								{
+									'trigger'  : 'manual',
+									'html'     : true,
+									'title'    : title,
+									'content'  : content,
+									'placement': $el.attr('show') || 'auto'
+								}
+
+							);
+
+						}
 
 					}
 
