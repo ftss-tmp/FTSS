@@ -1,4 +1,4 @@
-/*global utils, FTSS */
+/*global utils, FTSS, _, RawDeflate */
 
 /**
  * Misc utilities
@@ -78,9 +78,9 @@ utils.tagHighlight = function (data) {
 		map = FTSS.filters.map();
 
 		// First, generate the array of tags to test against
-		_.each(FTSS.tags, function (tag, key) {
+		_(FTSS.tags).each(function (tag, key) {
 
-			_.each(tag, function (t) {
+			_(tag).each(function (t) {
 
 				if (key !== 'custom') {
 
@@ -98,10 +98,10 @@ utils.tagHighlight = function (data) {
 		});
 
 		// Perform tests against all data using the test[] already created, _.all() stops once all tags are marked (if applicable)
-		_.all(data, function (req) {
+		_(data).all(function (req) {
 
 			// Must use _.each() in case a data item matches multiple tags
-			_.each(test, function (t, k) {
+			_(test).each(function (t, k) {
 
 				var field;
 
@@ -233,7 +233,7 @@ utils.deflate64 = function (str) {
 };
 
 utils.inflate64 = function (str) {
-	return RawDeflate.inflate(decodeURIComponent(encodeURI(atob(str))));
+	return RawDeflate.inflate(decodeURIComponent(decodeURI(atob(str))));
 };
 
 utils.deflate = function (str) {

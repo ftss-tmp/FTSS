@@ -33,10 +33,19 @@
     background-color: #eee;
     border-color: #bbb;
     opacity: .2;
+    transition: opacity 250ms ease;
+
 }
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
+    transition: background-color 200ms ease;
+    background-color: inherit;
+}
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+    transition: background-color 200ms ease;
     background-color: #f5fafc;
     color: #428bca;
     fill:#428bca!important;

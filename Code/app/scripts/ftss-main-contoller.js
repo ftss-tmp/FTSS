@@ -175,6 +175,8 @@
 
 								}
 
+								FTSS.search.$control.find('.item').addClass('processed');
+
 								FTSS.pending = false;
 
 							}());
@@ -218,7 +220,6 @@
 				 * This is the callback for the searchbox reset button, clears out the search params
 				 */
 				$scope.reset = function () {
-					clearTimeout(FTSS.delaySearch);
 					FTSS.search.clear();
 					$scope.searchText.$ = '';
 				};
@@ -237,7 +238,6 @@
 
 					if (FTSS.search) {
 						$scope.noSearch = false;
-						FTSS.search.enable();
 					}
 
 					if (FTSS.searchWatch) {

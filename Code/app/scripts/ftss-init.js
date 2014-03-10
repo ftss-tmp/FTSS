@@ -23,8 +23,7 @@ var FTSS = {}, utils = {}, caches = {};
 		                         'ngRoute',
 		                         'ui.bootstrap',
 		                         'monospaced.elastic',
-		                         'partials',
-		                         'ngAnimate'
+		                         'partials'
 	                         ]);
 
 	FTSS.ng.filter('html',
@@ -82,7 +81,7 @@ var FTSS = {}, utils = {}, caches = {};
 		//'pplURL' : 'https://cs3.eis.af.mil/_vti_bin/ListData.svc/UserInformationList',
 		'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
 		'debug'  : true,
-		'offline': false,
+		'offline': true,
 		'noCache': false
 	};
 
