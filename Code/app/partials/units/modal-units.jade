@@ -43,7 +43,7 @@ form(name='modal')
                 h4
                     icon instructor
                     b {{data.CoursesCount}} Courses Taught
-                select(selectize='MasterCourseListMulti', multiple, required)
+                select(selectize='MasterCourseList', bind='Courses_JSON', multiple, required)
 
         .row(style='height: 25px')
 

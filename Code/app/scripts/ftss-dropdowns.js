@@ -4,117 +4,132 @@
 
 	"use strict";
 
-	var dropdown, selectizeCollection;
-
-	dropdown = function (scope, opts) {
-
-		var loaded;
-
-		return _(opts).defaults(
-
-			{
-				'maxItems'    : 1,
-				'options'     : selectizeCollection[opts.select],
-				'create'      : false,
-				'hideSelected': true,
-				'onChange'    : function (val) {
-
-					scope.data[opts.field] = (val.map ? val.map(Number) : Number(val)) || val;
-
-					scope.clean = !loaded;
-
-					if (!loaded) {
-						loaded = true;
-					}
-
-				},
-				'onInitialize': function () {
-					this.setValue(scope.data[opts.field]);
-				}
-			});
-
-	};
-
-	selectizeCollection = {};
+	var options = {};
 
 	FTSS.dropdowns = {
 
-		'initSelectize': function (scope, SharePoint) {
+		'options': options,
+
+		'build': function (scope, opts) {
+
+			var loaded;
+
+			return _(opts).defaults(
+
+				{
+					'maxItems'    : 1,
+					'options'     : options[opts.select] || null,
+					'hideSelected': false,
+					'plugins'     : opts.maxItems > 1 ?
+					                [
+						                'remove_button'
+					                ] : null,
+					'onChange'    : function (val) {
+
+						if (!this.running) {
+
+							scope.data[opts.field] = (val.map ? val.map(Number) : Number(val)) || val;
+
+							scope.clean = !loaded;
+
+							if (!loaded) {
+								loaded = true;
+							}
+
+							if (opts.create && val) {
+
+								options[opts.select]
+
+									.push({
+										      'label': val,
+										      'text' : val,
+										      'Id'   : val
+									      });
+
+							}
+
+						}
+
+					},
+					'onInitialize': function () {
+
+						this.setValue(scope.data[opts.field]);
+
+					}
+				});
+
+		},
+
+		'initialize': function (scope, SharePoint) {
+
+			var doSearch = function (val) {
+
+				if (!FTSS.updating) {
+
+					if (val && val.length > 0) {
+
+						utils.updateSearch(function () {
+
+							var tags = {};
+
+							_.each(val, function (v) {
+
+								var split = v.split(':');
+
+								tags[split[0]] = tags[split[0]] ||
+								                 [
+								                 ];
+
+								tags[split[0]].push(Number(split[1]) || split[1]);
+
+							});
+
+							utils.permaLink(tags);
+
+						});
+
+					}
+
+				}
+
+			};
 
 			return {
 				'labelField'   : 'label',
 				'valueField'   : 'id',
-				'hideSelected' : true,
+				'hideSelected' : false,
 				'dataAttr'     : 'width',
 				'persist'      : true,
 				'optgroupOrder':
 					[
 						'SMART FILTERS',
-						'DETACHMENT',
+						'Units',
 						'AFSC',
 						'MDS',
-						'INSTRUCTOR',
-						'COURSE'
+						'Instructors',
+						'MasterCourseList'
 					],
 				'plugins'      :
 					[
 						'optgroup_columns',
 						'remove_button'
 					],
-				'type'         : function () {
-					clearTimeout(FTSS.delaySearch);
-				},
-				'onChange'     : function (val, instant) {
-
-					clearTimeout(FTSS.delaySearch);
-
-					if (!FTSS.updating) {
-
-						if (val instanceof Array && val.length > 0) {
-
-							FTSS.delaySearch = setTimeout(function () {
-
-								utils.updateSearch(function () {
-
-									var tags = {};
-
-									_.each(val, function (v) {
-
-										var split = v.split(':');
-
-										tags[split[0]] = tags[split[0]] ||
-										                 [
-										                 ];
-
-										tags[split[0]].push(Number(split[1]) || split[1]);
-
-									});
-
-									utils.permaLink(tags);
-
-								});
-
-							}, (instant ? 1 : 500));
-
-						} else {
-							utils.loading(false);
-							FTSS.search.unlock();
-						}
-
-					}
-				},
+				'onEnter'      : doSearch,
 				'onInitialize' : function () {
 
-					var count = 0, CACHE_COUNT = 4;
+					var count = 0, CACHE_COUNT = 5;
 
 					FTSS.search = this;
 
-					var loaded = function (data, title, text) {
+					var loaded = function (data, group, text) {
+
+						// Add the dataset to the caches object for global access
+						caches[group] = data;
 
 						// create the serachBox value of type:Id for eventual filter mapping
-						var id = title.toLowerCase().charAt(0) + ':';
+						var id = group.toLowerCase().charAt(0) + ':';
 
-						selectizeCollection[title] = _.chain(data)
+						options[group] = _.chain(data)
 
 							// Run the reject Archived operation a second time as some lists will place in caches but not selectize
 							.reject(function (d) {
@@ -133,9 +148,10 @@
 								     return {
 									     'Id'      : Id,
 									     'id'      : id + Id,
-									     'optgroup': title,
+									     'optgroup': group,
 									     'text'    : txt,
-									     'label'   : v.label || txt
+									     'label'   : v.label || txt,
+									     'data'    : v
 								     };
 
 							     })
@@ -143,14 +159,25 @@
 							// _.chain() requires value() to get the resultant dataset
 							.value();
 
-						// Add the option group (header) to our searchBox
-						FTSS.search.addOptionGroup(title, {
-							'label': title,
-							'value': title
-						});
+						// We don't want to add the Students list to the tagBox but will keep it for other uses
+						if (group !== 'Students' && group !== 'HostUnits') {
 
-						// Add the options to our searchBox
-						FTSS.search.addOption(selectizeCollection[title]);
+							var headers = {
+								'Units'           : 'Unit',
+								'MasterCourseList': 'Course',
+								'Instructors'     : 'Instructor'
+							};
+
+							// Add the option group (header) to our searchBox
+							FTSS.search.addOptionGroup(group, {
+								'label': headers[group] || group,
+								'value': group
+							});
+
+							// Add the options to our searchBox
+							FTSS.search.addOption(options[group]);
+
+						}
 
 						// Keep track of our async loads and fire once they are all done (not using $q.all())
 						if (++count > CACHE_COUNT) {
@@ -170,17 +197,14 @@
 
 						.then(function (response) {
 
-							      // Add MCL to Caches object if it not Archived
-							      caches.MasterCourseList = response;
-
 							      // Pull unique AFSC list from MCL & copy to Caches
-							      caches.AFSC = _.compact(_.uniq(_.pluck(response, 'AFSC')));
+							      loaded(_.compact(_.uniq(_.pluck(response, 'AFSC'))), 'AFSC');
 
 							      // Pull unqiue MDS list from MCL & copy to Caches
-							      caches.MDS = _.compact(_.uniq(_.pluck(response, 'MDS')));
+							      loaded(_.compact(_.uniq(_.pluck(response, 'MDS'))), 'MDS');
 
 							      // Add MCL to Selectize with row callback
-							      loaded(caches.MasterCourseList, 'COURSE', function (v) {
+							      loaded(response, 'MasterCourseList', function (v) {
 
 								      /**
 								       * Generates string format for dropdown display
@@ -220,12 +244,6 @@
 								      return v.text;
 							      });
 
-							      // Add MDS to Selectize
-							      loaded(caches.MDS, 'MDS');
-
-							      // Add AFSC to Selectize
-							      loaded(caches.AFSC, 'AFSC');
-
 						      });
 
 					SharePoint
@@ -234,11 +252,8 @@
 
 						.then(function (response) {
 
-							      // Add Units to Caches object
-							      caches.Units = response;
-
 							      // Add Units to Selectize with row callback
-							      loaded(response, 'DETACHMENT', function (v) {
+							      loaded(response, 'Units', function (v) {
 
 								      // Use Det # to determine squadron 2XX for 372 TRS / 3XX for 373 TRS
 								      v.Squadron = v.Det < 300 ? '372 TRS' : '373 TRS';
@@ -300,13 +315,29 @@
 
 						.then(function (response) {
 
-							      caches.Instructors = response;
-
-							      loaded(response, 'INSTRUCTOR', function (v) {
+							      loaded(response, 'Instructors', function (v) {
 
 								      v.label = v.Instructor.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
 
 								      return  v.Instructor.Name;
+
+							      });
+
+						      });
+
+					SharePoint
+
+						.read(FTSS.models.students)
+
+						.then(function (response) {
+
+							      loaded(_.compact(_.uniq(_.pluck(response, 'HostUnit'))), 'HostUnits');
+
+							      loaded(response, 'Students', function (v) {
+
+								      v.label = v.Student.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+
+								      return  v.Student.Name;
 
 							      });
 
@@ -317,95 +348,44 @@
 
 		},
 
-		'MasterCourseListMulti': function (scope) {
+		'people': function (scope, SharePoint, field) {
 
-			var loaded;
+			return FTSS.dropdowns
 
-			return dropdown(scope, {
+				.build(scope, {
+					       'field'       : field,
+					       'labelField'  : 'Name',
+					       'valueField'  : 'Id',
+					       'sortField'   : 'Name',
+					       'searchField' : 'Name',
+					       'persist'     : false,
+					       'maxItems'    : scope.peopleMax,
+					       'create'      : false,
+					       'plugins'     :
+						       [
+							       'remove_button'
+						       ],
+					       'load'        : function (query, callback) {
 
-				'select'      : 'COURSE',
-				'plugins'     :
-					[
-						'remove_button'
-					],
-				'maxItems'    : 999,
-				'onChange'    : function (val) {
+						       //	if (query.indexOf(', ') > 1) {                      <-- only limit queries on the production server
 
-					if (val.map) {
+						       SharePoint.people(query).then(callback);
 
-						scope.data.Courses_JSON = val.map(Number);
+						       //	}
 
-						scope.data.CoursesCount = val.length;
+					       },
+					       'onInitialize': function () {
 
-						scope.clean = !loaded;
+						       this.addOption({
+							                      'Id'  : scope.data[field],
+							                      'Name': scope.data.Name
+						                      });
 
-						if (!loaded) {
-							loaded = true;
-						}
+						       this.setValue(scope.data[field]);
 
-					}
+					       }
+				       });
 
-				},
-				'onInitialize': function () {
-					this.setValue(_(scope.data.CoursesMap).pluck('Id'));
-				}
-
-			});
-
-		},
-
-		'MasterCourseList': function (scope) {
-
-			return dropdown(scope, {
-
-				'select': 'COURSE',
-				'field' : 'CourseId'
-
-			});
-
-		},
-
-		'AFSC': function (scope) {
-
-			return dropdown(scope, {
-
-				'select': 'AFSC',
-				'field' : 'AFSC'
-
-			});
-
-		},
-
-		'MDS': function (scope) {
-
-			return dropdown(scope, {
-
-				'select': 'MDS',
-				'field' : 'MDS'
-
-			});
-
-		},
-
-		'Units': function (scope) {
-
-			return dropdown(scope, {
-
-				'select': 'DETACHMENT',
-				'field' : 'UnitId'
-
-			});
-
-		},
-
-		'Instructors': function (scope) {
-
-			return dropdown(scope, {
-
-				'select': 'INSTRUCTOR',
-				'field' : 'InstructorId'
-
-			});
 
 		}
 

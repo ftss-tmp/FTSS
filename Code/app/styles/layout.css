@@ -78,6 +78,10 @@ body.menu #sidebar-nav {
     padding-right: 0 !important;
 }
 
+.tab-pane {
+    padding-top: 1em;
+}
+
 .w5 {
     width: 5%;
 }

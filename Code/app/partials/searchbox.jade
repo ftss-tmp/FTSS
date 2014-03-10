@@ -3,16 +3,16 @@ div(ng-show='loaded', style='width:97%;float:left')
     #searchContainer.col-lg-12.no-pad(ng-class='{tagBox:tagBox}')
 
         #tagBox.col-lg-10(explain='tagBox', show='top', no-arrow='')
-            select.hide(selectize='initSelectize', multiple, placeholder='Click or type to add search terms', style='width:100%')
+            select.hide(selectize='initialize', multiple, placeholder='Click or type to add search terms', style='width:100%')
                 optgroup(label='SMART FILTERS')
 
-        #searchBox.col-lg-10(explain='searchBox', show='top')
+        #searchBox.col-lg-10(explain='searchBox', show='top', no-arrow='')
             input.search.search-large(type='search', ng-model='searchText.$', placeholder='Type in a search to limit the results for this list.')
 
         #searchButtons.col-lg-2.no-pad
 
             button.btn.btn-default(type='button', ng-click='reset()', hover='button-clear', show='left')
-                icon reset
+                icon restore
 
             span(style='width:5%')  
 

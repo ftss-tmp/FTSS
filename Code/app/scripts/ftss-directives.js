@@ -1,4 +1,4 @@
-/*global FTSS */
+/*global FTSS, _ */
 
 /**
  * FTSS Directives
@@ -25,9 +25,67 @@
 					link    : function (scope, element, attrs) {
 						$timeout(function () {
 
-							var opts = FTSS.dropdowns[attrs.selectize](scope, SharePoint);
+							var opts;
 
-							$(element).selectize(opts);
+							if (attrs.bind) {
+
+								opts = FTSS.dropdowns.build(scope, {
+									'select': attrs.selectize,
+									'field' : attrs.bind,
+									'create': attrs.hasOwnProperty('create'),
+									'maxItems': attrs.hasOwnProperty('multiple') ? 999 : 1
+								});
+
+							} else {
+
+								opts = FTSS.dropdowns[attrs.selectize](scope, SharePoint, attrs.field);
+
+							}
+
+							if (attrs.watch) {
+
+								var filter, refresh;
+
+								filter = function (f) {
+
+									return _(FTSS.dropdowns.options[attrs.selectize])
+
+										.filter(function (o) {
+											        return (o.data[attrs.watch] === f);
+										        });
+
+								};
+
+								refresh = function (f) {
+
+									var select = element[0].selectize;
+
+									if (select) {
+
+										select.running = true;
+
+										select.clearOptions();
+										select.addOption(filter(f));
+										select.setValue(scope.data[opts.field]);
+
+										select.running = false;
+
+									}
+
+								};
+
+								scope.$watch('data.' + attrs.watch, refresh);
+
+								opts.options = filter(scope.data[attrs.watch]);
+
+								$(element).selectize(opts);
+
+
+							} else {
+
+								$(element).selectize(opts);
+
+							}
 
 						});
 					}

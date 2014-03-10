@@ -99,7 +99,7 @@
 						'CreatedBy/Name',
 						'CreatedBy/WorkEMail',
 						'CreatedBy/WorkPhone',
-						'Response',
+						'Response_JSON',
 						'Students/Name',
 						'Students/WorkEMail',
 						'Students/WorkPhone',
@@ -142,6 +142,31 @@
 					]
 			}
 
+		},
+
+		'students': {
+
+			'cache': true,
+			'source': 'Students',
+			'params': {
+				'$expand':
+					[
+						'Student'
+					],
+				'$select':
+					[
+						'Id',
+						'Requirements_JSON',
+						'StudentType',
+						'HostUnit',
+						'FTD',
+						'StudentId',
+						'Student/Name',
+						'Student/WorkEMail',
+						'Student/WorkPhone',
+					    'Archived'
+					]
+			}
 		}
 
 	};

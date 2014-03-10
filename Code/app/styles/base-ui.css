@@ -39,3 +39,7 @@ a, a:hover {
 #mainView a:hover {
     border-bottom: 1px solid;
 }
+
+.nav a {
+    cursor: pointer!important;
+}

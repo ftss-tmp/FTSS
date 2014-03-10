@@ -11,7 +11,7 @@
 		 */
 
 		// The tag box at the top of the page that has courses/units/instructors/afsc/mds prefilled.
-		'tabBox'         : '[icon=info]Use this search box to create custom queries that you can <i>bookmark or share</i>.  Combine as many as you like, the first row of tags in <i><b>bold-italics</b></i> are custom searches for this page.',
+		'tagBox'         : '[icon=info]Use this search box to create custom queries that you can <i>bookmark or share</i>.  Combine as many as you like, the first row of tags in <i><b>bold-italics</b></i> are custom searches for this page.',
 
 		// The alternate search box for cached lists (Catalog/Units/Instructors/Students)
 		'searchBox'      : '[icon=info]This search box lets you do full-text instant searches.  The more words you add, the more specific your search will be.  I.e., "robins engines" would find any data that included <i>both</i> robins and engines.',
@@ -23,7 +23,7 @@
 		'button-collapse': 'Toggle expanded or collapsed rows',
 
 		// The record count in the top-left corner next to the tag box
-		'record-count'   : 'Displays the record count for your search.  If the background is <span style="color:#d58512;font-weight:800">orange</span>, there were too many records found so you"ll want to refine your search a little by adding more search tags.',
+		'record-count'   : 'Displays the record  count for your search.  If the background is <span style="color:#d58512;font-weight:800">orange</span>, there were too many records found so you"ll want to refine your search a little by adding more search tags.',
 
 
 		/**

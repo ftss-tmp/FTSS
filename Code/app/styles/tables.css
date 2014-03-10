@@ -102,3 +102,11 @@ tr.archived .btn.archive {
 tr.archived .btn.no-archive,.btn.archive {
     visibility: hidden;
 }
+
+tr.thin td {
+    padding:5px!important;
+}
+
+tr.thin button {
+    font-size: .5em!important;
+}

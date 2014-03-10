@@ -28,10 +28,10 @@ div(class='{{wellCollapse}}')
                         b {{instructor.AFSC}}
                     td.invert()
                         button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view(instructor)')
-                            icon(path='graph_pie')
+                            icon graph_pie
                         button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(instructor)')
-                            icon(path='edit')
+                            icon edit
                         button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(instructor)', hover='Archive this instructor')
-                            icon(path='delete')
+                            icon delete
                         button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(instructor)', hover='Restore this instructor', show='left')
-                            icon(path='undo')
+                            icon restore

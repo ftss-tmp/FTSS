@@ -4,6 +4,11 @@
     /*background: none !important;*/
 }
 
+.modal-dialog .row {
+    clear: both;
+    margin-bottom: .75em;
+}
+
 .modal-dialog .item {
     color: #000 !important;
 }

@@ -1,4 +1,4 @@
-/*global _, $, FTSS, LZString, utils, caches, watcher */
+/*global _, $, FTSS, utils, caches, watcher */
 
 /**
  * FTSS Main Controller
@@ -192,7 +192,7 @@
 
 				utils.permaLink = function (tag, pg) {
 
-					$scope.permaLink = LZString.compressToBase64(JSON.stringify(tag));
+					$scope.permaLink = utils.deflate64(JSON.stringify(tag));
 
 					window.location.hash =
 					[
@@ -262,7 +262,7 @@
 
 						$scope.permaLink = $routeParams.link;
 
-						FTSS.pending = ($routeParams.link === 'all') ? '*' : JSON.parse(LZString.decompressFromBase64($routeParams.link));
+						FTSS.pending = ($routeParams.link === 'all') ? '*' : JSON.parse(utils.inflate64($routeParams.link));
 
 					}
 
