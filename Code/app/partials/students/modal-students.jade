@@ -1,0 +1,65 @@
+form.form-horizontal(name='modal')
+
+    .modal-header
+        h4
+            icon student_hand
+            | {{data.Student.Name}}
+
+    .modal-body
+
+        tabset
+
+            // The student data tab
+            tab(heading='Student Data')
+
+                // This will only be shown if we are adding a student
+                .row(ng-if='createData')
+                    .col-lg-12
+                        .input-group
+                            .input-group-addon(style='width:11%')
+                                icon student_hand
+                            .input-group-selectize(explain='', show='right')
+                                select(selectize='people', field='StudentId')
+
+                // This will only be shown if we are adding a student
+                .row(ng-if='!createData')
+
+                    // Read-only view of the student's email
+                    .col-lg-8(ng-if='data.Student.WorkEMail')
+                        .input-group.disabled
+                            .input-group-addon
+                                icon envelope
+                            input.form-control(disabled, ng-model='data.Student.WorkEMail')
+
+                    // Read-only view of the student's phone number
+                    .col-lg-4(ng-if='data.Student.WorkPhone')
+                        .input-group.disabled
+                            .input-group-addon
+                                icon phone
+                            input.form-control(disabled, ng-model='data.Student.WorkPhone')
+
+                hr
+
+                .row
+
+                    .col-lg-6
+                        .input-group.caps
+                            .input-group-addon.w17 Unit
+                            .input-group-selectize(explain='', show='right')
+                                select(selectize='HostUnits', bind='HostUnit', create)
+
+                    .col-lg-6
+                        .input-group.caps
+                            .input-group-addon.w17 FTD
+                            .input-group-selectize(explain='', show='right')
+                                select(selectize='Units', bind='FTD')
+
+            // The student training requirements tab
+            tab(heading='Training Requirements')
+
+                #wide
+                    select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
+
+        .clearfix
+
+    ng-include(src='"/partials/modal-footer.html"')

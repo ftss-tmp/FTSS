@@ -226,3 +226,20 @@ utils.$ajaxFailure = function (req) {
 			               ].join(' ')
 	               });
 };
+
+
+utils.deflate64 = function (str) {
+	return btoa(decodeURI(encodeURIComponent(RawDeflate.deflate(str))));
+};
+
+utils.inflate64 = function (str) {
+	return RawDeflate.inflate(decodeURIComponent(encodeURI(atob(str))));
+};
+
+utils.deflate = function (str) {
+	return decodeURI(encodeURIComponent(RawDeflate.deflate(str)));
+};
+
+utils.inflate = function (str) {
+	return RawDeflate.inflate(decodeURIComponent(encodeURI(str)));
+};

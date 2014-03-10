@@ -17,7 +17,7 @@ div(class='{{wellCollapse}}')
                     th.w15 Details
                     th.w10 Actions
             tbody
-                tr(ng-repeat='unit in group')
+                tr(ng-repeat='unit in group track by unit.Id')
                     td
                         updated unit
                     td

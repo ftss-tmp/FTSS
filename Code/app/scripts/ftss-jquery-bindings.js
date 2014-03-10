@@ -85,7 +85,7 @@
 
 				}
 
-			}, 750);
+			}, this.hasAttribute('instant') ? 100 : 500);
 
 		},
 

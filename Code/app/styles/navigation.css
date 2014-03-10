@@ -1,5 +1,4 @@
 
-
 #sidebar-nav {
     float: left;
     margin: 0;
@@ -35,7 +34,13 @@
     text-decoration: none
 }
 
-.requirements .requirements *, .scheduled .scheduled *, .requests .requests *, .catalog .catalog *, .units .units *, .instructors .instructors * {
+.requirements .requirements *,
+.scheduled .scheduled *,
+.requests .requests *,
+.catalog .catalog *,
+.units .units *,
+.instructors .instructors *,
+.students .students * {
     font-weight: 600;
     text-shadow: 1px 1px 1px #fff;
     text-decoration: none;

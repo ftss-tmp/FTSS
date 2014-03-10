@@ -1,4 +1,4 @@
-/*global _, $, angular, LZString */
+/*global _, $, angular, RawDeflate */
 /**
  * FTSS Initializer
  *
@@ -23,7 +23,8 @@ var FTSS = {}, utils = {}, caches = {};
 		                         'ngRoute',
 		                         'ui.bootstrap',
 		                         'monospaced.elastic',
-		                         'partials'
+		                         'partials',
+		                         'ngAnimate'
 	                         ]);
 
 	FTSS.ng.filter('html',
@@ -86,6 +87,8 @@ var FTSS = {}, utils = {}, caches = {};
 	};
 
 	FTSS.utils = {};
+
+	FTSS.peopleCache = {};
 
 	/**
 	 * Converts SharePoint Date format into a the locale date string.
@@ -154,17 +157,6 @@ var FTSS = {}, utils = {}, caches = {};
 		                '$http',
 		                function ($http) {
 
-			                var writeParams = function (opt) {
-
-				                // Join the params list if it is an array
-				                _.each(opt.params, function (param, key) {
-					                if (param instanceof Array) {
-						                opt.params[key] = param.join(',');
-					                }
-				                });
-
-			                };
-
 			                FTSS.SP = {
 
 				                'people': (function () {
@@ -185,7 +177,15 @@ var FTSS = {}, utils = {}, caches = {};
 
 							                .then(function (response) {
 
-								                      return _.toArray(response.data.d);
+								                      var data = _.toArray(response.data.d);
+
+								                      _(data).each(function (d) {
+
+									                      FTSS.peopleCache[d.Id] = d.Name;
+
+								                      });
+
+								                      return data;
 
 							                      });
 
@@ -293,16 +293,40 @@ var FTSS = {}, utils = {}, caches = {};
 
 				                'read': function (options) {
 
-					                var getData, cacheString;
+					                var getData, getCache, cacheString;
 
-					                cacheString = options.cache ? 'SP_REST_Cache_' + options.source + JSON.stringify(options.params).replace(/[^\w]/gi, '_').replace(/(\_)\1+/g, '$1') : '';
+					                // If this request uses caching, then we need to create a localStorage key
+					                cacheString = options.cache ?
 
+					                              'SP_REST_Cache_' +
+
+						                              // Include the SP List name
+					                              options.source +
+
+					                              JSON.stringify(options.params)
+
+						                              // Remove all the junk from our JSON string of the model
+						                              .replace(/[^\w]/gi, '_').replace(/(\_)\1+/g, '$1')
+
+						                : '';
+
+					                /**
+					                 * getData $http wrapper, wraps the $http service with some SP-specific garbage
+					                 *
+					                 * @param opt Object
+					                 * @returns {*|Promise}
+					                 */
 					                getData = function (opt) {
 
-						                writeParams(opt);
+						                // Join the params list if it is an array
+						                _(opt.params).each(function (param, key) {
+							                if (param instanceof Array) {
+								                opt.params[key] = param.join(',');
+							                }
+						                });
 
-						                if (options.params && _.isEmpty(options.params.$filter)) {
-							                delete options.params.$filter;
+						                if (opt.params && _.isEmpty(opt.params.$filter)) {
+							                delete opt.params.$filter;
 						                }
 
 						                return $http({
@@ -314,9 +338,15 @@ var FTSS = {}, utils = {}, caches = {};
 
 							                .then(function (response) {
 
-								                      var i = 0, data = response.data.d.results || response.data.d, decoder, json =
-									                      [
-									                      ];
+								                      var i = 0,
+
+									                      data = response.data.d.results || response.data.d,
+
+									                      decoder,
+
+									                      json =
+										                      [
+										                      ];
 
 								                      if (data.length) {
 
@@ -364,95 +394,121 @@ var FTSS = {}, utils = {}, caches = {};
 
 					                };
 
+					                /**
+					                 * getCache custom cache resolver/awesomeness generator
+					                 * This will attempt to read localStorage for any previously cached data and merge
+					                 * updates with the cache.
+					                 *
+					                 * YOU MUST HAVE A SP FIELD NUMBER FIELD NAMES "Timestamp" FOR THIS TO WORK
+					                 *
+					                 * The Modified field WOULD have been perfect if SP oData requests filtered times properly :-/
+					                 *
+					                 * @param callback
+					                 */
+					                getCache = function (callback) {
+
+						                var cachedData, timestamp, opts;
+
+						                // Load the cached data, if it doesn't actually exist we'll deal with it later on
+						                cachedData = localStorage.getItem(cacheString + 'Data');
+
+						                // Offine enabled and the item exists, just return it without checking SP
+						                if (_internal.offline && cachedData) {
+
+							                callback(JSON.parse(RawDeflate.inflate(cachedData)));
+
+						                } else {
+
+							                // Check to see if localStorage already has a cache of this data
+							                timestamp = localStorage.getItem(cacheString + 'Stamp') || false;
+
+							                // If we already have cached data we need to add the timestamp to the filter
+							                if (timestamp) {
+
+								                // Lazy man's deep object clone
+								                opts = JSON.parse(JSON.stringify(options));
+
+								                // Start our new filter with the timestamp lookup--just in case SP is being dumb about SQL optimization
+								                opts.params.$filter = '(Timestamp gt ' + timestamp + ')';
+
+								                // Add back the rest of the filter if applicable
+								                opts.params.$filter += (opts.params.$filter ? ' and ' + opts.params.$filter : '');
+
+							                }
+
+							                // Set a new timestamp before our network call (so we don't miss anything)
+							                timestamp = FTSS.utils.getTimeStamp();
+
+							                // Call getData() with the custom opts or options as applicable
+							                getData(opts || options)
+
+								                .then(function (data) {
+
+									                      // There are a lot of ways to slice this, but this is the easiest and most reliable
+									                      try {
+										                      cachedData = JSON.parse(RawDeflate.inflate(cachedData));
+									                      } catch (e) {
+										                      cachedData = {};
+									                      }
+
+									                      // There was some data so we can add that to our cache and update everything
+									                      if (data !== {}) {
+
+										                      try {
+
+											                      // Merge our updates with the cache
+											                      _(data).each(function (row) {
+												                      cachedData[row.Id] = row;
+											                      });
+
+											                      // Convert new cached object to JSON and compress to UTF16 (for IE compatibility)
+											                      localStorage[cacheString + 'Data'] = RawDeflate.deflate(JSON.stringify(cachedData));
+
+											                      // Set the timestamp AFTER updating the cache (just in case something goes wrong)
+											                      localStorage[cacheString + 'Stamp'] = timestamp;
+
+											                      // Add a helpful little updated property to our response (but only after caching without it)
+											                      _(data).each(function (row) {
+												                      cachedData[row.Id].updated = true;
+											                      });
+
+										                      } catch (e) {
+
+
+										                      }
+
+									                      }
+
+									                      // All done, do the callback
+									                      callback(cachedData);
+
+								                      });
+
+						                }
+
+					                };
+
+					                // If caching is disabled for the service, then override the request
 					                if (_internal.noCache) {
 						                options.cache = false;
 					                }
 
-					                if (!options.cache) {
+					                // Return the getData or getCache promises
+					                return !options.cache ?
 
-						                return getData(options);
+						                // Return getData()'s $http promises, no caching
+						                   getData(options) :
 
-					                } else {
+						                // Return getCache()'s custom promises, caching is enabled
+						                   {
 
-						                return {
+							                   'then'   : getCache,
+							                   'catch'  : function () {
+							                   },
+							                   'finally': function () {
+							                   }
 
-							                'then'   : function (callback) {
-
-								                var item, filter, timestamp, opts;
-
-								                item = localStorage.getItem(cacheString + 'Data');
-
-								                if (_internal.offline && item) {
-
-									                callback(JSON.parse(LZString.decompressFromUTF16(item)));
-
-								                } else {
-
-									                timestamp = localStorage.getItem(cacheString + 'Stamp') || false;
-
-									                if (timestamp) {
-
-										                opts = JSON.parse(JSON.stringify(options));
-
-										                filter = "(Timestamp gt " + timestamp + ')';
-
-										                opts.params.$filter = filter + (opts.params.$filter ? ' and ' + opts.params.$filter : '');
-
-									                }
-
-									                timestamp = FTSS.utils.getTimeStamp();
-
-									                getData(opts || options)
-
-										                .then(function (data) {
-
-											                      var cached = localStorage[cacheString + 'Data'];
-
-											                      try {
-												                      cached = JSON.parse(LZString.decompressFromUTF16(cached));
-											                      } catch (e) {
-												                      cached = {};
-											                      }
-
-											                      if (data !== {}) {
-
-												                      _(data).each(function (row) {
-													                      cached[row.Id] = row;
-												                      });
-
-												                      // Set our timestamp back 5 minutes from GMT to handle small time inaccuracies
-												                      localStorage[cacheString + 'Stamp'] = timestamp;
-
-												                      // Convert new cached object to JSON and compress to UTF16 (for IE compatibility)
-												                      localStorage[cacheString + 'Data'] = LZString.compressToUTF16(JSON.stringify(cached));
-
-												                      if (timestamp) {
-
-													                      _(data).each(function (row) {
-														                      cached[row.Id].updated = true;
-													                      });
-
-												                      }
-
-											                      }
-
-											                      callback(cached);
-
-										                      });
-
-								                }
-
-							                },
-							                'catch'  : function () {
-							                },
-							                'finally': function () {
-							                }
-
-						                };
-
-
-					                }
-
+						                   };
 				                }
 
 			                };

@@ -133,12 +133,6 @@ div[ng-transclude] {
     font-weight: 800 !important;
 }
 
-#requestSeats .item {
-    border-bottom: 1px solid #428bca;
-    margin-bottom: 10px;
-    width: 97%;
-}
-
 #searchButtons button {
     margin-top: 1px;
     padding: 7px;

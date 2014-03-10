@@ -1,13 +1,19 @@
 #sort-group-search.clearfix(ng-show='count')
     .pull-right
         input.search(type='search', ng-model='searchText.$', placeholder='Search this page...')
+
 div(class='{{wellCollapse}}')
+
     div(ng-repeat='(header, group) in groups', style='margin-bottom: 50px')
+
         h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
-        div(class='well request{{r.status}}', ng-class='{"true":"expanded"}', ng-repeat='r in group', ng-once='')
+
+        div(class='well request{{r.status}}', ng-class='{"true":"expanded"}', ng-repeat='r in group track by r.Id')
+
             .statusBackground {{r.status}}
+
             h4(ng-click='r.expand = !r.expand')
                 span(class='btn invertSimple btn-{{r.iconClass}}', style='opacity: 1;', disabled='')
                     icon(path='{{r.icon}}')
@@ -15,7 +21,9 @@ div(class='{{wellCollapse}}')
                 span.pull-right(style='letter-spacing: .1em')
                     | {{r.start}} - {{r.end}}
                     icon calendar_range
+
             hr.rollup
+
             .rollup
                 p.lead(ng-hide='groupBy=="course"') {{r.Course.Number}}: {{r.Course.Title}}
                 .col-lg-7.pull-left
