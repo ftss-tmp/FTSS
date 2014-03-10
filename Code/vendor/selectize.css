@@ -160,6 +160,7 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    text-align: right;
 }
 
 .selectize-control.multi .selectize-input.has-items {
@@ -196,7 +197,7 @@
 
 .selectize-control.multi .selectize-input > div {
     padding: 1px 3px;
-    margin: 0 3px 3px 0;
+    margin: 0 0 3px 10px;
     color: #333333;
     cursor: pointer;
     background: #efefef;
@@ -204,7 +205,7 @@
 }
 
 .selectize-control.multi .selectize-input > div.active {
-    color: #fff!important;
+    color: #fff !important;
     background: #428bca;
     border: 0 solid rgba(0, 0, 0, 0);
 }
@@ -216,6 +217,12 @@
     border: 0 solid rgba(77, 77, 77, 0);
 }
 
+.selectize-input > input:focus {
+    border: 1px solid #5bc0de!important;
+    background-color: rgba(100, 200, 200, 0.0980392) !important;
+    border-radius: 3px;
+    transition: background-color 3000ms linear;
+}
 .selectize-input > input {
     max-width: 100% !important;
     max-height: none !important;
@@ -223,12 +230,17 @@
     padding: 0 !important;
     margin: 0 !important;
     line-height: inherit !important;
-    text-indent: 0 !important;
-    background: none !important;
+    text-indent: 25px !important;
     border: 0 none !important;
+    border-bottom: 1px solid #999 !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     -webkit-user-select: auto !important;
+    background-position: 2%!important;
+    background-color: transparent !important;
+    float: left;
+    width:300px!important;
+    transition: background-color 1000ms linear;
 }
 
 .selectize-input > input:focus {
@@ -297,7 +309,7 @@
 }
 
 .selectize-dropdown .active {
-    color: #ffffff!important;
+    color: #ffffff !important;
     background-color: #428bca;
 }
 

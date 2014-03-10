@@ -90,17 +90,19 @@
 
 					}
 
+					FTSS.search.$control.find('.item').addClass('processed');
+
 				}
 
 			};
 
 			return {
-				'labelField'   : 'label',
-				'valueField'   : 'id',
-				'hideSelected' : false,
-				'dataAttr'     : 'width',
-				'persist'      : true,
-				'optgroupOrder':
+				'labelField'     : 'label',
+				'valueField'     : 'id',
+				'hideSelected'   : false,
+				'dataAttr'       : 'width',
+				'persist'        : true,
+				'optgroupOrder'  :
 					[
 						'SMART FILTERS',
 						'Units',
@@ -109,15 +111,18 @@
 						'Instructors',
 						'MasterCourseList'
 					],
-				'plugins'      :
+				'plugins'        :
 					[
 						'optgroup_columns',
 						'remove_button'
 					],
-				'onEnter'      : doSearch,
-				'onInitialize' : function () {
+				'onEnter'        : doSearch,
+				'onDropdownClose': function () {
+					doSearch(this.getValue());
+				},
+				'onInitialize'   : function () {
 
-					var count = 0, CACHE_COUNT = 5;
+					var count = 0, CACHE_COUNT = 7;
 
 					FTSS.search = this;
 
@@ -151,7 +156,8 @@
 									     'optgroup': group,
 									     'text'    : txt,
 									     'label'   : v.label || txt,
-									     'data'    : v
+									     'data'    : v,
+									     'search'  : JSON.stringify(v)
 								     };
 
 							     })
@@ -180,7 +186,7 @@
 						}
 
 						// Keep track of our async loads and fire once they are all done (not using $q.all())
-						if (++count > CACHE_COUNT) {
+						if (++count === CACHE_COUNT) {
 
 							FTSS.loaded();
 							utils.$initPage();
@@ -391,4 +397,5 @@
 
 	};
 
-}());
+}()
+	);

@@ -78,7 +78,7 @@
 			});
 
 			/**
-			 *  For simplicitie's sake, the keyword TODAY is replaced with a SP-compatible date value and
+			 *  For simplicity's sake, the keyword TODAY is replaced with a SP-compatible date value and
 			 *  optgroup is added to make the custom filters show up in the right area of the dropdown
 			 */
 			_.each(filters.route(), function (filter) {
