@@ -33,7 +33,7 @@
 						if (loaded) {
 
 							// Update the field with the value(s)
-							scope.data[opts.field] = (val.map ? val.map(Number) : Number(val)) || val;
+							scope.data[opts.field] = (val && val.map ? val.map(Number) : Number(val)) || val;
 
 							// Flip the $dirty flag on this modal
 							modal.$dirty = true;
