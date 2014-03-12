@@ -1,4 +1,4 @@
-/*global _, $, FTSS, utils, caches, watcher */
+/*global _, FTSS, utils */
 
 /**
  * FTSS Main Controller
@@ -251,6 +251,7 @@
 					$scope.sortBy = {};
 					$scope.groupBy = {};
 					$scope.searchText = $scope.searchText || {};
+					FTSS.selectizeInstances = {};
 
 					utils.loading(true);
 
