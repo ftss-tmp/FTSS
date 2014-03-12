@@ -7,6 +7,15 @@
 
 	'use strict';
 
+	window.addEventListener("dragover", function (e) {
+		e = e || event;
+		e.preventDefault();
+	}, false);
+	window.addEventListener("drop", function (e) {
+		e = e || event;
+		e.preventDefault();
+	}, false);
+
 	var timeout, popover = {
 
 		/**
@@ -85,7 +94,7 @@
 
 				}
 
-			}, this.hasAttribute('instant') ? 100 : 500);
+			}, this.hasAttribute('instant') ? 50 : 500);
 
 		},
 
