@@ -16,33 +16,49 @@ form.form-horizontal(name='modal', ng-any-drop)
                     .input-group-selectize(explain='', show='right')
                         select(selectize='people', field='StudentId')
 
+            br
+            br
+
+
+        h4.light-bottom
+            b Inprocessing Date & Student Type
+
         .row
 
-            .col-lg-8
-                h4
-                    icon location_small
-                    b Assigned Unit & Local FTD
-
+            .col-lg-5
                 .input-group.caps
-                    .input-group-addon.w15 Unit
-                    .input-group-selectize(explain='', show='right')
-                        select(selectize='HostUnits', bind='HostUnit', create)
+                    .input-group-addon
+                        icon calendar_range
+                    input.form-control(ng-model='data.processDate', date-picker)
 
-                .clearfix(style='height:.3em')
-
-                .input-group.caps
-                    .input-group-addon.w15 FTD
-                    .input-group-selectize(explain='', show='right')
-                        select(selectize='Units', bind='FTD')
-
-            .col-lg-3.pull-right
-                h4
-                    b.text-right Category
-                .btn-group-vertical
+            .col-lg-7
+                .btn-group.pull-right
                     button.btn.btn-default(ng-model='data.StudentType', btn-radio='1') Enlisted
                     button.btn.btn-default(ng-model='data.StudentType', btn-radio='2') Officer
                     button.btn.btn-default(ng-model='data.StudentType', btn-radio='3') Civilian
 
+        br
+        br
+
+        h4.light-bottom
+            icon location_small
+            b Assigned Unit & Local FTD
+
+        .row
+
+            .col-lg-5
+                .input-group.caps
+                    .input-group-addon Unit
+                    .input-group-selectize(explain='', show='right')
+                        select(selectize='HostUnits', bind='HostUnit', create)
+
+            .col-lg-7
+                .input-group.caps
+                    .input-group-addon FTD
+                    .input-group-selectize(explain='', show='right')
+                        select(selectize='Units', bind='FTD')
+
+        br
         br
 
         .row.imds-import
@@ -53,7 +69,7 @@ form.form-horizontal(name='modal', ng-any-drop)
 
                 select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
 
-                .pull-right(hover="Click to import load {{firstName}}'s 593 from IMDS; you can also just drag & drop it onto this window.", show='right', text-parser='Import IMDS 593')
+                .pull-right(hover="Click to import {{data.firstName}}'s 593 from IMDS; you can also just drag & drop the file or text onto this window or copy/paste straight from IMDS.", show='right', text-parser='Import IMDS 593')
 
 
         .clearfix

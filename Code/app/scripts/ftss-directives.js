@@ -286,11 +286,29 @@
 
 	});
 
+	FTSS.ng.directive('datePicker', function () {
+
+		return {
+			'link': function ($scope, $el) {
+
+				$el.datepicker({
+					               format            : "MM d, yyyy",
+					               weekStart         : 1,
+					               endDate           : "today",
+					               daysOfWeekDisabled: "0,6",
+					               autoclose         : true,
+					               todayHighlight    : true
+				               });
+
+			}
+		}
+
+	});
+
 	FTSS.ng.directive('fixedHeader', function () {
 
 		return {
-			'restrict': 'A',
-			'link'    : function ($scope, $el) {
+			'link': function ($scope, $el) {
 
 				$el.stickyTableHeaders();
 

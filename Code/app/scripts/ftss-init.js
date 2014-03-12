@@ -24,7 +24,7 @@ var FTSS = {}, utils = {}, caches = {};
 		                         'ui.bootstrap',
 		                         'monospaced.elastic',
 		                         'partials',
-	                             'angularFileUpload'
+		                         'angularFileUpload'
 	                         ]);
 
 	FTSS.ng.filter('html',
@@ -429,7 +429,7 @@ var FTSS = {}, utils = {}, caches = {};
 								                opts = JSON.parse(JSON.stringify(options));
 
 								                // Start our new filter with the timestamp lookup--just in case SP is being dumb about SQL optimization
-								                opts.params.$filter = '(Timestamp gt ' + timestamp + ')' +  (opts.params.$filter ? ' and ' + opts.params.$filter : '')
+								                opts.params.$filter = '(Timestamp gt ' + timestamp + ')' + (opts.params.$filter ? ' and ' + opts.params.$filter : '')
 
 							                }
 

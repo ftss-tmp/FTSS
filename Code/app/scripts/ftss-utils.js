@@ -86,11 +86,11 @@ utils.tagHighlight = function (data) {
 
 					if (map[key]) {
 
-						test.push({
-							          id       : key + ':' + t,
-							          testField: map[key].split('/'),
-							          testValue: t
-						          });
+					test.push({
+						          id       : key + ':' + t,
+						          testField: map[key].split('/'),
+						          testValue: t
+					          });
 
 					}
 

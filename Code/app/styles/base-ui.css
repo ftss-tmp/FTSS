@@ -43,3 +43,20 @@ a, a:hover {
 .nav a {
     cursor: pointer!important;
 }
+
+.datepicker .disabled {
+    color: #eee!important;
+}
+
+.datepicker .old {
+    color: #bbb!Important;
+}
+
+.datepicker-days tr * {
+    width:40px!important;
+}
+
+.datepicker-days tr :nth-child(6), .datepicker-days tr :nth-child(7) {
+    display: none;
+    width:  0!important;
+}
