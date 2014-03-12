@@ -7,8 +7,7 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'SharePoint',
-		'$upload',
-		function ($scope, SharePoint, $upload) {
+		function ($scope, SharePoint) {
 
 			var self = FTSS.controller($scope, SharePoint, {
 
@@ -69,6 +68,17 @@ FTSS.ng.controller(
 							            d.ftd = caches.Units[d.FTD];
 							            d.Name = d.Student.Name;
 							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
+
+							            d.requirements = _.chain(d.Requirements_JSON)
+
+								            .map(function (r) {
+
+									                 var cache = caches.MasterCourseList[r];
+									                 return '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>';
+
+								                 })
+
+								            .sort().value().join('');
 
 						            });
 
