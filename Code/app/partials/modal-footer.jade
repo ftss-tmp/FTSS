@@ -1,4 +1,5 @@
-.row.alert.alert-danger(ng-if='(!clean || modal.$dirty) && modal.$invalid')
+
+.row.alert.alert-danger(ng-if='modal.$dirty && modal.$invalid')
     icon alert
     | All fields are required.
 .row.alert.alert-danger(ng-if='error')
@@ -9,7 +10,7 @@
     .sending(ng-show='submitted')
         spinner(size='2em')
         | Please wait, sending data...
-    button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='(clean !== false && !modal.$dirty) || modal.$invalid || submitted')
+    button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='!modal.$dirty || modal.$invalid || submitted')
         span.btn-label
             icon upload
         | Submit

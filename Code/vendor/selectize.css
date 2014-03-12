@@ -142,9 +142,17 @@
     display: inline-block;
     cursor: text;
     background: #ffffff;
+    transition: background-color 250ms ease;
+}
+
+.multi .selectize-input:hover, .multi .selectize-input.focus {
+    background-color: rgba(100, 200, 200, 0.0980392) !important;
+    border: 1px solid #5bc0de !important;
+    transition: background-color 100ms ease;
 }
 
 .selectize-input {
+    cursor: pointer !important;
     position: relative;
     z-index: 1;
     display: inline-block;
@@ -160,6 +168,13 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.single .item {
+    background-color: transparent !important;
+}
+
+.multi .selectize-input {
     text-align: right;
 }
 
@@ -217,12 +232,14 @@
     border: 0 solid rgba(77, 77, 77, 0);
 }
 
-.selectize-input > input:focus {
-    border: 1px solid #5bc0de!important;
-    background-color: rgba(100, 200, 200, 0.0980392) !important;
+.multi .selectize-input > input:focus, .multi .selectize-input.focus > input {
+    width: 100% !important;
+    margin-bottom: .75em!important;
+    border: 1px solid #5bc0de !important;
+    background-color: #fff !important;
     border-radius: 3px;
-    transition: background-color 3000ms linear;
 }
+
 .selectize-input > input {
     max-width: 100% !important;
     max-height: none !important;
@@ -230,17 +247,23 @@
     padding: 0 !important;
     margin: 0 !important;
     line-height: inherit !important;
-    text-indent: 25px !important;
     border: 0 none !important;
-    border-bottom: 1px solid #999 !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     -webkit-user-select: auto !important;
-    background-position: 2%!important;
+    background-position: 5px !important;
     background-color: transparent !important;
+}
+
+.single .selectize-input > input {
+    background: none!important;
+}
+
+.multi .selectize-input > input {
     float: left;
-    width:300px!important;
-    transition: background-color 1000ms linear;
+    width: 20px !important;
+    cursor: pointer;
+    padding-left: 25px !important;
 }
 
 .selectize-input > input:focus {

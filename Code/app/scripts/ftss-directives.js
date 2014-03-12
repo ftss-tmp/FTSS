@@ -20,9 +20,9 @@
 			function ($timeout, SharePoint) {
 				return {
 					// Restrict it to be an attribute in this case
-					restrict: 'A',
+					'restrict': 'A',
 					// responsible for registering DOM listeners as well as updating the DOM
-					link    : function (scope, element, attrs) {
+					'link'    : function (scope, element, attrs) {
 						$timeout(function () {
 
 							var opts;
@@ -30,9 +30,9 @@
 							if (attrs.bind) {
 
 								opts = FTSS.dropdowns.build(scope, {
-									'select': attrs.selectize,
-									'field' : attrs.bind,
-									'create': attrs.hasOwnProperty('create'),
+									'select'  : attrs.selectize,
+									'field'   : attrs.bind,
+									'create'  : attrs.hasOwnProperty('create'),
 									'maxItems': attrs.hasOwnProperty('multiple') ? 999 : 1
 								});
 
@@ -44,7 +44,7 @@
 
 							if (attrs.watch) {
 
-								var filter, refresh;
+								var init, filter, refresh;
 
 								filter = function (f) {
 
@@ -58,18 +58,20 @@
 
 								refresh = function (f) {
 
-									var select = element[0].selectize;
+									if (init) {
 
-									if (select) {
+										var select = element[0].selectize;
 
-										select.running = true;
+										if (select) {
 
-										select.clearOptions();
-										select.addOption(filter(f));
-										select.setValue(scope.data[opts.field]);
+											select.clearOptions();
+											select.addOption(filter(f));
+											select.setValue(scope.data[opts.field]);
 
-										select.running = false;
+										}
 
+									} else {
+										init = true;
 									}
 
 								};
@@ -78,14 +80,9 @@
 
 								opts.options = filter(scope.data[attrs.watch]);
 
-								$(element).selectize(opts);
-
-
-							} else {
-
-								$(element).selectize(opts);
-
 							}
+
+							FTSS.selectizeInstances[opts.field] =  $(element).selectize(opts)[0].selectize;
 
 						});
 					}
@@ -101,15 +98,15 @@
 			'$timeout',
 			function ($timeout) {
 				return {
-					restrict: 'E',
-					template: '<li class="{{link}}"><div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div><span class="link" ng-click="navigate()"><icon path="{{icon}}" size="1.5em"></icon><span>{{name}}</span></span></li>',
-					replace : true,
-					scope   : {
-						link: '@',
-						icon: '@',
-						name: '@'
+					'restrict': 'E',
+					'template': '<li class="{{link}}"><div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div><span class="link" ng-click="navigate()"><icon path="{{icon}}" size="1.5em"></icon><span>{{name}}</span></span></li>',
+					'replace' : true,
+					'scope'   : {
+						'link': '@',
+						'icon': '@',
+						'name': '@'
 					},
-					link    : function ($scope) {
+					'link'    : function ($scope) {
 
 						$scope.navigate = function () {
 							window.location.hash =
@@ -124,7 +121,7 @@
 							$scope.$$watchers =
 							[
 							];
-						}, 1);
+						});
 
 					}
 				};
