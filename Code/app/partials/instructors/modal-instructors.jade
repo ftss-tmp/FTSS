@@ -1,7 +1,7 @@
 form.form-horizontal(name='modal')
 
     .modal-header
-        h4(hover='instructors-edit-helpdesk-message', show='right')
+        h4(hover='instructors-edit-helpdesk', show='right')
             icon instructor
             | {{data.Name}}
 
@@ -33,16 +33,5 @@ form.form-horizontal(name='modal')
                     .input-group-addon AFSC
                     .input-group-selectize(explain='instructors-edit-afsc', show='right')
                         select(selectize='AFSC', bind='AFSC')
-
-
-        .row.alert.alert-danger(ng-if='!data.UnitId')
-            icon alert
-            | You must choose {{firstName}}'s&nbsp;
-            b assigned unit
-            | .
-
-        .row.alert.alert-danger(ng-if='error')
-            icon alert
-            | {{error}}
 
     ng-include(src='"/partials/modal-footer.html"')
