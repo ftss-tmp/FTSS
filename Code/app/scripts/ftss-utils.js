@@ -84,11 +84,15 @@ utils.tagHighlight = function (data) {
 
 				if (key !== 'custom') {
 
-					test.push({
-						          id       : key + ':' + t,
-						          testField: map[key].split('/'),
-						          testValue: t
-					          });
+					if (map[key]) {
+
+						test.push({
+							          id       : key + ':' + t,
+							          testField: map[key].split('/'),
+							          testValue: t
+						          });
+
+					}
 
 				}
 
@@ -141,7 +145,8 @@ utils.tagHighlight = function (data) {
 		});
 
 	} catch (e) {
-		FTSS.utils.log(e);
+		debugger;
+		console.log(e);
 	}
 
 };
