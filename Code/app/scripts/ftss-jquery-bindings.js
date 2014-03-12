@@ -73,42 +73,38 @@
 
 					$('.popover').remove();
 
-					if (!$el.data('bs.popover')) {
+					content = $el.attr('content');
 
-						content = $el.attr('content');
-
-						if (content) {
-							title = $el.attr('hover') || $el.attr('explain');
-						} else {
-							content = $el.attr('hover') || $el.attr('explain');
-							content = FTSS.messages[content] || content;
-						}
-
-						if (content) {
-
-							content = popover.icon(content);
-
-							$el.popover(
-
-								{
-									'trigger'  : 'manual',
-									'html'     : true,
-									'title'    : title,
-									'content'  : content,
-									'placement': $el.attr('show') || 'auto'
-								}
-
-							);
-
-						}
-
+					if (content) {
+						title = $el.attr('hover') || $el.attr('explain');
+					} else {
+						content = $el.attr('hover') || $el.attr('explain');
+						content = FTSS.messages[content] || content;
 					}
 
-					$el.popover('show');
+					if (content) {
 
-					if (typeof $el.attr('no-arrow') === 'string') {
+						content = popover.icon(content);
 
-						$el.data('bs.popover').$tip.addClass('no-arrow');
+						$el.popover(
+
+							{
+								'trigger'  : 'manual',
+								'html'     : true,
+								'title'    : title,
+								'content'  : content,
+								'placement': $el.attr('show') || 'auto'
+							}
+
+						);
+
+						$el.popover('show');
+
+						if (typeof $el.attr('no-arrow') === 'string') {
+
+							$el.data('bs.popover').$tip.addClass('no-arrow');
+
+						}
 
 					}
 
@@ -126,8 +122,6 @@
 			clearTimeout(timeout);
 
 			var $el = $(this);
-
-			clearTimeout(timeout);
 
 			if ($el.data('freeze') !== true) {
 
