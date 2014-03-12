@@ -252,6 +252,7 @@
 					$scope.groupBy = {};
 					$scope.searchText = $scope.searchText || {};
 					FTSS.selectizeInstances = {};
+					FTSS.pasteAction = false;
 
 					utils.loading(true);
 

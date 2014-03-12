@@ -1,4 +1,4 @@
-form.form-horizontal(name='modal', ng-file-drop='onFileSelect($files)')
+form.form-horizontal(name='modal', ng-any-drop)
 
     .modal-header
         h4
@@ -45,7 +45,7 @@ form.form-horizontal(name='modal', ng-file-drop='onFileSelect($files)')
 
         br
 
-        .row
+        .row.imds-import
             .col-lg-12(explain='students-modal-training', show='right')
                 h4
                     icon checklist
@@ -53,12 +53,8 @@ form.form-horizontal(name='modal', ng-file-drop='onFileSelect($files)')
 
                 select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
 
-                .pull-right(ng-if='fileReaderSupported', hover='Click to import load {{firstName}}\'s 593 from IMDS; you can also just drag & drop it onto this window.', show='right')
-                    label.btn.btn-info.btn-labeled(style='fill:#fff')
-                        span.btn-label
-                            icon insert
-                        input(type='file', ng-file-select='onFileSelect($files)', style='display:none')
-                        | Load 593
+                .pull-right(hover="Click to import load {{firstName}}'s 593 from IMDS; you can also just drag & drop it onto this window.", show='right', text-parser='Import IMDS 593')
+
 
         .clearfix
 
