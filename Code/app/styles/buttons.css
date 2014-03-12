@@ -45,3 +45,7 @@
 .btn-link {
     box-shadow: none !important;
 }
+
+.btn-group .btn {
+    margin-right: 0!important;
+}
