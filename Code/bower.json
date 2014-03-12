@@ -18,7 +18,9 @@
     "angular-route": "1.2.5",
     "angular-elastic": "~2.3.1",
     "StickyTableHeaders": "~0.1.7",
-    "angular-animate": "~1.2.14"
+    "angular-animate": "~1.2.14",
+    "css-toggle-switch": "~2.1.4",
+    "ng-file-upload": "~1.2.8"
   },
   "overrides": {
     "angular-mocks": {
