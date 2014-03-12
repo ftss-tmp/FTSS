@@ -28,19 +28,21 @@
     display: table-footer-group;
 }
 
+.table-hover tbody tr .btn-muted, .well .btn-muted {
+    transition: opacity 500ms ease;
+}
 .table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
     color: #111;
     background-color: #eee;
     border-color: #bbb;
     opacity: .2;
-    transition: opacity 250ms ease;
-
+    transition: opacity 500ms ease;
 }
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
     transition: background-color 200ms ease;
-    background-color: inherit;
+    background-color: transparent;
 }
 
 .table-hover tbody tr:hover > td,
