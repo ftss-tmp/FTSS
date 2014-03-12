@@ -10,6 +10,7 @@ FTSS.ng.controller(
 		function ($scope, SharePoint) {
 
 			var self = FTSS.controller($scope, SharePoint, {
+
 				'sort' : 'Base',
 				'group': 'Squadron',
 
@@ -38,8 +39,8 @@ FTSS.ng.controller(
 						      var u = data[i.UnitId];
 
 						      u.Instructors = u.Instructors ||
-							      [
-							      ];
+						                      [
+						                      ];
 
 						      u.Instructors.push(i.label);
 
