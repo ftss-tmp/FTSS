@@ -39,7 +39,7 @@
 		'catalog-edit-number'      : '',
 		'catalog-edit-imds'        : '',
 		'catalog-edit-title'       : '',
-		'catalog-edit-days'        : '',
+		'catalog-edit-days'        : 'The number of training days for this course.',
 		'catalog-edit-hours'       : '',
 		'catalog-edit-min'         : '',
 		'catalog-edit-max'         : '',
@@ -55,6 +55,7 @@
 		'units-edit-courses'       : 'List the courses taught by this FTD.',
 
 
+		'students-modal-training': 'This is a list of all the training requirements for this student.  When a student is scheduled for a given course, it is automatically removed from this list.<br><br>If you\'re using IE 10, you can also drag & drop an IMDS 593 to load all courses marked AWACT.'
 	};
 
 }());
