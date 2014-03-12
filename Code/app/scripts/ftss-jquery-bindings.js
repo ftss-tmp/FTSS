@@ -16,7 +16,27 @@
 		e.preventDefault();
 	}, false);
 
-	var timeout, popover = {
+	var timeout, popover, pasteAction;
+
+	/**
+	 * Intercepts paste events and handles if we have a paste handler set (FTSS.pasteAction)
+	 *
+	 * @param e jQuery event
+	 */
+	pasteAction = function (e) {
+
+		e.stopImmediatePropagation();
+
+		if (FTSS.pasteAction) {
+
+			e.preventDefault();
+			FTSS.pasteAction(e.originalEvent.clipboardData.getData('Text'));
+
+		}
+
+	};
+
+	popover = {
 
 		/**
 		 * Internal data parser that converts [icon=someicon] into the SVG icon form FTSS.icons:
@@ -183,6 +203,8 @@
 
 		.on('mouseleave', '[hover]', popover.exit)
 
-		.on('focusout', '[explain]', popover.exit);
+		.on('focusout', '[explain]', popover.exit)
+
+		.on('paste', '*', pasteAction);
 
 }());

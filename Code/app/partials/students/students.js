@@ -28,43 +28,27 @@ FTSS.ng.controller(
 
 				'model': 'students',
 
-				'edit': function (scope) {
+				'edit': function () {
 
-					scope.fileReaderSupported = window.FileReader !== null;
+					FTSS.pasteAction = function (text) {
 
-					scope.onFileSelect = function ($files) {
+						var pattern = new RegExp(/^(\d+).*(AWACT)/gm),
 
-						var file, reader;
+							match,
 
-						file = $files[0];
+							collection =
+								[
+								];
 
-						if (file.type.match('text/plain')) {
-
-							reader = new FileReader();
-
-							reader.onload = function () {
-
-								var pattern = new RegExp(/^(\d+).*(AWACT)/gm),
-
-									match,
-
-									collection =
-										[
-										];
-
-								while (match = pattern.exec(reader.result)) {
-									collection.push(_(caches.MasterCourseList).findWhere({'IMDS': match[1]}).Id);
-								}
-
-								FTSS.selectizeInstances.Requirements_JSON.setValue(collection);
-
-							};
-
-							reader.readAsText($files[0]);
-
+						while (match = pattern.exec(text)) {
+							try {
+								collection.push(_(caches.MasterCourseList).findWhere({'IMDS': match[1]}).Id);
+							} catch (e) {}
 						}
-					};
 
+						FTSS.selectizeInstances.Requirements_JSON.setValue(collection);
+
+					};
 
 				}
 
