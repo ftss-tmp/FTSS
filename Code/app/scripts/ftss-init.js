@@ -23,7 +23,8 @@ var FTSS = {}, utils = {}, caches = {};
 		                         'ngRoute',
 		                         'ui.bootstrap',
 		                         'monospaced.elastic',
-		                         'partials'
+		                         'partials',
+	                             'angularFileUpload'
 	                         ]);
 
 	FTSS.ng.filter('html',
@@ -81,7 +82,7 @@ var FTSS = {}, utils = {}, caches = {};
 		//'pplURL' : 'https://cs3.eis.af.mil/_vti_bin/ListData.svc/UserInformationList',
 		'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
 		'debug'  : true,
-		'offline': true,
+		'offline': false,
 		'noCache': false
 	};
 
@@ -411,7 +412,7 @@ var FTSS = {}, utils = {}, caches = {};
 						                // Load the cached data, if it doesn't actually exist we'll deal with it later on
 						                cachedData = localStorage.getItem(cacheString + 'Data');
 
-						                // Offine enabled and the item exists, just return it without checking SP
+						                // Offline enabled and the item exists, just return it without checking SP
 						                if (_internal.offline && cachedData) {
 
 							                callback(JSON.parse(RawDeflate.inflate(cachedData)));
@@ -428,10 +429,7 @@ var FTSS = {}, utils = {}, caches = {};
 								                opts = JSON.parse(JSON.stringify(options));
 
 								                // Start our new filter with the timestamp lookup--just in case SP is being dumb about SQL optimization
-								                opts.params.$filter = '(Timestamp gt ' + timestamp + ')';
-
-								                // Add back the rest of the filter if applicable
-								                opts.params.$filter += (opts.params.$filter ? ' and ' + opts.params.$filter : '');
+								                opts.params.$filter = '(Timestamp gt ' + timestamp + ')' +  (opts.params.$filter ? ' and ' + opts.params.$filter : '')
 
 							                }
 
