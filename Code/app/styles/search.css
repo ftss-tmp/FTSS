@@ -106,7 +106,7 @@
     font-size: 1.2em;
 }
 
-#tagBox .item:not(.processed):not(:hover) {
+#tagBox .item:not(.processed):not(:hover), #tagBox .item:not(.processed):not(:hover) div * {
     color: #47a447 !important;
     font-weight: 800;
 }
@@ -191,7 +191,7 @@
     margin-left: 20px !important;
 }
 
-.option.selected h5:before, .optgroup:not(.mastercourselist) .option.selected:before {
+.multi .selected h5:before, .multi .optgroup:not(.mastercourselist) .selected:before, .single .selected:before {
     content: "\2713\00a0\00a0";
 }
 
@@ -214,10 +214,6 @@
 
 input:focus::-webkit-input-placeholder {
     color: transparent;
-}
-
-.selectize-input input:focus {
-    border-bottom: 1px solid #5bc0de !important;
 }
 
 .optgroup {
