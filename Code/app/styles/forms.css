@@ -2,11 +2,33 @@
     box-shadow: none;
     font-weight: normal;
     color: #555;
-    background: none!important;
-    border: none!important;
+    background: none !important;
+    border: none !important;
     cursor: text;
 }
 
 .caps * {
     text-transform: uppercase;
+}
+
+.btn-group .active:before,
+.btn-group-vertical .active:before {
+    content: "\2713\00a0";
+}
+
+.ng-dirty, .selectize-input.ng-dirty .item {
+    color: #47a447 !important;
+    font-weight: 800 !important;
+}
+
+.ng-dirty {
+    border: 1px solid #47a447 !important;
+}
+
+.btn.dragover {
+    background-color: #47a447 !important;
+}
+
+form.dragover {
+    background-color: rgba(91, 192,222, .1);
 }
