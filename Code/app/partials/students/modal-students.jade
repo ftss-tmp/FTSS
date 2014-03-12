@@ -1,4 +1,4 @@
-form.form-horizontal(name='modal')
+form.form-horizontal(name='modal', ng-file-drop='onFileSelect($files)')
 
     .modal-header
         h4
@@ -7,58 +7,58 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        tabset
+        // This will only be shown if we are adding a student
+        .row(ng-if='createData')
+            .col-lg-12
+                .input-group
+                    .input-group-addon(style='width:11%')
+                        icon student_hand
+                    .input-group-selectize(explain='', show='right')
+                        select(selectize='people', field='StudentId')
 
-            // The student data tab
-            tab(heading='Student Data')
+        .row
 
-                // This will only be shown if we are adding a student
-                .row(ng-if='createData')
-                    .col-lg-12
-                        .input-group
-                            .input-group-addon(style='width:11%')
-                                icon student_hand
-                            .input-group-selectize(explain='', show='right')
-                                select(selectize='people', field='StudentId')
+            .col-lg-8
+                h4
+                    icon location_small
+                    b Assigned Unit & Local FTD
 
-                // This will only be shown if we are adding a student
-                .row(ng-if='!createData')
+                .input-group.caps
+                    .input-group-addon.w15 Unit
+                    .input-group-selectize(explain='', show='right')
+                        select(selectize='HostUnits', bind='HostUnit', create)
 
-                    // Read-only view of the student's email
-                    .col-lg-8(ng-if='data.Student.WorkEMail')
-                        .input-group.disabled
-                            .input-group-addon
-                                icon envelope
-                            input.form-control(disabled, ng-model='data.Student.WorkEMail')
+                .clearfix(style='height:.3em')
 
-                    // Read-only view of the student's phone number
-                    .col-lg-4(ng-if='data.Student.WorkPhone')
-                        .input-group.disabled
-                            .input-group-addon
-                                icon phone
-                            input.form-control(disabled, ng-model='data.Student.WorkPhone')
+                .input-group.caps
+                    .input-group-addon.w15 FTD
+                    .input-group-selectize(explain='', show='right')
+                        select(selectize='Units', bind='FTD')
 
-                hr
+            .col-lg-3.pull-right
+                h4
+                    b.text-right Category
+                .btn-group-vertical
+                    button.btn.btn-default(ng-model='data.StudentType', btn-radio='1') Enlisted
+                    button.btn.btn-default(ng-model='data.StudentType', btn-radio='2') Officer
+                    button.btn.btn-default(ng-model='data.StudentType', btn-radio='3') Civilian
 
-                .row
+        br
 
-                    .col-lg-6
-                        .input-group.caps
-                            .input-group-addon.w17 Unit
-                            .input-group-selectize(explain='', show='right')
-                                select(selectize='HostUnits', bind='HostUnit', create)
+        .row
+            .col-lg-12(explain='students-modal-training', show='right')
+                h4
+                    icon checklist
+                    b Required Training
 
-                    .col-lg-6
-                        .input-group.caps
-                            .input-group-addon.w17 FTD
-                            .input-group-selectize(explain='', show='right')
-                                select(selectize='Units', bind='FTD')
+                select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
 
-            // The student training requirements tab
-            tab(heading='Training Requirements')
-
-                #wide
-                    select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
+                .pull-right(ng-if='fileReaderSupported', hover='Click to import load {{firstName}}\'s 593 from IMDS; you can also just drag & drop it onto this window.', show='right')
+                    label.btn.btn-info.btn-labeled(style='fill:#fff')
+                        span.btn-label
+                            icon insert
+                        input(type='file', ng-file-select='onFileSelect($files)', style='display:none')
+                        | Load 593
 
         .clearfix
 

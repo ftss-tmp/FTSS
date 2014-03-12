@@ -1,4 +1,4 @@
-/*global caches, FTSS */
+/*global caches, FTSS, _ */
 
 FTSS.ng.controller(
 
@@ -7,7 +7,8 @@ FTSS.ng.controller(
 	[
 		'$scope',
 		'SharePoint',
-		function ($scope, SharePoint) {
+		'$upload',
+		function ($scope, SharePoint, $upload) {
 
 			var self = FTSS.controller($scope, SharePoint, {
 
@@ -25,10 +26,49 @@ FTSS.ng.controller(
 					'FTD'     : 'FTD'
 				},
 
-				'model': 'students'
+				'model': 'students',
+
+				'edit': function (scope) {
+
+					scope.fileReaderSupported = window.FileReader !== null;
+
+					scope.onFileSelect = function ($files) {
+
+						var file, reader;
+
+						file = $files[0];
+
+						if (file.type.match('text/plain')) {
+
+							reader = new FileReader();
+
+							reader.onload = function () {
+
+								var pattern = new RegExp(/^(\d+).*(AWACT)/gm),
+
+									match,
+
+									collection =
+										[
+										];
+
+								while (match = pattern.exec(reader.result)) {
+									collection.push(_(caches.MasterCourseList).findWhere({'IMDS': match[1]}).Id);
+								}
+
+								FTSS.selectizeInstances.Requirements_JSON.setValue(collection);
+
+							};
+
+							reader.readAsText($files[0]);
+
+						}
+					};
+
+
+				}
 
 			});
-
 
 			self
 
