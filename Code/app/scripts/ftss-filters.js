@@ -35,14 +35,14 @@
 
 		return {
 			'scheduled'  : {
-				'd': 'UnitId',
+				'u': 'UnitId',
 				'm': "Course/MDS",
 				'a': "Course/AFSC",
 				'i': 'InstructorId',
 				'c': 'CourseId'
 			},
 			'requests'   : {
-				'd': 'Scheduled/UnitId',
+				'u': 'Scheduled/UnitId',
 				'm': "Scheduled/Course/MDS",
 				'a': "Scheduled/Course/AFSC",
 				'i': 'Scheduled/InstructorId',
