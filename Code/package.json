@@ -2,7 +2,7 @@
 	"author"      : "Jeff McCoy",
 	"name"        : "FTSS",
 	"description" : "982 TRG Field Training Support System",
-	"version"     : "3.0.1",
+	"version"     : "3.0.0",
 	"homepage"    : "",
 	"repository"  : {
 		"type": "git",
