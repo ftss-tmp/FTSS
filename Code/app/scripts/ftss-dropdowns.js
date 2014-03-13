@@ -22,7 +22,6 @@
 				{
 					'maxItems'    : 1,
 					'options'     : options[opts.select] || null,
-					'hideSelected': false,
 					'plugins'     : opts.maxItems > 1 ?
 					                [
 						                'remove_button'
@@ -47,7 +46,6 @@
 
 									.push({
 										      'label': val,
-										      'text' : val,
 										      'Id'   : val
 									      });
 
@@ -109,10 +107,7 @@
 			};
 
 			return {
-				'labelField'     : 'label',
 				'valueField'     : 'id',
-				'hideSelected'   : false,
-				'dataAttr'       : 'width',
 				'persist'        : true,
 				'optgroupOrder'  :
 					[
@@ -166,7 +161,6 @@
 									     'Id'      : Id,
 									     'id'      : id + Id,
 									     'optgroup': group,
-									     'text'    : txt,
 									     'label'   : v.label || txt,
 									     'data'    : v,
 									     'search'  : JSON.stringify(v).replace(/([,{]"\w+":)|([{}"])/gi, ' ').toLowerCase()
