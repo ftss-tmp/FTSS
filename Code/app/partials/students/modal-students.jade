@@ -13,7 +13,7 @@ form.form-horizontal(name='modal', ng-any-drop)
                 .input-group
                     .input-group-addon(style='width:11%')
                         icon student_hand
-                    .input-group-selectize(explain='', show='right')
+                    .input-group-selectize
                         select(selectize='people', field='StudentId')
 
             br
@@ -26,13 +26,13 @@ form.form-horizontal(name='modal', ng-any-drop)
         .row
 
             .col-lg-5
-                .input-group.caps
+                .input-group.caps(explain='students-inprocessing-date', left)
                     .input-group-addon
                         icon calendar_range
                     input.form-control(ng-model='data.processDate', date-picker)
 
             .col-lg-7
-                .btn-group.pull-right
+                .btn-group.pull-right(hover='students-category', right)
                     button.btn.btn-default(ng-model='data.StudentType', btn-radio='1') Enlisted
                     button.btn.btn-default(ng-model='data.StudentType', btn-radio='2') Officer
                     button.btn.btn-default(ng-model='data.StudentType', btn-radio='3') Civilian
@@ -47,29 +47,29 @@ form.form-horizontal(name='modal', ng-any-drop)
         .row
 
             .col-lg-5
-                .input-group.caps
+                .input-group.caps(explain='students-host-unit', left)
                     .input-group-addon Unit
-                    .input-group-selectize(explain='', show='right')
+                    .input-group-selectize
                         select(selectize='HostUnits', bind='HostUnit', create)
 
             .col-lg-7
-                .input-group.caps
+                .input-group.caps(explain='students-local-ftd', right)
                     .input-group-addon FTD
-                    .input-group-selectize(explain='', show='right')
+                    .input-group-selectize
                         select(selectize='Units', bind='FTD')
 
         br
         br
 
         .row.imds-import
-            .col-lg-12(explain='students-modal-training', show='right')
+            .col-lg-12(explain='students-training-requirements', right)
                 h4
                     icon checklist
                     b Required Training
 
                 select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
 
-                .pull-right(hover="Click to import {{data.firstName}}'s 593 from IMDS; you can also just drag & drop the file or text onto this window or copy/paste straight from IMDS.", show='right', text-parser='Import IMDS 593')
+                .pull-right(hover="Click to import {{data.firstName}}'s 593 from IMDS; you can also just drag & drop the file or text onto this window or copy/paste straight from IMDS.", right, text-parser='Import IMDS 593')
 
 
         .clearfix
