@@ -86,11 +86,11 @@ utils.tagHighlight = function (data) {
 
 					if (map[key]) {
 
-					test.push({
-						          id       : key + ':' + t,
-						          testField: map[key].split('/'),
-						          testValue: t
-					          });
+						test.push({
+							          id       : key + ':' + t,
+							          testField: map[key].split('/'),
+							          testValue: t
+						          });
 
 					}
 
@@ -234,11 +234,11 @@ utils.$ajaxFailure = function (req) {
 
 
 utils.deflate64 = function (str) {
-	return btoa(decodeURI(encodeURIComponent(RawDeflate.deflate(str))));
+	return btoa(decodeURI(encodeURIComponent(RawDeflate.deflate(str)))).match(/.{1,5}/g).join('.').replace(/=/g, '');
 };
 
 utils.inflate64 = function (str) {
-	return RawDeflate.inflate(decodeURIComponent(decodeURI(atob(str))));
+	return RawDeflate.inflate(decodeURIComponent(decodeURI(atob(str.replace(/\./g, '')))));
 };
 
 utils.deflate = function (str) {

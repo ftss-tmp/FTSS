@@ -266,7 +266,7 @@
 
 						$scope.permaLink = $routeParams.link;
 
-						FTSS.pending = ($routeParams.link === 'all') ? '*' : JSON.parse(utils.inflate64($routeParams.link));
+						FTSS.pending = JSON.parse(utils.inflate64($scope.permaLink));
 
 					}
 
