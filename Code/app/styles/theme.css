@@ -4,81 +4,12 @@
     font-weight: lighter
 }
 
-.modal-backdrop.in {
-    opacity: 0.5 !important
-}
-
-div[ng-transclude] {
-    position: relative;
-}
-
 .container .text-muted {
     margin: 20px 0
 }
 
-.requestPending .statusBackground {
-    bottom: 25px;
-}
-
-.requestPending:hover .statusBackground {
-    color: #5bc0de;
-    opacity: .15;
-}
-
-.requestApproved:hover .statusBackground {
-    color: #5cb85c !important;
-    opacity: .15;
-}
-
-.requestDenied:hover .statusBackground {
-    color: #d9534f !important;
-    opacity: .15;
-}
-
-#messages {
-    word-wrap: break-word
-}
-
 .tooltip-inner {
     max-width: 500px
-}
-
-.no-pad {
-    padding: 0 !important
-}
-
-.nav-stacked > li {
-    float: none
-}
-
-.nav-stacked > li + li {
-    margin-left: 0;
-    margin-top: 2px
-}
-
-#stats {
-    float: left;
-    width: 3%;
-}
-
-#stats .badge {
-    background: #333;
-    font-size: 18px;
-    margin-top: 2px;
-    line-height: 1.5em;
-    text-align: center;
-}
-
-#stats .badge.overload {
-    background: #d58512;
-}
-
-#stats .badge span {
-    display: none;
-}
-
-#stats .badge.overload span {
-    display: inline;
 }
 
 #mainView, .wait #spinner {
@@ -122,16 +53,6 @@ div[ng-transclude] {
     display: none !important;
 }
 
-.availSeats {
-    margin: -1px 0 0;
-    font-size: inherit;
-    padding: 0 8px;
-    opacity: 1 !important;
-}
-
-.bold, .bold * {
-    font-weight: 800 !important;
-}
 
 #searchButtons button {
     margin-top: 1px;
@@ -148,21 +69,6 @@ div[ng-transclude] {
 
 .groupMDS .MDS, .groupAFSC .AFSC {
     display: none;
-}
-
-.requestDenied h4, .requestApproved h4 {
-    color: #000 !important;
-}
-
-.icon {
-    margin: 0 .3em;
-    display: inline-block;
-    width: 1.25em;
-    height: 1.25em;
-}
-
-.icon-time {
-    height: 1.35em !important;
 }
 
 .searching h3, .searching thead {
@@ -185,24 +91,6 @@ div[ng-transclude] {
     width: 150px;
 }
 
-.mask-img {
-    position: relative;
-    overflow: hidden;
-    box-shadow: #666 0px 2px 3px;
-    border-radius: 3%;
-}
-
-.mask-img.circle {
-    border-radius: 50%;
-}
-
-.mask-img img {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 0;
-}
-
 .well:hover .invert .icon *, tr:hover .invert .icon *, .invertSimple .icon * {
     fill: #fff !important;
     stroke: #fff !important;
@@ -217,56 +105,8 @@ div[ng-transclude] {
     margin-bottom: 25px;
 }
 
-.requestActions .requestStats {
-    color: #428bca;
-    display: none;
-}
-
-.navbar {
-    height: 50px;
-    border-radius: 0px;
-}
-
-svg {
-    margin-bottom: -.25em;
-}
-
 .modal-dialog input:focus {
     background-color: #f3f7f8;
     color: #3a87ad;
     font-weight: 800;
-}
-
-[hover] {
-    cursor: pointer;
-}
-
-.popover [hover]:hover {
-    color: #4993c6;
-}
-
-dd small {
-    color: #999 !important;
-    font-size: .75em !important;
-    text-transform: uppercase;
-}
-
-dt.tiny {
-    width: 50px;
-}
-
-dt.tiny + dd {
-    margin-left: 65px;
-}
-
-.border-bottom {
-    border-bottom: 1px solid;
-    margin-bottom: 5px
-}
-
-.uppercase {
-    text-transform: uppercase;
-}
-.lowercase {
-    text-transform: lowercase;
 }

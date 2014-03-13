@@ -7,8 +7,110 @@
     cursor: text;
 }
 
-.caps * {
-    text-transform: uppercase;
+
+input, button, select, textarea {
+    font-family: "Open Sans", Arial
+}
+
+input[type=text], input[type=password], textarea {
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.075);
+    font-size: 13px
+}
+
+.inline-input input[type=text], .inline-input input[type=password], input[type=text].inline-input, input[type=password].inline-input {
+    background: #fff;
+    border-bottom: 1px solid #d0dde9;
+    border-color: #dee3ea;
+    border-left: 0 none;
+    border-radius: 0;
+    border-right: 0 none;
+    border-top: 0 none;
+    box-shadow: none
+}
+
+.inline-input input[type=text]:focus, .inline-input input[type=password]:focus, input[type=text].inline-input:focus, input[type=password].inline-input:focus {
+    border-color: #5d6a80;
+    box-shadow: none
+}
+
+.inline-input input[type=text]:hover, .inline-input input[type=password]:hover, input[type=text].inline-input:hover, input[type=password].inline-input:hover {
+    border-color: #959fb0
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    border-color: #A2CEF0;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(82, 168, 236, 0.6)
+}
+
+input[type=reset] {
+    background: none;
+    border: 0 none;
+    font-size: 12px;
+    text-decoration: underline;
+    text-transform: uppercase
+}
+
+textarea {
+    background: #fff;
+    border-color: #dee3ea
+}
+
+select {
+    border-color: #d0dde9;
+    border-radius: 2px;
+    font-size: 13px;
+    height: 24px;
+    margin: 0
+}
+
+input[type=file] {
+    display: inline-block;
+    font-size: 12px;
+    line-height: 12px
+}
+
+input[disabled], textarea[disabled], input[readonly], textarea[readonly] {
+    color: #b1b1b1
+}
+
+.input-group input, .input-group input, .input-group .uneditable-input, .input-group .uneditable-input {
+    border: 1px solid #e3e3e3
+}
+
+.input-group .input-group-addon {
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    font-size: 13px;
+    padding: 4px 8px
+}
+
+
+input.search {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4QkNCOEJEODdERkYxMUUyOEMyNkMwRTQ3OEFBRDlCMCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4QkNCOEJEOTdERkYxMUUyOEMyNkMwRTQ3OEFBRDlCMCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjhCQ0I4QkQ2N0RGRjExRTI4QzI2QzBFNDc4QUFEOUIwIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjhCQ0I4QkQ3N0RGRjExRTI4QzI2QzBFNDc4QUFEOUIwIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+AnntLAAAATBJREFUeNpi/P//PwMI1E9arQykvIFYA4hZgfg9EB8B4h2NeaG/GJAAI0gTUIMDkJ0LxGxA/BGIvwCxNFTNFSDuAGr8CNPE/F9IWwFIVwMxExDPBOJZQLwFiA8CsRAQGwOx+IGT1446mmuDNbEAcQAQcwDxdKBp25Fc8Qjogi4g3QPE1lBnX2eAmq4GddJBBjQANOQPkNoK5SrCxJmgnv4KxL8ZsINPUJoFWdMHIBYBYlEcmrTRNIM1HYaGWiLQD+zIqoF8TSDlDsTvgPgsA5KVu6AeNQfiTqDCbVDnqgOxHyiEgfgv1E+XkOOJH8hOA2I7NKe9g4YsFxB/A+J2YOBcYISlCCTnyEOd+wFqMigeK5E0dqNowgWAhhkCqXIg5gbiG0RpgmoEpYwgIF4EEGAACIhdBSQWQAQAAAAASUVORK5CYII=') #fcfcfc no-repeat 95%;
+    border: 1px solid #d0dde9;
+    border-radius: 2px;
+    box-shadow: none;
+    font-size: 13px;
+    height: 25px;
+    margin: 0;
+    padding: 2px 6px;
+    top: 11px;
+    width: 220px
+}
+
+input.search-large {
+    width: 100%;
+    background-position: 99%;
+    font-size: 15px;
+    height: 30px;
+    margin-top: 3px;
+}
+
+
+input.ng-invalid.ng-dirty {
+    border: 1px solid #a94442;
+    background-color: #f2dede;
+    color: white;
 }
 
 .btn-group .active:before,
@@ -28,3 +130,5 @@
 .btn.dragover, form.dragover .drop {
     background-color: #47a447 !important;
 }
+
+

@@ -93,3 +93,17 @@
     padding-left: 7px;
     font-weight: 700;
 }
+
+.nav-stacked > li {
+    float: none
+}
+
+.nav-stacked > li + li {
+    margin-left: 0;
+    margin-top: 2px
+}
+
+.navbar {
+    height: 50px;
+    border-radius: 0px;
+}

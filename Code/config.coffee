@@ -27,6 +27,9 @@ exports.config =
           'app/styles/bootstrap.css',
           'vendor/selectize.css'
         ]
+        after: [
+          'app/styles/theme.css'
+        ]
 
     templates:
       joinTo:

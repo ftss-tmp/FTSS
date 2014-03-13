@@ -1,0 +1,50 @@
+.caps * {
+    text-transform: uppercase;
+}
+
+div[ng-transclude] {
+    position: relative;
+}
+
+.border-bottom {
+    border-bottom: 1px solid;
+    margin-bottom: 5px
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.lowercase {
+    text-transform: lowercase;
+}
+
+.no-pad {
+    padding: 0 !important
+}
+
+.bold, .bold * {
+    font-weight: 800 !important;
+}
+
+[hover] {
+    cursor: pointer;
+}
+
+.popover [hover]:hover {
+    color: #4993c6;
+}
+
+dd small {
+    color: #999 !important;
+    font-size: .75em !important;
+    text-transform: uppercase;
+}
+
+dt.tiny {
+    width: 50px;
+}
+
+dt.tiny + dd {
+    margin-left: 65px;
+}

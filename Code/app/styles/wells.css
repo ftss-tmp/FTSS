@@ -7,18 +7,9 @@
     text-decoration: none
 }
 
-.well .statusBackground {
-    bottom: -40px;
-    font-size: 120px;
-    opacity: .25;
-    position: absolute;
-    right: 5px;
-    text-transform: uppercase;
-    color: #ddd;
-}
-
 .well {
     font-size: 15px;
+    position: relative;
 }
 
 .well .rollupOnly {
@@ -36,10 +27,10 @@
 .well:hover a {
     color: #428bca;
 }
+
 .well:hover .requestStats {
     display: block;
 }
-
 
 .well h4 {
     text-transform: uppercase

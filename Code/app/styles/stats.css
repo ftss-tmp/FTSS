@@ -1,0 +1,25 @@
+
+#stats {
+    float: left;
+    width: 3%;
+}
+
+#stats .badge {
+    background: #333;
+    font-size: 18px;
+    margin-top: 2px;
+    line-height: 1.5em;
+    text-align: center;
+}
+
+#stats .badge.overload {
+    background: #d58512;
+}
+
+#stats .badge span {
+    display: none;
+}
+
+#stats .badge.overload span {
+    display: inline;
+}
