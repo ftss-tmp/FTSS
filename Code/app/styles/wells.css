@@ -10,14 +10,22 @@
 .well {
     font-size: 15px;
     position: relative;
+    max-height: 500px;
+    transition: all 1s;
 }
 
-.well .rollupOnly {
-    display: none;
+.collapsed .well {
+    max-height: 35px !important;
+    overflow: hidden;
 }
 
-.collapsed .well .rollupOnly {
-    display: inline;
+.well .rollup,.well .collapsed .rollupOnly {
+    opacity: 1;
+    transition: opacity 2s ease;
+}
+.wel .collapsed .rollup,.well .rollupOnly {
+    opacity: 0!important;
+    transition: opacity 1s ease;
 }
 
 .well a {

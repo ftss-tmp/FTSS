@@ -121,3 +121,17 @@ tr.thin td {
 tr.thin button {
     font-size: .5em!important;
 }
+
+.rollupContainer {
+    overflow: hidden;
+    max-height: 3000px;
+    opacity: 1;
+    transition: all 1s ease;
+}
+
+.collapsed .rollupContainer {
+    max-height: 0!important;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 500ms ease;
+}

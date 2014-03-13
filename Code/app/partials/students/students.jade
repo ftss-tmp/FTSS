@@ -6,41 +6,45 @@
 br
 
 div(class='{{wellCollapse}}')
+
     div(ng-repeat='(header, group) in groups')
+
         h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
 
-        table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
-            thead
-                tr
-                    th.w40 Student
-                    th.w15 Host Unit
-                    th.w15 FTD
-                    th.w10 Notes
-                    th.w10 Actions
-            tbody
-                tr.middle(ng-repeat='data in group', ng-class='{archived:data.Archived}')
+        .rollupContainer
 
-                    td
-                        updated data
-                        b
-                            span(ng-if='data.Archived')
-                                | ***ARCHIVED STUDENT***&nbsp;
-                            | {{data.Name}}
-                    td
-                        b {{data.HostUnit}}
-                    td
-                        b {{data.ftd.LongName}}
-                    td
-                        b(ng-if='data.Requirements_JSON.length', hover='Training Requirements', content='<dl class="dl-horizontal">{{data.requirements}}</dl>')
-                            icon checklist
-                    td.invert()
-                        button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view(data)')
-                            icon graph_pie
-                        button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(data)')
-                            icon edit
-                        button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(data)', hover='Archive this data')
-                            icon delete
-                        button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(data)', hover='Restore this data', left)
-                            icon restore
+            table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
+                thead
+                    tr
+                        th.w40 Student
+                        th.w15 Host Unit
+                        th.w15 FTD
+                        th.w10 Notes
+                        th.w10 Actions
+                tbody
+                    tr.middle(ng-repeat='data in group', ng-class='{archived:data.Archived}')
+
+                        td
+                            updated data
+                            b
+                                span(ng-if='data.Archived')
+                                    | ***ARCHIVED STUDENT***&nbsp;
+                                | {{data.Name}}
+                        td
+                            b {{data.HostUnit}}
+                        td
+                            b {{data.ftd.LongName}}
+                        td
+                            b(ng-if='data.Requirements_JSON.length', hover='Training Requirements', content='<dl class="dl-horizontal">{{data.requirements}}</dl>')
+                                icon checklist
+                        td.invert()
+                            button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view(data)')
+                                icon graph_pie
+                            button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(data)')
+                                icon edit
+                            button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(data)', hover='Archive this data')
+                                icon delete
+                            button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(data)', hover='Restore this data', left)
+                                icon restore

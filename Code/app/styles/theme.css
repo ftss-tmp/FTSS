@@ -36,10 +36,6 @@
     display: none
 }
 
-.collapsed .rollup {
-    display: none !important;
-}
-
 .active .pointer {
     display: block !important;
 }
@@ -52,7 +48,6 @@
 .disabled .remove {
     display: none !important;
 }
-
 
 #searchButtons button {
     margin-top: 1px;

@@ -6,32 +6,34 @@ div(class='{{wellCollapse}}')
             | {{header}}
             span.pull-right {{group.length}}
 
-        table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
+        .rollupContainer
 
-            thead
-                tr
-                    th
-                    th.w15 Base
-                    th.w10 Detachment
-                    th.w50 Email
-                    th.w15 Details
-                    th.w10 Actions
-            tbody
-                tr(ng-repeat='unit in group')
-                    td
-                        updated unit
-                    td
-                        b {{unit.Base}}
-                    td {{unit.Det}}
-                    td.lowercase
-                        a(href='mailto:{{unit.Email}}?subject=FTSS') {{unit.Email}}
-                    td
-                        span(ng-if='unit.CoursesHover', hover='There are {{unit.CoursesMap.length}} courses taught at Det {{unit.Det}}:', content='<dl class="dl-horizontal">{{unit.CoursesHover}}</dl>', style='padding:5px')
-                            icon books
-                        span(ng-if='unit.Instructors', hover='There are {{unit.InstructorsCount}} instructors assigned to Det {{unit.Det}}:', content='{{unit.Instructors}}', left, style='padding:5px')
-                            icon instructor
-                    td.invert(ng-once)
-                        button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='stats(unit)')
-                            icon graph_pie
-                        button.btn.btn-sm.btn-warning.btn-muted(type='button', ng-click='edit(unit)')
-                            icon edit
+            table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
+
+                thead
+                    tr
+                        th
+                        th.w15 Base
+                        th.w10 Detachment
+                        th.w50 Email
+                        th.w15 Details
+                        th.w10 Actions
+                tbody
+                    tr(ng-repeat='unit in group')
+                        td
+                            updated unit
+                        td
+                            b {{unit.Base}}
+                        td {{unit.Det}}
+                        td.lowercase
+                            a(href='mailto:{{unit.Email}}?subject=FTSS') {{unit.Email}}
+                        td
+                            span(ng-if='unit.CoursesHover', hover='There are {{unit.CoursesMap.length}} courses taught at Det {{unit.Det}}:', content='<dl class="dl-horizontal">{{unit.CoursesHover}}</dl>', style='padding:5px')
+                                icon books
+                            span(ng-if='unit.Instructors', hover='There are {{unit.InstructorsCount}} instructors assigned to Det {{unit.Det}}:', content='{{unit.Instructors}}', left, style='padding:5px')
+                                icon instructor
+                        td.invert(ng-once)
+                            button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='stats(unit)')
+                                icon graph_pie
+                            button.btn.btn-sm.btn-warning.btn-muted(type='button', ng-click='edit(unit)')
+                                icon edit
