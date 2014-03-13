@@ -181,7 +181,7 @@
 						if (group !== 'Students' && group !== 'HostUnits') {
 
 							var headers = {
-								'Units'           : 'Unit',
+								'Units'           : 'FTD',
 								'MasterCourseList': 'Course',
 								'Instructors'     : 'Instructor'
 							};
