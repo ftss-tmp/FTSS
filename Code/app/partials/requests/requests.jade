@@ -10,7 +10,7 @@ div(class='{{wellCollapse}}')
             | {{header}}
             span.pull-right {{group.length}}
 
-        div(class='well request{{r.status}}', ng-class='{"true":"expanded"}', ng-repeat='r in group track by r.Id')
+        div(class='well request{{r.status}}', ng-class='{"true":"expanded"}', ng-repeat='r in group')
 
             .statusBackground {{r.status}}
 

@@ -7,7 +7,7 @@ div(class='{{wellCollapse}}')
         h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
-        .well(ng-repeat='r in group track by r.Id', ng-once)
+        .well(ng-repeat='r in group', ng-once)
             h4
                 span(class='btn btn-{{r.openSeatsClass}} availSeats(disabled="")') {{r.openSeats}} Open
                 span.rollupOnly {{r.Course.PDS}} - {{r.Course.Number}}

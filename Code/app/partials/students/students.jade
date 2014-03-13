@@ -20,7 +20,7 @@ div(class='{{wellCollapse}}')
                     th.w10 Notes
                     th.w10 Actions
             tbody
-                tr.middle(ng-repeat='data in group track by data.Id', ng-class='{archived:data.Archived}')
+                tr.middle(ng-repeat='data in group', ng-class='{archived:data.Archived}')
 
                     td
                         updated data
