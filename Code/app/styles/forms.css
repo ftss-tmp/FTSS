@@ -16,12 +16,12 @@
     content: "\2713\00a0";
 }
 
-.ng-dirty, .selectize-input.ng-dirty .item {
+.modal-dialog .ng-dirty, .modal-dialog .selectize-input.ng-dirty .item {
     color: #47a447 !important;
     font-weight: 800 !important;
 }
 
-.ng-dirty {
+.modal-dialog .ng-dirty {
     border: 1px solid #47a447 !important;
 }
 
