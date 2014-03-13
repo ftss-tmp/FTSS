@@ -1,47 +1,77 @@
-/*global _, $, jQuery, FTSS */
+/*global _, FTSS, angular */
 
 (function () {
 
 	"use strict";
 
-	var filters = {};
+	var filters = {},
+
+		routes = {
+			'scheduled':
+				[
+					{'q': "Start ge datetime'TODAY'", 'label': 'Not Started'},
+					{'q': "End le datetime'TODAY'", 'label': 'Completed'},
+					{'q': "(Start le datetime'TODAY' and End ge datetime'TODAY')", 'label': 'In Progress'}
+				],
+			'requests' :
+				[
+					{'q': 'Status gt 1', 'label': 'Completed Requests'},
+					{'q': 'Status eq 1', 'label': 'Pending Requests'},
+					{'q': 'Status eq 2', 'label': 'Approved Requests'},
+					{'q': 'Status eq 3', 'label': 'Denied Requests'}
+				]
+		};
 
 	/**
 	 *  This is the app-wide collection of custom filters used by the search box
 	 */
-	filters.route = function (all) {
+	filters.route = (function () {
 
-		var route = {
-			'scheduled':
-				[
-					{'id': "custom:Start ge datetime'TODAY'", 'text': 'Not Started'},
-					{'id': "custom:End le datetime'TODAY'", 'text': 'Completed'},
-					{'id': "custom:(Start le datetime'TODAY' and End ge datetime'TODAY')", 'text': 'In Progress'}
-				],
-			'requests' :
-				[
-					{'id': 'custom:Status gt 1', 'text': 'Completed Requests'},
-					{'id': 'custom:Status eq 1', 'text': 'Pending Requests'},
-					{'id': 'custom:Status eq 2', 'text': 'Approved Requests'},
-					{'id': 'custom:Status eq 3', 'text': 'Denied Requests'}
-				]
+		var today, routeWrap = {};
+
+		// Store today's value throughout the app's lifecycle as it will be used numerous times
+		today = angular.injector(
+			[
+				"ng"
+			]).get("dateFilter")(new Date(), 'yyyy-MM-dd');
+
+		_(routes).each(function (filter, name) {
+
+			var route = routeWrap[name] =
+			            [
+			            ];
+
+			_(filter).each(function (f, id) {
+
+				f.id = 'q:' + name.charAt(0) + id;
+				f.q = f.q.replace(/TODAY/g, today);
+				f.optgroup = 'SMART FILTERS';
+
+				route.push(f);
+
+			});
+
+		});
+
+		return function (all) {
+
+			return all ? _.flatten(routeWrap) : routeWrap[FTSS.page()];
+
 		};
 
-		return all ? _.flatten(route) : route[FTSS.page()];
-
-	};
+	}());
 
 	filters.map = function () {
 
 		return {
-			'scheduled'  : {
+			'scheduled': {
 				'u': 'UnitId',
 				'm': "Course/MDS",
 				'a': "Course/AFSC",
 				'i': 'InstructorId',
 				'c': 'CourseId'
 			},
-			'requests'   : {
+			'requests' : {
 				'u': 'Scheduled/UnitId',
 				'm': "Scheduled/Course/MDS",
 				'a': "Scheduled/Course/AFSC",
@@ -56,24 +86,15 @@
 	 * When the view is updated, this will remove custom filters and then add the custom filters for this view
 	 * as defined by filters.route().
 	 */
-	filters.$add = (function () {
+	filters.$refresh = (function () {
 
-		var today, date = new Date();
-
-		// Store today's value throughout the app's lifecycle as it will be used numerous times
-		today =
-			[
-				date.getFullYear(),
-				('0' + date.getMonth() + 1).slice(-2),
-				('0' + date.getDate()).slice(-2)
-			].join('-');
-
-		// return the real function for filters.$add now that we have today cached in a closure
+		// return the real function for filters.$refresh now that we have today cached in a closure
 		return function () {
 
-			_.each(filters.route(true), function (f) {
+			// First, remove all custom options directly from FTSS.search (for performance reasons)
+			_.each(filters.route(true), function (filter) {
 
-				FTSS.search.removeOption(f.id);
+				FTSS.search.removeOption(filter.id);
 
 			});
 
@@ -83,15 +104,11 @@
 			 */
 			_.each(filters.route(), function (filter) {
 
-				filter.label = filter.text;
-
-				filter.id = filter.id.replace(/TODAY/g, today);
-
-				filter.optgroup = 'SMART FILTERS';
-
 				FTSS.search.addOption(filter);
 
 			});
+
+			FTSS.search.refreshOptions(false);
 
 		};
 
@@ -109,22 +126,15 @@
 
 		try {
 
-			var filter =
+			var maps = filters.map(), filter =
 				[
-				], maps = filters.map();
+				];
 
 			if (tags) {
 
-				tags.custom = tags.custom ||
-					[
-					];
-
-				filter = tags.custom.length ?
-					[
-						tags.custom.join(' or ')
-					] :
-					[
-					];
+				if (tags.q) {
+					filter.push('(' + tags.q.join(' or ') + ')');
+				}
 
 				_.each(maps, function (map, key) {
 
@@ -165,15 +175,15 @@
 
 				});
 
+				filter = filter.length > 0 ? filter.join(' and ') : '';
+
+				return filter;
+
 			}
-
-			filter = filter.length > 0 ? filter.join(' and ') : '';
-
-			return filter;
 
 		} catch (e) {
 
-			return '';
+			return 'TAG COMPILATION ERROR';
 
 		}
 

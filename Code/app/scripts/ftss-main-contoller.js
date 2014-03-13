@@ -96,7 +96,7 @@
 
 					if ($scope.loaded) {
 
-						FTSS.filters.$add();
+						FTSS.filters.$refresh();
 
 						if (FTSS.pending) {
 
@@ -119,7 +119,7 @@
 										FTSS.search.disable();
 										FTSS.search.addOption({
 											                      'id'      : 'custom:' + FTSS.pending.special,
-											                      'text'    : FTSS.pending.text || 'Special Lookup',
+											                      'label'   : FTSS.pending.text || 'Special Lookup',
 											                      'optgroup': 'SMART FILTERS'
 										                      });
 										FTSS.search.setValue('custom:' + FTSS.pending.special);
@@ -134,22 +134,26 @@
 
 										_.each(filterItems, function (filter) {
 
-											var valid = true;
+											var valid = true, custom = false;
 
-											if (filterGroup === 'custom') {
+											if (filterGroup === 'q') {
 
 												valid = _.some(customFilters, function (f) {
-													return f.id === 'custom:' + filter;
+													return f.id === 'q:' + filter;
 												});
+
+												custom = 'q:' + filter;
+												filter = customFilters[filter.charAt(1)].q;
 
 											}
 
 											if (valid) {
+
 												tagMap[filterGroup] = tagMap[filterGroup] ||
 												                      [
 												                      ];
 												tagMap[filterGroup].push(filter);
-												valMap.push(filterGroup + ':' + filter);
+												valMap.push(custom || filterGroup + ':' + filter);
 											}
 
 										});
@@ -158,13 +162,11 @@
 
 									utils.updateSearch(function () {
 
-										var filter;
+										var filter = FTSS.filters.$compile(tagMap);
 
 										FTSS.search.setValue(valMap);
 
-										filter = FTSS.filters.$compile(tagMap);
-
-										if (filter || FTSS.pending === '*') {
+										if (filter) {
 
 											FTSS.tags = tagMap;
 											$scope.filter = filter;
