@@ -28,7 +28,7 @@ div(class='{{wellCollapse}}')
                     td
                         span(ng-if='unit.CoursesHover', hover='There are {{unit.CoursesMap.length}} courses taught at Det {{unit.Det}}:', content='<dl class="dl-horizontal">{{unit.CoursesHover}}</dl>', style='padding:5px')
                             icon books
-                        span(ng-if='unit.Instructors', hover='There are {{unit.InstructorsCount}} instructors assigned to Det {{unit.Det}}:', content='{{unit.Instructors}}', show='left', style='padding:5px')
+                        span(ng-if='unit.Instructors', hover='There are {{unit.InstructorsCount}} instructors assigned to Det {{unit.Det}}:', content='{{unit.Instructors}}', left, style='padding:5px')
                             icon instructor
                     td.invert(ng-once)
                         button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='stats(unit)')

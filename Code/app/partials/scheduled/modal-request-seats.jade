@@ -7,14 +7,14 @@
         ng-pluralize(count='class.openSeats', when='{1:"There is only one seat available", "other":"There are {} seats available"}')
         | for the {{class.start}} class.
     br
-    div(explain='request-seats-students', show='right')
+    div(explain='request-seats-students', right)
         h4
             icon students
             | Requested Student(s)
         select(selectize='people', multiple)
 
     br
-    div(explain='request-seats-comments', show='right')
+    div(explain='request-seats-comments', right)
         h4
             i.fa.fa-comment
             | Request Comments

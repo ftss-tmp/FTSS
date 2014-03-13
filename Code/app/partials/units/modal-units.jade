@@ -23,7 +23,7 @@ form(name='modal')
                 .input-group
                     .input-group-addon
                         icon hash
-                    input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='units-edit-number', show='right', required)
+                    input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='units-edit-number', right, required)
         br
 
         .row
@@ -33,13 +33,13 @@ form(name='modal')
                 .input-group
                     .input-group-addon
                         icon envelope
-                    input.form-control(ng-model='data.Email', type='email', explain='units-edit-email', show='right', required)
+                    input.form-control(ng-model='data.Email', type='email', explain='units-edit-email', right, required)
 
         br
         br
 
         .row
-            .col-lg-12(explain='units-edit-courses', show='right')
+            .col-lg-12(explain='units-edit-courses', right)
                 h4
                     icon instructor
                     b {{data.CoursesCount}} Courses Taught

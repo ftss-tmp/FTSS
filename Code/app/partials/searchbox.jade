@@ -11,13 +11,13 @@ div(ng-show='loaded', style='width:97%;float:left')
 
         #searchButtons.col-lg-2.no-pad
 
-            button.btn.btn-default(type='button', ng-click='reset()', hover='button-clear', show='left')
+            button.btn.btn-default(type='button', ng-click='reset()', hover='button-clear', left)
                 icon restore
 
             span(style='width:5%')  
 
             span.dropdown
-                span.dropdown-toggle.btn.btn-default(hover='button-grouping', show='left')
+                span.dropdown-toggle.btn.btn-default(hover='button-grouping', left)
                     icon group
                 .dropdown-menu
                     h3.popover-title Group By
@@ -25,7 +25,7 @@ div(ng-show='loaded', style='width:97%;float:left')
                         button.btn.btn-link(ng-repeat='(val, name) in grouping', type='button', ng-model='groupBy.$', btn-radio='val')
                             | {{name}}
             span.dropdown
-                span.dropdown-toggle.btn.btn-default(hover='button-sorting', show='left')
+                span.dropdown-toggle.btn.btn-default(hover='button-sorting', left)
                     icon sort
                 .dropdown-menu
                     h3.popover-title Sort By
@@ -35,6 +35,6 @@ div(ng-show='loaded', style='width:97%;float:left')
 
             span(style='width:5%')  
 
-            button#toggleExpand(ng-click='collapse()', hover='button-collapse', show='left', class='btn btn-default {{wellCollapse}}', type='button')
+            button#toggleExpand(ng-click='collapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}', type='button')
                 icon expand
                 icon collpase

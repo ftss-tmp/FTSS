@@ -1,7 +1,7 @@
 form.form-horizontal(name='modal')
 
     .modal-header
-        h4(hover='instructors-edit-helpdesk', show='right')
+        h4(hover='instructors-edit-helpdesk', right)
             icon instructor
             | {{data.Name}}
 
@@ -26,12 +26,12 @@ form.form-horizontal(name='modal')
 
                 .row.input-group
                     .input-group-addon.w17 Unit
-                    .input-group-selectize(explain='instructors-edit-unit', show='right')
+                    .input-group-selectize(explain='instructors-edit-unit', right)
                         select(selectize='Units', bind='UnitId')
 
                 .row.input-group
                     .input-group-addon AFSC
-                    .input-group-selectize(explain='instructors-edit-afsc', show='right')
+                    .input-group-selectize(explain='instructors-edit-afsc', right)
                         select(selectize='AFSC', bind='AFSC')
 
     ng-include(src='"/partials/modal-footer.html"')

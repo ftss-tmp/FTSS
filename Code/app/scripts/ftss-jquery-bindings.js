@@ -1,4 +1,4 @@
-/*global FTSS */
+/*global FTSS, _ */
 
 /**
  * jQuery .on() bindings
@@ -65,7 +65,7 @@
 		 */
 		'enter': function () {
 
-			var $el = $(this), title, content;
+			var $el = $(this), title, content, placement;
 
 			timeout = setTimeout(function () {
 
@@ -86,6 +86,20 @@
 
 						content = popover.icon(content);
 
+						_(
+							[
+								'left',
+								'right',
+								'top',
+								'bottom'
+							])
+
+							.each(function (p) {
+								      if ($el[0].hasAttribute(p)) {
+									      placement = p;
+								      }
+							      });
+
 						$el.popover(
 
 							{
@@ -93,7 +107,7 @@
 								'html'     : true,
 								'title'    : title,
 								'content'  : content,
-								'placement': $el.attr('show') || 'auto'
+								'placement': placement || 'auto'
 							}
 
 						);
@@ -193,11 +207,11 @@
 
 		.on('mouseenter', '[hover]', popover.enter)
 
-		.on('focusin', '[explain]', popover.enter)
+		.on('focusin', '[explain],[explain] *', popover.enter)
 
 		.on('mouseleave', '[hover]', popover.exit)
 
-		.on('focusout', '[explain]', popover.exit)
+		.on('focusout', '[explain],[explain] *', popover.exit)
 
 		.on('paste', '*', pasteAction);
 
