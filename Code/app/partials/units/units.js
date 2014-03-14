@@ -82,7 +82,7 @@ FTSS.ng.controller(
 								            unit.CoursesHover = _(unit.CoursesMap).map(function (c) {
 
 									            if (unit.CoursesMap.length > 10) {
-										            return '<div class="col-lg-4" hover="' + c.Title + '" show="left"><b>' + c.PDS + '</b>: ' + c.Number + '</div>';
+										            return '<div class="col-lg-4" hover="' + c.Title + '" left><b>' + c.PDS + '</b>: ' + c.Number + '</div>';
 									            } else {
 										            return '<dt class="tiny">' + c.PDS + '</dt><dd>' + c.Number + '<br><small class="truncate">' + c.Title + '</small></dd>';
 									            }

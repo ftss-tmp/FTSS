@@ -176,6 +176,7 @@
 
 .multi .selectize-input {
     text-align: right;
+    transition: 500ms ease;
 }
 
 .selectize-control.multi .selectize-input.has-items {
@@ -221,7 +222,7 @@
 
 .selectize-control.multi .selectize-input > div.active {
     color: #fff !important;
-    background: #5bc0de!important;
+    background: #5bc0de !important;
     border: 0 solid rgba(0, 0, 0, 0);
 }
 
@@ -233,11 +234,13 @@
 }
 
 .multi .selectize-input > input:focus, .multi .selectize-input.focus > input {
+    margin-right: 100%!important;
     width: 100% !important;
-    margin-bottom: .75em!important;
+    margin-bottom: .75em !important;
     border: 1px solid #5bc0de !important;
     background-color: #fff !important;
     border-radius: 3px;
+    transition: width 500ms ease;
 }
 
 .selectize-input > input {
@@ -256,7 +259,7 @@
 }
 
 .single .selectize-input > input {
-    background: none!important;
+    background: none !important;
 }
 
 .multi .selectize-input > input {
@@ -302,6 +305,10 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 500ms ease;
+    display: none;
 }
 
 .selectize-dropdown [data-selectable] {
