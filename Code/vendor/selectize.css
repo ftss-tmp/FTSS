@@ -221,7 +221,7 @@
 
 .selectize-control.multi .selectize-input > div.active {
     color: #fff !important;
-    background: #428bca;
+    background: #5bc0de!important;
     border: 0 solid rgba(0, 0, 0, 0);
 }
 
