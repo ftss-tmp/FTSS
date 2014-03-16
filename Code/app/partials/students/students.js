@@ -73,12 +73,12 @@ FTSS.ng.controller(
 
 								            .map(function (r) {
 
-									                 var cache = caches.MasterCourseList[r];
-									                 return '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>';
+									                 var cache = caches.MasterCourseList[r] || false;
+									                 return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>': '';
 
 								                 })
 
-								            .sort().value().join('');
+								            .compact().sort().value().join('');
 
 						            });
 
