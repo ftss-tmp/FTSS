@@ -7,6 +7,9 @@
 
 	'use strict';
 
+	/**
+	 * prevent dragover & drop from exiting the application if a user misses the drop target
+	 */
 	window.addEventListener("dragover", function (e) {
 		e = e || event;
 		e.preventDefault();
@@ -15,6 +18,7 @@
 		e = e || event;
 		e.preventDefault();
 	}, false);
+
 
 	var timeout, popover, pasteAction;
 
@@ -199,7 +203,7 @@
 		}
 	};
 
-	// Use jQuery on() to bind to future elemnts
+	// Use jQuery on() to bind to future elements
 	$(document)
 
 		// Bind to the click event of element with the [hover] attribute
