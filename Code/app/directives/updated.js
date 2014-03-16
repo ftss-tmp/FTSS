@@ -18,7 +18,7 @@
 
 				if ($scope[$el[0].innerText].updated) {
 
-					$el[0].outerHTML = '<div class="icon icon-flag" hover="Updated since your last visit.">' + FTSS.icons.svg + FTSS.icons.flag + '</div>';
+					$el[0].outerHTML = '<div class="icon icon-flag" hover="Updated since your last visit.">' + FTSS.icons._svg + FTSS.icons.flag + '</div>';
 
 				} else {
 
