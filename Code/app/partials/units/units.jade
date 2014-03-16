@@ -19,21 +19,18 @@ div(class='{{wellCollapse}}')
                         th.w15 Details
                         th.w10 Actions
                 tbody
-                    tr(ng-repeat='unit in group')
+                    tr(ng-repeat='row in group', ng-dblclick='edit(row)')
                         td
-                            updated unit
+                            updated row
                         td
-                            b {{unit.Base}}
-                        td {{unit.Det}}
+                            b {{row.Base}}
+                        td {{row.Det}}
                         td.lowercase
-                            a(href='mailto:{{unit.Email}}?subject=FTSS') {{unit.Email}}
+                            a(href='mailto:{{row.Email}}?subject=FTSS') {{row.Email}}
                         td
-                            span(ng-if='unit.CoursesHover', hover='There are {{unit.CoursesMap.length}} courses taught at Det {{unit.Det}}:', content='<dl class="dl-horizontal">{{unit.CoursesHover}}</dl>', style='padding:5px')
+                            span(ng-if='row.CoursesHover', hover='There are {{row.CoursesMap.length}} courses taught at Det {{row.Det}}:', content='<dl class="dl-horizontal">{{row.CoursesHover}}</dl>', style='padding:5px')
                                 icon books
-                            span(ng-if='unit.Instructors', hover='There are {{unit.InstructorsCount}} instructors assigned to Det {{unit.Det}}:', content='{{unit.Instructors}}', left, style='padding:5px')
+                            span(ng-if='row.Instructors', hover='There are {{row.InstructorsCount}} instructors assigned to Det {{row.Det}}:', content='{{row.Instructors}}', left, style='padding:5px')
                                 icon instructor
                         td.invert(ng-once)
-                            button.btn.btn-sm.btn-info.btn-muted(type='button', ng-click='stats(unit)')
-                                icon graph_pie
-                            button.btn.btn-sm.btn-warning.btn-muted(type='button', ng-click='edit(unit)')
-                                icon edit
+                            actions(view, edit, label='FTD')

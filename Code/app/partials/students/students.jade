@@ -24,27 +24,20 @@ div(class='{{wellCollapse}}')
                         th.w10 Notes
                         th.w10 Actions
                 tbody
-                    tr.middle(ng-repeat='data in group', ng-class='{archived:data.Archived}')
+                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(row)')
 
                         td
-                            updated data
+                            updated row
                             b
-                                span(ng-if='data.Archived')
+                                span(ng-if='row.Archived')
                                     | ***ARCHIVED STUDENT***&nbsp;
-                                | {{data.Name}}
+                                | {{row.Name}}
                         td
-                            b {{data.HostUnit}}
+                            b {{row.HostUnit}}
                         td
-                            b {{data.ftd.LongName}}
+                            b {{row.ftd.LongName}}
                         td
-                            b(ng-if='data.Requirements_JSON.length', hover='Training Requirements', content='<dl class="dl-horizontal">{{data.requirements}}</dl>')
+                            b(ng-if='row.Requirements_JSON.length', hover='Training Requirements', content='<dl class="dl-horizontal">{{row.requirements}}</dl>')
                                 icon checklist
                         td.invert()
-                            button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view(data)')
-                                icon graph_pie
-                            button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(data)')
-                                icon edit
-                            button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(data)', hover='Archive this data')
-                                icon delete
-                            button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(data)', hover='Restore this data', left)
-                                icon restore
+                            actions(edit, archive, label='student')

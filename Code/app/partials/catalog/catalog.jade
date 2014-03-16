@@ -20,35 +20,30 @@ div(class='{{wellCollapse}}')
                         th.w10 Actions
 
                 tbody
-                    tr(ng-repeat='r in group', ng-class='{archived:r.Archived}')
+                    tr(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(row)')
                         td
-                            updated r
+                            updated row
                         td(style='text-transform: uppercase')
-                            b {{r.PDS}}
-                            |&nbsp;-&nbsp;{{r.Number}}&nbsp;
-                            span(ng-if='r.IMDS')
-                                |(IMDS: {{r.IMDS}})
+                            b {{row.PDS}}
+                            |&nbsp;-&nbsp;{{row.Number}}&nbsp;
+                            span(ng-if='row.IMDS')
+                                |(IMDS: {{row.IMDS}})
 
-                            span.pull-right(ng-if='r.Units && !r.Archived', hover='{{r.PDS}} is taught by {{r.Units.length}} FTDs:', content='{{r.units}}', style='margin-right: 15px;')
+                            span.pull-right(ng-if='row.Units && !row.Archived', hover='{{row.PDS}} is taught by {{row.Units.length}} FTDs:', content='{{row.units}}', style='margin-right: 15px;')
                                 icon instructor
-                            span.pull-right(ng-if='r.Archived', style='margin-right:10%') *** ARCHIVED COURSE ***
+                            span.pull-right(ng-if='row.Archived', style='margin-right:10%') *** ARCHIVED COURSE ***
                             br
-                            span.peek {{r.Title}}
+                            span.peek {{row.Title}}
                         td
-                            b {{r.MDS}}
+                            b {{row.MDS}}
                         td
-                            b {{r.AFSC}}
+                            b {{row.AFSC}}
                         td
                             | Days:&nbsp;
-                            b {{r.Days}}
+                            b {{row.Days}}
                             br
                             span.peek
                                 | Hours:&nbsp;
-                                b {{r.Hours}}
+                                b {{row.Hours}}
                         td.invert(ng-once='')
-                            button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(r)', hover='course-button-edit')
-                                icon edit
-                            button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(r)', hover='course-button-archive')
-                                icon delete
-                            button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(r)', hover='course-button-restore', left)
-                                icon restore
+                            actions(edit, archive, label='course')

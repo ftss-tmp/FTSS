@@ -17,26 +17,19 @@ div(class='{{wellCollapse}}')
                         th.w10 AFSC
                         th.w10 Actions
                 tbody
-                    tr.middle(ng-repeat='instructor in group', ng-class='{archived:instructor.Archived}')
+                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(row)')
 
-                        td(class='{{running(instructor)}}')
-                            photo(size='75px', data='instructor', force='true', ng-if='!instructor.Archived')
+                        td(class='{{running(row)}}')
+                            photo(size='75px', data='row', force='true', ng-if='!row.Archived')
                         td
-                            updated instructor
+                            updated row
                             b
-                                span(ng-if='instructor.Archived')
+                                span(ng-if='row.Archived')
                                     | ***ARCHIVED INSTRUCTOR***&nbsp;
-                                | {{instructor.Name}}
+                                | {{row.Name}}
                         td
-                            b {{instructor.UnitLong}}
+                            b {{row.UnitLong}}
                         td
-                            b {{instructor.AFSC}}
+                            b {{row.AFSC}}
                         td.invert()
-                            button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view(instructor)')
-                                icon graph_pie
-                            button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(instructor)')
-                                icon edit
-                            button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(instructor)', hover='Archive this instructor')
-                                icon delete
-                            button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(instructor)', hover='Restore this instructor', left)
-                                icon restore
+                            actions(view, edit, archive, label='instructor')
