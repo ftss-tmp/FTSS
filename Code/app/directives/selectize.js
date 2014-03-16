@@ -60,13 +60,27 @@
 				},
 				'onInitialize': function () {
 
-					// Set the value based on the current model
-					this.setValue(scope.data[opts.field]);
+					var self, setup;
 
-					this.refreshOptions(false);
+					self = this;
 
-					// Mark the first load as done
-					loaded = true;
+					setup = function () {
+
+						loaded = false;
+
+						// Set the value based on the current model
+						self.setValue(scope.data[opts.field]);
+
+						self.refreshOptions(false);
+
+						// Mark the first load as done
+						loaded = true;
+
+					};
+
+					scope.$watch('data.Id', setup);
+
+					setup();
 
 				}
 			});
