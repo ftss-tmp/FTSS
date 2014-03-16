@@ -305,10 +305,6 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    max-height: 0px;
-    overflow: hidden;
-    transition: max-height 500ms ease;
-    display: none;
 }
 
 .selectize-dropdown [data-selectable] {
