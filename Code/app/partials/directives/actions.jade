@@ -1,13 +1,13 @@
 div
 
-    button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view(row)', hover='View {{btn.label}} Stats', left, ng-if='btn.view')
+    button.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view()', hover='View {{btn.label}} Stats', left, ng-if='btn.view')
         icon graph_pie
 
-    button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(row)', hover='Edit {{btn.label}}', left, ng-if='btn.edit')
+    button.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit()', hover='Edit {{btn.label}}', left, ng-if='btn.edit')
         icon edit
 
-    button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive(row)', hover='Archive {{btn.label}}', left, ng-if='btn.archive')
+    button.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive()', hover='Archive {{btn.label}}', left, ng-if='btn.archive')
         icon delete
 
-    button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive(row)', hover='Restore {{btn.label}}', left, ng-if='btn.archive')
+    button.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive()', hover='Restore {{btn.label}}', left, ng-if='btn.archive')
         icon restore

@@ -10,8 +10,10 @@
     .sending(ng-show='submitted')
         spinner(size='2em')
         | Please wait, sending data...
+    button.btn.btn-link.btn-mini.pull-left(ng-click='traverse(false)') &#9664;
+    button.btn.btn-link.btn-mini.pull-left(ng-click='traverse(true)', style='margin-left:0') &#9654;
     button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='!modal.$dirty || modal.$invalid || submitted')
         span.btn-label
             icon upload
         | Submit
-    button.btn.btn-default(ng-click='cancel()') Cancel
+    button.btn.btn-default(ng-click='$hide()') Cancel

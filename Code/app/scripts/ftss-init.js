@@ -21,7 +21,7 @@ var FTSS = {}, utils = {}, caches = {};
 	FTSS.ng = angular.module('FTSS',
 	                         [
 		                         'ngRoute',
-		                         'ui.bootstrap',
+		                         'mgcrea.ngStrap',
 		                         'monospaced.elastic',
 		                         'partials',
 		                         'angularFileUpload'
@@ -44,7 +44,8 @@ var FTSS = {}, utils = {}, caches = {};
 	FTSS.ng.config(
 		[
 			'$routeProvider',
-			function ($routeProvider) {
+			'$modalProvider',
+			function ($routeProvider, $modalProvider) {
 
 				var routes =
 					[
@@ -71,6 +72,12 @@ var FTSS = {}, utils = {}, caches = {};
 				});
 
 				$routeProvider.otherwise({'redirectTo': '/error'});
+
+
+				angular.extend($modalProvider.defaults, {
+					'container': 'body',
+					'animation': 'am-fade-and-scale'
+				});
 
 			}
 		]);

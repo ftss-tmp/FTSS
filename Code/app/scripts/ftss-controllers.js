@@ -295,58 +295,56 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 							         })
 
 							.value();
+			'edit': function (callback) {
 
-						$scope.counter($scope.count, $scope.count !== results.total);
+				return function () {
 
-						if ($scope.tagBox) {
-							utils.tagHighlight(data);
-						}
+					var self, scope, instance;
 
-					} else {
+					self = this;
+					scope = self.$new(true);
 
-						utils.$message('ready');
+					instance = modal({
+						                 'scope'          : scope,
+						                 'backdrop'       : 'static',
+						                 'contentTemplate': '/partials/modal-' + opts.model + '.html'
+					                 });
 
+					scope.data = angular.copy(self.row);
+					scope.submit = actions.update(scope, instance);
+
+					if (callback) {
+						callback(scope);
 					}
 
-				});
+					scope.traverse = function (forward) {
 
-				FTSS.loaded();
+						setTimeout(function () {
 
-			}
+							var rows, row, pointer, data;
 
-		},
+							rows = $('tr.ng-scope');
 
-		'edit': function (callback) {
+							row = $('#row-' + scope.data.Id);
 
-			return function (data) {
+							pointer = rows.index(row);
 
-				utils.modal(
+							if (forward) {
 
-					{
-						'templateUrl': '/partials/modal-' + opts.model + '.html',
+								data = rows.eq(++pointer).data() || rows.first().data();
 
-						'controller':
-							[
-								'$scope',
-								'$modalInstance',
-								function (scope, $modalInstance) {
+							} else {
 
-									scope.data = angular.copy(data);
-									scope.submit = actions.update(scope, $modalInstance);
-									scope.cancel = $modalInstance.dismiss;
+								data = rows.eq(--pointer).data() || rows.last().data();
 
-									if (callback) {
-										callback(scope);
-									}
+							}
 
-								}
-							]
-					}
+							scope.data = angular.copy(data.$scope.row);
 
-				);
-			};
+							scope.$digest();
+						});
 
-		},
+					};
 
 		'archive': function (data) {
 
@@ -446,8 +444,8 @@ FTSS.controller = function ($scope, SharePoint, opts) {
 						// Call actions.process() to reprocess the data by our controllers
 						actions.process();
 
-						// Close the modal box
-						$modalInstance.close();
+							// Close the modal box
+							instance.destroy();
 
 					}
 

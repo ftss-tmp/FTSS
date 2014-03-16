@@ -32,35 +32,6 @@ utils.deepRead = (function () {
 
 }());
 
-
-utils.modal = (function () {
-
-	var modal;
-
-	FTSS.ng.run(
-		[
-			'$modal',
-			function ($modal) {
-				modal = $modal;
-			}
-		]);
-
-	return function (opts) {
-
-		modal
-
-			.open({
-				      'backdrop'   : 'static',
-				      'keyboard'   : true,
-				      'templateUrl': opts.templateUrl,
-				      'controller' : opts.controller
-			      });
-
-	};
-
-}());
-
-
 /**
  * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
  *
