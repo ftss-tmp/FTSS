@@ -17,6 +17,8 @@
 			'replace'    : true,
 			'link'       : function ($scope, $el, $attrs) {
 
+				$el.closest('tr').attr('id','row-' + $scope.row.Id);
+
 				$scope.btn = {
 					'label' : $attrs.label
 				};
