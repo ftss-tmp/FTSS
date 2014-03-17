@@ -32,28 +32,32 @@
 					// Do not run when initializing the value
 					if (loaded) {
 
-						// Update the field with the value(s)
-						scope.data[opts.field] = (val && val.map ? val.map(Number) : Number(val)) || val;
-
-						// Flip the $dirty flag on this modal
-						modal.$dirty = true;
-
-						this.$control.addClass('ng-dirty');
-
-						// Make sure we add the value to the list if it's new
-						if (opts.create && val) {
-
-							options[opts.select]
-
-								.push({
-									      'label': val,
-									      'Id'   : val
-								      });
-
-						}
+						var self = this;
 
 						// So that Angular will update the model immediately rather than waiting until we click somewhere else
-						scope.$apply();
+						scope.$apply(function () {
+
+							// Update the field with the value(s)
+							scope.data[opts.field] = (val && val.map ? val.map(Number) : Number(val)) || val;
+
+							// Flip the $dirty flag on this modal
+							modal.$setDirty();
+
+							self.$control.addClass('ng-dirty');
+
+							// Make sure we add the value to the list if it's new
+							if (opts.create && val) {
+
+								options[opts.select]
+
+									.push({
+										      'label': val,
+										      'Id'   : val
+									      });
+
+							}
+
+						});
 
 					}
 
