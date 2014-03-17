@@ -349,13 +349,9 @@ FTSS.controller = (function () {
 
 					scope.submit = actions.update(scope, instance.destroy);
 
-					if (callback) {
-						callback(scope);
-					}
+					scope.traverse = actions.update(scope, function (forward) {
 
-					scope.traverse = function (forward) {
-
-						setTimeout(function () {
+						timeout(function () {
 
 							var rows, row, pointer, data;
 
@@ -377,10 +373,15 @@ FTSS.controller = (function () {
 
 							scope.data = angular.copy(data.$scope.row);
 
-							scope.$digest();
-						}, 25);
 
 					};
+						});
+
+					});
+
+					if (callback) {
+						callback(scope);
+					}
 
 				};
 
