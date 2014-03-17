@@ -15,19 +15,19 @@ form.form-horizontal(name='modal')
             .col-lg-3
                 .input-group
                     .input-group-addon(style='width:55%') PDS
-                    input.form-control(ng-model='data.PDS', type='text', explain='catalog-edit-pds', right, required)
+                    input.form-control(ng-model='data.PDS', type='text', explain='catalog-edit-pds', right)
 
             .col-lg-5
                 .input-group
                     .input-group-addon MDS
                     .input-group-selectize
-                        select(selectize='MDS', bind='MDS', required)
+                        select(selectize='MDS', bind='MDS')
 
             .col-lg-4
                 .input-group
                     .input-group-addon AFSC
                     .input-group-selectize
-                        select(selectize='AFSC', bind='AFSC', required)
+                        select(selectize='AFSC', bind='AFSC')
 
         .clearfix(style='height:1em')
 
@@ -35,7 +35,7 @@ form.form-horizontal(name='modal')
             .col-lg-8
                 .input-group
                     .input-group-addon Number
-                    input.form-control(ng-model='data.Number', type='text', explain='catalog-edit-number', right, required)
+                    input.form-control(ng-model='data.Number', type='text', explain='catalog-edit-number', right)
 
             .col-lg-4
                 .input-group
@@ -48,7 +48,7 @@ form.form-horizontal(name='modal')
             .col-lg-12
                 .input-group
                     .input-group-addon(style='width:11.5%') Title
-                    input.form-control(ng-model='data.Title', explain='catalog-edit-title', right, required)
+                    input.form-control(ng-model='data.Title', explain='catalog-edit-title', right)
 
         br
         br
@@ -61,12 +61,12 @@ form.form-horizontal(name='modal')
                     | Course Length
                 .col-lg-6.no-pad
                     .input-group
-                        input.form-control(ng-model='data.Days', type='number', explain='catalog-edit-days', left, min='1', max='120', required)
+                        input.form-control(ng-model='data.Days', type='number', explain='catalog-edit-days', left, min='1', max='120')
                         .input-group-addon Days
 
                 .col-lg-5.no-pad.pull-right
                     .input-group
-                        input.form-control(ng-model='data.Hours', type='number', explain='catalog-edit-hours', left, min='8', max='999', required)
+                        input.form-control(ng-model='data.Hours', type='number', explain='catalog-edit-hours', left, min='8', max='999')
                         .input-group-addon Hrs
 
             .col-lg-5.pull-right
@@ -75,12 +75,12 @@ form.form-horizontal(name='modal')
                     | Course Seat Limits
                 .col-lg-5.no-pad
                     .input-group
-                        input.form-control(ng-model='data.Min', type='number', explain='catalog-edit-min', left, min='1', max='9', required)
+                        input.form-control(ng-model='data.Min', type='number', explain='catalog-edit-min', left, min='1', max='9')
                         .input-group-addon Min
 
                 .col-lg-6.no-pad.pull-right
                     .input-group
-                        input.form-control(ng-model='data.Max', type='number', explain='catalog-edit-max', left, min='1', max='99', required)
+                        input.form-control(ng-model='data.Max', type='number', explain='catalog-edit-max', left, min='1', max='99')
                         .input-group-addon Max
 
         br
