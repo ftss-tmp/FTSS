@@ -334,10 +334,10 @@ FTSS.controller = (function () {
 
 				return function () {
 
-					var self, scope, instance;
+					var scope, instance;
 
-					self = this;
-					scope = self.$new(true);
+					scope = $scope.$new(true);
+					scope.data = angular.copy(this.row);
 
 					instance = modal({
 						                 'scope'          : scope,
@@ -345,7 +345,6 @@ FTSS.controller = (function () {
 						                 'contentTemplate': '/partials/modal-' + opts.model + '.html'
 					                 });
 
-					scope.data = angular.copy(self.row);
 					scope.submit = actions.update(scope, instance);
 
 					if (callback) {
@@ -377,7 +376,7 @@ FTSS.controller = (function () {
 							scope.data = angular.copy(data.$scope.row);
 
 							scope.$digest();
-						});
+						}, 25);
 
 					};
 
