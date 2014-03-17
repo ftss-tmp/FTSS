@@ -18,23 +18,25 @@
 			'replace' : true,
 			'link'    : function ($scope, $el, $attrs) {
 
-				var data = $scope[$attrs.data] || {};
+				var linker = function () {
 
-				if (data.Photo || $attrs.force) {
+					var data, size, shape, height, img, html;
 
-					var size, shape, height, path;
-
+					data = $scope[$attrs.data] || {};
 					size = $attrs.size || '100px';
 					shape = $attrs.shape || 'circle';
 					height = (shape === 'circle' || shape === 'square') ? ';height:' + size : ';height:185px';
-					path = data.Photo ? 'bios/' + data.Id + '.jpg' : noPhoto;
+					img = '<img src="' + (data.Photo ? 'bios/' + data.Id + '.jpg' : noPhoto) + '" />';
+					html = '<div class="mask-img ' + shape + '" style="width:' + size + height + ';">';
 
-					$el[0].outerHTML = '<div class="mask-img ' + shape + '" style="width:' + size + height + ';"><img src="' + path + '" /></div>';
+					$el[0].innerHTML = html + (data.Photo || $attrs.hasOwnProperty('force') ? img : '') + '</div>';
 
+				};
+
+				if ($attrs.hasOwnProperty('watch')) {
+					$scope.$watch($attrs.data, linker);
 				} else {
-
-					$el.remove();
-
+					linker();
 				}
 
 			}
