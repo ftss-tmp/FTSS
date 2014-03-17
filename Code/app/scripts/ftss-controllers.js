@@ -386,7 +386,9 @@ FTSS.controller = (function () {
 
 			},
 
-			'archive': function (data) {
+			'archive': function () {
+
+				var data = this.row;
 
 				// Double check that this model can actually perform this action
 				if (data && data.hasOwnProperty('Archived')) {
