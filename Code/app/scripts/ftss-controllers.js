@@ -11,13 +11,15 @@
  */
 FTSS.controller = (function () {
 
-	var modal, sharePoint;
+	var timeout, modal, sharePoint;
 
 	FTSS.ng.run(
 		[
+			'$timeout',
 			'$modal',
 			'SharePoint',
-			function ($modal, SharePoint) {
+			function ($timeout, $modal, SharePoint) {
+				timeout = $timeout;
 				modal = $modal;
 				sharePoint = SharePoint;
 			}
