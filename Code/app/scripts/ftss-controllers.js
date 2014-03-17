@@ -373,8 +373,10 @@ FTSS.controller = (function () {
 
 							scope.data = angular.copy(data.$scope.row);
 
+							scope.modal.$setPristine();
 
-					};
+							$('.ng-dirty').removeClass('ng-dirty');
+
 						});
 
 					});
