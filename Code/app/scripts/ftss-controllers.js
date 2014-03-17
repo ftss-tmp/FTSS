@@ -434,63 +434,80 @@ FTSS.controller = (function () {
 			 * @param scope
 			 * @returns {Function}
 			 */
-			'update': function (scope, instance) {
+			'update': function (scope, callback) {
 
-				return function () {
+				callback = callback || function () {};
 
-					// Used by modale.footer.html to disable the submit button
-					scope.submitted = true;
+				return function (eventData) {
 
 					var old, fields, send = {};
 
-					// Keep a copy of the original data for comparison
-					old = actions.data[scope.data.Id];
+					if (scope.modal.$dirty) {
 
-					// angular.copy() so we don't overwrite the original model
-					fields = angular.copy(model.params.$select);
+						// Used by modal.footer.html to disable the submit button
+						scope.submitted = true;
 
-					//  Compare each field from the list of fields to the old data
-					_(fields).each(function (field) {
+						// Keep a copy of the original data for comparison
+						old = actions.data[scope.data.Id];
 
-						var data = scope.data[field];
+						// angular.copy() so we don't overwrite the original model
+						fields = angular.copy(model.params.$select);
 
-						// First check for valid fields as the model includes expanded and temporary that can not be sent
-						if (old.hasOwnProperty(field) && old[field] !== data) {
+						//  Compare each field from the list of fields to the old data
+						_(fields).each(function (field) {
 
-							send[field] = data;
+							var data = scope.data[field];
 
-						}
+							// First check for valid fields as the model includes expanded and temporary that can not be sent
+							if (old.hasOwnProperty(field) && old[field] !== data) {
 
-					});
+								send[field] = data;
 
-					// Use the model's cache setting & __metadata
-					send.cache = model.cache;
-					send.__metadata = scope.data.__metadata;
+							}
 
-					// Call sharePoint.update() with our data and handle the success/failure response
-					sharePoint.update(send).then(function (resp) {
+						});
 
-						// HTTP 204 is the status given for a successful update, there will be no body
-						if (resp.status === 204) {
+					}
 
-							// Update the etag so we can rewrite this data again during the session if we want
-							scope.data.__metadata.etag = resp.headers('etag');
+					// If nothing was updated then fire the callback with false
+					if (_(send).isEmpty()) {
 
-							// Mark the data as updated for the <updated> directive
-							scope.data.updated = true;
+						scope.submitted = false;
+						callback(eventData, false);
 
-							// Copy the updated back to the original dataset
-							actions.data[scope.data.Id] = angular.copy(scope.data);
+					} else {
 
-							// Call actions.process() to reprocess the data by our controllers
-							actions.process();
+						// Use the model's cache setting & __metadata
+						send.cache = model.cache;
+						send.__metadata = scope.data.__metadata;
 
-							// Close the modal box
-							instance.destroy();
+						// Call sharePoint.update() with our data and handle the success/failure response
+						sharePoint.update(send).then(function (resp) {
 
-						}
+							scope.submitted = false;
 
-					}, utils.$ajaxFailure);
+							// HTTP 204 is the status given for a successful update, there will be no body
+							if (resp.status === 204) {
+
+								// Update the etag so we can rewrite this data again during the session if we want
+								scope.data.__metadata.etag = resp.headers('etag');
+
+								// Mark the data as updated for the <updated> directive
+								scope.data.updated = true;
+
+								// Copy the updated back to the original dataset
+								actions.data[scope.data.Id] = angular.copy(scope.data);
+
+								// Call actions.process() to reprocess the data by our controllers
+								actions.process();
+
+								callback(eventData, true);
+
+							}
+
+						}, utils.$ajaxFailure);
+
+					}
 
 				};
 
