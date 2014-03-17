@@ -347,7 +347,7 @@ FTSS.controller = (function () {
 						                 'contentTemplate': '/partials/modal-' + opts.model + '.html'
 					                 });
 
-					scope.submit = actions.update(scope, instance);
+					scope.submit = actions.update(scope, instance.destroy);
 
 					if (callback) {
 						callback(scope);
