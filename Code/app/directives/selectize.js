@@ -386,12 +386,9 @@
 
 		},
 
-
 		'people': function (scope, SharePoint, field) {
 
-			return FTSS.dropdowns
-
-				.build(scope, {
+			return builder(scope, {
 					       'field'       : field,
 					       'labelField'  : 'Name',
 					       'valueField'  : 'Id',
@@ -423,7 +420,7 @@
 						       this.setValue(scope.data[field]);
 
 					       }
-				       })
+				       });
 		}
 
 	};
@@ -436,10 +433,11 @@
 			'SharePoint',
 			function ($timeout, SharePoint) {
 				return {
-					// Restrict it to be an attribute in this case
+					// Restrict it to be an attribute
 					'restrict': 'A',
-					// responsible for registering DOM listeners as well as updating the DOM
+					// Responsible for registering DOM listeners as well as updating the DOM
 					'link'    : function (scope, element, attrs) {
+
 						$timeout(function () {
 
 							var opts;
