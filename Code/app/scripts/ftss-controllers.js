@@ -338,49 +338,28 @@ FTSS.controller = (function () {
 
 					var scope, instance;
 
+					// Create a new isolated scope for this modal
 					scope = $scope.$new(true);
+
+					// Copy the row data to our isolated scope
 					scope.data = angular.copy(this.row);
 
+					// Create the angular-strap modal using this model's modal template
 					instance = modal({
-						                 'scope'          : scope,
-						                 'backdrop'       : 'static',
-						                 'contentTemplate': '/partials/modal-' + opts.model + '.html'
-					                 });
+						      'scope'          : scope,
+						      'backdrop'       : 'static',
+						      'contentTemplate': '/partials/modal-' + opts.model + '.html'
+					      });
 
-					scope.submit = actions.update(scope, instance.destroy);
+					scope.close = instance.destroy;
 
-					scope.traverse = actions.update(scope, function (forward) {
+					// Bind the submit action with a $destroy callback
+					scope.submit = actions.update(scope, scope.close);
 
-						timeout(function () {
+					// Pass action.update to the scope for our traverse directive
+					scope.update = actions.update;
 
-							var rows, row, pointer, data;
-
-							rows = $('tr.ng-scope');
-
-							row = $('#row-' + scope.data.Id);
-
-							pointer = rows.index(row);
-
-							if (forward) {
-
-								data = rows.eq(++pointer).data() || rows.first().data();
-
-							} else {
-
-								data = rows.eq(--pointer).data() || rows.last().data();
-
-							}
-
-							scope.data = angular.copy(data.$scope.row);
-
-							scope.modal.$setPristine();
-
-							$('.ng-dirty').removeClass('ng-dirty');
-
-						});
-
-					});
-
+					// If the callback (our post-processor exists, call it too)
 					if (callback) {
 						callback(scope);
 					}
