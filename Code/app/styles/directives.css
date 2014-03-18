@@ -40,3 +40,10 @@
 svg {
     margin-bottom: -.25em;
 }
+
+time-ago {
+    font-weight: normal!important;
+    color:#888!important;
+    float:right;
+    font-style: italic;
+}
