@@ -31,6 +31,7 @@
 .table-hover tbody tr .btn-muted, .well .btn-muted {
     transition: opacity 500ms ease;
 }
+
 .table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
     color: #111;
     background-color: #eee;
@@ -50,8 +51,8 @@
     transition: background-color 200ms ease;
     background-color: #f5fafc;
     color: #428bca;
-    fill:#428bca!important;
-    stroke:#428bca!important;
+    fill: #428bca !important;
+    stroke: #428bca !important;
 }
 
 .table-expanded tr td {
@@ -102,24 +103,24 @@ table thead.tableFloatingHeaderOriginal {
 
 tr.archived:not(:hover) * {
     text-decoration: line-through;
-    color:#bbb;
-    font-weight: normal!important;
+    color: #bbb;
+    font-weight: normal !important;
 }
 
 tr.archived .btn.archive {
     visibility: visible;
 }
 
-tr.archived .btn.no-archive,.btn.archive {
+tr.archived .btn.no-archive, .btn.archive {
     visibility: hidden;
 }
 
 tr.thin td {
-    padding:5px!important;
+    padding: 5px !important;
 }
 
 tr.thin button {
-    font-size: .5em!important;
+    font-size: .5em !important;
 }
 
 .rollupContainer {
@@ -130,8 +131,12 @@ tr.thin button {
 }
 
 .collapsed .rollupContainer {
-    max-height: 0!important;
+    max-height: 0 !important;
     overflow: hidden;
     opacity: 0;
     transition: all 500ms ease;
+}
+
+tr.modal-selected {
+    border-left: 20px solid #333;
 }
