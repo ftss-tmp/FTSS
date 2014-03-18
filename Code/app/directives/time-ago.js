@@ -14,7 +14,9 @@
 		return {
 			'restrict': 'E',
 			'replace' : true,
-			'link'    : function ($scope, $el) {
+			'link'    : function ($scope, $el, $attrs) {
+
+				var prefix = $attrs.prefix + ' ' || '';
 
 				$scope.$watch($el[0].textContent, function (t) {
 
@@ -24,11 +26,11 @@
 							break;
 
 						case (moment().diff(t, 'days') === 0):
-							$el.html('today');
+							$el.html(prefix + 'today');
 							break;
 
 						default:
-							$el.html(moment(t).fromNow());
+							$el.html(prefix + moment(t).fromNow());
 					}
 
 				});
