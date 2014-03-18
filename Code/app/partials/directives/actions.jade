@@ -3,7 +3,7 @@ div
     span.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view()', hover='View {{btn.label}} Stats', left, ng-if='btn.view')
         icon graph_pie
 
-    span.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit()', hover='Edit {{btn.label}}', left, ng-if='btn.edit')
+    span.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(false)', hover='Edit {{btn.label}}', left, ng-if='btn.edit')
         icon edit
 
     span.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive()', hover='Archive {{btn.label}}', left, ng-if='btn.archive')

@@ -1,9 +1,6 @@
-.row
-    button.btn.btn-success(type='button', ng-click='add()')
+.add-button.btn.btn-success(type='button', ng-click='edit(true)')
         icon add
         |&nbsp;Add Student
-
-br
 
 div(class='{{wellCollapse}}')
 
@@ -24,7 +21,7 @@ div(class='{{wellCollapse}}')
                         th.w10 Notes
                         th.w10 Actions
                 tbody
-                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(row)')
+                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)')
 
                         td
                             updated row

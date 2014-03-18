@@ -20,7 +20,7 @@ div(class='{{wellCollapse}}')
                         th.w10 Actions
 
                 tbody
-                    tr(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(row)')
+                    tr(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)')
                         td
                             updated row
                         td(style='text-transform: uppercase')
