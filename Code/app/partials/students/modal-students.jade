@@ -3,21 +3,18 @@ form.form-horizontal(name='modal', ng-any-drop)
     .modal-header
         h4
             icon student_hand
-            | {{data.Student.Name}}
+            | {{createData ? 'Student Inprocessing' : data.Student.Name}}
 
     .modal-body
 
         // This will only be shown if we are adding a student
-        .row(ng-if='createData')
+        .row(ng-if='createData', style='margin-bottom: 45px')
             .col-lg-12
-                .input-group
+                .input-group(explain='students-inprocessing-afgal', right)
                     .input-group-addon(style='width:11%')
                         icon student_hand
                     .input-group-selectize
-                        select(selectize='people', field='StudentId')
-
-            br
-            br
+                        select(selectize='people', field='StudentId', placeholder='Type a name to search...')
 
 
         h4.light-bottom
