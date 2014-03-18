@@ -30,6 +30,7 @@ form.form-horizontal(name='modal', ng-any-drop)
                     .input-group-addon
                         icon calendar_range
                     input.form-control(ng-model='data.processDate', date-picker)
+                time-ago data.processDate
 
             .col-lg-7
                 .btn-group.pull-right.no-toggle(hover='students-category', right, bs-radio-group, ng-model='data.StudentType')
