@@ -1,4 +1,4 @@
-/*global utils, FTSS, caches, _, Sifter, angular */
+/*global utils, FTSS, caches, _, Sifter, angular, moment */
 
 /**
  * FTSS.controller()
@@ -8,18 +8,19 @@
  * @param $scope
  * @param opts
  * @returns {{$scope: *, bind: 'bind', initialize: 'initialize', process: 'process', scheduledClass: 'scheduledClass', postProcess: 'postProcess'}}
+ *
+ * @todo need some more commenting/cleanup in FTSS.controller
  */
 FTSS.controller = (function () {
 
-	var timeout, modal, sharePoint;
+	var modal, sharePoint;
 
+	// Grab some angular variables for use later on
 	FTSS.ng.run(
 		[
-			'$timeout',
 			'$modal',
 			'SharePoint',
-			function ($timeout, $modal, SharePoint) {
-				timeout = $timeout;
+			function ($modal, SharePoint) {
 				modal = $modal;
 				sharePoint = SharePoint;
 			}
@@ -60,10 +61,8 @@ FTSS.controller = (function () {
 				// Copy the model to a local variable for reuse without affecting the original model
 				model = angular.copy(FTSS.models[opts.model]);
 
-				// Bind archive() to all scopes as it will only be called if specified in the view anyway
+				// Bind archive() & edit() to the scope in case they are needed
 				$scope.archive = actions.archive;
-
-				// Pass opts.edit to actions.edit for binding to the scope
 				$scope.edit = actions.edit(opts.edit);
 
 				// Return the promise, then()
@@ -178,30 +177,33 @@ FTSS.controller = (function () {
 			 */
 			'process': function (data) {
 
-				// Use data if valid, otherwise actions.data
+				// Use data if valid, otherwise actions.data our cached dataset
 				data = data || actions.data;
 
-
+				// If there is a defined data processor, then execute it against the data as well
 				if (process) {
-
 					_(data).each(process);
-
 				}
 
+				// (re)bind our groupBy & sortBy values
 				$scope.groupBy.$ = $scope.groupBy.$ || opts.group;
 				$scope.sortBy.$ = $scope.sortBy.$ || opts.sort;
 
+				// If this is a tagBox then we should call taghighlight as well
 				if ($scope.tagBox) {
 					utils.tagHighlight(data);
 					$scope.searchText = {};
 				}
 
+				// Finally, send our data off to the post-processor
 				actions.postProcess(data);
 
 			},
 
 			/**
+			 * This doesn't really belong here but is thrown in for convenience
 			 *
+			 * @todo Refactor scheduleClass & move to a better location!
 			 * @param req
 			 */
 			'scheduledClass': function (req) {
@@ -245,29 +247,40 @@ FTSS.controller = (function () {
 			},
 
 			/**
+			 * Controller Post-Processor
+			 * Here we setup sifter() for full-text searching
 			 *
 			 * @param data
 			 */
 			'postProcess': function (data) {
 
+				// Only post-process if we actually have data to work with
 				if (data) {
 
 					var sifter, results;
 
+					// Initialize sifter with the array of data after passing through some string sanitization
 					sifter = new Sifter(_(data).map(function (d) {
 
 						return {
+							/* We're using JSON stringify to fast deep-read our data & then stripping out the JSON junk
+							 * with a regex & then setting lowercase for faster text-processing
+							 */
 							'search': JSON.stringify(d).replace(/([,{]"\w+":)|([{}"])/gi, ' ').toLowerCase(),
+
+							// Also, send the data to sifter for use later on
 							'data'  : d
 						};
 
 					}));
 
+					// Try to set our searchText to the first word of the first tag from our tagBox
 					if (!$scope.tagBox && !$scope.searchText.$) {
 
-						$scope.searchText.$ = FTSS.search.$control.children(':first-child').contents().filter(function () {
-							return this.nodeType === 3;
-						}).text();
+						try {
+							var val = FTSS.search.getValue().slice(0, 1);
+							$scope.searchText.$ = FTSS.search.options[val].data.text.split(' ')[0];
+						} catch (e) {}
 
 					}
 
@@ -276,16 +289,21 @@ FTSS.controller = (function () {
 						FTSS.searchWatch();
 					}
 
+					// Create a watcher that monitors our searchText, groupBy & sortBy for changes
 					FTSS.searchWatch = $scope.$watchCollection('[searchText.$,groupBy.$,sortBy.$]', function () {
 
+						// reference for our searchText
 						var text = $scope.searchText.$;
 
+						// Reset groups, counter & count
 						$scope.groups = false;
 						$scope.counter('-', false);
 						$scope.count = 0;
 
+						// Now process our tagBox or text search if one is set
 						if ($scope.tagBox || text && text.length) {
 
+							// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
 							results = sifter.search(text, {
 								'fields'     :
 									[
@@ -295,6 +313,7 @@ FTSS.controller = (function () {
 								'conjunction': 'and'
 							});
 
+							// Create our sorted groups and put in our scope
 							$scope.groups = _.chain(results.items)
 
 								.map(function (match) {
@@ -312,26 +331,40 @@ FTSS.controller = (function () {
 
 								.value();
 
+							// Update the scope counter + overoad indicator
 							$scope.counter($scope.count, $scope.count !== results.total);
 
+							// Finally, do our tagHighlighting if this is a tagBox
 							if ($scope.tagBox) {
 								utils.tagHighlight(data);
 							}
 
 						} else {
 
+							// We don't have any query yet so just set the ready message
 							utils.$message('ready');
 
 						}
 
 					});
 
+					// Perform final loading
 					FTSS.loaded();
 
 				}
 
 			},
 
+			/**
+			 * Modal Edit Callback
+			 * The main edit dialog for then entire app--this one is kinda important.  First, generate a new isolated
+			 * scope then copy the row data to scope.data & launch the angular-strap modal dialog, also bind some close
+			 * & update actions and fire an optional post-processor to do more fancy stuff with the data from the
+			 * parent controller
+			 *
+			 * @param callback Function acts as a data post-processor for the calling controller to manipulate modal data
+			 * @returns {Function}
+			 */
 			'edit': function (callback) {
 
 				return function (isNew) {
@@ -384,6 +417,12 @@ FTSS.controller = (function () {
 
 			},
 
+			/**
+			 * Row archive function
+			 *
+			 * This is FTSS's version of a record deletion; the record Archived attribute is flipped with this function
+			 * to mark as archived/deleted
+			 */
 			'archive': function () {
 
 				var data = this.row;
@@ -420,7 +459,7 @@ FTSS.controller = (function () {
 
 				} else {
 
-					FTSS.utils.log('Invalid call to Archive()');
+					FTSS.utils.log('Invalid call to Archive() :-/');
 
 				}
 
