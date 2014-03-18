@@ -4,6 +4,7 @@
     overflow: hidden;
     box-shadow: #666 0px 2px 3px;
     border-radius: 3%;
+    background: rgb(233, 233, 233);
 }
 
 .mask-img.circle {
@@ -15,6 +16,10 @@
     width: 100%;
     left: 0;
     top: 0;
+}
+
+.cleanPhoto .mask-img.invalid {
+    visibility: hidden;
 }
 
 .modal-backdrop.in {
