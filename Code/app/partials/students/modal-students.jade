@@ -32,10 +32,16 @@ form.form-horizontal(name='modal', ng-any-drop)
                     input.form-control(ng-model='data.processDate', date-picker)
 
             .col-lg-7
-                .btn-group.pull-right(hover='students-category', right)
-                    button.btn.btn-default(ng-model='data.StudentType', btn-radio='1') Enlisted
-                    button.btn.btn-default(ng-model='data.StudentType', btn-radio='2') Officer
-                    button.btn.btn-default(ng-model='data.StudentType', btn-radio='3') Civilian
+                .btn-group.pull-right.no-toggle(hover='students-category', right, bs-radio-group, ng-model='data.StudentType')
+                    label.btn.btn-default
+                        input(value='1', type='radio')
+                        | Enlisted
+                    label.btn.btn-default
+                        input(value='2', type='radio')
+                        | Officer
+                    label.btn.btn-default
+                        input(value='3', type='radio')
+                        | Civilian
 
         br
         br
