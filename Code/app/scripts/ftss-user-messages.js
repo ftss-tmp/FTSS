@@ -31,8 +31,7 @@
 		 */
 
 		// The request seats dialog box, shown when someone tries to request seats for a class or submit a new training requirement (898)
-		'request-seats-students'        : 'Search for students to add to the request.\
-		                             example>Please ensure you have already loaded these students into FTSS.</example>',
+		'request-seats-students'        : 'Search for students to add to the request.<example>Please ensure you have already loaded these students into FTSS.</example>',
 		'request-seats-comments'        : 'Leave any comments for the FTD or MAJCOM as applicable (optional).',
 
 		// Catalog page
@@ -56,6 +55,7 @@
 		'units-edit-courses'            : 'List the courses taught by this FTD.',
 
 		// Students page
+		'students-inprocessing-afgal'   : 'Use this search box to find the student from the AFNET Global Address List.  The format should be the same as in Outlook.<example>Doe, John A SSgt...</example>',
 		'students-training-requirements': 'This is a list of all the training requirements for this student.  When a student is scheduled for a given course, it is automatically removed from this list.<br><br><example>This data can also be imported from an IMDS 593 using one of three ways:<br><ol><li>Copy & paste the text anywhere on this screen.</li><li>Drag & drop the text file onto this window.</li><li>Click the import button below & load the text file.</li></ol></example>',
 		'students-inprocessing-date'    : 'This is the in-processing date for the student,<br>it is used to sort students by longest wait-time.',
 		'students-host-unit'            : 'The unit this student is assigned to.',
