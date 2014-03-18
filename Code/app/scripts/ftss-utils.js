@@ -10,21 +10,29 @@ utils.deepRead = (function () {
 
 	return function (data, exp) {
 
-		var e = dict[exp] = dict[exp] || exp.split('.');
+		try {
 
-		switch (e.length) {
+			var e = dict[exp] = dict[exp] || exp.split('.');
 
-			case 1:
-				return data[e[0]];
+			switch (e.length) {
 
-			case 2:
-				return data[e[0]][e[1]];
+				case 1:
+					return data[e[0]];
 
-			case 3:
-				return data[e[0]][e[1]][e[2]];
+				case 2:
+					return data[e[0]][e[1]];
 
-			default:
-				return data;
+				case 3:
+					return data[e[0]][e[1]][e[2]];
+
+				default:
+					return data;
+
+			}
+
+		} catch (e) {
+
+			return null;
 
 		}
 
