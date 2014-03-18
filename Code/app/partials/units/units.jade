@@ -26,7 +26,7 @@ div(class='{{wellCollapse}}')
                             b {{row.Base}}
                         td {{row.Det}}
                         td.lowercase
-                            a(href='mailto:{{row.Email}}?subject=FTSS') {{row.Email}}
+                            a(href='mailto:{{row.Email}}?subject=FTSS', tabindex='-1') {{row.Email}}
                         td
                             span(ng-if='row.CoursesHover', hover='There are {{row.CoursesMap.length}} courses taught at Det {{row.Det}}:', content='<dl class="dl-horizontal">{{row.CoursesHover}}</dl>', style='padding:5px')
                                 icon books

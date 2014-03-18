@@ -3,15 +3,15 @@ div(ng-show='loaded', style='width:97%;float:left')
     #searchContainer.col-lg-12.no-pad(ng-class='{tagBox:tagBox}')
 
         #tagBox.col-lg-10(explain='tagBox', top, instant, no-arrow)
-            select.hide(selectize='appInit', multiple, placeholder='Click or type to add search terms', style='width:100%')
+            select.hide(selectize='appInit', multiple, placeholder='Click or type to add search terms', style='width:100%', tabindex='-1')
                 optgroup(label='SMART FILTERS')
 
         #searchBox.col-lg-10(explain='searchBox', top, no-arrow='')
-            input.search.search-large(type='search', ng-model='searchText.$', placeholder='Type in a search to limit the results for this list.')
+            input.search.search-large(type='search', ng-model='searchText.$', placeholder='Type in a search to limit the results for this list.', tabindex='-1')
 
         #searchButtons.col-lg-2.no-pad
 
-            button.btn.btn-default(type='button', ng-click='reset()', hover='button-clear', left)
+            span.btn.btn-default(type='button', ng-click='reset()', hover='button-clear', left)
                 icon restore
 
             span(style='width:5%')  
@@ -35,6 +35,6 @@ div(ng-show='loaded', style='width:97%;float:left')
 
             span(style='width:5%')  
 
-            button#toggleExpand(ng-click='collapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}', type='button')
+            span#toggleExpand(ng-click='collapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}', type='button')
                 icon expand
                 icon collpase
