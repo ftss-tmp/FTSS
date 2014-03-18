@@ -291,7 +291,7 @@ FTSS.controller = (function () {
 									[
 										'search'
 									],
-								'limit'      : 25,
+								'limit'      : $scope.pageLimit,
 								'conjunction': 'and'
 							});
 
