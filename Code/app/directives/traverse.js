@@ -20,56 +20,64 @@
 					'templateUrl': '/partials/traverse.html',
 					'link'       : function (scope, $el) {
 
-						var content = $('#content');
+						if (!scope.createData) {
 
-						// Reference the parent scope because we're down in another scope right now
-						scope = scope.$parent;
+							var content = $('#content');
 
-						$('#row-' + scope.data.Id).addClass('modal-selected');
+							// Reference the parent scope because we're down in another scope right now
+							scope = scope.$parent;
 
-						// Bind the traverse action which allows navigating between records without closing/opening the modal
-						scope.traverse = scope.update(scope, function (forward) {
+							$('#row-' + scope.data.Id).addClass('modal-selected');
 
-							// Wrap in $timeout due to the async callback required--this was simpler than a promise
-							$timeout(function () {
+							// Bind the traverse action which allows navigating between records without closing/opening the modal
+							scope.traverse = scope.update(scope, function (forward) {
 
-								var rows, row, pointer;
+								// Wrap in $timeout due to the async callback required--this was simpler than a promise
+								$timeout(function () {
 
-								// Array of all tr's on the page (with a scope)
-								rows = $('tr.ng-scope').removeClass('modal-selected');
+									var rows, row, pointer;
 
-								// The currently selected row
-								row = $('#row-' + scope.data.Id);
+									// Array of all tr's on the page (with a scope)
+									rows = $('tr.ng-scope').removeClass('modal-selected');
 
-								// Our current row index
-								pointer = rows.index(row);
+									// The currently selected row
+									row = $('#row-' + scope.data.Id);
 
-								// Map to the new row dependent on the forward variable
-								if (forward) {
-									row = rows.eq(++pointer).length && rows.eq(pointer) || rows.first();
-								} else {
-									row = rows.eq(--pointer).length && rows.eq(pointer) || rows.last();
-								}
+									// Our current row index
+									pointer = rows.index(row);
 
-								// Add .modal-selected to the new row
-								row.addClass('modal-selected');
+									// Map to the new row dependent on the forward variable
+									if (forward) {
+										row = rows.eq(++pointer).length && rows.eq(pointer) || rows.first();
+									} else {
+										row = rows.eq(--pointer).length && rows.eq(pointer) || rows.last();
+									}
 
-								content.scrollTop(content.scrollTop() + row.offset().top - 250);
+									// Add .modal-selected to the new row
+									row.addClass('modal-selected');
 
-								// Copy data back into new scope.data variable
-								scope.data = angular.copy(row.data().$scope.row);
+									content.scrollTop(content.scrollTop() + row.offset().top - 250);
 
-								// Reset the form state
-								scope.modal.$setPristine();
+									// Copy data back into new scope.data variable
+									scope.data = angular.copy(row.data().$scope.row);
+
+									// Reset the form state
+									scope.modal.$setPristine();
+
+								});
 
 							});
 
-						});
+							// Watch for the destruction of this element and then remove .modal-selected class
+							$el.on("$destroy", function () {
+								$('tr.ng-scope').removeClass('modal-selected');
+							});
 
-						// Watch for the destruction of this element and then remove .modal-selected class
-						$el.on("$destroy", function () {
-							$('tr.ng-scope').removeClass('modal-selected');
-						});
+						} else {
+
+							$el.remove();
+
+						}
 
 					}
 
