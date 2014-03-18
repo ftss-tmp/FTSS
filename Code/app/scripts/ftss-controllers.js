@@ -334,34 +334,50 @@ FTSS.controller = (function () {
 
 			'edit': function (callback) {
 
-				return function () {
+				return function (isNew) {
 
 					var scope, instance;
 
 					// Create a new isolated scope for this modal
 					scope = $scope.$new(true);
 
-					// Copy the row data to our isolated scope
-					scope.data = angular.copy(this.row);
+					// We handle add vs edit within the modal templates for simplicity
+					scope.createData = isNew || false;
 
 					// Create the angular-strap modal using this model's modal template
 					instance = modal({
-						      'scope'          : scope,
-						      'backdrop'       : 'static',
-						      'contentTemplate': '/partials/modal-' + opts.model + '.html'
-					      });
+						                 'scope'          : scope,
+						                 'backdrop'       : 'static',
+						                 'contentTemplate': '/partials/modal-' + opts.model + '.html'
+					                 });
 
+
+					// Bind close to instance.destroy to remove this modal
 					scope.close = instance.destroy;
 
-					// Bind the submit action with a $destroy callback
-					scope.submit = actions.update(scope, scope.close);
+					if (isNew) {
 
-					// Pass action.update to the scope for our traverse directive
-					scope.update = actions.update;
+						scope.data = {
+							'processDate': moment().format("MMMM D, YYYY"),
+							'StudentType': 1
+						};
 
-					// If the callback (our post-processor exists, call it too)
-					if (callback) {
-						callback(scope);
+					} else {
+
+						// Copy the row data to our isolated scope
+						scope.data = angular.copy(this.row);
+
+						// Bind the submit action with a destroy callback
+						scope.submit = actions.update(scope, scope.close);
+
+						// Pass action.update to the scope for our traverse directive
+						scope.update = actions.update;
+
+						// If the callback (our post-processor exists, call it too)
+						if (callback) {
+							callback(scope);
+						}
+
 					}
 
 				};
