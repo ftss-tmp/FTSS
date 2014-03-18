@@ -43,6 +43,7 @@
 							// Flip the $dirty flag on this modal
 							modal.$setDirty();
 
+							// Add ng-dirty class manually as we aren't really a ngForm control
 							self.$control.addClass('ng-dirty');
 
 							// Make sure we add the value to the list if it's new
@@ -498,7 +499,18 @@
 
 							}
 
-							FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+							try {
+								var selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+
+								scope.modal
+
+									.$addControl({
+										             '$setPristine': function () {
+											             selectize.$control.removeClass('ng-dirty');
+										             }
+									             });
+
+							} catch (e) {}
 
 						});
 					}
