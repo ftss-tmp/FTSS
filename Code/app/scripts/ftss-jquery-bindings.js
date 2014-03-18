@@ -157,14 +157,13 @@
 			var $el, tip;
 
 			$el = $(this);
+			tip = $el.data('bs.popover') && $el.data('bs.popover').$tip;
 
-			if ($el.hasClass('btn')) {
+			if ($el.hasClass('btn') || !tip) {
 
 				popover.clear($el);
 
 			} else {
-
-				tip = $el.data('bs.popover').$tip;
 
 				$el.addClass('frozen');
 				tip.addClass('frozen');
@@ -207,7 +206,7 @@
 	$(document)
 
 		// Bind to the click event of element with the [hover] attribute
-		.on('click', '[hover]', popover.toggle)
+		.on('click', '[hover]:not(.no-toggle)', popover.toggle)
 
 		.on('mouseenter', '[hover]', popover.enter)
 
