@@ -11,7 +11,7 @@ var FTSS = {}, utils = {}, caches = {};
 
 	"use strict";
 
-	var _internal;
+	var debug = true;
 
 	/**
 	 * Creat the Angular module & declare dependencies
@@ -106,7 +106,7 @@ var FTSS = {}, utils = {}, caches = {};
 
 		return function (data, noStamp) {
 
-			if (_internal.debug && console) {
+			if (debug && console) {
 
 				var stamp = (new Date()).getTime();
 
