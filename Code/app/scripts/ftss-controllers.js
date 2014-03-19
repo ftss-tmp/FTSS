@@ -499,7 +499,7 @@ FTSS.controller = (function () {
 							var data = scope.data[field] || false;
 
 							// First check for valid fields as the model includes expanded and temporary that can not be sent
-							if (data && scope.data.hasOwnProperty(field) && (isNew || old[field] !== data)) {
+							if (data && scope.data.hasOwnProperty(field) && (isNew || !_(data).isEqual(old[field]))) {
 
 								send[field] = data;
 
