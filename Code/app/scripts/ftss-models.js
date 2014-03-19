@@ -160,6 +160,7 @@
 						'StudentType',
 						'HostUnit',
 						'FTD',
+						'ProcessDate',
 						'StudentId',
 						'Student/Name',
 						'Student/WorkEMail',
