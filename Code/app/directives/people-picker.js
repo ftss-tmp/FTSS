@@ -14,7 +14,6 @@
 		return {
 			'restrict'   : 'E',
 			'templateUrl': '/partials/people-picker.html',
-			'priority'   : 700,
 			'link'       : function ($scope, $el, $attrs) {
 
 				if ($scope.createData) {

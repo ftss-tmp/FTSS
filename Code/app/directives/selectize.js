@@ -9,7 +9,7 @@
 
 	"use strict";
 
-	var builder, custom, options = {};
+	var builder, custom, options = {}, timeout;
 
 	builder = function (scope, opts) {
 
@@ -35,7 +35,7 @@
 						var self = this;
 
 						// So that Angular will update the model immediately rather than waiting until we click somewhere else
-						scope.$apply(function () {
+						timeout(function () {
 
 							// Update the field with the value(s)
 							scope.data[opts.field] = (val && val.map ? val.map(Number) : Number(val)) || val;
@@ -391,27 +391,27 @@
 			var filter = scope.picker.filter;
 
 			return builder(scope, {
-					       'field'       : field,
-					       'labelField'  : 'Name',
-					       'valueField'  : 'Id',
-					       'sortField'   : 'Name',
-					       'searchField' : 'Name',
-					       'persist'     : false,
-					       'create'      : false,
-					       'plugins'     :
-						       [
-							       'remove_button'
-						       ],
-					       'load'        : function (query, callback) {
+				'field'      : field,
+				'labelField' : 'Name',
+				'valueField' : 'Id',
+				'sortField'  : 'Name',
+				'searchField': 'Name',
+				'persist'    : false,
+				'create'     : false,
+				'plugins'    :
+					[
+						'remove_button'
+					],
+				'load'       : function (query, callback) {
 
-						       //	if (query.indexOf(', ') > 1) {                      <-- only limit queries on the production server
+					//	if (query.indexOf(', ') > 1) {                      <-- only limit queries on the production server
 
-						       SharePoint.people(query, filter).then(callback);
+					SharePoint.people(query, filter).then(callback);
 
-						       //	}
+					//	}
 
-					       }
-				       });
+				}
+			});
 		}
 
 	};
@@ -423,11 +423,16 @@
 			'$timeout',
 			'SharePoint',
 			function ($timeout, SharePoint) {
+
 				return {
+
 					// Restrict it to be an attribute
 					'restrict': 'A',
+
 					// Responsible for registering DOM listeners as well as updating the DOM
 					'link'    : function (scope, element, attrs) {
+
+						timeout = $timeout;
 
 						$timeout(function () {
 
