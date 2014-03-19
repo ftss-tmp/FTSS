@@ -16,6 +16,7 @@ exports.config =
       order :
         before: [
           'bower_components/jquery/dist/jquery.js',
+          'app/scripts/angular-sharepoint.js',
           'app/scripts/ftss-init.js'
         ]
 
