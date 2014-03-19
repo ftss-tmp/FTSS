@@ -111,7 +111,8 @@
 								'html'     : true,
 								'title'    : title,
 								'content'  : content,
-								'placement': placement || 'auto'
+								'placement': placement || 'auto',
+								'container': 'body'
 							}
 
 						);
