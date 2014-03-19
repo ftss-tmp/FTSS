@@ -1,0 +1,7 @@
+.row(ng-if='createData', style='margin-bottom: 45px', explain='people-picker', right)
+    .col-lg-12
+        .input-group
+            .input-group-addon
+                icon search
+            .input-group-selectize
+                select(selectize='people', field='{{picker.field}}', placeholder='Type a name to search...')
