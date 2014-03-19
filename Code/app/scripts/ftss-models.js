@@ -1,4 +1,4 @@
-/*global _, $, jQuery, FTSS, app, angular */
+/*global FTSS */
 
 /**
  * FTSS Models

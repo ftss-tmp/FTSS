@@ -47,3 +47,12 @@ time-ago {
     float:right;
     font-style: italic;
 }
+
+.datepicker tr :nth-child(6), .datepicker tr :nth-child(7) {
+    display: none;
+
+}
+.datepicker .btn {
+    border:none!important;
+    box-shadow: none!important;
+}
