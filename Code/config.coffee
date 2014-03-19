@@ -25,7 +25,6 @@ exports.config =
         'css/app.css': /^(app|vendor|bower_components)/
       order:
         before: [
-          'app/styles/bootstrap.css',
           'vendor/selectize.css'
         ]
         after: [
