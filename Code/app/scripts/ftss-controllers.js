@@ -405,7 +405,6 @@ FTSS.controller = (function () {
 						// Copy the row data to our isolated scope
 						scope.data = angular.copy(this.row);
 
-
 						// Pass action.update to the scope for our traverse directive
 						scope.update = actions.update;
 

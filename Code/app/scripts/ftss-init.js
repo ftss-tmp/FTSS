@@ -35,7 +35,8 @@ var FTSS = {}, utils = {}, caches = {};
 		[
 			'$routeProvider',
 			'$modalProvider',
-			function ($routeProvider, $modalProvider) {
+			'$datepickerProvider',
+			function ($routeProvider, $modalProvider, $datepickerProvider) {
 
 				var routes =
 					[
@@ -66,6 +67,13 @@ var FTSS = {}, utils = {}, caches = {};
 				angular.extend($modalProvider.defaults, {
 					'container': 'body',
 					'animation': 'am-fade-and-scale'
+				});
+
+				angular.extend($datepickerProvider.defaults, {
+					'dateFormat': 'd MMM yyyy',
+					'startWeek' : 1,
+					'autoclose' : true,
+					'animation' : false
 				});
 
 			}
