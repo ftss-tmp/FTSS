@@ -26,6 +26,8 @@
 		'record-count'   : 'Displays the record  count for your search.  If the background is <span style="color:#d58512;font-weight:800">orange</span>, there were too many records found so you\'ll want to refine your search a little by adding more search tags.',
 
 
+		'people-picker'  : 'Use this search box to find the name from the AFNET Global Address List.  The format should be the same as in Outlook.<example>Doe, John A SSgt...</example>',
+
 		/**
 		 * Dialog boxes, these are the various dialog box messages displayed in FTSS
 		 */
@@ -55,7 +57,6 @@
 		'units-edit-courses'            : 'List the courses taught by this FTD.',
 
 		// Students page
-		'students-inprocessing-afgal'   : 'Use this search box to find the student from the AFNET Global Address List.  The format should be the same as in Outlook.<example>Doe, John A SSgt...</example>',
 		'students-training-requirements': 'This is a list of all the training requirements for this student.  When a student is scheduled for a given course, it is automatically removed from this list.<br><br><example>This data can also be imported from an IMDS 593 using one of three ways:<br><ol><li>Copy & paste the text anywhere on this screen.</li><li>Drag & drop the text file onto this window.</li><li>Click the import button below & load the text file.</li></ol></example>',
 		'students-inprocessing-date'    : 'This is the in-processing date for the student,<br>it is used to sort students by longest wait-time.',
 		'students-host-unit'            : 'The unit this student is assigned to.',
