@@ -11,7 +11,7 @@ div(ng-show='loaded', style='width:97%;float:left')
 
         #searchButtons.col-lg-2.no-pad
 
-            span.btn.btn-default(type='button', ng-click='reset()', hover='button-clear', left)
+            span.btn.btn-default(ng-click='reset()', hover='button-clear', left)
                 icon restore
 
             span(style='width:5%')  
@@ -35,6 +35,6 @@ div(ng-show='loaded', style='width:97%;float:left')
 
             span(style='width:5%')  
 
-            span#toggleExpand(ng-click='collapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}', type='button')
+            span#toggleExpand(ng-click='collapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}')
                 icon expand
                 icon collpase
