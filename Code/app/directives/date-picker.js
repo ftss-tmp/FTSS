@@ -12,7 +12,7 @@
 	FTSS.ng.directive('datePicker', function () {
 
 		return {
-			'link': function ($scope, $el) {
+			'link': function ($scope, $el, $attrs) {
 
 				$el.datepicker({
 					               format            : "MM d, yyyy",
@@ -22,6 +22,10 @@
 					               autoclose         : true,
 					               todayHighlight    : true
 				               });
+
+				$scope.$watch($attrs.ngModel, function (date) {
+					$el.datepicker('update', date);
+				});
 
 			}
 		};
