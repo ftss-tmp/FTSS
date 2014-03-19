@@ -14,14 +14,14 @@ FTSS.ng.controller(
 				'group': 'HostUnit',
 
 				'grouping': {
-					'HostUnit': 'Unit',
-					'FTD'     : 'FTD'
+					'ftdName' : 'FTD',
+					'HostUnit': 'Unit'
 				},
 
 				'sorting': {
 					'Name'    : 'Name',
 					'HostUnit': 'Unit',
-					'FTD'     : 'FTD'
+					'ftdName' : 'FTD'
 				},
 
 				'model': 'students',
@@ -65,15 +65,17 @@ FTSS.ng.controller(
 						      .then(function (d) {
 
 							            d.ftd = caches.Units[d.FTD];
+							            d.ftdName = d.ftd.LongName;
 							            d.Name = d.Student.Name;
 							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
+
 
 							            d.requirements = _.chain(d.Requirements_JSON)
 
 								            .map(function (r) {
 
 									                 var cache = caches.MasterCourseList[r] || false;
-									                 return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>': '';
+									                 return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>' : '';
 
 								                 })
 
