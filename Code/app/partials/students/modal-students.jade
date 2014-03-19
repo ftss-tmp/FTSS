@@ -13,16 +13,18 @@ form.form-horizontal(name='modal', ng-any-drop)
         h4.light-bottom
             b Inprocessing Date & Student Type
 
+        input.form-control(ng-model='data.ProcessDate', bs-datepicker)
+        br
         .row
 
-            .col-lg-5
-                .input-group.caps(explain='students-inprocessing-date', left)
+            .col-lg-6
+                .input-group(explain='students-inprocessing-date', left)
                     .input-group-addon
                         icon calendar_range
-                    input.form-control(ng-model='data.ProcessDate', date-picker)
+                    input.form-control(ng-model='data.ProcessDate', bs-datepicker, data-max-date='today')
                 time-ago(prefix='inprocessed') data.ProcessDate
 
-            .col-lg-7
+            .col-lg-6
                 .btn-group.pull-right.no-toggle(hover='students-category', right, bs-radio-group, ng-model='data.StudentType')
                     label.btn.btn-default
                         input(value='1', type='radio')
