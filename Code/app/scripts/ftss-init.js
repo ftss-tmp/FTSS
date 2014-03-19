@@ -73,8 +73,6 @@ var FTSS = {}, utils = {}, caches = {};
 
 	FTSS.utils = {};
 
-	FTSS.peopleCache = {};
-
 	/**
 	 * Converts SharePoint Date format into a the locale date string.
 	 *

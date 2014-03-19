@@ -246,7 +246,7 @@
 						FTSS.searchWatch();
 					}
 
-					$scope.pageLimit = 50;
+					$scope.pageLimit = 25;
 					$scope.count = '-';
 					$scope.overload = false;
 					$scope.filter = false;
