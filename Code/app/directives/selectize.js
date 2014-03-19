@@ -395,7 +395,6 @@
 					       'sortField'   : 'Name',
 					       'searchField' : 'Name',
 					       'persist'     : false,
-					       'maxItems'    : scope.peopleMax,
 					       'create'      : false,
 					       'plugins'     :
 						       [
@@ -408,16 +407,6 @@
 						       SharePoint.people(query).then(callback);
 
 						       //	}
-
-					       },
-					       'onInitialize': function () {
-
-						       this.addOption({
-							                      'Id'  : scope.data[field],
-							                      'Name': scope.data.Name
-						                      });
-
-						       this.setValue(scope.data[field]);
 
 					       }
 				       });
