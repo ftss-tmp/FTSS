@@ -295,40 +295,61 @@
 
 									                   json =
 										                   [
+										                   ],
+
+									                   date =
+										                   [
 										                   ];
 
 								                   if (data.length) {
 
-									                   _.chain(data[0])
+									                   _(data[0]).each(function (d, f) {
 
-										                   .keys()
+										                   var type = typeof(d);
 
-										                   .each(function (f) {
-											                         if (f.indexOf('_JSON') > 1) {
-												                         json.push(f);
-											                         }
-										                         });
+										                   if (f.indexOf('_JSON') > 1) {
+											                   json.push(f);
+										                   } else if (type === 'string' || type === 'object') {
+											                   date.push(f);
+										                   }
 
-									                   if (json.length) {
+									                   });
 
-										                   decoder = function (v) {
+									                   decoder = function (v) {
 
+										                   if (json.length) {
 											                   _(json).each(function (field) {
 
 												                   v[field] = JSON.parse(v[field]);
 
 											                   });
+										                   }
 
-											                   return v;
+										                   if (date.length) {
+											                   _(date).each(function (field) {
 
-										                   };
+												                   try {
 
-									                   }
+													                   if (v[field].indexOf('/Date(') > -1) {
+
+														                   v[field] = _utils.getDate(v[field]);
+
+													                   }
+
+												                   } catch (e) {}
+
+											                   });
+										                   }
+
+										                   return v;
+
+									                   };
+
 
 									                   try {
 
 										                   data = _.reduce(data, function (o, v) {
-											                   o[v.Id || i++] = json ? decoder(v) : v;
+											                   o[v.Id || i++] = decoder(v);
 											                   return o;
 										                   }, {});
 
