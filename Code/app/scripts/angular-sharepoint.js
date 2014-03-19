@@ -80,6 +80,24 @@
 				             return scope;
 			             };
 
+			             _utils.getDate = (function () {
+
+				             var dCache = {};
+
+				             return function (date) {
+
+					             if (date && !dCache[date]) {
+
+						             dCache[date] = new Date(Number(date.replace(/[^\d.]/g, '')));
+
+					             }
+
+					             return date ? dCache[date] : null;
+
+				             };
+
+			             }());
+
 			             return {
 
 				             /**
