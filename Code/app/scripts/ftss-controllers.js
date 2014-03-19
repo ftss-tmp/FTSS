@@ -481,7 +481,7 @@ FTSS.controller = (function () {
 				return function (eventData) {
 
 					var old, fields, send = {};
-debugger;
+
 					if (scope.modal.$dirty) {
 
 						// Used by modal.footer.html to disable the submit button
