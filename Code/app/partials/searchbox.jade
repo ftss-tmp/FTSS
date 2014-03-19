@@ -17,20 +17,23 @@ div(ng-show='loaded', style='width:97%;float:left')
             span(style='width:5%')  
 
             span.dropdown
-                span.dropdown-toggle.btn.btn-default(hover='button-grouping', left)
+                span.dropdown-toggle.btn.btn-default(hover='button-grouping', left, data-toggle='dropdown')
                     icon group
                 .dropdown-menu
                     h3.popover-title Group By
-                    .btn-group-vertical
-                        button.btn.btn-link(ng-repeat='(val, name) in grouping', type='button', ng-model='groupBy.$', btn-radio='val')
+                    .btn-group-vertical(bs-radio-group, ng-model='groupBy.$')
+                        label.btn.btn-link(ng-repeat='(val,name) in grouping')
+                            input(value='{{val}}', type='radio')
                             | {{name}}
+
             span.dropdown
-                span.dropdown-toggle.btn.btn-default(hover='button-sorting', left)
+                span.dropdown-toggle.btn.btn-default(hover='button-sorting', left, data-toggle='dropdown')
                     icon sort
                 .dropdown-menu
                     h3.popover-title Sort By
-                    .btn-group-vertical
-                        button.btn.btn-link(ng-repeat='(val, name) in sorting', type='button', ng-model='sortBy.$', btn-radio='val')
+                    .btn-group-vertical(bs-radio-group, ng-model='sortBy.$')
+                        label.btn.btn-link(ng-repeat='(val,name) in sorting')
+                            input(value='{{val}}', type='radio')
                             | {{name}}
 
             span(style='width:5%')  
