@@ -3,7 +3,7 @@ form.form-horizontal(name='modal')
     .modal-header
         h3
             icon books
-            | {{data.PDS}} - {{data.Number}}
+            | {{createData ? 'Add New Course' : data.PDS + ' - ' + data.Number}}
 
     .modal-body
 

@@ -8,14 +8,7 @@ form.form-horizontal(name='modal', ng-any-drop)
     .modal-body
 
         // This will only be shown if we are adding a student
-        .row(ng-if='createData', style='margin-bottom: 45px')
-            .col-lg-12
-                .input-group(explain='students-inprocessing-afgal', right)
-                    .input-group-addon(style='width:11%')
-                        icon search
-                    .input-group-selectize
-                        select(selectize='people', field='StudentId', placeholder='Type a name to search...')
-
+        people-picker(field='StudentId', filter='Students')
 
         h4.light-bottom
             b Inprocessing Date & Student Type
@@ -26,8 +19,8 @@ form.form-horizontal(name='modal', ng-any-drop)
                 .input-group.caps(explain='students-inprocessing-date', left)
                     .input-group-addon
                         icon calendar_range
-                    input.form-control(ng-model='data.processDate', date-picker)
-                time-ago(prefix='inprocessed') data.processDate
+                    input.form-control(ng-model='data.ProcessDate', date-picker)
+                time-ago(prefix='inprocessed') data.ProcessDate
 
             .col-lg-7
                 .btn-group.pull-right.no-toggle(hover='students-category', right, bs-radio-group, ng-model='data.StudentType')

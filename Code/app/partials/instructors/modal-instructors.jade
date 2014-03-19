@@ -3,9 +3,12 @@ form.form-horizontal(name='modal')
     .modal-header
         h4(hover='instructors-edit-helpdesk', right)
             icon instructor
-            | {{data.Name}}
+            | {{createData ? 'Add New Instructor' : data.Name}}
 
     .modal-body
+
+        // This will only be shown if we are adding a student
+        people-picker(field='InstructorId', filter='Instructors')
 
         .row
 
