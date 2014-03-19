@@ -388,6 +388,8 @@
 
 		'people': function (scope, SharePoint, field) {
 
+			var filter = scope.picker.filter;
+
 			return builder(scope, {
 					       'field'       : field,
 					       'labelField'  : 'Name',
@@ -404,7 +406,7 @@
 
 						       //	if (query.indexOf(', ') > 1) {                      <-- only limit queries on the production server
 
-						       SharePoint.people(query).then(callback);
+						       SharePoint.people(query, filter).then(callback);
 
 						       //	}
 

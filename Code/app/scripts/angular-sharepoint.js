@@ -82,22 +82,39 @@
 
 			             return {
 
+				             /**
+				              *
+				              */
 				             'people': (function () {
 
+					             // This is the cache of our people queries
 					             var _cache = {};
 
-					             return function (search) {
+					             return function (search, filter) {
 
+						             // Call the filter independently because it may be change while the SP data shouldn't
+						             var execFilter = function (data) {
+
+							             return filter ? _(data).filter(function (d) {
+
+								             return filter(d);
+
+							             }) : data;
+
+						             };
+
+						             // If we've already done this search during the app's lifecycle, return it instead
 						             if (_cache[search]) {
 
 							             return {
 								             'then': function (callback) {
-									             callback(_cache[search]);
+									             callback(execFilter(_cache[search]));
 								             }
 							             };
 
 						             }
 
+						             // No cache existed so make the SP query
 						             return $http({
 							                          'dataType': 'json',
 							                          'method'  : 'GET',
@@ -110,17 +127,11 @@
 							                          }
 						                          })
 
+							             // Now convert to an array, store a copy in the cache and return results of execFilter()
 							             .then(function (response) {
 
 								                   var data = _cache[search] = _.toArray(response.data.d);
-
-								                   _(data).each(function (d) {
-
-									                   FTSS.peopleCache[d.Id] = d.Name;
-
-								                   });
-
-								                   return data;
+								                   return execFilter(data);
 
 							                   });
 
