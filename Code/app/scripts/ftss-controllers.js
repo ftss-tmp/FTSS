@@ -356,8 +356,8 @@ FTSS.controller = (function () {
 			},
 
 			/**
-			 * Modal Edit Callback
-			 * The main edit dialog for then entire app--this one is kinda important.  First, generate a new isolated
+			 * Modal Add/Edit Callback
+			 * The main add/edit dialog for then entire app--this one is kinda important.  First, generate a new isolated
 			 * scope then copy the row data to scope.data & launch the angular-strap modal dialog, also bind some close
 			 * & update actions and fire an optional post-processor to do more fancy stuff with the data from the
 			 * parent controller
@@ -367,6 +367,7 @@ FTSS.controller = (function () {
 			 */
 			'edit': function (callback) {
 
+				// the isNew boolean determines if this is a create or update action
 				return function (isNew) {
 
 					var scope, instance;
@@ -384,9 +385,12 @@ FTSS.controller = (function () {
 						                 'contentTemplate': '/partials/modal-' + opts.model + '.html'
 					                 });
 
-
 					// Bind close to instance.destroy to remove this modal
 					scope.close = instance.destroy;
+
+
+					// Bind the submit action with a destroy callback
+					scope.submit = actions.update(scope, scope.close, isNew);
 
 					if (isNew) {
 
@@ -395,13 +399,12 @@ FTSS.controller = (function () {
 							'StudentType': 1
 						};
 
+
 					} else {
 
 						// Copy the row data to our isolated scope
 						scope.data = angular.copy(this.row);
 
-						// Bind the submit action with a destroy callback
-						scope.submit = actions.update(scope, scope.close);
 
 						// Pass action.update to the scope for our traverse directive
 						scope.update = actions.update;
@@ -471,21 +474,21 @@ FTSS.controller = (function () {
 			 * @param scope
 			 * @returns {Function}
 			 */
-			'update': function (scope, callback) {
+			'update': function (scope, callback, isNew) {
 
 				callback = callback || function () {};
 
 				return function (eventData) {
 
 					var old, fields, send = {};
-
+debugger;
 					if (scope.modal.$dirty) {
 
 						// Used by modal.footer.html to disable the submit button
 						scope.submitted = true;
 
 						// Keep a copy of the original data for comparison
-						old = actions.data[scope.data.Id];
+						old = actions.data[scope.data.Id] || {};
 
 						// angular.copy() so we don't overwrite the original model
 						fields = angular.copy(model.params.$select);
@@ -493,10 +496,10 @@ FTSS.controller = (function () {
 						//  Compare each field from the list of fields to the old data
 						_(fields).each(function (field) {
 
-							var data = scope.data[field];
+							var data = scope.data[field] || false;
 
 							// First check for valid fields as the model includes expanded and temporary that can not be sent
-							if (old.hasOwnProperty(field) && old[field] !== data) {
+							if (data && scope.data.hasOwnProperty(field) && (isNew || old[field] !== data)) {
 
 								send[field] = data;
 
@@ -516,33 +519,50 @@ FTSS.controller = (function () {
 
 						// Use the model's cache setting & __metadata
 						send.cache = model.cache;
-						send.__metadata = scope.data.__metadata;
+						send.__metadata = scope.data.__metadata || model.source;
 
-						// Call sharePoint.update() with our data and handle the success/failure response
-						sharePoint.update(send).then(function (resp) {
+						if (isNew) {
 
-							scope.submitted = false;
+							sharePoint.create(send).then(function (resp) {
 
-							// HTTP 204 is the status given for a successful update, there will be no body
-							if (resp.status === 204) {
+								if (resp.status === 201) {
 
-								// Update the etag so we can rewrite this data again during the session if we want
-								scope.data.__metadata.etag = resp.headers('etag');
+									callback(eventData, true);
+									actions.reload();
 
-								// Mark the data as updated for the <updated> directive
-								scope.data.updated = true;
+								}
 
-								// Copy the updated back to the original dataset
-								actions.data[scope.data.Id] = angular.copy(scope.data);
+							}), utils.$ajaxFailure;
 
-								// Call actions.process() to reprocess the data by our controllers
-								actions.process();
+						} else {
 
-								callback(eventData, true);
+							// Call sharePoint.update() with our data and handle the success/failure response
+							sharePoint.update(send).then(function (resp) {
 
-							}
+								scope.submitted = false;
 
-						}, utils.$ajaxFailure);
+								// HTTP 204 is the status given for a successful update, there will be no body
+								if (resp.status === 204) {
+
+									// Update the etag so we can rewrite this data again during the session if we want
+									scope.data.__metadata.etag = resp.headers('etag');
+
+									// Mark the data as updated for the <updated> directive
+									scope.data.updated = true;
+
+									// Copy the updated back to the original dataset
+									actions.data[scope.data.Id] = angular.copy(scope.data);
+
+									// Call actions.process() to reprocess the data by our controllers
+									actions.process();
+
+									callback(eventData, true);
+
+								}
+
+							}, utils.$ajaxFailure);
+
+						}
 
 					}
 
