@@ -26,7 +26,16 @@ FTSS.ng.controller(
 
 				'model': 'students',
 
-				'edit': function () {
+				'edit': function (scope, isNew) {
+
+					if (isNew) {
+
+						scope.data = {
+							'processDate': 'today',
+							'StudentType': 1
+						};
+
+					}
 
 					FTSS.pasteAction = function (text) {
 
