@@ -36,7 +36,8 @@
 			'$location',
 			'SharePoint',
 			'$routeParams',
-			function ($scope, $location, SharePoint, $routeParams) {
+			'$timeout',
+			function ($scope, $location, SharePoint, $routeParams, $timeout) {
 
 				FTSS.loaded = function () {
 					utils.loading(false);
@@ -197,13 +198,18 @@
 				utils.permaLink = function (tag, pg) {
 
 					$scope.permaLink = LZString.compressToBase64(JSON.stringify(tag));
+					$timeout(function () {
 
-					$location.path(
-						[
-							'',
-							pg || FTSS.page(),
-							$scope.permaLink
-						].join('/'));
+						$scope.permaLink = utils.compress(JSON.stringify(tag));
+
+						$location.path(
+							[
+								'',
+								pg || FTSS.page(),
+								$scope.permaLink
+							].join('/'));
+
+					});
 
 				};
 
@@ -216,7 +222,7 @@
 				$scope.isPage = function (link) {
 					return link === (FTSS.page() || 'home') ? 'active' : '';
 				};
-	
+
 				/**
 				 * This is the callback for the searchbox reset button, clears out the search params
 				 */
