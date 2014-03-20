@@ -75,6 +75,7 @@
 							break;
 
 						case 'ready':
+							debugger;
 							utils.loading(false);
 							msg = {
 								'intro'  : "You're ready to go.",
@@ -197,7 +198,6 @@
 
 				utils.permaLink = function (tag, pg) {
 
-					$scope.permaLink = LZString.compressToBase64(JSON.stringify(tag));
 					$timeout(function () {
 
 						$scope.permaLink = utils.compress(JSON.stringify(tag));
@@ -269,7 +269,7 @@
 
 						$scope.permaLink = $routeParams.link;
 
-						FTSS.pending = JSON.parse(LZString.decompressFromBase64($scope.permaLink));
+						FTSS.pending = JSON.parse(utils.decompress($scope.permaLink));
 
 					}
 
