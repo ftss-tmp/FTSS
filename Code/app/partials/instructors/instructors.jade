@@ -30,9 +30,9 @@ div(class='{{wellCollapse}}')
                             b
                                 span(ng-if='row.Archived')
                                     | ***ARCHIVED INSTRUCTOR***&nbsp;
-                                | {{row.Name}}
+                                | {{row.Instructor.Name}}
                         td
-                            b {{row.UnitLong}}
+                            b {{row.Unit.LongName}}
                         td
                             b {{row.AFSC}}
                         td.invert()

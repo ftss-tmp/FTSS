@@ -11,17 +11,17 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'Name',
-				'group': 'UnitLong',
+				'group': 'Unit.LongName',
 
 				'grouping': {
-					'Squadron': 'Squadron',
-					'UnitLong': 'Detachment',
-					'AFSC'    : 'AFSC'
+					'Squadron'     : 'Squadron',
+					'Unit.LongName': 'Detachment',
+					'AFSC'         : 'AFSC'
 				},
 
 				'sorting': {
-					'Name': 'Name',
-					'AFSC': 'AFSC'
+					'Instructor.Name': 'Name',
+					'AFSC'           : 'AFSC'
 				},
 				'model'  : 'instructors'
 
@@ -41,10 +41,7 @@ FTSS.ng.controller(
 						      .then(function (d) {
 
 							            d.Unit = caches.Units[d.UnitId];
-							            d.Det = d.Unit.Det;
-							            d.Name = d.Instructor.Name;
-							            d.UnitLong = d.Unit.LongName;
-							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
+							            d.firstName = d.Instructor.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
 
 						            });
 
