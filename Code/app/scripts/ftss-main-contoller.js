@@ -196,7 +196,7 @@
 
 				utils.permaLink = function (tag, pg) {
 
-					$scope.permaLink = utils.deflate64(JSON.stringify(tag));
+					$scope.permaLink = LZString.compressToBase64(JSON.stringify(tag));
 
 					$location.path(
 						[
@@ -216,8 +216,7 @@
 				$scope.isPage = function (link) {
 					return link === (FTSS.page() || 'home') ? 'active' : '';
 				};
-
-
+	
 				/**
 				 * This is the callback for the searchbox reset button, clears out the search params
 				 */
@@ -266,7 +265,7 @@
 
 						$scope.permaLink = $routeParams.link;
 
-						FTSS.pending = JSON.parse(utils.inflate64($scope.permaLink));
+						FTSS.pending = JSON.parse(LZString.decompressFromBase64($scope.permaLink));
 
 					}
 

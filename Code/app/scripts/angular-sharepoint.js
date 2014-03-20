@@ -52,11 +52,11 @@
 			              *
 			              * @type {*|deflate|Function}
 			              */
-			             _utils.compress = RawDeflate && RawDeflate.deflate || LZString && LZString.compressToUTF16 || function (data) {
+			             _utils.compress = LZString && LZString.compressToUTF16 || function (data) {
 				             return data;
 			             };
 
-			             _utils.decompress = RawDeflate && RawDeflate.inflate || LZString && LZString.decompressFromUTF16 || function (data) {
+			             _utils.decompress = LZString && LZString.decompressFromUTF16 || function (data) {
 				             return data;
 			             };
 
