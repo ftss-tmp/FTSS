@@ -4,12 +4,12 @@ div(class='{{wellCollapse}}')
         h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
-        .well(ng-repeat='r in group', ng-once)
+        .well(ng-repeat='row in group', ng-once)
             h4
-                span(class='btn btn-{{r.openSeatsClass}} availSeats(disabled="")') {{r.openSeats}} Open
-                span.rollupOnly {{r.Course.PDS}} - {{r.Course.Number}}
+                span(class='btn btn-{{row.openSeatsClass}} availSeats(disabled="")') {{row.openSeats}} Open
+                span.rollupOnly {{row.Course.PDS}} - {{row.Course.Number}}
                 span.pull-right(style='letter-spacing: .1em')
-                    | {{r.start}} - {{r.end}}
+                    | {{row.start}} - {{row.end}}
                     icon calendar_range
             hr.rollup
             .rollup
@@ -17,29 +17,29 @@ div(class='{{wellCollapse}}')
                     table.table.table-split
                         thead
                             tr
-                                th.truncate(colspan='3') {{r.Course.PDS}} - {{r.Course.Number}}: {{r.Course.Title}}
+                                th.truncate(colspan='3') {{row.Course.PDS}} - {{row.Course.Number}}: {{row.Course.Title}}
                         tbody
-                            tr(ng-show='r.Instructor.Photo')
+                            tr(ng-show='row.Instructorow.Photo')
                                 td(rowspan='7', colspan='1', style='border-right: none;width:175px;padding-top: 20px')
-                                    photo.img-rounded(size='150px', shape='rectangle', data='r.Instructor')
+                                    photo.img-rounded(size='150px', shape='rectangle', data='row.Instructor')
                             tr
                                 td Location
-                                td {{r.det.Base}} (Detachment {{r.det.Det}})
+                                td {{row.det.Base}} (Detachment {{row.det.Det}})
                             tr
                                 td Instructor
-                                td {{r.instructor}}
+                                td {{row.instructor}}
                             tr
                                 td MDS
-                                td {{r.Course.MDS}}
+                                td {{row.Course.MDS}}
                             tr
                                 td AFSC
-                                td {{r.Course.AFSC}}
+                                td {{row.Course.AFSC}}
                             tr
                                 td Days
-                                td {{r.Course.Days}}
+                                td {{row.Course.Days}}
                             tr
                                 td Hours
-                                td {{r.Course.Hours}}
+                                td {{row.Course.Hours}}
                 .col-lg-2.pull-right.text-right
                     table.table.table-split
                         thead
@@ -48,34 +48,34 @@ div(class='{{wellCollapse}}')
                         tbody
                             tr
                                 td Host
-                                td.text-center {{r.Host}}
+                                td.text-center {{row.Host}}
                             tr
                                 td Other
-                                td.text-center {{r.Other}}
+                                td.text-center {{row.Other}}
                             tr
                                 td Approved
-                                td.text-center {{r.approvedSeats}}
+                                td.text-center {{row.approvedSeats}}
                             tr(style='border-top:2px solid;')
                                 td Minimum
-                                td.text-center {{r.Course.Min}}
+                                td.text-center {{row.Course.Min}}
                             tr
                                 td Maximum
-                                td.text-center {{r.Course.Max}}
+                                td.text-center {{row.Course.Max}}
                             tr(style='border-top:2px solid;')
                                 td Pending
-                                td.text-center {{r.pendingSeats}}
+                                td.text-center {{row.pendingSeats}}
                             tr
                                 td Available
-                                td.text-center {{r.openSeats}}
+                                td.text-center {{row.openSeats}}
                 .clearfix
                 .requestActions
                     hr
                     .pull-right.invert
-                        button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='r.openSeats')
+                        button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='row.openSeats')
                             span.btn-label
                                 icon add
                             | Request Seats
-                        button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='r.requestCount', ng-click='view(r)')
+                        button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='row.requestCount', ng-click='view(r)')
                             span.btn-label
                                 icon search
                             | View Requests
@@ -83,7 +83,7 @@ div(class='{{wellCollapse}}')
                             span.btn-label
                                 icon edit
                             | Edit Class
-                        button.btn.btn-danger.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
+                        button.btn.btn-dangerow.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
                             span.btn-label
                                 icon delete
                             | Cancel Class
