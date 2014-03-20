@@ -198,12 +198,12 @@
 
 					$scope.permaLink = utils.deflate64(JSON.stringify(tag));
 
-					window.location.hash =
-					[
-						'',
-						pg || FTSS.page(),
-						$scope.permaLink
-					].join('/');
+					$location.path(
+						[
+							'',
+							pg || FTSS.page(),
+							$scope.permaLink
+						].join('/'));
 
 				};
 

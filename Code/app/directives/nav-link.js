@@ -13,7 +13,8 @@
 
 		[
 			'$timeout',
-			function ($timeout) {
+			'$location',
+			function ($timeout, $location) {
 				return {
 					'restrict'   : 'E',
 					'templateUrl': '/partials/nav-link.html',
@@ -26,12 +27,12 @@
 					'link'       : function ($scope) {
 
 						$scope.navigate = function () {
-							window.location.hash =
-							[
-								'',
-								$scope.link,
-								$scope.$parent.permaLink
-							].join('/');
+							$location.path(
+								[
+									'',
+									$scope.link,
+									$scope.$parent.permaLink
+								].join('/'));
 						};
 
 						$timeout(function () {

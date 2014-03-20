@@ -36,7 +36,8 @@ var FTSS = {}, utils = {}, caches = {};
 			'$routeProvider',
 			'$modalProvider',
 			'$datepickerProvider',
-			function ($routeProvider, $modalProvider, $datepickerProvider) {
+			'$locationProvider',
+			function ($routeProvider, $modalProvider, $datepickerProvider, $locationProvider) {
 
 				var routes =
 					[
@@ -63,6 +64,8 @@ var FTSS = {}, utils = {}, caches = {};
 				});
 
 				$routeProvider.otherwise({'redirectTo': '/error'});
+
+				$locationProvider.html5Mode(false);
 
 				angular.extend($modalProvider.defaults, {
 					'container': 'body',
