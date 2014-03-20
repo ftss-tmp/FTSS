@@ -1,4 +1,4 @@
-/*global FTSS, _ */
+/*global FTSS, _, utils, caches */
 
 /**
  * Selectize directive
