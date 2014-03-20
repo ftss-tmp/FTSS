@@ -31,7 +31,7 @@ FTSS.ng.controller(
 					if (isNew) {
 
 						scope.data = {
-							'processDate': 'today',
+							'ProcessDate': new Date(),
 							'StudentType': 1
 						};
 
