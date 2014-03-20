@@ -7,18 +7,22 @@
 	var filters = {},
 
 		routes = {
-			'scheduled':
+			'scheduled'   :
 				[
 					{'q': "Start ge datetime'TODAY'", 'label': 'Not Started'},
 					{'q': "End le datetime'TODAY'", 'label': 'Completed'},
 					{'q': "(Start le datetime'TODAY' and End ge datetime'TODAY')", 'label': 'In Progress'}
 				],
-			'requests' :
+			'requests'    :
 				[
 					{'q': 'Status gt 1', 'label': 'Completed Requests'},
 					{'q': 'Status eq 1', 'label': 'Pending Requests'},
 					{'q': 'Status eq 2', 'label': 'Approved Requests'},
 					{'q': 'Status eq 3', 'label': 'Denied Requests'}
+				],
+			'requirements':
+				[
+					{'q': '', 'label': ''}
 				]
 		};
 
@@ -64,19 +68,25 @@
 	filters.map = function () {
 
 		return {
-			'scheduled': {
+			'scheduled'   : {
 				'u': 'UnitId',
 				'm': "Course/MDS",
 				'a': "Course/AFSC",
 				'i': 'InstructorId',
 				'c': 'CourseId'
 			},
-			'requests' : {
+			'requests'    : {
 				'u': 'Scheduled/UnitId',
 				'm': "Scheduled/Course/MDS",
 				'a': "Scheduled/Course/AFSC",
 				'i': 'Scheduled/InstructorId',
 				'c': 'Scheduled/CourseId'
+			},
+			'requirements': {
+				'u': 'UnitId',
+				'm': "Course/MDS",
+				'a': "Course/AFSC",
+				'c': 'CourseId'
 			}
 		}[FTSS.page()];
 

@@ -3,7 +3,7 @@
 /**
  * FTSS Models
  *
- * 		'$inlinecount': 'allpages',
+ *        '$inlinecount': 'allpages',
  *      '$top'        : 25,
  *
  */
@@ -30,9 +30,9 @@
 						'AFSC',
 						'Title',
 						'Number',
-					    'IMDS',
-					    'CAFMCL',
-					    'Archived'
+						'IMDS',
+						'CAFMCL',
+						'Archived'
 					]
 			}
 
@@ -50,7 +50,7 @@
 						'Det',
 						'Email',
 						'Phone',
-					    'Courses_JSON'
+						'Courses_JSON'
 					]
 			}
 
@@ -71,8 +71,8 @@
 						'Instructor/Name',
 						'Instructor/WorkEMail',
 						'Instructor/WorkPhone',
-					    'Photo',
-					    'Archived'
+						'Photo',
+						'Archived'
 					]
 			}
 
@@ -80,7 +80,7 @@
 
 		'requests': {
 
-			'cache': true,
+			'cache' : true,
 			'source': 'Requests',
 			'params': {
 				'$expand':
@@ -119,7 +119,7 @@
 
 		'scheduled': {
 
-			'cache': true,
+			'cache' : true,
 			'source': 'Scheduled',
 			'params': {
 				'$expand':
@@ -144,9 +144,30 @@
 
 		},
 
+		'requirements': {
+
+			'cache' : true,
+			'source': 'Requirements',
+			'params': {
+				'$expand':
+					[
+						'Course'
+					],
+				'$select':
+					[
+						'Id',
+						'UnitId',
+						'CourseId',
+						'Students_JSON',
+						'DateNeeded',
+						'Notes'
+					]
+			}
+		},
+
 		'students': {
 
-			'cache': true,
+			'cache' : true,
 			'source': 'Students',
 			'params': {
 				'$expand':
@@ -165,7 +186,7 @@
 						'Student/Name',
 						'Student/WorkEMail',
 						'Student/WorkPhone',
-					    'Archived'
+						'Archived'
 					]
 			}
 		}
