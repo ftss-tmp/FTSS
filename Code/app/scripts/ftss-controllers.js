@@ -1,4 +1,4 @@
-/*global utils, FTSS, caches, _, Sifter, angular, moment */
+/*global utils, FTSS, caches, _, Sifter, angular */
 
 /**
  * FTSS.controller()
@@ -388,31 +388,18 @@ FTSS.controller = (function () {
 					// Bind close to instance.destroy to remove this modal
 					scope.close = instance.destroy;
 
-
 					// Bind the submit action with a destroy callback
 					scope.submit = actions.update(scope, scope.close, isNew);
 
-					if (isNew) {
+					// Pass action.update to the scope for our traverse directive
+					scope.update = actions.update;
 
-						scope.data = {
-							'processDate': moment().format("MMMM D, YYYY"),
-							'StudentType': 1
-						};
+					// Copy the row data to our isolated scope
+					scope.data = isNew ? {} : angular.copy(this.row);
 
-
-					} else {
-
-						// Copy the row data to our isolated scope
-						scope.data = angular.copy(this.row);
-
-						// Pass action.update to the scope for our traverse directive
-						scope.update = actions.update;
-
-						// If the callback (our post-processor exists, call it too)
-						if (callback) {
-							callback(scope);
-						}
-
+					// If the callback (our post-processor exists, call it too)
+					if (callback) {
+						callback(scope, isNew);
 					}
 
 				};
