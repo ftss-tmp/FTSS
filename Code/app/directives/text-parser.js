@@ -1,3 +1,5 @@
+/*global FTSS */
+
 /**
  * Text Parser directive
  *
@@ -33,80 +35,85 @@
 
 	};
 
-	FTSS.ng.directive('textParser', function () {
+	FTSS.ng.directive(
 
-		return {
+		'textParser', function () {
 
-			'restrict'   : 'A',
-			'templateUrl': '/partials/text-parser.html',
-			'link'       : function (scope, $el, $attrs) {
+			return {
 
-				if (window.FileReader !== null) {
+				'restrict'   : 'A',
+				'templateUrl': '/partials/text-parser.html',
+				'link'       : function (scope, $el, $attrs) {
 
-					$el.find('input').bind('change', readText);
+					if (window.FileReader !== null) {
 
-					$el.find('label').append($attrs.textParser);
+						$el.find('input').bind('change', readText);
 
-				} else {
+						$el.find('label').append($attrs.textParser);
 
-					$el.remove();
+					} else {
+
+						$el.remove();
+
+					}
 
 				}
 
+			};
+
+		});
+
+	FTSS.ng.directive(
+
+		'ngAnyDrop',
+
+		[
+			'$timeout',
+			function ($timeout) {
+
+				return function (scope, elem) {
+
+					if ('draggable' in document.createElement('span')) {
+
+						var cancel = null;
+
+						elem[0].addEventListener("dragover", function (evt) {
+							$timeout.cancel(cancel);
+							evt.stopPropagation();
+							evt.preventDefault();
+							elem.addClass("dragover");
+						}, false);
+
+						elem[0].addEventListener("dragleave", function () {
+							cancel = $timeout(function () {
+								elem.removeClass("dragover");
+							});
+						}, false);
+
+						elem[0].addEventListener("drop", function (evt) {
+
+							evt.stopPropagation();
+							evt.preventDefault();
+
+							elem.removeClass("dragover");
+
+							var txt = evt.dataTransfer.getData('Text');
+
+							if (txt) {
+
+								FTSS.pasteAction(txt);
+
+							} else {
+
+								readText(evt);
+
+							}
+
+						}, false);
+					}
+				};
 			}
 
-		};
-
-	});
-
-	FTSS.ng.directive('ngAnyDrop',
-	                  [
-		                  '$timeout',
-		                  function ($timeout) {
-
-			                  return function (scope, elem) {
-
-				                  if ('draggable' in document.createElement('span')) {
-
-					                  var cancel = null;
-
-					                  elem[0].addEventListener("dragover", function (evt) {
-						                  $timeout.cancel(cancel);
-						                  evt.stopPropagation();
-						                  evt.preventDefault();
-						                  elem.addClass("dragover");
-					                  }, false);
-
-					                  elem[0].addEventListener("dragleave", function () {
-						                  cancel = $timeout(function () {
-							                  elem.removeClass("dragover");
-						                  });
-					                  }, false);
-
-					                  elem[0].addEventListener("drop", function (evt) {
-
-						                  evt.stopPropagation();
-						                  evt.preventDefault();
-
-						                  elem.removeClass("dragover");
-
-						                  var txt = evt.dataTransfer.getData('Text');
-
-						                  if (txt) {
-
-							                  FTSS.pasteAction(txt);
-
-						                  } else {
-
-							                  readText(evt);
-
-						                  }
-
-					                  }, false);
-				                  }
-			                  };
-		                  }
-
-	                  ]);
+		]);
 
 }());
