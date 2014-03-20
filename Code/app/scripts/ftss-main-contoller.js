@@ -75,7 +75,6 @@
 							break;
 
 						case 'ready':
-							debugger;
 							utils.loading(false);
 							msg = {
 								'intro'  : "You're ready to go.",
