@@ -224,9 +224,7 @@ FTSS.controller = (function () {
 
 					req.end = FTSS.utils.fixDate(schedClass.End);
 
-					req.unit = req.det.Base + ', Det ' + req.det.Det;
-
-					req.course = req.Course.PDS + ' - ' + req.Course.Number;
+					req.unit = req.det.LongName;
 
 					seats = _.reduce(schedClass.Requests.results, function (memo, r) {
 						memo[r.Status] += r.Students.results.length;
