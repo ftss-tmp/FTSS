@@ -90,9 +90,11 @@
 
 						                  elem.removeClass("dragover");
 
-						                  if (evt.dataTransfer.items[0].kind === 'string') {
+						                  var txt = evt.dataTransfer.getData('Text');
 
-							                  FTSS.pasteAction(evt.dataTransfer.getData('Text'));
+						                  if (txt) {
+
+							                  FTSS.pasteAction(txt);
 
 						                  } else {
 
