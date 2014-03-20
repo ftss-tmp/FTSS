@@ -52,3 +52,19 @@
 .btn-group .btn {
     margin-right: 0!important;
 }
+
+.support {
+    cursor: pointer;
+    opacity: .6;
+    margin:10px 10px;
+    font-size: 1.25em;
+    transition:500ms ease;
+}
+
+.support:hover {
+    opacity: 1;
+}
+.support svg {
+    stroke: #fff;
+    fill: #fff;
+}
