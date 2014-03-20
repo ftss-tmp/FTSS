@@ -247,9 +247,7 @@
 						$scope.noSearch = false;
 					}
 
-					if (FTSS.searchWatch) {
-						FTSS.searchWatch();
-					}
+					(FTSS.searchWatch || Function)();
 
 					$scope.pageLimit = 25;
 					$scope.count = '-';
