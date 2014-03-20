@@ -1,4 +1,4 @@
-/*global utils, FTSS, _, RawDeflate */
+/*global utils, FTSS, _, LZString */
 
 /**
  * Misc utilities
@@ -212,18 +212,10 @@ utils.$ajaxFailure = function (req) {
 };
 
 
-utils.deflate64 = function (str) {
-	return btoa(decodeURI(encodeURIComponent(RawDeflate.deflate(str)))).match(/.{1,5}/g).join('.').replace(/=/g, '');
+utils.compress = function (str) {
+	return LZString.compressToBase64(str).match(/.{1,5}/g).join('.').replace(/=/g, '');
 };
 
-utils.inflate64 = function (str) {
-	return RawDeflate.inflate(decodeURIComponent(decodeURI(atob(str.replace(/\./g, '')))));
-};
-
-utils.deflate = function (str) {
-	return decodeURI(encodeURIComponent(RawDeflate.deflate(str)));
-};
-
-utils.inflate = function (str) {
-	return RawDeflate.inflate(decodeURIComponent(encodeURI(str)));
+utils.decompress = function (str) {
+	return LZString.decompressFromBase64(str.replace(/\./g, ''));
 };
