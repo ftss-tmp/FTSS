@@ -1,4 +1,6 @@
-
+.aside {
+    max-width: 40%;
+}
 .mask-img {
     position: relative;
     overflow: hidden;

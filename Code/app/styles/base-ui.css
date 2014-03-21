@@ -43,6 +43,7 @@ a, a:hover {
 .nav a {
     cursor: pointer!important;
 }
+
 /*
 .datepicker .disabled {
     color: #eee!important;
@@ -56,6 +57,9 @@ a, a:hover {
     width:40px!important;
 }*/
 
+.panel-footer {
+    height:40px;
+}
 
 [ng-dblclick] {
     cursor: pointer;

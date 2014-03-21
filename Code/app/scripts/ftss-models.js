@@ -203,6 +203,24 @@
 						'Training/Requirements_JSON'
 					]
 			}
+		},
+
+		'support': {
+
+			'cache' : true,
+			'source': 'Support',
+			'params': {
+				'$expand' : 'CreatedBy',
+				'$select' :
+					[
+						'Page',
+						'Staff',
+						'Comment',
+						'Created',
+						'CreatedBy/Name'
+					]
+			}
+
 		}
 
 	};
