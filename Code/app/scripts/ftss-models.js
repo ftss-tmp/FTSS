@@ -151,15 +151,18 @@
 			'params': {
 				'$expand':
 					[
-						'Course'
+						'Course',
+						'Students'
 					],
 				'$select':
 					[
 						'Id',
 						'UnitId',
 						'CourseId',
-						'Students_JSON',
+						'StudentsId',
 						'DateNeeded',
+						'Students/Training/Requirements_JSON',
+						'Students/Id',
 						'Notes'
 					]
 			}
@@ -170,23 +173,34 @@
 			'cache' : true,
 			'source': 'Students',
 			'params': {
-				'$expand':
-					[
-						'Student'
-					],
+				'$expand': 'Student',
 				'$select':
 					[
 						'Id',
-						'Requirements_JSON',
 						'StudentType',
 						'HostUnit',
 						'FTD',
 						'ProcessDate',
 						'StudentId',
+						'TrainingId',
 						'Student/Name',
 						'Student/WorkEMail',
 						'Student/WorkPhone',
 						'Archived'
+					]
+			}
+		},
+
+		'student_requirements': {
+
+			'cache' : true,
+			'source': 'Students',
+			'params': {
+				'$expand': 'Training',
+				'$select':
+					[
+						'Id',
+						'Training/Requirements_JSON'
 					]
 			}
 		}
