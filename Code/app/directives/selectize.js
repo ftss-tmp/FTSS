@@ -353,11 +353,17 @@
 
 						.then(function (response) {
 
-							      loaded(response, 'Instructors', function (v) {
+							      loaded(response, 'Instructors', function (val) {
 
-								      v.label = v.Instructor.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+								      _(val.Instructor).each(function (v, k) {
+									      val[k] = v;
+								      });
 
-								      return  v.Instructor.Name;
+								      delete val.Instructor;
+
+								      val.label = val.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+
+								      return  val.Name;
 
 							      });
 
@@ -371,11 +377,17 @@
 
 							      loaded(_.compact(_.uniq(_.pluck(response, 'HostUnit'))), 'HostUnits');
 
-							      loaded(response, 'Students', function (v) {
+							      loaded(response, 'Students', function (val) {
 
-								      v.label = v.Student.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+								      _(val.Student).each(function (v, k) {
+									      val[k] = v;
+								      });
 
-								      return  v.Student.Name;
+								      delete val.Student;
+
+								      val.label = val.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+
+								      return  val.Name;
 
 							      });
 
@@ -493,19 +505,15 @@
 
 							}
 
-							try {
-								var selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+							var selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
 
-								scope.modal
+							scope.modal && scope.modal
 
-									.$addControl({
-										             '$setPristine': function () {
-											             selectize.$control.removeClass('ng-dirty');
-										             }
-									             });
-
-							} catch (e) {}
-
+								.$addControl({
+									             '$setPristine': function () {
+										             selectize.$control.removeClass('ng-dirty');
+									             }
+								             });
 						});
 					}
 				};
