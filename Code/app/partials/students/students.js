@@ -6,7 +6,8 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'SharePoint',
+		function ($scope, SharePoint) {
 
 			var self = FTSS.controller($scope, {
 
@@ -67,28 +68,40 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
-					      self
+					      SharePoint
 
-						      .initialize(data)
+						      .read(FTSS.models.student_requirements)
 
-						      .then(function (d) {
+						      .then(function (data_reqs) {
 
-							            d.ftd = caches.Units[d.FTD];
-							            d.ftdName = d.ftd.LongName;
-							            d.Name = d.Student.Name;
-							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
+							            _(data_reqs).each(function (d, k) {
+								            data[k].Requirements_JSON = JSON.parse(d.Training.Requirements_JSON);
+							            });
 
+							            self
 
-							            d.requirements = _.chain(d.Requirements_JSON)
+								            .initialize(data)
 
-								            .map(function (r) {
+								            .then(function (d) {
 
-									                 var cache = caches.MasterCourseList[r] || false;
-									                 return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>' : '';
+									                  d.ftd = caches.Units[d.FTD];
+									                  d.ftdName = d.ftd.LongName;
+									                  d.Name = d.Student.Name;
+									                  d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
 
-								                 })
+									                  d.requirements = _.chain(d.Requirements_JSON)
 
-								            .compact().sort().value().join('');
+										                  .map(function (r) {
+
+											                       var cache = caches.MasterCourseList[r] || false;
+											                       return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>' : '';
+
+										                       })
+
+										                  .compact().sort().value().join('');
+
+								                  });
+
 
 						            });
 
