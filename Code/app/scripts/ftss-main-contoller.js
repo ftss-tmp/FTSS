@@ -37,7 +37,8 @@
 			'SharePoint',
 			'$routeParams',
 			'$timeout',
-			function ($scope, $location, SharePoint, $routeParams, $timeout) {
+			'$http',
+			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
 				FTSS.loaded = function () {
 					utils.loading(false);
@@ -90,6 +91,47 @@
 						'intro'  : msg.intro || 'Quick Note:  ',
 						'message': msg.message || ''
 					};
+
+				};
+
+				/**
+				 * Bitly url generator--just because we can.  This will automatically use the 1.usa.gov domain
+				 * as that's what usa.gov uses.  If it doesn't work, then it returns the long url instead
+				 */
+				$scope.bitly = function () {
+
+
+					var page, url;
+
+					page =
+					[
+						'https://cs3.eis.af.mil/sites/00-ED-AM-11/FTSS',
+						$scope.page(),
+						$scope.permaLink
+					].join('/');
+
+					url =
+					[
+						'https://api-ssl.bitly.com/v3/shorten?',
+						'access_token=4d2a55cd24810f5e392f6d6c61b0b5d3663ef554&',
+						'formate=json&',
+						'longUrl=',
+						encodeURIComponent(page),
+						'&callback=JSON_CALLBACK'
+					].join('');
+
+					$http({
+						      'method': 'jsonp',
+						      'url'   : url
+					      })
+
+						.then(function (data) {
+							      if (data.status === 200) {
+								      console.log(data.data.data.url);
+							      } else {
+								      console.log(page);
+							      }
+						      });
 
 				};
 

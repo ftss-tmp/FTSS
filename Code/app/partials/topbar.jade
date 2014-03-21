@@ -9,5 +9,8 @@ header.navbar.navbar-inverse(role='banner')
             a(href='#', tabindex='-1')
                 | {{user.Name}}
         li
+            .support(ng-click='bitly()', style='width:1.3em;color:#fff;font-size:1.3em')
+                icon share
+        li
             .support(data-content-template='/partials/support.html', data-placement='left', bs-aside='aside', data-container='body', data-animation='am-slide-left')
                 icon question
