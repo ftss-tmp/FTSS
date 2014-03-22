@@ -79,14 +79,17 @@
     max-width: 33%
 }
 
-.optgroup.instructors.count-6, .optgroup.instructors.count-5, .optgroup.instructors.count-4{
+.optgroup.instructors.count-4{
+    max-width: 25%;
+}
+
+.optgroup.instructors.count-7, .optgroup.instructors.count-6, .optgroup.instructors.count-5 {
     width: 20%
 }
 
-.optgroup.mastercourselist.count-6, .optgroup.mastercourselist.count-5 {
+.optgroup.mastercourselist.count-7, .optgroup.mastercourselist.count-6, .optgroup.mastercourselist.count-5 {
     width: 40%
 }
-
 
 #tagBox .selectize-input .item, .truncate {
     overflow: hidden;
