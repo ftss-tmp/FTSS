@@ -6,7 +6,7 @@ header.navbar.navbar-inverse(role='banner')
 
     ul.nav.navbar-nav.pull-right.hidden-xs
         li(ng-controller='user')
-            a(href='#', tabindex='-1')
+            a(tabindex='-1', bs-popover, data-content-template='/partials/user-settings.html', data-placement='bottom-left', data-animation='am-flip-x')
                 | {{user.Name}}
         li
             .support(ng-click='bitly()', style='width:1.3em;color:#fff;font-size:1.3em')
