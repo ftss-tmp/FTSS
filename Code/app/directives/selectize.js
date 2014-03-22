@@ -140,7 +140,8 @@
 						'AFSC',
 						'MDS',
 						'Instructors',
-						'MasterCourseList'
+						'MasterCourseList',
+						'HostUnits'
 					],
 				'plugins'        :
 					[
@@ -153,7 +154,7 @@
 				},
 				'onInitialize'   : function () {
 
-					var count = 0, CACHE_COUNT = 7;
+					var count = 0, CACHE_COUNT = 6;
 
 					FTSS.search = this;
 
@@ -195,27 +196,23 @@
 							// _.chain() requires value() to get the resultant dataset
 							.value();
 
-						// We don't want to add the Students list to the tagBox but will keep it for other uses
-						if (group !== 'Students' && group !== 'HostUnits') {
+						var headers = {
+							'Units'           : 'FTD',
+							'MasterCourseList': 'Course',
+							'Instructors'     : 'Instructor',
+							'HostUnits'       : 'Host Unit'
+						};
 
-							var headers = {
-								'Units'           : 'FTD',
-								'MasterCourseList': 'Course',
-								'Instructors'     : 'Instructor'
-							};
-
-							// Add the option group (header) to our searchBox
-							FTSS.search.addOptionGroup(group, {
-								'label': headers[group] || group,
-								'value': group
-							});
-
-						}
+						// Add the option group (header) to our searchBox
+						FTSS.search.addOptionGroup(group, {
+							'label': headers[group] || group,
+							'value': group
+						});
 
 						// Keep track of our async loads and fire once they are all done (not using $q.all())
 						if (++count === CACHE_COUNT) {
 
-							var tagBoxOpts = options.AFSC.concat(options.MDS, options.MasterCourseList, options.Units, options.Instructors);
+							var tagBoxOpts = options.AFSC.concat(options.MDS, options.MasterCourseList, options.Units, options.Instructors, options.HostUnits);
 
 							// Add the options to our searchBox
 							FTSS.search.addOption(tagBoxOpts);
@@ -343,8 +340,35 @@
 								      ].join('');
 
 								      return v.text;
+
 							      });
 
+							      SharePoint
+
+								      .read(FTSS.models.host_units)
+
+								      .then(function (hosts) {
+
+									            loaded(hosts, 'HostUnits', function (v) {
+
+										            v.Text = v.Unit + ', ' + v.Base;
+
+										            v.label =
+										            [
+											            '<b>',
+											            v.Unit,
+											            '</b><em>, ',
+											            v.Base,
+											            '</em><right>Det. ',
+											            caches.Units[v.FTD].Det,
+											            '</right>'
+										            ].join('');
+
+										            return v.Unit;
+
+									            });
+
+								            });
 						      });
 
 					SharePoint
@@ -360,30 +384,6 @@
 								      });
 
 								      delete val.Instructor;
-
-								      val.label = val.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
-
-								      return  val.Name;
-
-							      });
-
-						      });
-
-					SharePoint
-
-						.read(FTSS.models.students)
-
-						.then(function (response) {
-
-							      loaded(_.compact(_.uniq(_.pluck(response, 'HostUnit'))), 'HostUnits');
-
-							      loaded(response, 'Students', function (val) {
-
-								      _(val.Student).each(function (v, k) {
-									      val[k] = v;
-								      });
-
-								      delete val.Student;
 
 								      val.label = val.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
 
