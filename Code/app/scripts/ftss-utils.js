@@ -2,7 +2,7 @@
 
 /**
  * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
- * due to performance considerations.
+ * due to performance considerations.  Uses a short-circuit for invalid properties & returns false.
  *
  * data = {
  *   a1: { b1: "hello" },
@@ -12,6 +12,10 @@
  * deepRead(data, "a1.b1") => "hello"
  *
  * deepRead(data, "a2.b2.c2") => "world"
+ *
+ * deepRead(data, "a1.b2") => false
+ *
+ * deepRead(data, "a1.b2.c2.any.random.number.of.non-existant.properties") => false
  *
  * @param {object} data - The collection to iterate over
  * @param {string} expression - The string expression to evaluate
@@ -24,10 +28,10 @@ utils.deepRead = function (data, expression) {
 	// Cache a copy of the split expression, then set to exp
 	var exp = expression.split('.'), retVal;
 
-	// Recursively read the object using a do-while loop
+	// Recursively read the object using a do-while loop, uses short-circuit for invalid properties
 	do {
-		retVal = (retVal || data)[exp.shift()];
-	} while (exp.length);
+		retVal = (retVal || data)[exp.shift()] || false;
+	} while (retVal !== false && exp.length);
 
 	// Return our retVal or false if not found
 	return retVal || false;
