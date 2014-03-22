@@ -1,4 +1,4 @@
-/*global FTSS */
+/*global FTSS, _, moment */
 
 /**
  *
@@ -30,6 +30,10 @@
 						});
 
 						$scope.comments = data;
+
+						$scope.addReply = function() {
+
+						};
 
 					});
 
