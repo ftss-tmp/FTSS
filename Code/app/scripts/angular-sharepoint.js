@@ -407,26 +407,26 @@
 									                   // There was some data so we can add that to our cache and update everything
 									                   if (!_(data).isEmpty()) {
 
-										                   try {
+										                   var hasCache = !_(cachedData).isEmpty();
 
-											                   // Merge our updates with the cache
-											                   _(data).each(function (row, key) {
-												                   cachedData[key] = row;
-											                   });
+										                   // Merge our updates with the cache
+										                   _(data).each(function (row, key) {
+											                   cachedData[key] = row;
+										                   });
 
-											                   // Convert new cached object to JSON and compress to UTF16 (for IE compatibility)
-											                   localStorage[cacheString + 'Data'] = _utils.compress(JSON.stringify(cachedData));
+										                   // Convert new cached object to JSON and compress to UTF16 (for IE compatibility)
+										                   localStorage[cacheString + 'Data'] = _utils.compress(JSON.stringify(cachedData));
 
-											                   // Set the timestamp AFTER updating the cache (just in case something goes wrong)
-											                   localStorage[cacheString + 'Stamp'] = timestamp;
+										                   // Set the timestamp AFTER updating the cache (just in case something goes wrong)
+										                   localStorage[cacheString + 'Stamp'] = timestamp;
+
+
+										                   if (hasCache) {
 
 											                   // Add a helpful little updated property to our response (but only after caching without it)
 											                   _(data).each(function (row, key) {
 												                   cachedData[key].updated = true;
 											                   });
-
-										                   } catch (e) {
-
 
 										                   }
 
