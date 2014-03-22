@@ -6,23 +6,24 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		'SharePoint',
-		function ($scope, SharePoint) {
+		function ($scope) {
 
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'Name',
-				'group': 'HostUnit',
+				'group': 'HostUnit.Text',
+
+				'tagBox': true,
 
 				'grouping': {
-					'ftdName' : 'FTD',
-					'HostUnit': 'Unit'
+					'ftd.LongName' : 'FTD',
+					'HostUnit.Text': 'Unit'
 				},
 
 				'sorting': {
-					'Name'    : 'Name',
-					'HostUnit': 'Unit',
-					'ftdName' : 'FTD'
+					'Name'         : 'Name',
+					'HostUnit.Text': 'Unit',
+					'ftd.LongName' : 'FTD'
 				},
 
 				'model': 'students',
@@ -32,7 +33,7 @@ FTSS.ng.controller(
 					if (isNew) {
 
 						scope.data = {
-							'ProcessDate': new Date(),
+							'ProcessDate': (new Date()),
 							'StudentType': 1
 						};
 
@@ -64,44 +65,31 @@ FTSS.ng.controller(
 
 			self
 
-				.bind('loaded')
+				.bind('filter')
 
 				.then(function (data) {
 
-					      SharePoint
+					      self
 
-						      .read(FTSS.models.student_requirements)
+						      .initialize(data)
 
-						      .then(function (data_reqs) {
+						      .then(function (d) {
 
-							            _(data_reqs).each(function (d, k) {
-								            data[k].Requirements_JSON = JSON.parse(d.Training.Requirements_JSON);
-							            });
+							            d.HostUnit = caches.HostUnits[d.HostUnitId];
+							            d.ftd = caches.Units[d.HostUnit.FTD];
+							            d.Name = d.Student.Name;
+							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
 
-							            self
+							            d.requirements = _.chain(d.Requirements_JSON)
 
-								            .initialize(data)
+								            .map(function (r) {
 
-								            .then(function (d) {
+									                 var cache = caches.MasterCourseList[r] || false;
+									                 return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>' : '';
 
-									                  d.ftd = caches.Units[d.FTD];
-									                  d.ftdName = d.ftd.LongName;
-									                  d.Name = d.Student.Name;
-									                  d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
+								                 })
 
-									                  d.requirements = _.chain(d.Requirements_JSON)
-
-										                  .map(function (r) {
-
-											                       var cache = caches.MasterCourseList[r] || false;
-											                       return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>' : '';
-
-										                       })
-
-										                  .compact().sort().value().join('');
-
-								                  });
-
+								            .compact().sort().value().join('');
 
 						            });
 

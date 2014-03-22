@@ -56,6 +56,22 @@
 
 		},
 
+		'host_units': {
+
+			'cache' : true,
+			'source': 'HostUnits',
+			'params': {
+				'$select':
+					[
+						'Id',
+						'Base',
+						'Unit',
+						'FTD'
+					]
+			}
+
+		},
+
 		'instructors': {
 
 			'cache' : true,
@@ -173,45 +189,35 @@
 			'cache' : true,
 			'source': 'Students',
 			'params': {
-				'$expand': 'Student',
+				'$expand':
+					[
+						'Student',
+						'HostUnit'
+					],
 				'$select':
 					[
 						'Id',
 						'StudentType',
-						'HostUnit',
-						'FTD',
+						'HostUnitId',
 						'ProcessDate',
 						'StudentId',
-						'TrainingId',
 						'Student/Name',
 						'Student/WorkEMail',
 						'Student/WorkPhone',
+						'Requirements_JSON',
 						'Archived'
 					]
 			}
 		},
 
-		'student_requirements': {
-
-			'cache' : true,
-			'source': 'Students',
-			'params': {
-				'$expand': 'Training',
-				'$select':
-					[
-						'Id',
-						'Training/Requirements_JSON'
-					]
-			}
-		},
 
 		'support': {
 
 			'cache' : true,
 			'source': 'Support',
 			'params': {
-				'$expand' : 'CreatedBy',
-				'$select' :
+				'$expand': 'CreatedBy',
+				'$select':
 					[
 						'Page',
 						'Staff',

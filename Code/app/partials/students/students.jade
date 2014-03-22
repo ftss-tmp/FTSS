@@ -17,7 +17,7 @@ div(class='{{wellCollapse}}')
                     tr
                         th.w40 Student
                         th.w15 Host Unit
-                        th.w15 FTD
+                        th.w15 Local FTD
                         th.w10 Notes
                         th.w10 Actions
                 tbody
@@ -30,7 +30,7 @@ div(class='{{wellCollapse}}')
                                     | ***ARCHIVED STUDENT***&nbsp;
                                 | {{row.Name}}
                         td
-                            b {{row.HostUnit}}
+                            b {{row.HostUnit.Unit}}
                         td
                             b {{row.ftd.LongName}}
                         td
