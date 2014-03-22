@@ -13,7 +13,7 @@
  */
 FTSS.controller = (function () {
 
-	var modal, sharePoint;
+	var tagBox, modal, sharePoint;
 
 	// Grab some angular variables for use later on
 	FTSS.ng.run(
@@ -57,6 +57,9 @@ FTSS.controller = (function () {
 
 				// If loaded we only want to bind the first time
 				var single = (prop === 'loaded');
+
+				// For multi mode, we are using the tagBox
+				tagBox = !single;
 
 				// Copy the model to a local variable for reuse without affecting the original model
 				model = angular.copy(FTSS.models[opts.model]);
@@ -181,16 +184,14 @@ FTSS.controller = (function () {
 				data = data || actions.data;
 
 				// If there is a defined data processor, then execute it against the data as well
-				if (process) {
-					_(data).each(process);
-				}
+				process && _(data).each(process);
 
 				// (re)bind our groupBy & sortBy values
 				$scope.groupBy.$ = $scope.groupBy.$ || opts.group;
 				$scope.sortBy.$ = $scope.sortBy.$ || opts.sort;
 
 				// If this is a tagBox then we should call taghighlight as well
-				if ($scope.tagBox) {
+				if (tagBox) {
 					utils.tagHighlight(data);
 					$scope.searchText = {};
 				}
@@ -273,7 +274,7 @@ FTSS.controller = (function () {
 					}));
 
 					// Try to set our searchText to the first word of the first tag from our tagBox
-					if (!$scope.tagBox && !$scope.searchText.$) {
+					if (!tagBox && !$scope.searchText.$) {
 
 						try {
 							var val = FTSS.search.getValue().slice(0, 1);
@@ -283,9 +284,7 @@ FTSS.controller = (function () {
 					}
 
 					// De-register the watcher if it exists
-					if (FTSS.searchWatch) {
-						FTSS.searchWatch();
-					}
+					(FTSS.searchWatch || Function)();
 
 					// Create a watcher that monitors our searchText, groupBy & sortBy for changes
 					FTSS.searchWatch = $scope.$watchCollection('[searchText.$,groupBy.$,sortBy.$]', function () {
@@ -299,7 +298,7 @@ FTSS.controller = (function () {
 						$scope.count = 0;
 
 						// Now process our tagBox or text search if one is set
-						if ($scope.tagBox || text && text.length) {
+						if (tagBox || text && text.length) {
 
 							// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
 							results = sifter.search(text, {
@@ -333,9 +332,7 @@ FTSS.controller = (function () {
 							$scope.counter($scope.count, $scope.count !== results.total);
 
 							// Finally, do our tagHighlighting if this is a tagBox
-							if ($scope.tagBox) {
-								utils.tagHighlight(data);
-							}
+							tagBox && utils.tagHighlight(data);
 
 						} else {
 

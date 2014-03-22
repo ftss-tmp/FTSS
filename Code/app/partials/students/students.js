@@ -13,8 +13,6 @@ FTSS.ng.controller(
 				'sort' : 'Name',
 				'group': 'HostUnit.Text',
 
-				'tagBox': true,
-
 				'grouping': {
 					'ftd.LongName' : 'FTD',
 					'HostUnit.Text': 'Unit'

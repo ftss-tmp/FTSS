@@ -12,8 +12,6 @@ FTSS.ng.controller(
 				'sort' : 'status',
 				'group': 'course',
 
-				'tagBox': true,
-
 				'grouping': {
 					'course'     : 'Course',
 					'status'     : 'Status',
