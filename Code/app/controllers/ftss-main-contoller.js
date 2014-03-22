@@ -75,14 +75,6 @@
 							};
 							break;
 
-						case 'ready':
-							utils.loading(false);
-							msg = {
-								'intro'  : "You're ready to go.",
-								'newLine': true,
-								'message': 'To get started, use the search box above.  The page should update automagically. If the record count to the left of the search box is orange, there were too many results--you\'ll want to refine your search a little.'
-							};
-
 					}
 
 					$scope.messages = {
@@ -229,7 +221,7 @@
 						} else {
 
 							utils.updateSearch('');
-							utils.$message('ready');
+							$scope.cleanSlate = true;
 
 						}
 

@@ -30,9 +30,6 @@ FTSS.controller = (function () {
 
 		var model, process, actions;
 
-		// The tagBox controls whether the search or tagBox are shown
-		$scope.$parent.tagBox = opts.tagBox || false;
-
 		// Specify the groupBy parameter
 		$scope.$parent.grouping = opts.grouping || false;
 
@@ -58,8 +55,8 @@ FTSS.controller = (function () {
 				// If loaded we only want to bind the first time
 				var single = (prop === 'loaded');
 
-				// For multi mode, we are using the tagBox
-				tagBox = !single;
+				// The tagBox controls whether the search or tagBox are shown
+				$scope.$parent.tagBox = tagBox = !single;
 
 				// Copy the model to a local variable for reuse without affecting the original model
 				model = angular.copy(FTSS.models[opts.model]);
@@ -337,7 +334,7 @@ FTSS.controller = (function () {
 						} else {
 
 							// We don't have any query yet so just set the ready message
-							utils.$message('ready');
+							$scope.cleanSlate = true;
 
 						}
 
