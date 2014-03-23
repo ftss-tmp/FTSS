@@ -58,3 +58,9 @@ time-ago {
     border:none!important;
     box-shadow: none!important;
 }
+
+.pageMessage {
+    font-size: 1.1em;
+    letter-spacing: .1em;
+    line-height: 1.75em;
+}

@@ -105,3 +105,10 @@
     color: #3a87ad;
     font-weight: 800;
 }
+
+.hideHelp {
+    float: right;
+    right: -40px;
+    position: relative;
+    bottom: -15px;
+}
