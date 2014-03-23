@@ -19,24 +19,28 @@
 
 				$timeout(function () {
 
-					var model = FTSS.models.support;
+					var model = FTSS.models.support, update;
 
 					model.params.$filter = "Page eq '" + $location.path().split('/')[1] + "'";
 
-					SharePoint.read(model).then(function (data) {
+					$scope.addReply = function () {
 
-						_(data).each(function (d) {
-							d.TimeAgo = moment(d.Created).fromNow();
+					};
+
+					update = function () {
+						SharePoint.read(model).then(function (data) {
+
+							_(data).each(function (d) {
+								d.TimeAgo = moment(d.Created).fromNow();
+							});
+
+							$scope.comments = data;
+
+							$timeout(update, 5000);
 						});
+					};
 
-						$scope.comments = data;
-
-						$scope.addReply = function() {
-
-						};
-
-					});
-
+					update();
 
 				});
 
