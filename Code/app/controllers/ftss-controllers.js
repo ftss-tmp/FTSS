@@ -77,9 +77,15 @@ FTSS.controller = (function () {
 
 								actions.reload = function () {
 
-									if (prop === 'filter') {
-										model.params.$filter = watch;
-									}
+									var filters =
+										[
+										];
+
+									opts.filter && filters.push(opts.filter);
+
+									(prop === 'filter') && filters.push(watch);
+
+									model.params.$filter = filters.join(' and ');
 
 									sharePoint
 
