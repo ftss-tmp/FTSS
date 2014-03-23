@@ -49,6 +49,8 @@ var FTSS = {}, utils = {}, caches = {};
 						'students',
 						'catalog',
 						'units',
+						'backlog',
+						'hosts',
 						'error'
 					];
 
@@ -125,7 +127,6 @@ var FTSS = {}, utils = {}, caches = {};
 					console.info(data);
 				} else {
 					console.log(stamp, data, stamp - last);
-					//console.trace();
 				}
 
 				last = stamp;

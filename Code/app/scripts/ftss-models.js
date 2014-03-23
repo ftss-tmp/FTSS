@@ -56,7 +56,7 @@
 
 		},
 
-		'host_units': {
+		'hosts': {
 
 			'cache' : true,
 			'source': 'HostUnits',
