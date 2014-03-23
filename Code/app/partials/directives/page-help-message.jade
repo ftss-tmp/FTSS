@@ -1,0 +1,5 @@
+.alert.alert-warning.alert-dismissable(ng-if='showHelp')
+    .close(data-dismiss='alert') &times;
+    .pageMessage {{pageMessage}}
+    .hideHelp.btn.btn-link(ng-click='hideHelp()', data-dismiss='alert') Don't show this anymore
+    .clearfix

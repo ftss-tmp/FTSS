@@ -2,4 +2,16 @@ h3.light-bottom
     icon question
     | What Am I Doing Here?
 
-.well This page should answer all your questions and stuff!!!
+div(ng-controller='supportController')
+
+    .lead Add a question or comment here and a FTSS support team member will get back to you pretty quick.
+
+    .panel.panel-default(ng-repeat='comment in comments', style='font-size:.9em')
+
+        .panel-body
+            .pull-left{{comment.Comment}}
+            .pull-right.btn-link(ng-click='addReply') Reply
+
+        .panel-footer(ng-class='{bold:comment.Staff}')
+            .pull-left {{comment.CreatedBy.Name}}
+            .pull-right {{comment.TimeAgo}}

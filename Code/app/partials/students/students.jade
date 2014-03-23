@@ -1,3 +1,5 @@
+page-help-message
+
 .add-button.btn.btn-success(ng-click='edit(true)')
         icon add
         |&nbsp;Add Student
@@ -6,35 +8,38 @@ div(class='{{wellCollapse}}')
 
     div(ng-repeat='(header, group) in groups')
 
-        h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px')
-            | {{header}}
+        h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px') {{header}}
             span.pull-right {{group.length}}
 
         .rollupContainer
 
             table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
-                thead
-                    tr
+
+                thead: tr
+
                         th.w40 Student
                         th.w15 Host Unit
-                        th.w15 FTD
+                        th.w15 Local FTD
                         th.w10 Notes
                         th.w10 Actions
+
                 tbody
+
                     tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)')
 
                         td
                             updated row
                             b
-                                span(ng-if='row.Archived')
-                                    | ***ARCHIVED STUDENT***&nbsp;
+                                span(ng-if='row.Archived') ***ARCHIVED STUDENT***&nbsp;
                                 | {{row.Name}}
-                        td
-                            b {{row.HostUnit}}
-                        td
-                            b {{row.ftd.LongName}}
-                        td
-                            b(ng-if='row.Requirements_JSON.length', hover='Training Requirements', content='<dl class="dl-horizontal">{{row.requirements}}</dl>')
+
+                        td: b {{row.HostUnit.Unit}}
+
+                        td: b {{row.ftd.LongName}}
+
+                        td: b(ng-if='row.Requirements_JSON.length',
+                                hover='Training Requirements',
+                                content='<dl class="dl-horizontal">{{row.requirements}}</dl>')
                                 icon checklist
-                        td.invert()
-                            actions(edit, archive, label='student')
+
+                        td.invert: actions(edit, archive, label='student')

@@ -12,8 +12,6 @@ FTSS.ng.controller(
 				'sort' : 'DateNeeded',
 				'group': 'Date',
 
-				'tagBox': true,
-
 				'grouping': {
 					'Date'         : 'Month',
 					'Unit.LongName': 'FTD',

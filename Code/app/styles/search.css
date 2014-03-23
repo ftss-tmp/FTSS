@@ -79,14 +79,17 @@
     max-width: 33%
 }
 
-.optgroup.instructors.count-6, .optgroup.instructors.count-5, .optgroup.instructors.count-4{
+.optgroup.instructors.count-4{
+    max-width: 25%;
+}
+
+.optgroup.instructors.count-7, .optgroup.instructors.count-6, .optgroup.instructors.count-5 {
     width: 20%
 }
 
-.optgroup.mastercourselist.count-6, .optgroup.mastercourselist.count-5 {
+.optgroup.mastercourselist.count-7, .optgroup.mastercourselist.count-6, .optgroup.mastercourselist.count-5 {
     width: 40%
 }
-
 
 #tagBox .selectize-input .item, .truncate {
     overflow: hidden;
@@ -109,6 +112,7 @@
 #tagBox .item:not(.processed):not(:hover), #tagBox .item:not(.processed):not(:hover) div * {
     color: #47a447 !important;
     font-weight: 800;
+    background: #eee;
 }
 
 #searchContainer.tagBox #searchBox, #searchContainer #tagBox {
@@ -119,18 +123,19 @@
     display: block;
 }
 
-.item {
-    background-color: #fcfcfc !important;
-    color: #777 !important
+#tagBox .item.processed {
+    background-color: #fcfcfc;
+    color: #555;
 }
 
-.item.matched {
-    background-color: #eaeaea !important;
-    color: #000 !important;
-    font-weight: 800;
+.multi .item, #tagBox .item.matched {
+    background: #555;
+    margin-bottom: 2px !important;
+    color:#fff;
 }
 
 .item.matched:before {
+    color:#fff;
     content: "\2713\00a0\00a0";
 }
 
@@ -148,10 +153,6 @@
     font-style: normal;
 }
 
-.item b {
-    font-weight: normal;
-}
-
 .option h5 {
     font-weight: 800;
 }
@@ -160,7 +161,7 @@
     font-style: normal;
 }
 
-.option right {
+right {
     display: inline-block;
     float: right;
 }
@@ -195,19 +196,19 @@
     content: "\2713\00a0\00a0";
 }
 
-#wide .item * {
+.wide .item * {
     background-color: transparent !important;
     color: #000 !important;
 }
 
-#wide .item {
+.wide .item {
     background-color: transparent !important;
     border-bottom: 1px solid #5bc0de !important;
     margin-bottom: 10px !important;
     width: 100%;
 }
 
-#wide .item em {
+.wide .item em {
     display: inline !important;
     font-style: normal;
 }

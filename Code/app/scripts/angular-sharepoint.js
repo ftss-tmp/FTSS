@@ -328,15 +328,11 @@
 										                   if (date.length) {
 											                   _(date).each(function (field) {
 
-												                   try {
+												                   if (typeof v[field] === 'string' && v[field].indexOf('/Date(') > -1) {
 
-													                   if (v[field].indexOf('/Date(') > -1) {
+													                   v[field] = _utils.getDate(v[field]);
 
-														                   v[field] = _utils.getDate(v[field]);
-
-													                   }
-
-												                   } catch (e) {}
+												                   }
 
 											                   });
 										                   }
@@ -345,16 +341,10 @@
 
 									                   };
 
-
-									                   try {
-
-										                   data = _.reduce(data, function (o, v) {
-											                   o[v.Id || i++] = decoder(v);
-											                   return o;
-										                   }, {});
-
-									                   } catch (e) {
-									                   }
+									                   return _.reduce(data, function (o, v) {
+										                   o[v.Id || i++] = decoder(v);
+										                   return o;
+									                   }, {});
 
 								                   }
 
@@ -412,35 +402,31 @@
 								             .then(function (data) {
 
 									                   // There are a lot of ways to slice this, but this is the easiest and most reliable
-									                   try {
-										                   cachedData = JSON.parse(_utils.decompress(cachedData));
-									                   } catch (e) {
-										                   cachedData = {};
-									                   }
+									                   cachedData = cachedData && JSON.parse(_utils.decompress(cachedData)) || {};
 
 									                   // There was some data so we can add that to our cache and update everything
-									                   if (data !== {}) {
+									                   if (!_(data).isEmpty()) {
 
-										                   try {
+										                   var hasCache = !_(cachedData).isEmpty();
 
-											                   // Merge our updates with the cache
-											                   _(data).each(function (row) {
-												                   cachedData[row.Id] = row;
-											                   });
+										                   // Merge our updates with the cache
+										                   _(data).each(function (row, key) {
+											                   cachedData[key] = row;
+										                   });
 
-											                   // Convert new cached object to JSON and compress to UTF16 (for IE compatibility)
-											                   localStorage[cacheString + 'Data'] = _utils.compress(JSON.stringify(cachedData));
+										                   // Convert new cached object to JSON and compress to UTF16 (for IE compatibility)
+										                   localStorage[cacheString + 'Data'] = _utils.compress(JSON.stringify(cachedData));
 
-											                   // Set the timestamp AFTER updating the cache (just in case something goes wrong)
-											                   localStorage[cacheString + 'Stamp'] = timestamp;
+										                   // Set the timestamp AFTER updating the cache (just in case something goes wrong)
+										                   localStorage[cacheString + 'Stamp'] = timestamp;
+
+
+										                   if (hasCache) {
 
 											                   // Add a helpful little updated property to our response (but only after caching without it)
-											                   _(data).each(function (row) {
-												                   cachedData[row.Id].updated = true;
+											                   _(data).each(function (row, key) {
+												                   cachedData[key].updated = true;
 											                   });
-
-										                   } catch (e) {
-
 
 										                   }
 

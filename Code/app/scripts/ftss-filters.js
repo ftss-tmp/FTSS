@@ -23,7 +23,38 @@
 			'requirements':
 				[
 					{'q': '', 'label': ''}
+				],
+			'students'    :
+				[
+					{'q': '', 'label': ''}
 				]
+		},
+
+		filterMaps = {
+			'scheduled'   : {
+				'u': 'UnitId',
+				'm': "Course/MDS",
+				'a': "Course/AFSC",
+				'i': 'InstructorId',
+				'c': 'CourseId'
+			},
+			'requests'    : {
+				'u': 'Scheduled/UnitId',
+				'm': "Scheduled/Course/MDS",
+				'a': "Scheduled/Course/AFSC",
+				'i': 'Scheduled/InstructorId',
+				'c': 'Scheduled/CourseId'
+			},
+			'requirements': {
+				'u': 'UnitId',
+				'm': "Course/MDS",
+				'a': "Course/AFSC",
+				'c': 'CourseId'
+			},
+			'students': {
+				'u': 'HostUnit/FTD',
+				'h': 'HostUnitId'
+			}
 		};
 
 	/**
@@ -67,28 +98,7 @@
 
 	filters.map = function () {
 
-		return {
-			'scheduled'   : {
-				'u': 'UnitId',
-				'm': "Course/MDS",
-				'a': "Course/AFSC",
-				'i': 'InstructorId',
-				'c': 'CourseId'
-			},
-			'requests'    : {
-				'u': 'Scheduled/UnitId',
-				'm': "Scheduled/Course/MDS",
-				'a': "Scheduled/Course/AFSC",
-				'i': 'Scheduled/InstructorId',
-				'c': 'Scheduled/CourseId'
-			},
-			'requirements': {
-				'u': 'UnitId',
-				'm': "Course/MDS",
-				'a': "Course/AFSC",
-				'c': 'CourseId'
-			}
-		}[FTSS.page()];
+		return filterMaps[FTSS.page()];
 
 	};
 

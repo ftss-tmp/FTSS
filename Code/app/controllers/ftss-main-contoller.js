@@ -37,7 +37,8 @@
 			'SharePoint',
 			'$routeParams',
 			'$timeout',
-			function ($scope, $location, SharePoint, $routeParams, $timeout) {
+			'$http',
+			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
 				FTSS.loaded = function () {
 					utils.loading(false);
@@ -74,14 +75,6 @@
 							};
 							break;
 
-						case 'ready':
-							utils.loading(false);
-							msg = {
-								'intro'  : "You're ready to go.",
-								'newLine': true,
-								'message': 'To get started, use the search box above.  The page should update automagically. If the record count to the left of the search box is orange, there were too many results--you\'ll want to refine your search a little.'
-							};
-
 					}
 
 					$scope.messages = {
@@ -90,6 +83,57 @@
 						'intro'  : msg.intro || 'Quick Note:  ',
 						'message': msg.message || ''
 					};
+
+				};
+
+				/**
+				 * Bitly url generator--just because we can.  This will automatically use the 1.usa.gov domain
+				 * as that's what usa.gov uses.  If it doesn't work, then it returns the long url instead
+				 */
+				$scope.bitly = function () {
+
+					var pg = $scope.page(), cacheLink = 'FTSS_bitly_pg' + $scope.permaLink;
+
+					var page, url;
+
+					if (localStorage[cacheLink]) {
+
+						$scope.bitlyResponse = localStorage[cacheLink];
+
+					} else {
+
+						$scope.bitlyResponse = '';
+
+						page = encodeURIComponent(
+							[
+								'https://cs3.eis.af.mil/sites/00-ED-AM-11/FTSS',
+								pg,
+								$scope.permaLink
+							].join('/'));
+
+
+						url =
+						[
+							'https://api-ssl.bitly.com/v3/shorten?',
+							'access_token=4d2a55cd24810f5e392f6d6c61b0b5d3663ef554',
+							'&formate=json',
+							'&longUrl=',
+							page,
+							'&callback=JSON_CALLBACK'
+						].join('');
+
+						return $http({
+							             'method': 'jsonp',
+							             'url'   : url
+						             })
+
+							.then(function (data) {
+
+								      $scope.bitlyResponse = localStorage[cacheLink] = ((data.status === 200) ? data.data.data.url : page).split('://')[1];
+
+							      });
+
+					}
 
 				};
 
@@ -187,7 +231,7 @@
 						} else {
 
 							utils.updateSearch('');
-							utils.$message('ready');
+							$scope.cleanSlate = true;
 
 						}
 

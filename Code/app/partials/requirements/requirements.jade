@@ -41,9 +41,9 @@ div(class='{{wellCollapse}}')
                 .col-lg-5.pull-right.text-right(style='margin-top: 10px')
                     p.truncate(ng-repeat='student in row.Students', style='margin-bottom: 10px')
                         icon student_hand
-                        a(href='mailto:{{student.WorkEMail}}{{row.mail}}') {{s.Name}}
+                        a(href='mailto:{{student.WorkEMail}}{{row.mail}}') {{student.Name}}
                         br
-                        span(ng-show='student.WorkPhone') {{s.WorkPhone}}
+                        span(ng-show='student.WorkPhone') {{student.WorkPhone}}
 
 
                 .clearfix

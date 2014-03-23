@@ -26,7 +26,7 @@
 		'record-count'   : 'Displays the record  count for your search.  If the background is <span style="color:#d58512;font-weight:800">orange</span>, there were too many records found so you\'ll want to refine your search a little by adding more search tags.',
 
 
-		'people-picker'  : 'Use this search box to find the name from the AFNET Global Address List.  The format should be the same as in Outlook.<example>Doe, John A SSgt...</example>',
+		'people-picker': 'Use this search box to find the name from the AFNET Global Address List.  The format should be the same as in Outlook.<example>Doe, John A SSgt...</example>',
 
 		/**
 		 * Dialog boxes, these are the various dialog box messages displayed in FTSS
@@ -61,7 +61,13 @@
 		'students-inprocessing-date'    : 'This is the in-processing date for the student,<br>it is used to sort students by longest wait-time.',
 		'students-host-unit'            : 'The unit this student is assigned to.',
 		'students-local-ftd'            : 'If applicable, the local FTD for this student.  This is used to determine if the seat request is a local or TDY allocation.',
-		'students-category'             : 'Choose the student type, used in conjunction with TDY status to determine the seat request type.'
+		'students-category'             : 'Choose the student type, used in conjunction with TDY status to determine the seat request type.',
+
+		'page': {
+
+			'students': "In FTSS, you should add all Airmen requiring FTD training upfront.  By doing so, we can automate the backlog tracking required by AFI.  After establishing your training requirements here, you can generate 898 requirements from your backlog.  If you use IMDS to track FTD training, the course codes are already loaded into FTSS so you can just drag and drop a student's 593 to load their training requirements."
+
+		}
 	};
 
 }());

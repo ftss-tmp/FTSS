@@ -14,8 +14,6 @@ FTSS.ng.controller(
 				'sort' : 'Start',
 				'group': 'Course.MDS',
 
-				'tagBox': true,
-
 				'grouping': {
 					'Course.MDS'  : 'MDS',
 					'unit'        : 'Unit',

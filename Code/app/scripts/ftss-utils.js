@@ -1,44 +1,43 @@
 /*global utils, FTSS, _, LZString */
 
 /**
- * Misc utilities
+ * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
+ * due to performance considerations.  Uses a short-circuit for invalid properties & returns false.
+ *
+ * data = {
+ *   a1: { b1: "hello" },
+ *	 a2: { b2: { c2: "world" } }
+ *	}
+ *
+ * deepRead(data, "a1.b1") => "hello"
+ *
+ * deepRead(data, "a2.b2.c2") => "world"
+ *
+ * deepRead(data, "a1.b2") => false
+ *
+ * deepRead(data, "a1.b2.c2.any.random.number.of.non-existant.properties") => false
+ *
+ * @param {object} data - The collection to iterate over
+ * @param {string} expression - The string expression to evaluate
+ *
+ * @return {various | boolean} retVal - Returns the found property or false if not found
  *
  */
-utils.deepRead = (function () {
+utils.deepRead = function (data, expression) {
 
-	var dict = {};
+	// Cache a copy of the split expression, then set to exp
+	var exp = expression.split('.'), retVal;
 
-	return function (data, exp) {
+	// Recursively read the object using a do-while loop, uses short-circuit for invalid properties
+	do {
+		retVal = (retVal || data)[exp.shift()] || false;
+	} while (retVal !== false && exp.length);
 
-		try {
+	// Return our retVal or false if not found
+	return retVal || false;
 
-			var e = dict[exp] = dict[exp] || exp.split('.');
+};
 
-			switch (e.length) {
-
-				case 1:
-					return data[e[0]];
-
-				case 2:
-					return data[e[0]][e[1]];
-
-				case 3:
-					return data[e[0]][e[1]][e[2]];
-
-				default:
-					return data;
-
-			}
-
-		} catch (e) {
-
-			return null;
-
-		}
-
-	};
-
-}());
 
 /**
  * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
@@ -213,9 +212,9 @@ utils.$ajaxFailure = function (req) {
 
 
 utils.compress = function (str) {
-	return LZString.compressToBase64(str).match(/.{1,5}/g).join('.').replace(/=/g, '');
+	return LZString.compressToBase64(str).match(/.{1,5}/g).join('-').replace(/=/g, '');
 };
 
 utils.decompress = function (str) {
-	return LZString.decompressFromBase64(str.replace(/\./g, ''));
+	return LZString.decompressFromBase64(str.replace(/\-/g, ''));
 };

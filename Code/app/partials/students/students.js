@@ -11,17 +11,17 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'Name',
-				'group': 'HostUnit',
+				'group': 'HostUnit.Text',
 
 				'grouping': {
-					'ftdName' : 'FTD',
-					'HostUnit': 'Unit'
+					'ftd.LongName' : 'FTD',
+					'HostUnit.Text': 'Unit'
 				},
 
 				'sorting': {
-					'Name'    : 'Name',
-					'HostUnit': 'Unit',
-					'ftdName' : 'FTD'
+					'Name'         : 'Name',
+					'HostUnit.Text': 'Unit',
+					'ftd.LongName' : 'FTD'
 				},
 
 				'model': 'students',
@@ -31,7 +31,7 @@ FTSS.ng.controller(
 					if (isNew) {
 
 						scope.data = {
-							'ProcessDate': new Date(),
+							'ProcessDate': (new Date()),
 							'StudentType': 1
 						};
 
@@ -63,7 +63,7 @@ FTSS.ng.controller(
 
 			self
 
-				.bind('loaded')
+				.bind('filter')
 
 				.then(function (data) {
 
@@ -73,11 +73,10 @@ FTSS.ng.controller(
 
 						      .then(function (d) {
 
-							            d.ftd = caches.Units[d.FTD];
-							            d.ftdName = d.ftd.LongName;
+							            d.HostUnit = caches.HostUnits[d.HostUnitId];
+							            d.ftd = caches.Units[d.HostUnit.FTD];
 							            d.Name = d.Student.Name;
 							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
-
 
 							            d.requirements = _.chain(d.Requirements_JSON)
 

@@ -6,8 +6,11 @@ header.navbar.navbar-inverse(role='banner')
 
     ul.nav.navbar-nav.pull-right.hidden-xs
         li(ng-controller='user')
-            a(href='#', tabindex='-1')
+            a(tabindex='-1', bs-popover, data-content-template='/partials/user-settings.html', data-placement='bottom-left', data-animation='am-flip-x')
                 | {{user.Name}}
+        li
+            .support(bs-popover, ng-click='bitly()', data-animation='am-flip-x', title="Share This Link", data-content-template='/partials/bitly.html',data-placement='bottom-right', data-container='body', style='width:1.3em;color:#fff;font-size:1.3em')
+                icon share
         li
             .support(data-content-template='/partials/support.html', data-placement='left', bs-aside='aside', data-container='body', data-animation='am-slide-left')
                 icon question
