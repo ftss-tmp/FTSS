@@ -34,6 +34,8 @@
     text-decoration: none
 }
 
+.hosts .hosts *,
+.backlog .backlog *,
 .requirements .requirements *,
 .scheduled .scheduled *,
 .requests .requests *,

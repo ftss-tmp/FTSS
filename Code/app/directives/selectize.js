@@ -141,7 +141,7 @@
 						'MDS',
 						'Instructors',
 						'MasterCourseList',
-						'HostUnits'
+						'Hosts'
 					],
 				'plugins'        :
 					[
@@ -200,7 +200,7 @@
 							'Units'           : 'FTD',
 							'MasterCourseList': 'Course',
 							'Instructors'     : 'Instructor',
-							'HostUnits'       : 'Host Unit'
+							'Hosts'           : 'Host Unit'
 						};
 
 						// Add the option group (header) to our searchBox
@@ -212,7 +212,7 @@
 						// Keep track of our async loads and fire once they are all done (not using $q.all())
 						if (++count === CACHE_COUNT) {
 
-							var tagBoxOpts = options.AFSC.concat(options.MDS, options.MasterCourseList, options.Units, options.Instructors, options.HostUnits);
+							var tagBoxOpts = options.AFSC.concat(options.MDS, options.MasterCourseList, options.Units, options.Instructors, options.Hosts);
 
 							// Add the options to our searchBox
 							FTSS.search.addOption(tagBoxOpts);
@@ -345,11 +345,11 @@
 
 							      SharePoint
 
-								      .read(FTSS.models.host_units)
+								      .read(FTSS.models.hosts)
 
 								      .then(function (hosts) {
 
-									            loaded(hosts, 'HostUnits', function (v) {
+									            loaded(hosts, 'Hosts', function (v) {
 
 										            v.Text = v.Unit + ', ' + v.Base;
 

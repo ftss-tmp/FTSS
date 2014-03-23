@@ -112,3 +112,7 @@
     position: relative;
     bottom: -15px;
 }
+
+right {
+    margin-left: 1em;
+}

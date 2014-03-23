@@ -51,6 +51,12 @@
 				'a': "Course/AFSC",
 				'c': 'CourseId'
 			},
+			'backlog': {
+				'u': 'UnitId',
+				'm': "Course/MDS",
+				'a': "Course/AFSC",
+				'c': 'CourseId'
+			},
 			'students': {
 				'u': 'HostUnit/FTD',
 				'h': 'HostUnitId'

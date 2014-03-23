@@ -73,7 +73,7 @@ FTSS.ng.controller(
 
 						      .then(function (d) {
 
-							            d.HostUnit = caches.HostUnits[d.HostUnitId];
+							            d.HostUnit = caches.Hosts[d.HostUnitId];
 							            d.ftd = caches.Units[d.HostUnit.FTD];
 							            d.Name = d.Student.Name;
 							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
