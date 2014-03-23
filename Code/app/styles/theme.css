@@ -116,3 +116,10 @@
 right {
     margin-left: 1em;
 }
+
+.bigLetter {
+    font-size: 2em;
+    line-height: .75em;
+    vertical-align: bottom;
+    margin-right: .25em;
+}
