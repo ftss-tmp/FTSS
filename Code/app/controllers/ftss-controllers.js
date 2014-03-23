@@ -472,10 +472,10 @@ FTSS.controller = (function () {
 						//  Compare each field from the list of fields to the old data
 						_(fields).each(function (field) {
 
-							var data = scope.data[field] || false;
+							var data = scope.data[field];
 
 							// First check for valid fields as the model includes expanded and temporary that can not be sent
-							if (data && scope.data.hasOwnProperty(field) && (isNew || !_(data).isEqual(old[field]))) {
+							if (scope.data.hasOwnProperty(field) && (isNew || !_(data).isEqual(old[field]))) {
 
 								send[field] = data;
 
