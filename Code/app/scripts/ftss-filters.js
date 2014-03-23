@@ -52,7 +52,7 @@
 				'c': 'CourseId'
 			},
 			'students': {
-				'u': 'HostUnit/FTDId',
+				'u': 'HostUnit/FTD',
 				'h': 'HostUnitId'
 			}
 		};
