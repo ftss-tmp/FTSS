@@ -12,7 +12,6 @@ body {
 }
 
 h1, h2, h3, h4, h5 {
-    color: #29323d;
     line-height: inherit;
     margin: 0;
     font-family: 'Open Sans', sans-serif;

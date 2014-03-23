@@ -1,31 +1,8 @@
 
-.item:hover * {
-    color: #FFF !important;
-    /*background: none !important;*/
-}
 
 .modal-dialog .row {
     clear: both;
     margin-bottom: .75em;
-}
-
-.modal-dialog .item {
-    color: #000 !important;
-}
-
-.modal-dialog .multi .item, .modal-dialog .multi .item * {
-
-    color: #FFF !important;
-    background: #777 !important;
-    margin-bottom: 2px !important;
-}
-
-.modal-dialog .multi .item a {
-    color: #aaa !important;
-}
-
-.modal-dialog .multi .item a:hover {
-    color: #fff !important;
 }
 
 .modal-dialog .alert-danger {
