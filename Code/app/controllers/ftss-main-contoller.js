@@ -92,38 +92,48 @@
 				 */
 				$scope.bitly = function () {
 
+					var pg = $scope.page(), cacheLink = 'FTSS_bitly_pg' + $scope.permaLink;
 
 					var page, url;
 
-					page =
-					[
-						'https://cs3.eis.af.mil/sites/00-ED-AM-11/FTSS',
-						$scope.page(),
-						$scope.permaLink
-					].join('/');
+					if (localStorage[cacheLink]) {
 
-					url =
-					[
-						'https://api-ssl.bitly.com/v3/shorten?',
-						'access_token=4d2a55cd24810f5e392f6d6c61b0b5d3663ef554&',
-						'formate=json&',
-						'longUrl=',
-						encodeURIComponent(page),
-						'&callback=JSON_CALLBACK'
-					].join('');
+						$scope.bitlyResponse = localStorage[cacheLink];
 
-					$http({
-						      'method': 'jsonp',
-						      'url'   : url
-					      })
+					} else {
 
-						.then(function (data) {
-							      if (data.status === 200) {
-								      console.log(data.data.data.url);
-							      } else {
-								      console.log(page);
-							      }
-						      });
+						$scope.bitlyResponse = '';
+
+						page = encodeURIComponent(
+							[
+								'https://cs3.eis.af.mil/sites/00-ED-AM-11/FTSS',
+								pg,
+								$scope.permaLink
+							].join('/'));
+
+
+						url =
+						[
+							'https://api-ssl.bitly.com/v3/shorten?',
+							'access_token=4d2a55cd24810f5e392f6d6c61b0b5d3663ef554',
+							'&formate=json',
+							'&longUrl=',
+							page,
+							'&callback=JSON_CALLBACK'
+						].join('');
+
+						return $http({
+							             'method': 'jsonp',
+							             'url'   : url
+						             })
+
+							.then(function (data) {
+
+								      $scope.bitlyResponse = localStorage[cacheLink] = ((data.status === 200) ? data.data.data.url : page).split('://')[1];
+
+							      });
+
+					}
 
 				};
 
