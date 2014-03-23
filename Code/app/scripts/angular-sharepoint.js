@@ -1,4 +1,4 @@
-/*global angular, RawDeflate, LZString, _ */
+/*global angular, LZString, _ */
 
 /**
  * Angular SharePoint
@@ -72,7 +72,7 @@
 				             _(scope).each(function (s, field) {
 
 					             if (field.indexOf('_JSON') > 0) {
-						             scope[field] = JSON.stringify(s);
+						             scope[field] = s !== null ? JSON.stringify(s) : '';
 					             }
 
 				             });
