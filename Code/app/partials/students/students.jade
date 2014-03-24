@@ -20,7 +20,7 @@ div(class='{{wellCollapse}}')
                         th.w40 Student
                         th.w15 Host Unit
                         th.w15 Local FTD
-                        th.w10 Notes
+                        th.w10 Requirements
                         th.w10 Actions
 
                 tbody
@@ -37,9 +37,10 @@ div(class='{{wellCollapse}}')
 
                         td: b {{row.ftd.LongName}}
 
-                        td: b(ng-if='row.Requirements_JSON.length',
+                        td: b(ng-if='!row.Archived && row.Requirements_JSON.length',
                                 hover='Training Requirements',
                                 content='<dl class="dl-horizontal">{{row.requirements}}</dl>')
                                 icon checklist
+                                | {{row.Requirements_JSON.length}} Courses
 
                         td.invert: actions(edit, archive, label='student')
