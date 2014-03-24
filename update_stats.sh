@@ -9,7 +9,6 @@ echo
 git log --pretty=tformat: --numstat | gawk '{ add += $1 ; subs += $2 ; loc += $1 + $2 } END { printf "added lines: %s removed lines : %s total lines: %s\n",add,subs,loc }' -
 echo
 
-echo Counting Total Lines
 cloc --exclude-dir=node_modules,_public --quiet Code
 echo
  
