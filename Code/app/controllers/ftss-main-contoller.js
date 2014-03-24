@@ -272,6 +272,7 @@
 				$scope.reset = function () {
 					FTSS.search.clear();
 					$scope.searchText.$ = '';
+					FTSS.search.refreshOptions(false);
 				};
 
 				/**
