@@ -1,69 +1,109 @@
+#main-stats
+    .row.stats-row
+        .col-md-3.col-sm-3.stat
+            .data
+                span.number {{totals.reqs}}
+                | Courses
+            span.date Backlogged
+        .col-md-3.col-sm-3.stat
+            .data
+                span.number {{totals.students}}
+                | Students
+            span.date Backlogged
+        .col-md-3.col-sm-3.stat
+            .data
+                span.number {{totals.avg[1]}}
+                | {{totals.avg[2]}}
+            span.date Average Wait Time
+        .col-md-3.col-sm-3.stat.last
+            .data
+                span.number {{totals.max[1]}}
+                | {{totals.max[2]}}
+            span.date Longest Wait Time
+
 div(class='{{wellCollapse}}')
+
     div(ng-repeat='(header, group) in groups')
+
         h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
+
         .well(ng-repeat='row in group', ng-once)
 
             h4
-                span(class='btn btn-info') {{row.Students_JSON.length}} Required
-                span.rollupOnly {{row.Course.PDS}} - {{row.Course.Number}}
-                span.pull-right(style='letter-spacing: .1em')
-                    | {{row.Date}}
-                    icon calendar_range
+                span.btn.btn-info
+                    span.bigLetter {{row.requirements.length}}
+                    | {{row.Number}} Requirement
+                span.pull-right(style='margin-top:5px') {{row.Title}} -&nbsp;
+                    b {{row.PDS}}
 
             hr.rollup
 
-            .rollup
+            .rollup.slide
 
-                .col-lg-7.pull-left
+                .pull-left.col-lg-4
+                    //
+                        table.table-tiny
+                            thead(style='font-size:1.2em')
+                                tr
+                                    th {{row.PDS}}
+                                    th {{row.MDS}}
+                                    th {{row.AFSC}}
+                            tbody
+                                tr
+                                    td PDS
+                                    td MDS
+                                    td AFSC
+
                     table.table.table-split
                         thead
                             tr
-                                th.truncate(colspan='2') {{row.Course.PDS}} - {{row.Course.Number}}: {{row.Course.Title}}
+                                th.truncate(colspan='2') {{row.PDS}} Course Details
                         tbody
                             tr
-                                td Location
-                                td {{row.Unit.LongName}}
-                            tr
                                 td MDS
-                                td {{row.Course.MDS}}
+                                td {{row.MDS}}
                             tr
                                 td AFSC
-                                td {{row.Course.AFSC}}
+                                td {{row.AFSC}}
                             tr
-                                td Days
-                                td {{row.Course.Days}}
+                                td Length
+                                td {{row.Days}} Days / {{row.Hours}} Hours
                             tr
-                                td Hours
-                                td {{row.Course.Hours}}
-
-                .col-lg-5.pull-right.text-right(style='margin-top: 10px')
-                    p.truncate(ng-repeat='student in row.Students', style='margin-bottom: 10px')
-                        icon student_hand
-                        a(href='mailto:{{student.WorkEMail}}{{row.mail}}') {{student.Name}}
-                        br
-                        span(ng-show='student.WorkPhone') {{student.WorkPhone}}
+                                td Limits
+                                td {{row.Min}} Min / {{row.Max}} Max
+                            tr
+                                td Taught Locally?
+                                td Yes
 
 
-                .clearfix
-                    .requestActions
-                        hr
-                        .pull-right.invert
-                            button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='row.openSeats')
-                                span.btn-label
-                                    icon add
-                                | Request Seats
-                            button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='row.requestCount', ng-click='view(r)')
-                                span.btn-label
-                                    icon search
-                                | View Requests
-                            button.btn.btn-warning.btn-labeled.btn-muted(type='button', ng-click='edit(r)')
-                                span.btn-label
-                                    icon edit
-                                | Edit Class
-                            button.btn.btn-dangerow.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
-                                span.btn-label
-                                    icon delete
-                                | Cancel Class
-                        .clearfix
+                    table.table.table-split(ng-if='row.Units.length')
+                        thead: tr: th.truncate(colspan='2') Additional Locations Taught
+
+                        tbody
+                            tr(ng-repeat="u in row.Units | orderBy:'Base'")
+                                td {{u.LongName}}
+
+                .pull-right.col-lg-6
+                    table.table.table-split
+                        thead
+                            tr
+                                th.truncate(colspan='2') Backlog Details
+                        tbody
+                            tr
+                                td Required #
+                                td {{row.requirements.length}} student(s)
+
+                            tr
+                                td Avg Wait
+                                td {{row.avgWait}}
+
+                            tr
+                                td Longest Wait
+                                td {{row.maxWait}}
+
+
+            .clearfix
+
+        .clearfix
