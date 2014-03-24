@@ -66,7 +66,7 @@ utils.tagHighlight = function (data) {
 
 						test.push({
 							          id       : key + ':' + t,
-							          testField: map[key].split('/'),
+							          testField: map[key].split('/').join('.'),
 							          testValue: t
 						          });
 
@@ -85,30 +85,12 @@ utils.tagHighlight = function (data) {
 			// Must use _.each() in case a data item matches multiple tags
 			_(test).each(function (t, k) {
 
-				var field;
-
-				// In order to handle nested values (up to 2), switch on the t.testField.length
-				switch (t.testField.length) {
-
-					case 1:
-						field = req[t.testField[0]];
-						break;
-
-					case 2:
-						field = req[t.testField[0]][t.testField[1]];
-						break;
-
-					default:
-						field = req[t.testField[0]][t.testField[1]][t.testField[2]];
-
-				}
-
 				/**
 				 *  If field and testValue match, add Matched class and delete test-- we shouldn't touch the DOM
 				 *  from a controller but for performance reasons, this is much faster than relying on
 				 *  AngularJS.
 				 */
-				if (field === t.testValue) {
+				if (utils.deepRead(req, t.testField) === t.testValue) {
 
 					FTSS.search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
 					delete test[k];
