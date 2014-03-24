@@ -10,7 +10,7 @@
 .well {
     font-size: 15px;
     position: relative;
-    max-height: 525px;
+    max-height: 1000px;
     transition: all 1s;
 }
 
