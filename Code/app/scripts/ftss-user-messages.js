@@ -69,7 +69,9 @@
 
 			'hosts': "Before a student can be added to FTSS (required for 898s), the host unit must be added.  Use this page to add or edit hosts units.  If the unit has a local FTD, be sure to add that to the unit as this is used in determining if this is a local or TDY request.",
 
-			'units': "Use this page to edit the info for FTDs.  Here you can add courses that are taught at a particular unit to FTSS as well as annotate the contact email."
+			'units': "Use this page to edit the info for FTDs.  Here you can add courses that are taught at a particular unit to FTSS as well as annotate the contact email.",
+
+			'instructors': "Use this page to add or edit instructors in FTSS, Instructor bio photos are optional."
 
 		}
 	};
