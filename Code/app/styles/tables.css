@@ -101,6 +101,10 @@ table thead.tableFloatingHeaderOriginal {
     background: #fff;
 }
 
+tr.archived td {
+    padding: 1px 10px 1px 10px!important;
+}
+
 tr.archived:not(:hover) * {
     text-decoration: line-through;
     color: #bbb;
