@@ -16,7 +16,9 @@
 			'replace' : true,
 			'link'    : function ($scope, $el) {
 
-				if ($scope[$el[0].innerText].updated) {
+				var prop = $scope[$el[0].innerText];
+
+				if (prop.updated && !prop.Archived) {
 
 					$el[0].outerHTML = '<div class="icon icon-flag" hover="Updated since your last visit.">' + FTSS.icons._svg + FTSS.icons.flag + '</div>';
 
