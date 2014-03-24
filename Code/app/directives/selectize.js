@@ -241,6 +241,9 @@
 							      // Add MCL to Selectize with row callback
 							      loaded(response, 'MasterCourseList', function (v) {
 
+								      // Save for later  our unit listings
+								      v.Units = {};
+
 								      /**
 								       * Generates string format for dropdown display
 								       *
