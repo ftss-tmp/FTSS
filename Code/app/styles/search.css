@@ -51,20 +51,8 @@
     font-size: 1.15em;
 }
 
-.optgroup.units {
-    width: 20%
-}
-
-.optgroup.afsc {
-    width: 10%;
-}
-
 .optgroup.afsc .option, .optgroup.mds .option {
     font-weight: 800;
-}
-
-.optgroup.mds {
-    width: 10%
 }
 
 .optgroup.count-1 {
@@ -72,14 +60,14 @@
 }
 
 .optgroup.count-2 {
-    max-width:50%
+    width:50%
 }
 
 .optgroup.count-3 {
-    max-width: 33%
+    width: 33%
 }
 
-.optgroup.instructors.count-4{
+.optgroup.count-4{
     max-width: 25%;
 }
 
