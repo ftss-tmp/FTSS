@@ -66,6 +66,7 @@
 		'page': {
 
 			'students': "In FTSS, you should add all Airmen requiring FTD training upfront.  By doing so, we can automate the backlog tracking required by AFI.  After establishing your training requirements here, you can generate 898 requirements from your backlog.  If you use IMDS to track FTD training, the course codes are already loaded into FTSS so you can just drag and drop a student's 593 to load their training requirements."
+			'hosts': "Before a student can be added to FTSS (required for 898s), the host unit must be added.  Use this page to add or edit hosts units.  If the unit has a local FTD, be sure to add that to the unit as this is used in determining if this is a local or TDY request.",
 
 		}
 	};

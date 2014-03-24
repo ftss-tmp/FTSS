@@ -10,16 +10,18 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				'sort' : 'Base',
-				'group': 'Squadron',
+				'sort' : 'Unit',
+				'group': 'Base',
 
 				'grouping': {
-					'Squadron': 'Squadron'
+					'Base'        : 'Base',
+					'det.LongName': 'FTD'
 				},
 
 				'sorting': {
-					'Base': 'Base',
-					'Det' : 'Detachment'
+					'Base'        : 'Base',
+					'Unit'        : 'Unit',
+					'det.LongName': 'FTD'
 				},
 
 				'model': 'hosts'
@@ -36,9 +38,9 @@ FTSS.ng.controller(
 
 						      .initialize(data)
 
-						      .then(function (unit) {
+						      .then(function (d) {
 
-							            unit.Squadron = unit.Det < 300 ? '372 TRS' : '373 TRS';
+							            d.det = caches.Units[d.FTD];
 
 						            });
 
