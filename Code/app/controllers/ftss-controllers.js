@@ -300,49 +300,39 @@ FTSS.controller = (function () {
 						$scope.counter('-', false);
 						$scope.count = 0;
 
-						// Now process our tagBox or text search if one is set
-						if (tagBox || text && text.length) {
+						// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
+						results = sifter.search(text, {
+							'fields'     :
+								[
+									'search'
+								],
+							'limit'      : $scope.pageLimit,
+							'conjunction': 'and'
+						});
 
-							// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
-							results = sifter.search(text, {
-								'fields'     :
-									[
-										'search'
-									],
-								'limit'      : $scope.pageLimit,
-								'conjunction': 'and'
-							});
+						// Create our sorted groups and put in our scope
+						$scope.groups = _.chain(results.items)
 
-							// Create our sorted groups and put in our scope
-							$scope.groups = _.chain(results.items)
+							.map(function (match) {
+								     return sifter.items[match.id].data;
+							     })
 
-								.map(function (match) {
-									     return sifter.items[match.id].data;
-								     })
+							.sortBy(function (srt) {
+								        return utils.deepRead(srt, $scope.sortBy.$);
+							        })
 
-								.sortBy(function (srt) {
-									        return utils.deepRead(srt, $scope.sortBy.$);
-								        })
+							.groupBy(function (gp) {
+								         $scope.count++;
+								         return utils.deepRead(gp, $scope.groupBy.$) || '* No Grouping Data Found';
+							         })
 
-								.groupBy(function (gp) {
-									         $scope.count++;
-									         return utils.deepRead(gp, $scope.groupBy.$) || '* No Grouping Data Found';
-								         })
+							.value();
 
-								.value();
+						// Update the scope counter + overoad indicator
+						$scope.counter($scope.count, $scope.count !== results.total);
 
-							// Update the scope counter + overoad indicator
-							$scope.counter($scope.count, $scope.count !== results.total);
-
-							// Finally, do our tagHighlighting if this is a tagBox
-							tagBox && utils.tagHighlight(data);
-
-						} else {
-
-							// We don't have any query yet so just set the ready message
-							$scope.cleanSlate = true;
-
-						}
+						// Finally, do our tagHighlighting if this is a tagBox
+						tagBox && utils.tagHighlight(data);
 
 					});
 
