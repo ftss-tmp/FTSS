@@ -64,3 +64,12 @@ time-ago {
     letter-spacing: .1em;
     line-height: 1.75em;
 }
+
+
+.hideHelp {
+    float: right;
+    right: -40px;
+    position: relative;
+    margin-top: -20px;
+    bottom: -15px;
+}
