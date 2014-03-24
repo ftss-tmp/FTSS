@@ -18,13 +18,13 @@
 
 				if ($scope.createData) {
 
-					var list = $attrs.filter ? _(caches[$attrs.filter]).pluck($attrs.field) : false;
-
+					var list = $attrs.filter ? FTSS.people[$attrs.filter] : false;
+console.log(list);
 					$scope.picker = {
 						'field' : $attrs.field,
 						'filter': list ? function (data) {
 
-							return !_(list).contains(data.Id);
+							return !list.hasOwnProperty(data.Id);
 
 						} : false
 					};

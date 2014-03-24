@@ -84,6 +84,7 @@ var FTSS = {}, utils = {}, caches = {};
 			}
 		]);
 
+	FTSS.people = {};
 	FTSS.utils = {};
 
 	/**

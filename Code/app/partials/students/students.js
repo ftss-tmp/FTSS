@@ -67,11 +67,15 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
+					      FTSS.people.students = FTSS.people.students || {};
+
 					      self
 
 						      .initialize(data)
 
 						      .then(function (d) {
+
+							            FTSS.people.students[d.StudentId] = null;
 
 							            d.HostUnit = caches.Hosts[d.HostUnitId];
 							            d.ftd = caches.Units[d.HostUnit.FTD];
