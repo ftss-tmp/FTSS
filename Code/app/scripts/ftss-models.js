@@ -50,6 +50,7 @@
 						'Det',
 						'Email',
 						'Phone',
+						'Location',
 						'Courses_JSON'
 					]
 			}
@@ -64,9 +65,9 @@
 				'$select':
 					[
 						'Id',
-						'Base',
 						'Unit',
-						'FTD'
+						'FTD',
+					    'Location'
 					]
 			}
 
