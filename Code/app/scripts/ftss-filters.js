@@ -51,16 +51,17 @@
 				'a': "Course/AFSC",
 				'c': 'CourseId'
 			},
-			'backlog': {
-				'u': 'UnitId',
-				'm': "Course/MDS",
-				'a': "Course/AFSC",
-				'c': 'CourseId'
+			'backlog'     : {
+				'h': 'HostUnitId'
 			},
-			'students': {
+			'students'    : {
 				'u': 'HostUnit/FTD',
 				'h': 'HostUnitId'
 			}
+		},
+
+		max = {
+			'backlog': 1
 		};
 
 	/**
@@ -114,26 +115,47 @@
 	 */
 	filters.$refresh = (function () {
 
+		var options, userOptions;
+
 		// return the real function for filters.$refresh now that we have today cached in a closure
 		return function () {
 
-			// First, remove all custom options directly from FTSS.search (for performance reasons)
-			_.each(filters.route(true), function (filter) {
+			var page = FTSS.page();
 
-				FTSS.search.removeOption(filter.id);
+			// create a cloned backup of our options & userOptions before we change them up
+			options = options || _(FTSS.search.options).clone();
+			userOptions = userOptions || _(FTSS.search.userOptions).clone();
 
-			});
+			// empty the options--how wild is that!?@!
+			FTSS.search.options = {};
+			FTSS.search.userOptions = {};
 
-			/**
-			 *  For simplicity's sake, the keyword TODAY is replaced with a SP-compatible date value and
-			 *  optgroup is added to make the custom filters show up in the right area of the dropdown
-			 */
+			// Add our custom searches back for this page
 			_.each(filters.route(), function (filter) {
 
 				FTSS.search.addOption(filter);
 
 			});
 
+			// Temporary list of valid filter keys for this page
+			var validFilters = _(filterMaps[page]).keys();
+
+			// Add everything else back in that is a valid filter for this page
+			_(userOptions).each(function (opt, key) {
+
+				if (_(validFilters).contains(key.charAt(0))) {
+					FTSS.search.options[key] = _(options[key]).clone();
+					FTSS.search.userOptions[key] = _(userOptions[key]).clone();
+				}
+
+			});
+
+			var settings = FTSS.search.settings;
+
+			settings.maxItems = max[page] || 20;
+			settings.mode = (settings.maxItems === 1) ? 'single' : 'multi';
+
+			// Need to redraw selectize with our updated options!
 			FTSS.search.refreshOptions(false);
 
 		};
