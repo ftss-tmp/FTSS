@@ -120,6 +120,10 @@ form * .ng-dirty, form .selectize-input.ng-dirty .item {
     font-weight: 800 !important;
 }
 
+form .selectize-input.ng-dirty .item {
+    background: #f3f3f3;
+}
+
 form * .ng-dirty {
     border: 1px solid #47a447 !important;
 }
