@@ -1,4 +1,4 @@
-/*global _, $, angular, RawDeflate */
+/*global _, angular */
 /**
  * FTSS Initializer
  *
