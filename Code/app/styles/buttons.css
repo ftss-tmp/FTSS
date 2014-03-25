@@ -83,3 +83,9 @@
 #toggleExpand .icon-collapse {
     display: none !important;
 }
+
+traverse * {
+    color:#333!important;
+    text-decoration: none!important;
+    outline:none!important;
+}
