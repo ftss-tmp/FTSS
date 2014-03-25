@@ -8,7 +8,7 @@ form(name='modal')
     .modal-body
 
         .row
-            .col-lg-5
+            .col-lg-4
                 h4
                     b Base
                 .input-group
@@ -16,7 +16,6 @@ form(name='modal')
                         icon location_small
                     input.form-control(ng-model='data.Base', type='text')
 
-            .col-lg-4
             .col-lg-3
                 h4
                     b Detachment
@@ -24,6 +23,18 @@ form(name='modal')
                     .input-group-addon
                         icon hash
                     input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='units-edit-number', right)
+
+            .col-lg-5
+                h4
+                    b Coordinates
+                .input-group
+                    .input-group-addon
+                        icon location_small
+                    input.form-control(ng-model='data.Location',
+                                        type='text'
+                                        explain='<img src="http://maps.google.com/maps/api/staticmap?center={{data.Location}}&zoom=12&size=400x300&sensor=false" style="width: 400px; height: 300px;" /><h4>The map below should coorelate to this location.</h4>',
+                                        right)
+
         br
 
         .row

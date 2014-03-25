@@ -3,56 +3,33 @@ form(name='modal')
     .modal-header
         h3
             icon location
-            | {{data.Squadron}}/Det {{data.Det}}
+            | {{data.Unit}}
 
     .modal-body
 
         .row
-            .col-lg-5
+            .col-lg-6
+                .input-group
+                    .input-group-addon Unit Name
+                    input.form-control(ng-model='data.Unit', type='text')
+
+        br
+
+        .row
+
+            .col-lg-6
                 h4
-                    b Base
+
+            .col-lg-6
+                h4
+                    b Coordinates
                 .input-group
                     .input-group-addon
                         icon location_small
-                    input.form-control(ng-model='data.Base', type='text')
-
-            .col-lg-4
-            .col-lg-3
-                h4
-                    b Detachment
-                .input-group
-                    .input-group-addon
-                        icon hash
-                    input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='units-edit-number', right)
-        br
-
-        .row
-            .col-lg-12
-                h4
-                    b FTD Production Supervisor E-mail
-                .input-group
-                    .input-group-addon
-                        icon envelope
-                    input.form-control(ng-model='data.Email', type='email', explain='units-edit-email', right)
+                    input.form-control(ng-model='data.Location', type='text')
 
         br
         br
 
-        .row
-            .col-lg-12(explain='units-edit-courses', right)
-                h4
-                    icon books
-                    b {{data.CoursesCount}} Courses Taught
-                select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
-
-        .row(style='height: 25px')
-
-        .row.alert.alert-danger(ng-if='!data.Base || !data.Det')
-            icon alert
-            | Please ensure you enter a valid base and detachment number.
-
-        .row.alert.alert-danger(ng-if='error')
-            icon alert
-            | {{error}}
 
     ng-include(src='"/partials/modal-footer.html"')
