@@ -11,15 +11,13 @@ FTSS.ng.controller(
 			var self = FTSS.controller($scope, {
 
 				'sort' : 'Unit',
-				'group': 'Base',
+				'group': 'det.LongName',
 
 				'grouping': {
-					'Base'        : 'Base',
 					'det.LongName': 'FTD'
 				},
 
 				'sorting': {
-					'Base'        : 'Base',
 					'Unit'        : 'Unit',
 					'det.LongName': 'FTD'
 				},
