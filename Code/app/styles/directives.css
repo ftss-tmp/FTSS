@@ -1,6 +1,7 @@
 .aside {
     max-width: 40%;
 }
+
 .mask-img {
     position: relative;
     overflow: hidden;
@@ -44,9 +45,9 @@ svg {
 }
 
 time-ago {
-    font-weight: normal!important;
-    color:#888!important;
-    float:right;
+    font-weight: normal !important;
+    color: #888 !important;
+    float: right;
     font-style: italic;
 }
 
@@ -54,9 +55,10 @@ time-ago {
     display: none;
 
 }
+
 .datepicker .btn {
-    border:none!important;
-    box-shadow: none!important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .pageMessage {
@@ -64,7 +66,6 @@ time-ago {
     letter-spacing: .1em;
     line-height: 1.75em;
 }
-
 
 .hideHelp {
     float: right;
