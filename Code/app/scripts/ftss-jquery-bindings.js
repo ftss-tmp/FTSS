@@ -191,7 +191,7 @@
 			var obj = self.data('bs.popover');
 
 			self.removeClass('frozen');
-			self.popover('hide');
+			self.popover((self[0].hasAttribute('live')) ? 'destroy' : 'hide');
 			self.data('freeze', false);
 
 			if (obj) {
