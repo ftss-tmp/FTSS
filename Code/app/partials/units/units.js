@@ -22,7 +22,32 @@ FTSS.ng.controller(
 					'Det' : 'Detachment'
 				},
 
-				'model': 'units'
+				'model': 'units',
+
+				edit: function () {
+
+					FTSS.pasteAction = function (text) {
+
+						var match = text.split(','),
+
+							courses = _(caches.MasterCourseList),
+
+							collection =
+								[
+								];
+
+						_(match).each(function (val) {
+
+							var valid = courses.findWhere({'PDS': val.trim().toUpperCase()});
+							valid && collection.push(valid.Id);
+
+						});
+
+						collection.length && FTSS.selectizeInstances.Courses_JSON.setValue(collection);
+
+					};
+
+				}
 
 			});
 
