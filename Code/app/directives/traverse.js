@@ -20,9 +20,14 @@
 					'templateUrl': '/partials/traverse.html',
 					'link'       : function (scope, $el) {
 
+						var view = $('#mainView');
+
 						if (!scope.createData) {
 
 							var content = $('#content');
+
+							// Let the view CSS know about this modal so we can do some fun stuff
+							view.addClass('hasModal');
 
 							// Reference the parent scope because we're down in another scope right now
 							scope = scope.$parent;
@@ -70,6 +75,7 @@
 
 							// Watch for the destruction of this element and then remove .modal-selected class
 							$el.on("$destroy", function () {
+								view.removeClass('hasModal');
 								$('tr.ng-scope').removeClass('modal-selected');
 							});
 

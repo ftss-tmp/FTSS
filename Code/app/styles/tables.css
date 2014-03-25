@@ -23,9 +23,9 @@
     text-align: center;
 }
 
-.table thead.slim {
-    visibility: hidden;
-    display: table-footer-group;
+.table thead.slim, #mainView.hasModal .table thead {
+    visibility: hidden!important;
+    display: table-footer-group!important;
 }
 
 .table-hover tbody tr .btn-muted, .well .btn-muted {
