@@ -24,7 +24,7 @@ div(class='{{wellCollapse}}')
                         th.w10 Actions
 
                 tbody
-                    tr(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)')
+                    tr(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)', ng-if='!row.Archived || showArchive')
                         td
                             updated row
                         td(style='text-transform: uppercase')

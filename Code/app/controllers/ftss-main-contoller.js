@@ -283,6 +283,13 @@
 				};
 
 				/**
+				 * Toggles data archive visibility
+				 */
+				$scope.toggleArchive = function () {
+					$scope.showArchive = $scope.showArchive ? '' : 'archived';
+				};
+
+				/**
 				 * Starts the loading indicators on navigation begin
 				 */
 				$scope.$on('$locationChangeStart', function () {

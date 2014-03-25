@@ -23,7 +23,7 @@ div(class='{{wellCollapse}}')
                         th.w10 AFSC
                         th.w10 Actions
                 tbody
-                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)')
+                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)', ng-if='!row.Archived || showArchive')
 
                         td.cleanPhoto(class='{{running(row)}}')
                             photo(size='75px', data='row', ng-if='!row.Archived')

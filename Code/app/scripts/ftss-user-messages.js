@@ -21,6 +21,7 @@
 		'button-grouping': 'Change how data is grouped',
 		'button-sorting' : 'Change the sorting order',
 		'button-collapse': 'Toggle expanded or collapsed rows',
+		'button-archive' : 'Toggle visibility of archived data',
 
 		// The record count in the top-left corner next to the tag box
 		'record-count'   : 'Displays the record  count for your search.  If the background is <span style="color:#d58512;font-weight:800">orange</span>, there were too many records found so you\'ll want to refine your search a little by adding more search tags.',

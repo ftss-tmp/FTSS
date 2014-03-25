@@ -54,14 +54,6 @@
     padding: 7px;
 }
 
-#toggleExpand .icon-expand, #toggleExpand.collapsed .icon-collapse {
-    display: inline-block !important;
-}
-
-#toggleExpand.collapsed .icon-expand, #toggleExpand .icon-collapse {
-    display: none !important;
-}
-
 .groupMDS .MDS, .groupAFSC .AFSC {
     display: none;
 }

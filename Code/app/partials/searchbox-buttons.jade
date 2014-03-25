@@ -1,0 +1,36 @@
+#searchButtons.no-pad.pull-right(style='width:250px')
+
+    span.btn.btn-default(ng-click='reset()', hover='button-clear', left)
+        icon restore
+
+    span(style='width:5%')  
+
+    span.dropdown
+        span.dropdown-toggle.btn.btn-default(hover='button-grouping', left, data-toggle='dropdown')
+            icon group
+        .dropdown-menu
+            h3.popover-title Group By
+            .btn-group-vertical(bs-radio-group, ng-model='groupBy.$')
+                label.btn.btn-link(ng-repeat='(val,name) in grouping')
+                    input(value='{{val}}', type='radio')
+                    | {{name}}
+
+    span.dropdown
+        span.dropdown-toggle.btn.btn-default(hover='button-sorting', left, data-toggle='dropdown')
+            icon sort
+        .dropdown-menu
+            h3.popover-title Sort By
+            .btn-group-vertical(bs-radio-group, ng-model='sortBy.$')
+                label.btn.btn-link(ng-repeat='(val,name) in sorting')
+                    input(value='{{val}}', type='radio')
+                    | {{name}}
+
+    span(style='width:5%')  
+
+    span#toggleExpand(ng-click='collapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}')
+        icon expand
+        icon collapse
+
+    span#toggleArchive(ng-click='toggleArchive()', hover='button-archive', left, class='btn btn-default {{showArchive}}')
+        icon trash_hide
+        icon trash_show

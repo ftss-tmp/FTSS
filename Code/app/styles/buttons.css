@@ -50,21 +50,36 @@
 }
 
 .btn-group .btn {
-    margin-right: 0!important;
+    margin-right: 0 !important;
 }
 
 .support {
     cursor: pointer;
     opacity: .6;
-    margin:10px 10px;
+    margin: 10px 10px;
     font-size: 1.25em;
-    transition:500ms ease;
+    transition: 500ms ease;
 }
 
 .support:hover {
     opacity: 1;
 }
+
 .support svg {
     stroke: #fff;
     fill: #fff;
+}
+
+#toggleArchive .icon-trash_hide,
+#toggleArchive.archived .icon-trash_show,
+#toggleExpand .icon-expand,
+#toggleExpand.collapsed .icon-collapse {
+    display: inline-block !important;
+}
+
+#toggleArchive.archived .icon-trash_hide,
+#toggleArchive .icon-trash_show,
+#toggleExpand.collapsed .icon-expand,
+#toggleExpand .icon-collapse {
+    display: none !important;
 }

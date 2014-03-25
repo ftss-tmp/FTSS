@@ -25,7 +25,7 @@ div(class='{{wellCollapse}}')
 
                 tbody
 
-                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)')
+                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)', ng-if='!row.Archived || showArchive')
 
                         td
                             updated row
