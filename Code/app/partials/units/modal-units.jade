@@ -1,9 +1,11 @@
+img#googleModalMap(src='http://maps.google.com/maps/api/staticmap?center={{data.Location}}&zoom=12&size=400x300&sensor=false')
+
 form(name='modal')
 
     .modal-header
         h3
             icon location
-            | {{data.Squadron}}/Det {{data.Det}}
+            | Update FTD {{data.Squadron}}/Det {{data.Det}}
 
     .modal-body
 
@@ -30,10 +32,7 @@ form(name='modal')
                 .input-group
                     .input-group-addon
                         icon location_small
-                    input.form-control(ng-model='data.Location',
-                                        type='text'
-                                        explain='<img src="http://maps.google.com/maps/api/staticmap?center={{data.Location}}&zoom=12&size=400x300&sensor=false" style="width: 400px; height: 300px;" /><h4>The map below should coorelate to this location.</h4>',
-                                        right)
+                    input.form-control(ng-model='data.Location', type='text', explain='units-edit-coordinates', right)
 
         br
 
