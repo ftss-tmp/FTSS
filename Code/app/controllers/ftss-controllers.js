@@ -386,7 +386,7 @@ FTSS.controller = (function () {
 					scope.data = isNew ? {} : angular.copy(this.row);
 
 					// If the callback (our post-processor exists, call it too)
-					(callback || Function)(scope, isNew);
+					callback && callback(scope, isNew);
 
 				};
 
