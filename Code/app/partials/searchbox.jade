@@ -1,43 +1,8 @@
-div(ng-show='loaded', style='width:97%;float:left')
+#searchContainer(ng-class='{tagBox:tagBox}')
 
-    #searchContainer.col-lg-12.no-pad(ng-class='{tagBox:tagBox}')
+    #tagBox(explain='tagBox', top, instant, no-arrow)
+        select.hide(selectize='appInit', multiple, placeholder='Click or type to add search terms', style='width:100%', tabindex='-1')
+            optgroup(label='SMART FILTERS')
 
-        #tagBox.col-lg-10(explain='tagBox', top, instant, no-arrow)
-            select.hide(selectize='appInit', multiple, placeholder='Click or type to add search terms', style='width:100%', tabindex='-1')
-                optgroup(label='SMART FILTERS')
-
-        #searchBox.col-lg-10(explain='searchBox', top, no-arrow='')
-            input.search.search-large(type='search', ng-model='searchText.$', placeholder='Type in a search to limit the results for this list.', tabindex='-1')
-
-        #searchButtons.col-lg-2.no-pad
-
-            span.btn.btn-default(ng-click='reset()', hover='button-clear', left)
-                icon restore
-
-            span(style='width:5%')  
-
-            span.dropdown
-                span.dropdown-toggle.btn.btn-default(hover='button-grouping', left, data-toggle='dropdown')
-                    icon group
-                .dropdown-menu
-                    h3.popover-title Group By
-                    .btn-group-vertical(bs-radio-group, ng-model='groupBy.$')
-                        label.btn.btn-link(ng-repeat='(val,name) in grouping')
-                            input(value='{{val}}', type='radio')
-                            | {{name}}
-
-            span.dropdown
-                span.dropdown-toggle.btn.btn-default(hover='button-sorting', left, data-toggle='dropdown')
-                    icon sort
-                .dropdown-menu
-                    h3.popover-title Sort By
-                    .btn-group-vertical(bs-radio-group, ng-model='sortBy.$')
-                        label.btn.btn-link(ng-repeat='(val,name) in sorting')
-                            input(value='{{val}}', type='radio')
-                            | {{name}}
-
-            span(style='width:5%')  
-
-            span#toggleExpand(ng-click='collapse()', hover='button-collapse', left, class='btn btn-default {{wellCollapse}}')
-                icon expand
-                icon collpase
+    #searchBox(explain='searchBox', top, no-arrow='')
+        input.search.search-large(type='search', ng-model='searchText.$', placeholder='Type in a search to limit the results for this list.', tabindex='-1')
