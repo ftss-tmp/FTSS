@@ -82,6 +82,8 @@ FTSS.ng.controller(
 
 								      if (!req) {
 									      req = reqs[r] = _(caches.MasterCourseList[r]).clone();
+									      req.listFTD = [];
+									      req.localFTD = 'Not Available';
 									      req.days = 0;
 									      req.requirements =
 									      [
@@ -92,6 +94,9 @@ FTSS.ng.controller(
 
 								      req.days += s.days;
 
+								      req.FTD = s.FTD || {};
+								      req.Location = s.HostUnit.Location;
+
 							      });
 
 						      }
@@ -101,7 +106,21 @@ FTSS.ng.controller(
 
 						      _(u.Courses_JSON).each(function (c) {
 
-							      reqs[c] && (reqs[c].Units[u.Id] = u);
+							      var req = reqs[c];
+
+							      if (req) {
+								      console.info(req.Location, u.Location);
+
+								      u.distance = utils.distanceCalc(req.Location, u.Location) || 'unknown';
+								      u.distanceInt = parseInt(u.distance, 10) || 99999999;
+
+								      if (req.FTD.Id === u.Id) {
+									      req.localFTD = u.LongName;
+								      } else {
+									      req.listFTD.push(u);
+								      }
+
+							      }
 
 						      });
 

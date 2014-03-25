@@ -42,24 +42,10 @@ div(class='{{wellCollapse}}')
 
             .rollup.slide
 
-                .pull-left.col-lg-4
-                    //
-                        table.table-tiny
-                            thead(style='font-size:1.2em')
-                                tr
-                                    th {{row.PDS}}
-                                    th {{row.MDS}}
-                                    th {{row.AFSC}}
-                            tbody
-                                tr
-                                    td PDS
-                                    td MDS
-                                    td AFSC
+                .col-lg-3
+
 
                     table.table.table-split
-                        thead
-                            tr
-                                th.truncate(colspan='2') {{row.PDS}} Course Details
                         tbody
                             tr
                                 td MDS
@@ -74,22 +60,22 @@ div(class='{{wellCollapse}}')
                                 td Limits
                                 td {{row.Min}} Min / {{row.Max}} Max
                             tr
-                                td Taught Locally?
-                                td Yes
+                                td Local FTD
+                                td {{row.localFTD}}
 
-
-                    table.table.table-split(ng-if='row.Units.length')
+                    table.table.table-split(ng-if='row.listFTD.length > 0')
                         thead: tr: th.truncate(colspan='2') Additional Locations Taught
 
                         tbody
-                            tr(ng-repeat="u in row.Units | orderBy:'Base'")
+                            tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
+                                td {{u.distance}}
                                 td {{u.LongName}}
 
-                .pull-right.col-lg-6
+                .col-lg-1
+
+
+                .col-lg-3
                     table.table.table-split
-                        thead
-                            tr
-                                th.truncate(colspan='2') Backlog Details
                         tbody
                             tr
                                 td Required #
