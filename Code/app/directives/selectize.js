@@ -354,15 +354,13 @@
 
 									            loaded(hosts, 'Hosts', function (v) {
 
-										            v.Text = v.Unit + ', ' + v.Base;
+										            v.Text = v.Unit;
 
 										            v.label =
 										            [
 											            '<b>',
 											            v.Unit,
-											            '</b><em>, ',
-											            v.Base,
-											            '</em><right>Det. ',
+											            '</b><right>Det. ',
 											            caches.Units[v.FTD].Det,
 											            '</right>'
 										            ].join('');
