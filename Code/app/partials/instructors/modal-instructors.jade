@@ -7,7 +7,7 @@ form.form-horizontal(name='modal')
             icon instructor
             | {{createData ? 'Add New Instructor' : data.InstructorName}}
 
-    .modal-body
+    .modal-body(ng-file-drop='onFileSelect($files)')
 
         // This will only be shown if we are adding a student
         people-picker(field='Instructor', filter='Instructors')
@@ -23,6 +23,7 @@ form.form-horizontal(name='modal')
 
             .col-lg-4(style='margin-left:5%')
                 photo.img-rounded(size='150px', shape='rectangle', data='data', watch, force)
+                small: i Add or update by drag & drop
 
             .col-lg-7
 
