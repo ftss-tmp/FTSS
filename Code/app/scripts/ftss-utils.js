@@ -26,11 +26,11 @@
 utils.deepRead = function (data, expression) {
 
 	// Cache a copy of the split expression, then set to exp
-	var exp = expression.split('.'), retVal;
+	var exp = (expression || '').split('.'), retVal;
 
 	// Recursively read the object using a do-while loop, uses short-circuit for invalid properties
 	do {
-		retVal = (retVal || data)[exp.shift()] || false;
+		retVal = (retVal || data || {})[exp.shift()] || false;
 	} while (retVal !== false && exp.length);
 
 	// Return our retVal or false if not found
