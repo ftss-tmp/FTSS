@@ -405,7 +405,7 @@
 				'sortField'  : 'Name',
 				'searchField': 'Name',
 				'persist'    : false,
-				'create'     : true,
+				'create'     : false,
 				'plugins'    :
 					[
 						'remove_button'
@@ -424,7 +424,7 @@
 				},
 				'load'       : function (query, callback) {
 
-					if (query.indexOf(', ') > 1) {
+					if (query.indexOf(',') > 1) {
 
 						SharePoint.people(query, filter).then(function (data) {
 
