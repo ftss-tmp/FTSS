@@ -1,4 +1,4 @@
-/*global FTSS */
+/*global FTSS, PRODUCTION */
 
 /**
  * Photo directive
@@ -26,7 +26,6 @@
 					size = $attrs.size || '100px';
 					shape = $attrs.shape || 'circle';
 					height = (shape === 'circle' || shape === 'square') ? ';height:' + size : ';height:185px';
-					img = '<img src="' + (data.Photo ? 'bios/' + data.Id + '.jpg' : noPhoto) + '" />';
 					html =
 					[
 						'<div class="mask-img',
@@ -37,6 +36,13 @@
 						height,
 						'">'
 					].join(' ');
+
+					img = PRODUCTION ?
+
+					      '<img src="' + (data.Photo ? 'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' + data.Id + '.jpg' : noPhoto) + '" />' :
+
+					      '<img src="' + (data.Photo ? 'bios/' + data.Id + '.jpg' : noPhoto) + '" />';
+
 
 					$el[0].innerHTML = html + (data.Photo || $attrs.hasOwnProperty('force') ? img : '') + '</div>';
 

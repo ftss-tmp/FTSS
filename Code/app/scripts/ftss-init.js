@@ -5,7 +5,7 @@
  * @type {{}}
  */
 
-var FTSS = {}, utils = {}, caches = {};
+var FTSS = {}, utils = {}, caches = {}, PRODUCTION = (location.hostname !== 'localhost');
 
 (function () {
 

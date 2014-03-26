@@ -1,4 +1,4 @@
-/*global angular, LZString, _ */
+/*global angular, LZString, _, PRODUCTION */
 
 /**
  * Angular SharePoint
@@ -24,15 +24,21 @@
 
 			             var _config, _utils = {};
 
-			             _config = {
-				             //'baseURL': 'https://sheppard.eis.aetc.af.mil/982TRG/373TRS/Det306/scheduling/_vti_bin/ListData.svc/',
-				             'baseURL': 'http://dev/_vti_bin/ListData.svc/',
-				             'userURL': 'http://dev/_layouts/userdisp.aspx?Force=True',
-				             //'pplURL' : 'https://cs3.eis.af.mil/_vti_bin/ListData.svc/UserInformationList',
-				             'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
-				             'offline': false,
-				             'noCache': false
-			             };
+			             _config = PRODUCTION ?
+
+			                       {
+				                       'baseURL': 'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype/_vti_bin/ListData.svc/',
+				                       'userURL': 'https://cs3.eis.af.mil/_layouts/userdisp.aspx?Force=True',
+				                       'pplURL' : 'https://cs3.eis.af.mil/_vti_bin/ListData.svc/UserInformationList',
+				                       'offline': false,
+				                       'noCache': false
+			                       } : {
+				                       'baseURL': 'http://dev/_vti_bin/ListData.svc/',
+				                       'userURL': 'http://dev/_layouts/userdisp.aspx?Force=True',
+				                       'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
+				                       'offline': false,
+				                       'noCache': false
+			                       };
 
 			             /**
 			              * Generate a timestamp offset from 1 Jan 2014 (EPOCH was too large and causing SP to throw a 500 error) :-/
@@ -113,7 +119,7 @@
 						             // Call the filter independently because it may be change while the SP data shouldn't
 						             var execFilter = function (data) {
 
-							             return filter ? _(data).filter(function (d) {
+							             return filter ? _.filter(data, function (d) {
 
 								             return filter(d);
 
@@ -126,6 +132,7 @@
 
 							             return {
 								             'then': function (callback) {
+									             debugger;
 									             callback(execFilter(_cache[search]));
 								             }
 							             };
@@ -139,7 +146,7 @@
 							                          'cache'   : true,
 							                          'url'     : _config.pplURL,
 							                          'params'  : {
-								                          '$select': 'Id,Name',
+								                          '$select': 'Name,WorkEMail',
 								                          '$filter': "startswith(Name,'" + search + "')",
 								                          '$top'   : 5
 							                          }
@@ -156,7 +163,7 @@
 					             };
 
 				             }()),
-				             'user'  : function ($scope, sField) {
+				             'user'  : function (scope, sField) {
 
 					             var scopeField = sField || 'user';
 
@@ -170,7 +177,7 @@
 
 							             if (new Date().getTime() - data.updated < 2592000000) {
 
-								             $scope[scopeField] = data;
+								             scope[scopeField] = data;
 								             return;
 
 							             }
@@ -210,7 +217,7 @@
 
 							                   localStorage.SP_REST_USER = JSON.stringify(data);
 
-							                   $scope[scopeField] = data;
+							                   scope[scopeField] = data;
 
 						                   });
 
