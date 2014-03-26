@@ -247,9 +247,11 @@
 
 				             },
 
-				             'read': function (options) {
+				             'read': function (optOriginal) {
 
-					             var getData, getCache, cacheString;
+					             var getData, getCache, cacheString, options;
+
+					             options = angular.copy(optOriginal);
 
 					             // If this request uses caching, then we need to create a localStorage key
 					             cacheString = options.cache ?
@@ -412,9 +414,9 @@
 									                   cachedData = cachedData && JSON.parse(_utils.decompress(cachedData)) || {};
 
 									                   // There was some data so we can add that to our cache and update everything
-									                   if (!_(data).isEmpty()) {
+									                   if (!_.isEmpty(data)) {
 
-										                   var hasCache = !_(cachedData).isEmpty();
+										                   var hasCache = !_.isEmpty(cachedData);
 
 										                   // Merge our updates with the cache
 										                   _(data).each(function (row, key) {
