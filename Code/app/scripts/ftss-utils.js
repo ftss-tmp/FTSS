@@ -38,6 +38,20 @@ utils.deepRead = function (data, expression) {
 
 };
 
+/**
+ *  Generates a date offset UUID for our photo
+ *  http://stackoverflow.com/a/8809472/467373
+ */
+utils.generateUUID = function () {
+	var d = new Date().getTime();
+	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = (d + Math.random() * 16) % 16 | 0;
+		d = Math.floor(d / 16);
+		return (c === 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+	});
+	return uuid;
+};
+
 
 /**
  * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
@@ -50,8 +64,7 @@ utils.tagHighlight = function (data) {
 
 		var test, map;
 
-		test =
-		[
+		test = [
 		];
 		map = FTSS.filters.map();
 
@@ -204,12 +217,11 @@ utils.$ajaxFailure = function (req) {
 		               'newLine': true,
 		               'class'  : 'danger',
 		               'intro'  : 'Hmmm, something went wrong:',
-		               'message':
-			               [
-				               this.type,
-				               '(' + req.status + ')',
-				               this.url
-			               ].join(' ')
+		               'message': [
+			               this.type,
+			               '(' + req.status + ')',
+			               this.url
+		               ].join(' ')
 	               });
 };
 
