@@ -92,7 +92,11 @@
 				 */
 				$scope.bitly = function () {
 
-					var pg = $scope.page(), cacheLink = 'FTSS_bitly_pg' + $scope.permaLink;
+					var permaLink = $scope.permaLink || '',
+
+						pg = $scope.page(),
+
+						cacheLink = 'FTSS_bitly_' + pg + permaLink;
 
 					var page, url;
 
@@ -106,11 +110,10 @@
 
 						page = encodeURIComponent(
 							[
-								'https://cs3.eis.af.mil/sites/00-ED-AM-11/FTSS',
+								'https://cs3.eis.af.mil/sites/OO-ED-AM-11/index.html#',
 								pg,
-								$scope.permaLink
+								permaLink
 							].join('/'));
-
 
 						url =
 						[
