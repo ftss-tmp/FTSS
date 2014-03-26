@@ -382,15 +382,9 @@
 
 							      loaded(response, 'Instructors', function (val) {
 
-								      _(val.Instructor).each(function (v, k) {
-									      val[k] = v;
-								      });
+								      val.label = val.InstructorName.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
 
-								      delete val.Instructor;
-
-								      val.label = val.Name.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
-
-								      return  val.Name;
+								      return  val.InstructorName;
 
 							      });
 
@@ -405,28 +399,47 @@
 
 			var filter = scope.picker.filter;
 
-			return builder(scope, {
-				'field'      : field,
-				'labelField' : 'Name',
-				'valueField' : 'Id',
+			return {
+				'labelField' : 'label',
+				'valueField' : 'Name',
 				'sortField'  : 'Name',
 				'searchField': 'Name',
 				'persist'    : false,
-				'create'     : false,
+				'create'     : true,
 				'plugins'    :
 					[
 						'remove_button'
 					],
+				'onChange'   : function (val) {
+
+					var self = this;
+
+					timeout(function () {
+
+						scope.data[field + 'Name'] = val;
+						scope.data[field + 'Email'] = self.options[val].WorkEMail || '';
+
+					});
+
+				},
 				'load'       : function (query, callback) {
 
-					//	if (query.indexOf(', ') > 1) {                      <-- only limit queries on the production server
+					if (query.indexOf(', ') > 1) {
 
-					SharePoint.people(query, filter).then(callback);
+						SharePoint.people(query, filter).then(function (data) {
 
-					//	}
+							_(data).each(function (d) {
+								d.label = '<div><h5>' + d.Name + '</h5><small>' + d.WorkEMail + '</small></div>';
+							});
+
+							callback(data);
+
+						});
+
+					}
 
 				}
-			});
+			};
 		}
 
 	};

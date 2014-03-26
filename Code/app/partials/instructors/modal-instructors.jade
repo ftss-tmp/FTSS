@@ -5,12 +5,19 @@ form.form-horizontal(name='modal')
     .modal-header
         h4(hover='instructors-edit-helpdesk', right)
             icon instructor
-            | {{createData ? 'Add New Instructor' : data.Instructor.Name}}
+            | {{createData ? 'Add New Instructor' : data.InstructorName}}
 
     .modal-body
 
         // This will only be shown if we are adding a student
-        people-picker(field='InstructorId', filter='Instructors')
+        people-picker(field='Instructor', filter='Instructors')
+
+        .input-group
+            .input-group-addon
+                icon envelope
+            input.form-control(ng-model='data.InstructorEmail', type='email')
+
+        br
 
         .row
 

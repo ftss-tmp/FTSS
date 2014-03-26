@@ -78,16 +78,13 @@
 			'cache' : true,
 			'source': 'Instructors',
 			'params': {
-				'$expand': 'Instructor',
 				'$select':
 					[
 						'Id',
 						'UnitId',
 						'AFSC',
-						'InstructorId',
-						'Instructor/Name',
-						'Instructor/WorkEMail',
-						'Instructor/WorkPhone',
+						'InstructorName',
+						'InstructorEmail',
 						'Photo',
 						'Archived'
 					]
@@ -192,7 +189,6 @@
 			'params': {
 				'$expand':
 					[
-						'Student',
 						'HostUnit'
 					],
 				'$select':
@@ -201,10 +197,8 @@
 						'StudentType',
 						'HostUnitId',
 						'ProcessDate',
-						'StudentId',
-						'Student/Name',
-						'Student/WorkEMail',
-						'Student/WorkPhone',
+						'StudentName',
+						'StudentEmail',
 						'Requirements_JSON',
 						'Archived'
 					]

@@ -41,7 +41,7 @@ FTSS.ng.controller(
 						      .then(function (d) {
 
 							            d.Unit = caches.Units[d.UnitId];
-							            d.firstName = d.Instructor.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
+							            d.firstName = d.InstructorName.match(/[a-z]+,\s([a-z]+)/i)[1];
 
 						            });
 
