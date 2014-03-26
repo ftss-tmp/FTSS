@@ -262,7 +262,7 @@ FTSS.controller = (function () {
 					var sifter, results;
 
 					// Initialize sifter with the array of data after passing through some string sanitization
-					sifter = new Sifter(_(data).map(function (d) {
+					sifter = new Sifter(_.map(data, function (d) {
 
 						return {
 							/* We're using JSON stringify to fast deep-read our data & then stripping out the JSON junk
@@ -311,7 +311,7 @@ FTSS.controller = (function () {
 						});
 
 						// Create our sorted groups and put in our scope
-						$scope.groups = _.chain(results.items)
+						$scope.groups = _(results.items)
 
 							.map(function (match) {
 								     return sifter.items[match.id].data;
@@ -471,7 +471,7 @@ FTSS.controller = (function () {
 							var data = scope.data[field];
 
 							// First check for valid fields as the model includes expanded and temporary that can not be sent
-							if (scope.data.hasOwnProperty(field) && (isNew || !_(data).isEqual(old[field]))) {
+							if (scope.data.hasOwnProperty(field) && (isNew || !_.isEqual(data, old[field]))) {
 
 								send[field] = data;
 
@@ -482,7 +482,7 @@ FTSS.controller = (function () {
 					}
 
 					// If nothing was updated then fire the callback with false
-					if (_(send).isEmpty()) {
+					if (_.isEmpty(send)) {
 
 						scope.submitted = false;
 						callback(eventData, false);

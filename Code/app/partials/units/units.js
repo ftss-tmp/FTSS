@@ -38,7 +38,7 @@ FTSS.ng.controller(
 
 						_(match).each(function (val) {
 
-							var valid = courses.findWhere({'PDS': val.trim().toUpperCase()});
+							var valid = courses.findWhere({'PDS': val.trim().toUpperCase()}).value();
 							valid && collection.push(valid.Id);
 
 						});
@@ -90,7 +90,7 @@ FTSS.ng.controller(
 							            if (unit.Courses_JSON) {
 
 								            // Add all the course data to each unit for searching
-								            unit.CoursesMap = _.chain(unit.Courses_JSON)
+								            unit.CoursesMap = _(unit.Courses_JSON)
 
 									            .map(function (c) {
 
@@ -103,7 +103,7 @@ FTSS.ng.controller(
 									            .value();
 
 								            // Flattened string (yes this is HTML in a controller :-( for Hover
-								            unit.CoursesHover = _(unit.CoursesMap).map(function (c) {
+								            unit.CoursesHover = _.map(unit.CoursesMap, function (c) {
 
 									            if (unit.CoursesMap.length > 10) {
 										            return '<div class="col-lg-4" hover="' + c.Title + '" left><b>' + c.PDS + '</b>: ' + c.Number + '</div>';

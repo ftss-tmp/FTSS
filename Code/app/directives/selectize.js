@@ -18,7 +18,9 @@
 		// AngularUI tabs creates a new scope so this will let us handle either situation
 		modal = scope.modal || scope.$parent.modal;
 
-		return _(opts).defaults(
+		return _.defaults(
+
+			opts,
 
 			{
 				'maxItems'    : 1,
@@ -472,11 +474,11 @@
 
 								filter = function (f) {
 
-									return _(options[attrs.selectize])
+									return _.filter(
 
-										.filter(function (o) {
-											        return (o.data[attrs.watch] === f);
-										        });
+										options[attrs.selectize], function (o) {
+											return (o.data[attrs.watch] === f);
+										});
 
 								};
 

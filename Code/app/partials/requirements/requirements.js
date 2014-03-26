@@ -43,7 +43,7 @@ FTSS.ng.controller(
 							            d.Unit = caches.Units[d.UnitId];
 							            d.Date = moment(d.DateNeeded).format('MMM YYYY');
 
-							            d.Students = _.chain(d.Students_JSON)
+							            d.Students = _(d.Students_JSON)
 
 								            .map(function (c) {
 

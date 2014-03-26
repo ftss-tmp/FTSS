@@ -123,8 +123,8 @@
 			var page = FTSS.page();
 
 			// create a cloned backup of our options & userOptions before we change them up
-			options = options || _(FTSS.search.options).clone();
-			userOptions = userOptions || _(FTSS.search.userOptions).clone();
+			options = options || _.clone(FTSS.search.options);
+			userOptions = userOptions || _.clone(FTSS.search.userOptions);
 
 			// empty the options--how wild is that!?@!
 			FTSS.search.options = {};
@@ -138,14 +138,14 @@
 			});
 
 			// Temporary list of valid filter keys for this page
-			var validFilters = _(filterMaps[page]).keys();
+			var validFilters = _.keys(filterMaps[page]);
 
 			// Add everything else back in that is a valid filter for this page
 			_(userOptions).each(function (opt, key) {
 
-				if (_(validFilters).contains(key.charAt(0))) {
-					FTSS.search.options[key] = _(options[key]).clone();
-					FTSS.search.userOptions[key] = _(userOptions[key]).clone();
+				if (_.contains(validFilters, key.charAt(0))) {
+					FTSS.search.options[key] = _.clone(options[key]);
+					FTSS.search.userOptions[key] = _.clone(userOptions[key]);
 				}
 
 			});

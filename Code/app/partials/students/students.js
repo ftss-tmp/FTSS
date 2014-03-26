@@ -49,7 +49,7 @@ FTSS.ng.controller(
 
 						while (match = pattern.exec(text)) {
 							try {
-								collection.push(_(caches.MasterCourseList).findWhere({'IMDS': match[1]}).Id);
+								collection.push(_.findWhere(caches.MasterCourseList, {'IMDS': match[1]}).Id);
 							} catch (e) {}
 						}
 
@@ -82,7 +82,7 @@ FTSS.ng.controller(
 							            d.Name = d.Student.Name;
 							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
 
-							            d.requirements = _.chain(d.Requirements_JSON)
+							            d.requirements = _(d.Requirements_JSON)
 
 								            .map(function (r) {
 
