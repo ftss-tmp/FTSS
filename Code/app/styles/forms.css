@@ -132,4 +132,11 @@ form * .ng-dirty {
     background-color: #47a447 !important;
 }
 
+input:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+
+input:-ms-input-placeholder {
+    color: #aaa;
+}
 
