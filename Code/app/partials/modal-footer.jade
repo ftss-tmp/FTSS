@@ -10,7 +10,6 @@
     .sending(ng-show='submitted')
         spinner(size='2em')
         | Please wait, sending data...
-    traverse
     button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='!modal.$dirty || modal.$invalid || submitted')
         span.btn-label
             icon upload

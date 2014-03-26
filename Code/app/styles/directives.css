@@ -74,3 +74,36 @@ time-ago {
     margin-top: -20px;
     bottom: -15px;
 }
+
+.modal-header, .modal-body, .modal-footer {
+    z-index: 999;
+}
+
+.leftBigTraverse:hover, .rightBigTraverse:hover {
+    transition: opacity 500ms ease;
+    opacity: 1;
+}
+
+.leftBigTraverse, .rightBigTraverse {
+    outline: none !important;
+    border: none !important;
+    transition: opacity 500ms ease;
+    text-decoration: none !important;
+    top: 0px;
+    opacity: .1;
+    color: #fff !important;
+    position: absolute;
+    font-size: 300px;
+}
+
+.withMap .leftBigTraverse, .withMap .rightBigTraverse {
+    top: 300px;
+}
+
+.leftBigTraverse {
+    left: -350px;
+}
+
+.rightBigTraverse {
+    right: -400px;
+}

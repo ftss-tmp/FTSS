@@ -29,9 +29,6 @@
 							// Let the view CSS know about this modal so we can do some fun stuff
 							view.addClass('hasModal');
 
-							// Reference the parent scope because we're down in another scope right now
-							scope = scope.$parent;
-
 							$('#row-' + scope.data.Id).addClass('modal-selected');
 
 							// Bind the traverse action which allows navigating between records without closing/opening the modal
