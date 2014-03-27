@@ -51,8 +51,7 @@ var FTSS = {}, utils = {}, caches = {}, PRODUCTION = (location.hostname !== 'loc
 						'catalog',
 						'units',
 						'backlog',
-						'hosts',
-						'error'
+						'hosts'
 					];
 
 				_.each(routes, function (route) {
@@ -66,7 +65,7 @@ var FTSS = {}, utils = {}, caches = {}, PRODUCTION = (location.hostname !== 'loc
 
 				});
 
-				$routeProvider.otherwise({'redirectTo': '/error'});
+				$routeProvider.otherwise({'redirectTo': '/home'});
 
 				$locationProvider.html5Mode(false);
 
