@@ -111,6 +111,7 @@ right {
 
 /* Main stats up of screen */
 #main-stats {
+    position: relative;
     background-color: #fdfdfd;
     border-bottom: 1px solid #efeef3;
 }
@@ -122,7 +123,7 @@ right {
 
 #main-stats .stat {
     text-align: right;
-    padding: 25px 0px 30px 0px;
+    padding: 5px 0px 25px 0px;
     border-right: 1px solid #e8e9ee;
     position: relative;
     box-shadow: 1px 0px 0px 0px white;
@@ -136,13 +137,13 @@ right {
     color: #29323a;
     text-transform: uppercase;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 1.5em;
     padding-right: 50px;
 }
 
 #main-stats .stat .data .number {
     color: #32a0ee;
-    font-size: 25px;
+    font-size: 2em;
     margin-right: 15px;
 }
 
@@ -151,7 +152,7 @@ right {
     font-weight: lighter;
     font-family: 'Lato', 'Open Sans';
     font-style: italic;
-    font-size: 13px;
+    font-size: 1.1em;
     position: absolute;
     right: 50px;
 }

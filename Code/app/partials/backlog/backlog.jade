@@ -1,21 +1,30 @@
 #main-stats
     .row.stats-row
-        .col-md-3.col-sm-3.stat
+        #backlog BACKLOG
+        .backlogGradient.stat
+        .col-md-3.stat
             .data
                 span.number {{totals.reqs}}
                 | Courses
-            span.date Backlogged
-        .col-md-3.col-sm-3.stat
+            span.date
+                b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
+                | Require TDY
+
+        .col-md-3.stat
             .data
                 span.number {{totals.students}}
                 | Students
-            span.date Backlogged
-        .col-md-3.col-sm-3.stat
+            span.date
+                b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
+                | Backlogged
+
+        .col-md-3.stat
             .data
                 span.number {{totals.avg[1]}}
                 | {{totals.avg[2]}}
             span.date Average Wait Time
-        .col-md-3.col-sm-3.stat.last
+
+        .col-md-2.stat.last
             .data
                 span.number {{totals.max[1]}}
                 | {{totals.max[2]}}

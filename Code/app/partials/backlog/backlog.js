@@ -96,16 +96,22 @@ FTSS.ng.controller('backlogController',
 				                             };
 
 				                         $scope.totals = {
-					                         'max'     : [
+					                         'allStudents': 0,
+					                         'max'        : [
 					                         ],
-					                         'days'    : 0,
-					                         'students': 0,
-					                         'reqs'    : 0
+					                         'days'       : 0,
+					                         'students'   : 0,
+					                         'reqs'       : 0,
+					                         'reqsTDY'    : 0
+				                         };
+
 				                         $scope.graphs = {
 					                         'reqs': {}
 				                         };
 
 				                         _(data).each(function (s) {
+
+					                         !s.Archived && $scope.totals.allStudents++;
 
 					                         if (!s.Archived && !_(s.Requirements_JSON).isEmpty()) {
 
@@ -159,18 +165,26 @@ FTSS.ng.controller('backlogController',
 
 				                         _(caches.Units).each(function (u) {
 
+					                         var counted = false;
+
 					                         _(u.Courses_JSON).each(function (c) {
 
 						                         var req = reqs[c];
 
 						                         if (req) {
 
-							                         u.distance = utils.distanceCalc(req.Location, u.Location) || 'unknown';
+							                         u.distance =
+							                         utils.distanceCalc(req.Location, u.Location) || 'unknown';
+
 							                         u.distanceInt = parseInt(u.distance, 10) || 99999999;
 
 							                         if (req.FTD.Id === u.Id) {
 								                         req.localFTD = u.LongName;
 							                         } else {
+								                         if (!counted) {
+									                         counted = true;
+									                         $scope.totals.reqsTDY++;
+								                         }
 								                         req.listFTD.push(u);
 							                         }
 
@@ -180,11 +194,18 @@ FTSS.ng.controller('backlogController',
 
 				                         });
 
-				                         $scope.totals.avg = timeAvg($scope.totals,
-				                                                     $scope.totals.students).match(/^(\S+)\s(.*)/);
+				                         $scope.totals.pctStudents =
+				                         Math.floor($scope.totals.students / $scope.totals.allStudents * 100);
 
-				                         $scope.totals.max = moment.duration(_($scope.totals.max).max(),
-				                                                             'days').humanize().match(/^(\S+)\s(.*)/);
+				                         $scope.totals.avg = timeAvg($scope.totals,
+				                                                     $scope.totals.students)
+					                         .match(/^(\S+)\s(.*)/);
+
+				                         $scope.totals.max = moment
+
+					                         .duration(_.max($scope.totals.max), 'days')
+					                         .humanize()
+					                         .match(/^(\S+)\s(.*)/);
 
 				                         data = reqs;
 
@@ -206,4 +227,5 @@ FTSS.ng.controller('backlogController',
 			                         });
 
 	                   }
-                   ]);
+                   ])
+;
