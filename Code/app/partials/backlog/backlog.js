@@ -6,6 +6,45 @@ FTSS.ng.controller('backlogController',
 	                   '$scope',
 	                   function ($scope) {
 
+		                   $scope.d3 = {
+
+			                   'colors': ['#39B4D7',
+			                              '#488EA1',
+			                              '#13718C',
+			                              '#69CEEB',
+			                              '#8CD6EB',
+			                              '#4966DD',
+			                              '#5363A6',
+			                              '#182F90',
+			                              '#778EEE',
+			                              '#97A8EE',
+			                              '#37E36B',
+			                              '#49AB67',
+			                              '#129439',
+			                              '#68F191',
+			                              '#8CF1AB'
+			                   ],
+
+			                   'x': function () {
+				                   return function (d) {
+					                   return d.k;
+				                   };
+			                   },
+
+			                   'y': function () {
+				                   return function (d) {
+					                   return d.v;
+				                   };
+
+			                   },
+
+			                   color: function () {
+				                   return function (d, i) {
+					                   return $scope.d3.colors[i];
+				                   };
+			                   }
+		                   };
+
 		                   var self = FTSS.controller($scope, {
 			                       'sort' : 'PDS',
 			                       'group': 'MDS',
@@ -45,7 +84,16 @@ FTSS.ng.controller('backlogController',
 
 			                   .then(function (data) {
 
-				                         var reqs = {};
+				                         var reqs = {},
+
+				                             graphCount = function (req) {
+					                             var reqs = $scope.graphs.reqs,
+
+					                                 grp = req[$scope.groupBy.$ || 'MDS'];
+
+					                             reqs[grp] = reqs[grp] ? ++reqs[grp] : 1;
+
+				                             };
 
 				                         $scope.totals = {
 					                         'max'     : [
@@ -53,6 +101,8 @@ FTSS.ng.controller('backlogController',
 					                         'days'    : 0,
 					                         'students': 0,
 					                         'reqs'    : 0
+				                         $scope.graphs = {
+					                         'reqs': {}
 				                         };
 
 				                         _(data).each(function (s) {
@@ -86,6 +136,8 @@ FTSS.ng.controller('backlogController',
 								                         ];
 							                         }
 
+							                         graphCount(req);
+
 							                         req.requirements.push(s);
 
 							                         req.days += s.days;
@@ -96,6 +148,13 @@ FTSS.ng.controller('backlogController',
 						                         });
 
 					                         }
+				                         });
+
+			                                                        debugger;
+
+				                         $scope.graphs.reqs = _.map($scope.graphs.reqs, function (v, k) {
+					                         console.log(v, $scope.totals);
+					                         return {'k': k, 'v': v};
 				                         });
 
 				                         _(caches.Units).each(function (u) {

@@ -21,6 +21,18 @@
                 | {{totals.max[2]}}
             span.date Longest Wait Time
 
+div
+    nvd3-pie-chart(data='graphs.reqs',
+                    id='pieReqs',
+                    width='250',
+                    height='250',
+                    x='d3.x()',
+                    y='d3.y()',
+                    donut='true',
+                    tooltips='true',
+                    color="d3.color()")
+        svg
+
 div(class='{{wellCollapse}}')
 
     div(ng-repeat='(header, group) in groups')
