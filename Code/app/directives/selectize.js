@@ -1,4 +1,4 @@
-/*global FTSS, _, caches */
+/*global FTSS, _, caches, PRODUCTION */
 
 /**
  * Selectize directive
@@ -38,8 +38,8 @@
 						timeout(function () {
 
 							// Update the field with the value(s)
-							scope.data[opts.field] = (val && val.map ? val.map(Number) : Number(val))
-								|| val;
+							scope.data[opts.field] =
+							(val && val.map ? val.map(Number) : Number(val)) || val;
 
 							// Flip the $dirty flag on this modal
 							modal.$setDirty();
@@ -415,7 +415,7 @@
 				},
 				'load'       : function (query, callback) {
 
-					if (query.indexOf(',') > 1) {
+					if (!PRODUCTION || query.indexOf(',') > 1) {
 
 						SharePoint.people(query, filter)
 
