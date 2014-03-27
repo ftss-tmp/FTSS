@@ -50,19 +50,6 @@ a, a:hover {
     cursor: pointer!important;
 }
 
-/*
-.datepicker .disabled {
-    color: #eee!important;
-}
-
-.datepicker .old {
-    color: #bbb!Important;
-}
-
-.datepicker-days tr * {
-    width:40px!important;
-}*/
-
 .panel-footer {
     height:35px;
 }
@@ -76,3 +63,4 @@ a, a:hover {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
 }
+
