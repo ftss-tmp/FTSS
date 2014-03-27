@@ -19,7 +19,7 @@ div(class='{{wellCollapse}}')
 
                         th.w40 Student
                         th.w15 Host Unit
-                        th.w15 Local FTD
+                        th.w15 Inprocessed
                         th.w10 Requirements
                         th.w10 Actions
 
@@ -33,9 +33,9 @@ div(class='{{wellCollapse}}')
                                 span(ng-if='row.Archived') ***ARCHIVED STUDENT***&nbsp;
                                 | {{row.StudentName}}
 
-                        td: b {{row.HostUnit.Unit}}
+                        td: {{row.HostUnit.Unit}}
 
-                        td: b {{row.ftd.LongName}}
+                        td: {{row.wait}}
 
                         td: b(ng-if='!row.Archived && row.Requirements_JSON.length',
                                 hover='Training Requirements',

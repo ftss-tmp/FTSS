@@ -1,7 +1,6 @@
 /*global caches, FTSS, _ */
 
 FTSS.ng.controller(
-
 	'studentsController',
 
 	[
@@ -41,11 +40,11 @@ FTSS.ng.controller(
 
 						var pattern = new RegExp(/^(\d+).*(AWACT)/gm),
 
-							match,
+						    match,
 
-							collection =
-								[
-								];
+						    collection =
+							    [
+							    ];
 
 						while (match = pattern.exec(text)) {
 							try {
@@ -81,12 +80,20 @@ FTSS.ng.controller(
 							            d.ftd = caches.Units[d.HostUnit.FTD];
 							            d.firstName = d.StudentName.match(/[a-z]+,\s([a-z]+)/i)[1];
 
+							            d.wait = moment(d.ProcessDate).fromNow();
+
 							            d.requirements = _(d.Requirements_JSON)
 
 								            .map(function (r) {
 
 									                 var cache = caches.MasterCourseList[r] || false;
-									                 return cache ? '<dt class="tiny">' + cache.PDS + '</dt><dd>' + cache.Number + '<br><small class="truncate">' + cache.Title + '</small></dd>' : '';
+									                 return cache ? '<dt class="tiny">'
+										                                + cache.PDS
+										                                + '</dt><dd>'
+										                                + cache.Number
+										                                + '<br><small class="truncate">'
+										                                + cache.Title
+										                 + '</small></dd>' : '';
 
 								                 })
 
