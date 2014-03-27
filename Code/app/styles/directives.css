@@ -129,13 +129,13 @@ time-ago {
 }
 .spinner {
     padding: 0;
-    -ms-animation: rotation 2s infinite linear;
+    animation: rotation 2s infinite linear;
     -webkit-animation: rotation 1.5s infinite linear;
 }
 
-@-ms-keyframes rotation {
-    from {-webkit-transform: rotate(0deg);}
-    to   {-webkit-transform: rotate(359deg);}
+@keyframes rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(359deg); }
 }
 
 @-webkit-keyframes rotation {
