@@ -1,0 +1,34 @@
+doctype html
+html(lang='en', ng-app='FTSS')
+
+    head
+        meta(charset='utf-8')
+        meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+        title(ng-bind-template='FTSS {{page()}}')
+        base(href='https://ig-emt-usafe-eumcppmtaxb2pkjtaj276b62sa6wzthga8lxxaqkdam78fqkkr.s3.amazonaws.com/ftss/')
+        link(rel='stylesheet', href='css/app.css')
+
+        script(src='js/vendor.js')
+
+    body(ng-controller='mainController')
+
+        ng-include(src='"/partials/topbar.html"')
+        ng-include(src='"/partials/leftbar.html"')
+
+        #content
+
+            #pad-wrapper
+                .row(ng-show='loaded', ng-cloak)
+                    ng-include(src='"/partials/searchbox-buttons.html"')
+                    ng-include(src='"/partials/stats.html"')
+                    ng-include(src='"/partials/searchbox.html"')
+
+                    .clearfix
+                    hr(style='margin:3px 0 5px')
+
+                ng-include(src='"/partials/feedback.html"')
+
+                #mainView(ng-view)
+
+        script(src='js/partials.js')
+        script(src='js/app.js')
