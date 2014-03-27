@@ -158,29 +158,18 @@ utils.loading = (function () {
 
 	return function (loading) {
 
-		try {
-
-			utils.$message(false);
+		setTimeout(function () {
 
 			if (loadingState !== loading) {
 
-				if (loading) {
-					document.body.style.cursor = loader.className = 'wait';
-					if (FTSS.search) {
-						FTSS.search.close();
-						FTSS.search.blur();
-					}
-				} else {
-					document.body.style.cursor = loader.className = '';
-				}
-
 				loadingState = loading;
+
+				document.body.style.cursor = loader.className = loading ? 'wait' : '';
+				FTSS.search && FTSS.search.close();
 
 			}
 
-		} catch (e) {
-
-		}
+		});
 
 	};
 
@@ -200,7 +189,12 @@ utils.distanceCalc = function (start, end) {
 		var R = 3963.1676; // Radius of the earth in miles
 		var dLat = deg2rad(end[0] - start[0]);  // deg2rad below
 		var dLon = deg2rad(end[1] - start[1]);
-		var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(start[0])) * Math.cos(deg2rad(end[0])) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+		var a = Math.sin(dLat / 2)
+			        * Math.sin(dLat / 2)
+			+ Math.cos(deg2rad(start[0]))
+				  * Math.cos(deg2rad(end[0]))
+				  * Math.sin(dLon / 2)
+			        * Math.sin(dLon / 2);
 		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 		return Math.ceil(R * c); // Distance in miles
@@ -224,7 +218,6 @@ utils.$ajaxFailure = function (req) {
 		               ].join(' ')
 	               });
 };
-
 
 utils.compress = function (str) {
 	return LZString.compressToBase64(str).match(/.{1,5}/g).join('-').replace(/=/g, '');
