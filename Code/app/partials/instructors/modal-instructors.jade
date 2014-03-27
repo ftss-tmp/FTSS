@@ -3,9 +3,10 @@ form.form-horizontal(name='modal')
     traverse
 
     .modal-header
-        h4(hover='instructors-edit-helpdesk', right)
+        h4
             icon instructor
-            | {{createData ? 'Add New Instructor' : data.InstructorName}}
+            span(ng-if='createData') Add Instructor
+            input(ng-if='!createData', ng-model='data.InstructorName')
 
     .modal-body(ng-file-drop='onFileSelect($files)')
 

@@ -5,7 +5,8 @@ form.form-horizontal(name='modal', ng-any-drop)
     .modal-header
         h4
             icon student_hand
-            | {{createData ? 'Student Inprocessing' : data.Student.Name}}
+            span(ng-if='createData') Student Inprocessing
+            input(ng-if='!createData', ng-model='data.StudentName')
 
     .modal-body
 
@@ -15,7 +16,7 @@ form.form-horizontal(name='modal', ng-any-drop)
         .input-group
             .input-group-addon
                 icon envelope
-            input.form-control(ng-model='data.InstructorEmail', type='email')
+            input.form-control(ng-model='data.StudentEmail', type='email')
 
         br
 
