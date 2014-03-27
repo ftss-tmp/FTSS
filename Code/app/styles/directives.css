@@ -120,3 +120,25 @@ time-ago {
 .rightBigTraverse {
     right: -400px;
 }
+
+.spinner img {
+    width:100%;
+    height: 100%;
+    margin:0;
+    padding: 0;
+}
+.spinner {
+    padding: 0;
+    -ms-animation: rotation 2s infinite linear;
+    -webkit-animation: rotation 1.5s infinite linear;
+}
+
+@-ms-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to   {-webkit-transform: rotate(359deg);}
+}
+
+@-webkit-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to   {-webkit-transform: rotate(359deg);}
+}
