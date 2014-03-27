@@ -22,7 +22,8 @@
     "momentjs": "~2.5.1",
     "angular-animate": "~1.2.14",
     "lz-string": "*",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "angularjs-nvd3-directives": "~0.0.5-beta"
   },
   "overrides": {
     "angular-mocks": {
