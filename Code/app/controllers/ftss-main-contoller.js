@@ -56,8 +56,7 @@
 		                     * @param Object msg
 		                     */
 		                    utils.$message = function (msg) {
-console.log(msg);
-			                    return;
+
 			                    switch (msg) {
 
 				                    case false:
