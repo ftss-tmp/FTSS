@@ -142,3 +142,7 @@ time-ago {
     from {-webkit-transform: rotate(0deg);}
     to   {-webkit-transform: rotate(359deg);}
 }
+
+.people-picker input {
+    width:100%!important;
+}

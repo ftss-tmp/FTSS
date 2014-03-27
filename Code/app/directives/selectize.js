@@ -405,11 +405,10 @@
 				'sortField'  : 'Name',
 				'searchField': 'Name',
 				'persist'    : false,
-				'create'     : false,
-				'plugins'    :
-					[
-						'remove_button'
-					],
+				'create'     : true,
+				'plugins'    : [
+					'remove_button'
+				],
 				'onChange'   : function (val) {
 
 					var self = this;
@@ -417,7 +416,7 @@
 					timeout(function () {
 
 						scope.data[field + 'Name'] = val;
-						scope.data[field + 'Email'] = self.options[val].WorkEMail || '';
+						scope.data[field + 'Email'] = (self.options[val] || {}).WorkEMail || '';
 
 					});
 
@@ -426,15 +425,20 @@
 
 					if (query.indexOf(',') > 1) {
 
-						SharePoint.people(query, filter).then(function (data) {
+						SharePoint.people(query, filter)
 
-							_(data).each(function (d) {
-								d.label = '<div><h5>' + d.Name + '</h5><small>' + d.WorkEMail + '</small></div>';
-							});
 
-							callback(data);
+								      _(data).each(function (d) {
+									      d.label = '<div><h5>'
+										                + d.Name
+										                + '</h5><small>'
+										                + d.WorkEMail
+										      + '</small></div>';
+								      });
 
-						});
+								      callback(data);
+
+							      });
 
 					}
 

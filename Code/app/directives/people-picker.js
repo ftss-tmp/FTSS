@@ -19,7 +19,7 @@
 				if ($scope.createData) {
 
 					var list = $attrs.filter ? FTSS.people[$attrs.filter] : false;
-console.log(list);
+
 					$scope.picker = {
 						'field' : $attrs.field,
 						'filter': list ? function (data) {
