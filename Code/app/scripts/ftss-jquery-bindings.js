@@ -19,8 +19,7 @@
 		e.preventDefault();
 	}, false);
 
-
-	var timeout, popover, pasteAction;
+	var popover, pasteAction;
 
 	/**
 	 * Intercepts paste events and handles if we have a paste handler set (FTSS.pasteAction)
@@ -71,65 +70,56 @@
 
 			var $el = $(this), title, content, placement;
 
-			timeout = setTimeout(function () {
+			if (!$el.data('freeze')) {
 
-				if (!$el.data('freeze')) {
+				$('.popover').remove();
 
-					$('.popover').remove();
+				content = $el.attr('content');
 
-					content = $el.attr('content');
+				if (content) {
+					title = $el.attr('hover') || $el.attr('explain');
+				} else {
+					content = $el.attr('hover') || $el.attr('explain');
+					content = FTSS.messages[content] || content;
+				}
 
-					if (content) {
-						title = $el.attr('hover') || $el.attr('explain');
-					} else {
-						content = $el.attr('hover') || $el.attr('explain');
-						content = FTSS.messages[content] || content;
-					}
+				if (content) {
 
-					if (content) {
+					content = popover.icon(content);
 
-						content = popover.icon(content);
+					_([
+						  'left',
+						  'right',
+						  'top',
+						  'bottom'
+					  ])
 
-						_(
-							[
-								'left',
-								'right',
-								'top',
-								'bottom'
-							])
+						.each(function (p) {
+							      if ($el[0].hasAttribute(p)) {
+								      placement = p;
+							      }
+						      });
 
-							.each(function (p) {
-								      if ($el[0].hasAttribute(p)) {
-									      placement = p;
-								      }
-							      });
+					$el.popover({
+						            'trigger'  : 'manual',
+						            'html'     : true,
+						            'title'    : title,
+						            'content'  : content,
+						            'placement': placement || 'auto',
+						            'container': 'body'
+					            });
 
-						$el.popover(
+					$el.popover('show');
 
-							{
-								'trigger'  : 'manual',
-								'html'     : true,
-								'title'    : title,
-								'content'  : content,
-								'placement': placement || 'auto',
-								'container': 'body'
-							}
+					if (typeof $el.attr('no-arrow') === 'string') {
 
-						);
-
-						$el.popover('show');
-
-						if (typeof $el.attr('no-arrow') === 'string') {
-
-							$el.data('bs.popover').$tip.addClass('no-arrow');
-
-						}
+						$el.data('bs.popover').$tip.addClass('no-arrow');
 
 					}
 
 				}
 
-			}, this.hasAttribute('instant') ? 50 : 500);
+			}
 
 		},
 
@@ -137,8 +127,6 @@
 		 *
 		 */
 		'exit': function () {
-
-			clearTimeout(timeout);
 
 			var $el = $(this);
 
@@ -185,8 +173,6 @@
 		 * @param tip
 		 */
 		'clear': function (self) {
-
-			clearTimeout(timeout);
 
 			var obj = self.data('bs.popover');
 
