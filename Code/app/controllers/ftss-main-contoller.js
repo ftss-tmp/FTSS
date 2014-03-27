@@ -12,327 +12,317 @@
 
 	"use strict";
 
-	FTSS.ng.controller(
+	FTSS.ng.controller('user',
 
-		'user',
-		[
-			'$scope',
-			'SharePoint',
-			function ($scope, SharePoint) {
+	                   [
+		                   '$scope',
+		                   'SharePoint',
+		                   function ($scope, SharePoint) {
 
-				SharePoint.user($scope);
+			                   SharePoint.user($scope);
 
-			}
-		]);
+		                   }
+	                   ]);
 
 	/**
 	 * The main controller performs the initial caching functions as well as setting up other app-wide $scope objects
 	 */
-	FTSS.ng.controller(
-
-		'mainController',
-		[
-			'$scope',
-			'$location',
-			'SharePoint',
-			'$routeParams',
-			'$timeout',
-			'$http',
-			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
-
-				FTSS.loaded = function () {
-					utils.loading(false);
-					$scope.loaded = true;
-				};
+	FTSS.ng.controller('mainController',
+
+	                   ['$scope',
+	                    '$location',
+	                    'SharePoint',
+	                    '$routeParams',
+	                    '$timeout',
+	                    '$http',
+	                    function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
+
+		                    FTSS.loaded = function () {
+			                    utils.loading(false);
+			                    $scope.loaded = true;
+		                    };
 
-				/**
-				 * Returns the current base page
-				 * @returns String page
-				 */
-				$scope.page = FTSS.page = function () {
-					return  $location.path().split('/')[1];
-				};
+		                    /**
+		                     * Returns the current base page
+		                     * @returns String page
+		                     */
+		                    $scope.page = FTSS.page = function () {
+			                    return  $location.path().split('/')[1];
+		                    };
 
-				/**
-				 * User feedback function, provides alerts, errors and general instructions to users
-				 *
-				 * @param Object msg
-				 */
-				utils.$message = function (msg) {
+		                    /**
+		                     * User feedback function, provides alerts, errors and general instructions to users
+		                     *
+		                     * @param Object msg
+		                     */
+		                    utils.$message = function (msg) {
+console.log(msg);
+			                    return;
+			                    switch (msg) {
 
-					switch (msg) {
+				                    case false:
+					                    $scope.messages = {};
+					                    return;
 
-						case false:
-							$scope.messages = {};
-							return;
+				                    case 'empty':
+					                    utils.loading(false);
+					                    msg = {
+						                    'class'  : 'warning',
+						                    'intro'  : 'Nothing Found!  ',
+						                    'message': "There doesn't seem to be anything that matches your request.  Maybe you should add some more tags to your search."
+					                    };
+					                    break;
 
-						case 'empty':
-							utils.loading(false);
-							msg = {
-								'class'  : 'warning',
-								'intro'  : 'Nothing Found!  ',
-								'message': "There doesn't seem to be anything that matches your request.  Maybe you should add some more tags to your search."
-							};
-							break;
+			                    }
 
-					}
+			                    $scope.messages = {
+				                    'newLine': msg.newLine || 'false',
+				                    'class'  : msg.class || 'info',
+				                    'intro'  : msg.intro || 'Quick Note:  ',
+				                    'message': msg.message || ''
+			                    };
 
-					$scope.messages = {
-						'newLine': msg.newLine || 'false',
-						'class'  : msg.class || 'info',
-						'intro'  : msg.intro || 'Quick Note:  ',
-						'message': msg.message || ''
-					};
+		                    };
 
-				};
+		                    /**
+		                     * Bitly url generator--just because we can.  This will automatically use the 1.usa.gov domain
+		                     * as that's what usa.gov uses.  If it doesn't work, then it returns the long url instead
+		                     */
+		                    $scope.bitly = function () {
 
-				/**
-				 * Bitly url generator--just because we can.  This will automatically use the 1.usa.gov domain
-				 * as that's what usa.gov uses.  If it doesn't work, then it returns the long url instead
-				 */
-				$scope.bitly = function () {
+			                    var permaLink = $scope.permaLink || '',
 
-					var permaLink = $scope.permaLink || '',
+			                        pg = $scope.page(),
 
-						pg = $scope.page(),
+			                        cacheLink = 'FTSS_bitly_' + pg + permaLink;
 
-						cacheLink = 'FTSS_bitly_' + pg + permaLink;
+			                    var page, url;
 
-					var page, url;
+			                    if (localStorage[cacheLink]) {
 
-					if (localStorage[cacheLink]) {
+				                    $scope.bitlyResponse = localStorage[cacheLink];
 
-						$scope.bitlyResponse = localStorage[cacheLink];
+			                    } else {
 
-					} else {
+				                    $scope.bitlyResponse = '';
 
-						$scope.bitlyResponse = '';
+				                    page = encodeURIComponent([
+					                                              'https://cs3.eis.af.mil/sites/OO-ED-AM-11/index.html#',
+					                                              pg,
+					                                              permaLink
+				                                              ].join('/'));
 
-						page = encodeURIComponent(
-							[
-								'https://cs3.eis.af.mil/sites/OO-ED-AM-11/index.html#',
-								pg,
-								permaLink
-							].join('/'));
+				                    url = [
+					                    'https://api-ssl.bitly.com/v3/shorten?',
+					                    'access_token=4d2a55cd24810f5e392f6d6c61b0b5d3663ef554',
+					                    '&formate=json',
+					                    '&longUrl=',
+					                    page,
+					                    '&callback=JSON_CALLBACK'
+				                    ].join('');
 
-						url =
-						[
-							'https://api-ssl.bitly.com/v3/shorten?',
-							'access_token=4d2a55cd24810f5e392f6d6c61b0b5d3663ef554',
-							'&formate=json',
-							'&longUrl=',
-							page,
-							'&callback=JSON_CALLBACK'
-						].join('');
+				                    return $http({
+					                                 'method': 'jsonp',
+					                                 'url'   : url
+				                                 })
 
-						return $http({
-							             'method': 'jsonp',
-							             'url'   : url
-						             })
+					                    .then(function (data) {
 
-							.then(function (data) {
+						                          $scope.bitlyResponse = localStorage[cacheLink] = ((data.status
+							                          === 200) ? data.data.data.url : page).split('://')[1];
 
-								      $scope.bitlyResponse = localStorage[cacheLink] = ((data.status === 200) ? data.data.data.url : page).split('://')[1];
+					                          });
 
-							      });
+			                    }
 
-					}
+		                    };
 
-				};
+		                    utils.$initPage = function () {
 
-				utils.$initPage = function () {
+			                    if ($scope.loaded) {
 
-					if ($scope.loaded) {
+				                    FTSS.filters.$refresh();
 
-						FTSS.filters.$refresh();
+				                    if (FTSS.pending) {
 
-						if (FTSS.pending) {
+					                    (function () {
 
-							(function () {
+						                    var valMap, tagMap, customFilters;
 
-								var valMap, tagMap, customFilters;
+						                    valMap = [
+						                    ];
+						                    tagMap = {};
 
-								valMap =
-								[
-								];
-								tagMap = {};
+						                    customFilters = FTSS.filters.route();
 
-								customFilters = FTSS.filters.route();
+						                    if (FTSS.pending.special) {
 
-								if (FTSS.pending.special) {
+							                    utils.updateSearch(function () {
 
-									utils.updateSearch(function () {
+								                    $scope.noSearch = true;
+								                    FTSS.search.disable();
+								                    FTSS.search.addOption({
+									                                          'id'      : 'custom:'
+										                                          + FTSS.pending.special,
+									                                          'label'   : FTSS.pending.text
+										                                          || 'Special Lookup',
+									                                          'optgroup': 'SMART FILTERS'
+								                                          });
+								                    FTSS.search.setValue('custom:' + FTSS.pending.special);
+								                    $scope.filter = FTSS.pending.special;
+								                    $scope.permaLink = '';
 
-										$scope.noSearch = true;
-										FTSS.search.disable();
-										FTSS.search.addOption({
-											                      'id'      : 'custom:' + FTSS.pending.special,
-											                      'label'   : FTSS.pending.text || 'Special Lookup',
-											                      'optgroup': 'SMART FILTERS'
-										                      });
-										FTSS.search.setValue('custom:' + FTSS.pending.special);
-										$scope.filter = FTSS.pending.special;
-										$scope.permaLink = '';
+							                    });
 
-									});
+						                    } else {
 
-								} else {
+							                    _.each(FTSS.pending, function (filterItems, filterGroup) {
 
-									_.each(FTSS.pending, function (filterItems, filterGroup) {
+								                    _.each(filterItems, function (filter) {
 
-										_.each(filterItems, function (filter) {
+									                    var valid = true, custom = false;
 
-											var valid = true, custom = false;
+									                    if (filterGroup === 'q') {
 
-											if (filterGroup === 'q') {
+										                    valid = _.some(customFilters, function (f) {
+											                    return f.id === 'q:' + filter;
+										                    });
 
-												valid = _.some(customFilters, function (f) {
-													return f.id === 'q:' + filter;
-												});
+										                    custom = 'q:' + filter;
+										                    filter = customFilters[filter.charAt(1)].q;
 
-												custom = 'q:' + filter;
-												filter = customFilters[filter.charAt(1)].q;
+									                    }
 
-											}
+									                    if (valid) {
 
-											if (valid) {
+										                    tagMap[filterGroup] = tagMap[filterGroup] || [
+										                    ];
+										                    tagMap[filterGroup].push(filter);
+										                    valMap.push(custom || filterGroup + ':' + filter);
+									                    }
 
-												tagMap[filterGroup] = tagMap[filterGroup] ||
-												                      [
-												                      ];
-												tagMap[filterGroup].push(filter);
-												valMap.push(custom || filterGroup + ':' + filter);
-											}
+								                    });
 
-										});
+							                    });
 
-									});
+							                    utils.updateSearch(function () {
 
-									utils.updateSearch(function () {
+								                    var filter = FTSS.filters.$compile(tagMap);
 
-										var filter = FTSS.filters.$compile(tagMap);
+								                    FTSS.search.setValue(valMap);
 
-										FTSS.search.setValue(valMap);
+								                    if (filter) {
 
-										if (filter) {
+									                    FTSS.tags = tagMap;
+									                    $scope.filter = filter;
 
-											FTSS.tags = tagMap;
-											$scope.filter = filter;
+								                    }
 
-										}
+							                    });
 
-									});
+						                    }
 
-								}
+						                    FTSS.search.$control.find('.item').addClass('processed');
 
-								FTSS.search.$control.find('.item').addClass('processed');
+						                    FTSS.pending = false;
 
-								FTSS.pending = false;
+					                    }());
 
-							}());
+				                    } else {
 
-						} else {
+					                    utils.updateSearch('');
+					                    $scope.cleanSlate = true;
 
-							utils.updateSearch('');
-							$scope.cleanSlate = true;
+				                    }
 
-						}
+			                    }
 
-					}
+		                    };
 
-				};
+		                    utils.permaLink = function (tag, pg) {
 
-				utils.permaLink = function (tag, pg) {
+			                    $scope.permaLink = utils.compress(JSON.stringify(tag));
 
-					$timeout(function () {
+			                    $location.path(['',
+			                                    pg || FTSS.page(),
+			                                    $scope.permaLink].join('/'));
 
-						$scope.permaLink = utils.compress(JSON.stringify(tag));
+		                    };
 
-						$location.path(
-							[
-								'',
-								pg || FTSS.page(),
-								$scope.permaLink
-							].join('/'));
+		                    /**
+		                     * Returns "active" if current page equals link
+		                     *
+		                     * @param link
+		                     * @returns {string}
+		                     */
+		                    $scope.isPage = function (link) {
+			                    return link === (FTSS.page() || 'home') ? 'active' : '';
+		                    };
 
-					});
+		                    /**
+		                     * This is the callback for the searchbox reset button, clears out the search params
+		                     */
+		                    $scope.reset = function () {
+			                    FTSS.search.clear();
+			                    $scope.searchText.$ = '';
+			                    FTSS.search.refreshOptions(false);
+		                    };
 
-				};
+		                    /**
+		                     * Toggles data well collapses
+		                     */
+		                    $scope.collapse = function () {
+			                    $scope.wellCollapse = $scope.wellCollapse ? '' : 'collapsed';
+		                    };
 
-				/**
-				 * Returns "active" if current page equals link
-				 *
-				 * @param link
-				 * @returns {string}
-				 */
-				$scope.isPage = function (link) {
-					return link === (FTSS.page() || 'home') ? 'active' : '';
-				};
+		                    /**
+		                     * Toggles data archive visibility
+		                     */
+		                    $scope.toggleArchive = function () {
+			                    $scope.showArchive = $scope.showArchive ? '' : 'archived';
+		                    };
 
-				/**
-				 * This is the callback for the searchbox reset button, clears out the search params
-				 */
-				$scope.reset = function () {
-					FTSS.search.clear();
-					$scope.searchText.$ = '';
-					FTSS.search.refreshOptions(false);
-				};
+		                    /**
+		                     * Starts the loading indicators on navigation begin
+		                     */
+		                    $scope.$on('$locationChangeStart', function () {
 
-				/**
-				 * Toggles data well collapses
-				 */
-				$scope.collapse = function () {
-					$scope.wellCollapse = $scope.wellCollapse ? '' : 'collapsed';
-				};
+			                    if (FTSS.search) {
+				                    $scope.noSearch = false;
+			                    }
 
-				/**
-				 * Toggles data archive visibility
-				 */
-				$scope.toggleArchive = function () {
-					$scope.showArchive = $scope.showArchive ? '' : 'archived';
-				};
+			                    (FTSS.searchWatch || Function)();
 
-				/**
-				 * Starts the loading indicators on navigation begin
-				 */
-				$scope.$on('$locationChangeStart', function () {
+			                    $scope.pageLimit = 25;
+			                    $scope.count = '-';
+			                    $scope.overload = false;
+			                    $scope.filter = false;
+			                    $scope.sortBy = {};
+			                    $scope.groupBy = {};
+			                    $scope.searchText = $scope.searchText || {};
+			                    FTSS.selectizeInstances = {};
+			                    FTSS.pasteAction = false;
 
-					if (FTSS.search) {
-						$scope.noSearch = false;
-					}
+			                    utils.loading(true);
 
-					(FTSS.searchWatch || Function)();
+		                    });
 
-					$scope.pageLimit = 25;
-					$scope.count = '-';
-					$scope.overload = false;
-					$scope.filter = false;
-					$scope.sortBy = {};
-					$scope.groupBy = {};
-					$scope.searchText = $scope.searchText || {};
-					FTSS.selectizeInstances = {};
-					FTSS.pasteAction = false;
+		                    $scope.$on('$routeChangeSuccess', function () {
 
-					utils.loading(true);
+			                    if ($routeParams.link) {
 
-				});
+				                    $scope.permaLink = $routeParams.link;
 
-				$scope.$on('$routeChangeSuccess', function () {
+				                    FTSS.pending = JSON.parse(utils.decompress($scope.permaLink));
 
-					if ($routeParams.link) {
+			                    }
 
-						$scope.permaLink = $routeParams.link;
+			                    utils.$initPage();
 
-						FTSS.pending = JSON.parse(utils.decompress($scope.permaLink));
+		                    });
 
-					}
-
-					utils.$initPage();
-
-				});
-
-			}
-		]);
+	                    }
+	                   ]);
 
 
 }()
