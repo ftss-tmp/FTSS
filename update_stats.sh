@@ -19,3 +19,8 @@ find . -type f -execdir cat {} \; | wc -l
 echo App Lines
 
 
+echo
+find . -type f | wc -l
+echo App Files
+
+
