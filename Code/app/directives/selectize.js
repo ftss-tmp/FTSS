@@ -462,7 +462,7 @@
 
 						timeout = $timeout;
 
-						$timeout(function () {
+						setTimeout(function () {
 
 							var opts;
 
