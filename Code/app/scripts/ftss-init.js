@@ -14,7 +14,7 @@ var FTSS = {}, utils = {}, caches = {}, PRODUCTION = (location.hostname !== 'loc
 	var debug = true;
 
 	/**
-	 * Creat the Angular module & declare dependencies
+	 * Create the Angular module & declare dependencies
 	 *
 	 * @type {module}
 	 */
@@ -25,7 +25,8 @@ var FTSS = {}, utils = {}, caches = {}, PRODUCTION = (location.hostname !== 'loc
 		                         'mgcrea.ngStrap',
 		                         'monospaced.elastic',
 		                         'partials',
-		                         'angularFileUpload'
+		                         'angularFileUpload',
+	                             'ngAnimate'
 	                         ]);
 
 	/*
