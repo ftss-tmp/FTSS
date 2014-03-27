@@ -1,4 +1,4 @@
-/*global FTSS, _, utils, caches */
+/*global FTSS, _, caches */
 
 /**
  * Selectize directive
@@ -19,16 +19,14 @@
 		modal = scope.modal || scope.$parent.modal;
 
 		return _.defaults(
-
 			opts,
 
 			{
 				'maxItems'    : 1,
 				'options'     : options[opts.select] || null,
-				'plugins'     : opts.maxItems > 1 ?
-				                [
-					                'remove_button'
-				                ] : null,
+				'plugins'     : opts.maxItems > 1 ? [
+					'remove_button'
+				] : null,
 				'onChange'    : function (val) {
 
 					// Do not run when initializing the value
@@ -40,7 +38,8 @@
 						timeout(function () {
 
 							// Update the field with the value(s)
-							scope.data[opts.field] = (val && val.map ? val.map(Number) : Number(val)) || val;
+							scope.data[opts.field] = (val && val.map ? val.map(Number) : Number(val))
+								|| val;
 
 							// Flip the $dirty flag on this modal
 							modal.$setDirty();
@@ -100,56 +99,46 @@
 
 			var doSearch = function (val) {
 
-				if (!FTSS.updating) {
+				if (val && val.length > 0) {
 
-					if (val && val.length > 0) {
+					var tags = {};
 
-						utils.updateSearch(function () {
+					_.each(val, function (v) {
 
-							var tags = {};
+						var split = v.split(':');
 
-							_.each(val, function (v) {
+						tags[split[0]] = tags[split[0]] || [
+						];
 
-								var split = v.split(':');
+						tags[split[0]].push(Number(split[1]) || split[1]);
 
-								tags[split[0]] = tags[split[0]] ||
-								                 [
-								                 ];
+						scope.fn.setPermaLink(tags);
+						scope.fn.doNavigate();
 
-								tags[split[0]].push(Number(split[1]) || split[1]);
-
-							});
-
-							utils.permaLink(tags);
-
-						});
-
-					}
-
-					FTSS.search.$control.find('.item').addClass('processed');
+					});
 
 				}
+
+				FTSS.search.$control.find('.item').addClass('processed');
 
 			};
 
 			return {
 				'valueField'     : 'id',
 				'persist'        : true,
-				'optgroupOrder'  :
-					[
-						'SMART FILTERS',
-						'Units',
-						'AFSC',
-						'MDS',
-						'Instructors',
-						'MasterCourseList',
-						'Hosts'
-					],
-				'plugins'        :
-					[
-						'optgroup_columns',
-						'remove_button'
-					],
+				'optgroupOrder'  : [
+					'SMART FILTERS',
+					'Units',
+					'AFSC',
+					'MDS',
+					'Instructors',
+					'MasterCourseList',
+					'Hosts'
+				],
+				'plugins'        : [
+					'optgroup_columns',
+					'remove_button'
+				],
 				'onEnter'        : doSearch,
 				'onDropdownClose': function () {
 					doSearch(this.getValue());
@@ -190,7 +179,9 @@
 									     'optgroup': group,
 									     'label'   : v.label || txt,
 									     'data'    : v,
-									     'search'  : JSON.stringify(v).replace(/([,{]"\w+":)|([{}"])/gi, ' ').toLowerCase()
+									     'search'  : JSON.stringify(v)
+										     .replace(/([,{]"\w+":)|([{}"])/gi, ' ')
+										     .toLowerCase()
 								     };
 
 							     })
@@ -214,13 +205,20 @@
 						// Keep track of our async loads and fire once they are all done (not using $q.all())
 						if (++count === CACHE_COUNT) {
 
-							var tagBoxOpts = options.AFSC.concat(options.MDS, options.MasterCourseList, options.Units, options.Instructors, options.Hosts);
+							var tagBoxOpts = []
+
+								.concat(options.AFSC,
+							            options.MDS,
+							            options.MasterCourseList,
+							            options.Units,
+							            options.Instructors,
+							            options.Hosts);
 
 							// Add the options to our searchBox
 							FTSS.search.addOption(tagBoxOpts);
 
-							FTSS.loaded();
-							utils.$initPage();
+							scope.fn.setLoaded();
+							scope.fn.doInitPage();
 
 							$('.hide').removeClass('hide');
 
@@ -235,10 +233,10 @@
 						.then(function (response) {
 
 							      // Pull unique AFSC list from MCL & copy to Caches
-							      loaded(_.compact(_.uniq(_.pluck(response, 'AFSC'))), 'AFSC');
+							      loaded(_(response).pluck('AFSC').uniq().compact().value(), 'AFSC');
 
 							      // Pull unqiue MDS list from MCL & copy to Caches
-							      loaded(_.compact(_.uniq(_.pluck(response, 'MDS'))), 'MDS');
+							      loaded(_(response).pluck('MDS').uniq().compact().value(), 'MDS');
 
 							      // Add MCL to Selectize with row callback
 							      loaded(response, 'MasterCourseList', function (v) {
@@ -253,8 +251,7 @@
 								       *
 								       * @type {*|string}
 								       */
-								      v.label =
-								      [
+								      v.label = [
 									      '<div><h5>',
 									      v.PDS,
 									      '<em> - ',
@@ -272,8 +269,7 @@
 								       *
 								       * @type {*|string}
 								       */
-								      v.text =
-								      [
+								      v.text = [
 									      v.PDS,
 									      v.Number,
 									      v.Title,
@@ -305,8 +301,7 @@
 								       *
 								       * @type {*|string}
 								       */
-								      v.text =
-								      [
+								      v.text = [
 									      v.Base,
 									      v.Det,
 									      v.Squadron,
@@ -320,8 +315,7 @@
 								       *
 								       * @type {*|string}
 								       */
-								      v.label =
-								      [
+								      v.label = [
 									      '<b>',
 									      v.Base,
 									      '</b><right>&nbsp;(Det ',
@@ -336,8 +330,7 @@
 								       *
 								       * @type {*|string}
 								       */
-								      v.LongName =
-								      [
+								      v.LongName = [
 									      v.Base,
 									      ' (Det. ',
 									      v.Det,
@@ -358,8 +351,7 @@
 
 										            v.Text = v.Unit;
 
-										            v.label =
-										            [
+										            v.label = [
 											            '<b>',
 											            v.Unit,
 											            '</b><right>Det. ',
@@ -427,6 +419,7 @@
 
 						SharePoint.people(query, filter)
 
+							.then(function (data) {
 
 								      _(data).each(function (d) {
 									      d.label = '<div><h5>'
@@ -448,96 +441,92 @@
 
 	};
 
-	FTSS.ng.directive(
+	FTSS.ng.directive('selectize', [
+		'$timeout',
+		'SharePoint',
+		function ($timeout, SharePoint) {
 
-		'selectize',
-		[
-			'$timeout',
-			'SharePoint',
-			function ($timeout, SharePoint) {
+			return {
 
-				return {
+				// Restrict it to be an attribute
+				'restrict': 'A',
 
-					// Restrict it to be an attribute
-					'restrict': 'A',
+				// Responsible for registering DOM listeners as well as updating the DOM
+				'link'    : function (scope, element, attrs) {
 
-					// Responsible for registering DOM listeners as well as updating the DOM
-					'link'    : function (scope, element, attrs) {
+					timeout = $timeout;
 
-						timeout = $timeout;
+					setTimeout(function () {
 
-						setTimeout(function () {
+						var opts;
 
-							var opts;
+						if (attrs.bind) {
 
-							if (attrs.bind) {
+							opts = builder(scope, {
+								'select'  : attrs.selectize,
+								'field'   : attrs.bind,
+								'create'  : attrs.hasOwnProperty('create'),
+								'maxItems': attrs.hasOwnProperty('multiple') ? 999 : 1
+							});
 
-								opts = builder(scope, {
-									'select'  : attrs.selectize,
-									'field'   : attrs.bind,
-									'create'  : attrs.hasOwnProperty('create'),
-									'maxItems': attrs.hasOwnProperty('multiple') ? 999 : 1
+						} else {
+
+							opts = custom[attrs.selectize](scope, SharePoint, attrs.field);
+
+						}
+
+						if (attrs.watch) {
+
+							var init, filter, refresh;
+
+							filter = function (f) {
+
+								return _.filter(options[attrs.selectize], function (o) {
+									return (o.data[attrs.watch] === f);
 								});
 
-							} else {
+							};
 
-								opts = custom[attrs.selectize](scope, SharePoint, attrs.field);
+							refresh = function (f) {
 
-							}
+								if (init) {
 
-							if (attrs.watch) {
+									var select = element[0].selectize;
 
-								var init, filter, refresh;
+									if (select) {
 
-								filter = function (f) {
+										select.clearOptions();
+										select.addOption(filter(f));
+										select.setValue(scope.data[opts.field]);
 
-									return _.filter(
-
-										options[attrs.selectize], function (o) {
-											return (o.data[attrs.watch] === f);
-										});
-
-								};
-
-								refresh = function (f) {
-
-									if (init) {
-
-										var select = element[0].selectize;
-
-										if (select) {
-
-											select.clearOptions();
-											select.addOption(filter(f));
-											select.setValue(scope.data[opts.field]);
-
-										}
-
-									} else {
-										init = true;
 									}
 
-								};
+								} else {
+									init = true;
+								}
 
-								scope.$watch('data.' + attrs.watch, refresh);
+							};
 
-								opts.options = filter(scope.data[attrs.watch]);
+							scope.$watch('data.' + attrs.watch, refresh);
 
-							}
+							opts.options = filter(scope.data[attrs.watch]);
 
-							var selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
+						}
 
-							scope.modal && scope.modal
+						var selectize = FTSS.selectizeInstances[opts.field] = $(element).selectize(opts)[0].selectize;
 
-								.$addControl({
-									             '$setPristine': function () {
-										             selectize.$control.removeClass('ng-dirty');
-									             }
-								             });
-						});
-					}
-				};
-			}
-		]);
+						scope.modal && scope.modal
+
+							.$addControl(
+							{
+								'$setPristine': function () {
+									selectize.$control.removeClass('ng-dirty');
+								}
+							});
+					});
+				}
+			};
+		}
+	]);
 
 }());

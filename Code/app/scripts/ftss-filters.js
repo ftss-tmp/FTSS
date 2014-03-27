@@ -97,7 +97,7 @@
 
 		return function (all) {
 
-			return all ? _.flatten(routeWrap) : routeWrap[FTSS.page()];
+			return all ? _.flatten(routeWrap) : routeWrap[FTSS._fn.getPage()];
 
 		};
 
@@ -105,7 +105,7 @@
 
 	filters.map = function () {
 
-		return filterMaps[FTSS.page()];
+		return filterMaps[FTSS._fn.getPage()];
 
 	};
 
@@ -120,7 +120,7 @@
 		// return the real function for filters.$refresh now that we have today cached in a closure
 		return function () {
 
-			var page = FTSS.page();
+			var page = FTSS._fn.getPage();
 
 			// create a cloned backup of our options & userOptions before we change them up
 			options = options || _.clone(FTSS.search.options);

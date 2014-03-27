@@ -118,8 +118,7 @@ utils.tagHighlight = function (data) {
 		});
 
 	} catch (e) {
-		debugger;
-		console.log(e);
+		FTSS.utils.log(e);
 	}
 
 };

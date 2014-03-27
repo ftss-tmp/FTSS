@@ -18,11 +18,10 @@
 			return {
 				'restrict': 'E',
 				'replace' : true,
-				'scope'   : {},
 				'templateUrl': '/partials/page-help-message.html',
 				'link'    : function ($scope) {
 
-					var page = FTSS.page();
+					var page = $scope.fn.getPage();
 
 					$scope.showHelp = (localStorage['FTSS_Pref_Help_' + page] !== 'false');
 

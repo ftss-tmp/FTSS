@@ -337,7 +337,7 @@ FTSS.controller = (function () {
 					});
 
 					// Perform final loading
-					FTSS.loaded();
+					$scope.fn.setLoaded();
 
 				}
 

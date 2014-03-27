@@ -7,43 +7,36 @@
 
 	"use strict";
 
-	FTSS.ng.directive(
+	FTSS.ng.directive('navLink',
 
-		'navLink',
+	                  [
+		                  '$timeout',
+		                  function ($timeout) {
+			                  return {
+				                  'restrict'   : 'E',
+				                  'templateUrl': '/partials/nav-link.html',
+				                  'replace'    : true,
+				                  'scope'      : {
+					                  'link': '@',
+					                  'icon': '@',
+					                  'name': '@'
+				                  },
+				                  'link'       : function ($scope) {
 
-		[
-			'$timeout',
-			'$location',
-			function ($timeout, $location) {
-				return {
-					'restrict'   : 'E',
-					'templateUrl': '/partials/nav-link.html',
-					'replace'    : true,
-					'scope'      : {
-						'link': '@',
-						'icon': '@',
-						'name': '@'
-					},
-					'link'       : function ($scope) {
+					                  $scope.navigate = function() {
 
-						$scope.navigate = function () {
-							$location.path(
-								[
-									'',
-									$scope.link,
-									$scope.$parent.permaLink
-								].join('/'));
-						};
+						                  $scope.$parent.fn.doNavigate($scope.link);
 
-						$timeout(function () {
-							$scope.$$watchers =
-							[
-							];
-						});
+					                  };
 
-					}
-				};
-			}
-		]);
+					                  $timeout(function () {
+						                  $scope.$$watchers = [
+						                  ];
+					                  });
+
+				                  }
+			                  };
+		                  }
+	                  ]);
 
 }());
