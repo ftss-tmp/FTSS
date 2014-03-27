@@ -22,7 +22,7 @@
     margin-left: -15px;
     outline: 0;
     padding: 10px 0px 10px 14px;
-    opacity: .65;
+    opacity: .5;
     cursor: pointer;
 }
 
@@ -32,6 +32,18 @@
 
 #dashboard-menu > li.active > .link, #dashboard-menu > li > .link:hover {
     text-decoration: none
+}
+
+.hosts .hosts .pointer,
+.backlog .backlog .pointer,
+.requirements .requirements .pointer,
+.scheduled .scheduled .pointer,
+.requests .requests .pointer,
+.catalog .catalog .pointer,
+.units .units .pointer,
+.instructors .instructors .pointer,
+.students .students .pointer {
+    display: block !important;
 }
 
 .hosts .hosts *,
@@ -78,6 +90,10 @@
     z-index: 1001
 }
 
+#dashboard-menu li {
+    position: relative;
+}
+
 #dashboard-menu .link span {
     transition: color .1s linear
 }
@@ -108,4 +124,8 @@
 .navbar {
     height: 50px;
     border-radius: 0px;
+}
+
+.link {
+    transition: 300ms ease;
 }
