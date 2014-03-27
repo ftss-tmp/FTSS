@@ -75,12 +75,11 @@ FTSS.ng.controller(
 
 						      .then(function (d) {
 
-							            FTSS.people.students[d.StudentId] = null;
+							            FTSS.people.students[d.StudentName] = null;
 
 							            d.HostUnit = caches.Hosts[d.HostUnitId];
 							            d.ftd = caches.Units[d.HostUnit.FTD];
-							            d.Name = d.Student.Name;
-							            d.firstName = d.Name.match(/[a-z]+,\s([a-z]+)/i)[1];
+							            d.firstName = d.StudentName.match(/[a-z]+,\s([a-z]+)/i)[1];
 
 							            d.requirements = _(d.Requirements_JSON)
 
