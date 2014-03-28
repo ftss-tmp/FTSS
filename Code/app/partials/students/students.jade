@@ -6,7 +6,7 @@ page-help-message
 
 div(class='{{wellCollapse}}')
 
-    div(ng-repeat='(header, group) in groups')
+    div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
 
         h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px') {{header}}
             span.pull-right {{group.length}}
@@ -25,7 +25,10 @@ div(class='{{wellCollapse}}')
 
                 tbody
 
-                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)', ng-if='!row.Archived || showArchive')
+                    tr.middle(ng-repeat='row in group',
+                                ng-class='{archived:row.Archived}',
+                                ng-dblclick='edit(false)',
+                                ng-if='!row.Archived || showArchive')
 
                         td
                             updated row
