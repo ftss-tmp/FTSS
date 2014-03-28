@@ -53,7 +53,7 @@ FTSS.ng.controller(
 
 			self
 
-				.bind('loaded')
+				.bind()
 
 				.then(function (data) {
 

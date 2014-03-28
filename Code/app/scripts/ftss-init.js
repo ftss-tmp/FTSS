@@ -26,8 +26,7 @@ var FTSS = {}, utils = {}, caches = {}, PRODUCTION = (location.hostname !== 'loc
 		                         'monospaced.elastic',
 		                         'partials',
 		                         'angularFileUpload',
-	                             'ngAnimate',
-	                             'nvd3ChartDirectives'
+	                             'ngAnimate'
 	                         ]);
 
 	/*

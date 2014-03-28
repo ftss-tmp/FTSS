@@ -217,8 +217,7 @@
 							// Add the options to our searchBox
 							FTSS.search.addOption(tagBoxOpts);
 
-							scope.fn.setLoaded();
-							scope.fn.doInitPage();
+							scope.fn.doInitPage(true);
 
 							$('.hide').removeClass('hide');
 

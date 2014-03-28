@@ -71,7 +71,7 @@ FTSS.ng.controller('instructorsController',
 
 		                   self
 
-			                   .bind('loaded')
+			                   .bind()
 
 			                   .then(function (data) {
 

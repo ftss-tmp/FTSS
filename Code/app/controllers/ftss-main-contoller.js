@@ -151,16 +151,16 @@
 
 					'doInitPage': function () {
 
-						if ($scope.loaded) {
+						if (FTSS.search || $scope.loaded) {
 
-							FTSS.filters.$refresh();
+							if ($scope.tagBox) {
 
-							var pending = $scope.permaLink
-								&& JSON.parse(utils.decompress($scope.permaLink));
+								FTSS.filters.$refresh();
 
-							if (pending) {
+								var pending =
+									    $scope.permaLink && JSON.parse(utils.decompress($scope.permaLink));
 
-								(function () {
+								if (pending) {
 
 									var valMap, tagMap, customFilters;
 
@@ -245,11 +245,14 @@
 									FTSS.search.$control.find('.item').addClass('processed');
 									pending = false;
 
-								}());
+								} else {
+
+									utils.updateSearch('');
+
+								}
 
 							} else {
 
-								utils.updateSearch('');
 								$scope.cleanSlate = true;
 
 							}
@@ -321,7 +324,6 @@
 				$scope.$on('$routeChangeSuccess', function () {
 
 					$scope.permaLink = $routeParams.link || '';
-					_fn.doInitPage();
 
 				});
 

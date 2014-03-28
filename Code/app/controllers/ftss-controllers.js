@@ -13,16 +13,18 @@
  */
 FTSS.controller = (function () {
 
-	var tagBox, modal, sharePoint;
+	var tagBox, modal, sharePoint, timeout;
 
 	// Grab some angular variables for use later on
 	FTSS.ng.run(
 		[
 			'$modal',
 			'SharePoint',
-			function ($modal, SharePoint) {
+			'$timeout',
+			function ($modal, SharePoint, $timeout) {
 				modal = $modal;
 				sharePoint = SharePoint;
+				timeout = $timeout;
 			}
 		]);
 
@@ -53,7 +55,10 @@ FTSS.controller = (function () {
 			'bind': function (prop) {
 
 				// If loaded we only want to bind the first time
-				var single = (prop === 'loaded');
+				var single = !prop;
+
+				// Default to cached mode & watch cleanSlate
+				prop = prop || 'cleanSlate';
 
 				// The tagBox controls whether the search or tagBox are shown
 				$scope.$parent.tagBox = tagBox = !single;
@@ -69,6 +74,8 @@ FTSS.controller = (function () {
 				return {
 					'then': function (callback) {
 
+						$scope.fn.doInitPage();
+
 						// Create a $scope.$watch and unwatch = to the return value for unbinding
 						var unwatch = $scope.$watch(prop, function (watch) {
 
@@ -77,9 +84,7 @@ FTSS.controller = (function () {
 
 								actions.reload = function () {
 
-									var filters =
-										[
-										];
+									var filters = [];
 
 									opts.filter && filters.push(opts.filter);
 
@@ -98,9 +103,7 @@ FTSS.controller = (function () {
 								actions.reload();
 
 								// If this is a bind-once and has been called, delete the watch
-								if (single) {
-									unwatch();
-								}
+								single && unwatch();
 
 							}
 						});
@@ -222,7 +225,9 @@ FTSS.controller = (function () {
 
 					req.Instructor = caches.Instructors[schedClass.InstructorId] || false;
 
-					req.instructor = req.Instructor.Instructor && req.Instructor.Instructor.Name || 'No Instructor Identified';
+					req.instructor = req.Instructor.Instructor
+						                 && req.Instructor.Instructor.Name
+						|| 'No Instructor Identified';
 
 					req.start = FTSS.utils.fixDate(schedClass.Start);
 
@@ -259,7 +264,7 @@ FTSS.controller = (function () {
 				// Only post-process if we actually have data to work with
 				if (data) {
 
-					var sifter, results;
+					var sifter, results, watcher, exec;
 
 					// Initialize sifter with the array of data after passing through some string sanitization
 					sifter = new Sifter(_.map(data, function (d) {
@@ -289,8 +294,13 @@ FTSS.controller = (function () {
 					// De-register the watcher if it exists
 					(FTSS.searchWatch || Function)();
 
-					// Create a watcher that monitors our searchText, groupBy & sortBy for changes
-					FTSS.searchWatch = $scope.$watchCollection('[searchText.$,groupBy.$,sortBy.$]', function () {
+					watcher = _.debounce(function (newVal, oldVal) {
+
+						!_.isEqual(newVal, oldVal) && timeout(exec);
+
+					}, 300);
+
+					exec = function () {
 
 						// reference for our searchText
 						var text = $scope.searchText.$;
@@ -302,10 +312,9 @@ FTSS.controller = (function () {
 
 						// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
 						results = sifter.search(text, {
-							'fields'     :
-								[
-									'search'
-								],
+							'fields'     : [
+								'search'
+							],
 							'limit'      : $scope.pageLimit,
 							'conjunction': 'and'
 						});
@@ -334,10 +343,15 @@ FTSS.controller = (function () {
 						// Finally, do our tagHighlighting if this is a tagBox
 						tagBox && utils.tagHighlight(data);
 
-					});
+						// Perform final loading
+						$scope.fn.setLoaded();
 
-					// Perform final loading
-					$scope.fn.setLoaded();
+					};
+
+					exec();
+
+					// Create a watcher that monitors our searchText, groupBy & sortBy for changes
+					FTSS.searchWatch = $scope.$watchCollection('[searchText.$,groupBy.$,sortBy.$]', watcher);
 
 				}
 
