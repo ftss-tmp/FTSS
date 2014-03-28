@@ -1,4 +1,4 @@
-/*global FTSS, caches, _, moment */
+/*global FTSS, caches, _, moment, utils */
 
 FTSS.ng.controller('backlogController',
 
@@ -69,12 +69,11 @@ FTSS.ng.controller('backlogController',
 
 			                       return moment.duration(Math.ceil(time.days / length), 'days').humanize();
 
-
 		                       },
 
 		                       timeMax = function (reqs) {
 
-			                       return moment.duration(_.chain(reqs).pluck('days').max().value(), 'days').humanize();
+			                       return moment.duration(_(reqs).pluck('days').max().value(), 'days').humanize();
 
 		                       };
 
@@ -97,8 +96,7 @@ FTSS.ng.controller('backlogController',
 
 				                         $scope.totals = {
 					                         'allStudents': 0,
-					                         'max'        : [
-					                         ],
+					                         'max'        : [],
 					                         'days'       : 0,
 					                         'students'   : 0,
 					                         'reqs'       : 0,
@@ -156,12 +154,24 @@ FTSS.ng.controller('backlogController',
 					                         }
 				                         });
 
-			                                                        debugger;
+				                         $scope.graphs.reqs = _($scope.graphs.reqs)
+					                         .map(function (v, k) {
+						                              return {'k': k, 'v': v};
+					                              })
+					                         .sortBy('v')
+					                         .slice(-7)
+					                         .value();
 
-				                         $scope.graphs.reqs = _.map($scope.graphs.reqs, function (v, k) {
-					                         console.log(v, $scope.totals);
-					                         return {'k': k, 'v': v};
-				                         });
+				                         $scope.graphs.reqs.push(
+					                         {
+
+						                         'k': 'All Others',
+
+						                         'v': $scope.totals.reqs - _($scope.graphs.reqs).pluck('v').reduce(function (sum, el) {
+							                         return sum + el;
+						                         })
+
+					                         });
 
 				                         _(caches.Units).each(function (u) {
 

@@ -3,6 +3,18 @@
         #backlog BACKLOG
         .backlogGradient.stat
         .col-md-3.stat
+            div(style='position:absolute;z-index:9999;top:-40px;left:-45px')
+                nvd3-pie-chart(data='graphs.reqs',
+                id='pieReqs',
+                width='175',
+                height='175',
+                x='d3.x()',
+                y='d3.y()',
+                donut='true',
+                showLabels="true"
+                donutLabelsOutside="true"
+                color="d3.color()")
+                    svg
             .data
                 span.number {{totals.reqs}}
                 | Courses
@@ -30,17 +42,6 @@
                 | {{totals.max[2]}}
             span.date Longest Wait Time
 
-div
-    nvd3-pie-chart(data='graphs.reqs',
-                    id='pieReqs',
-                    width='250',
-                    height='250',
-                    x='d3.x()',
-                    y='d3.y()',
-                    donut='true',
-                    tooltips='true',
-                    color="d3.color()")
-        svg
 
 div(class='{{wellCollapse}}')
 
