@@ -1,4 +1,4 @@
-/*global caches, FTSS, _ */
+/*global caches, FTSS, _, moment */
 
 FTSS.ng.controller(
 	'studentsController',
@@ -78,7 +78,6 @@ FTSS.ng.controller(
 
 							            d.HostUnit = caches.Hosts[d.HostUnitId];
 							            d.ftd = caches.Units[d.HostUnit.FTD];
-							            d.firstName = d.StudentName.match(/[a-z]+,\s([a-z]+)/i)[1];
 
 							            d.wait = moment(d.ProcessDate).fromNow();
 
