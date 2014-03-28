@@ -23,7 +23,7 @@
     "angular-animate": "~1.2.14",
     "lz-string": "*",
     "lodash": "~2.4.1",
-    "angularjs-nvd3-directives": "~0.0.5-beta"
+    "bean": "~1.0.6"
   },
   "overrides": {
     "angular-mocks": {
