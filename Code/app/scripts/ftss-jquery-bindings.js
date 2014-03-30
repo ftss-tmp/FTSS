@@ -51,14 +51,12 @@
 		 */
 		'icon': function (content) {
 
-			var svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="100%" ';
-
 			return content
 
 				.replace(/\[icon\=([a-z]+)\]/g,
 
 			             function (match, icon) {
-				             return '<div class="icon icon-' + icon + '">' + svg + FTSS.icons[icon] + '</div>';
+				             return '<svg class="icon icon-' + icon + '"><use xlink:href="#icon-' + icon + '"/></use></svg>';
 			             });
 
 		},
