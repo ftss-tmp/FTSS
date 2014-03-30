@@ -74,6 +74,8 @@ mixin actions(view, edit, archive, label)
             span.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive()', hover='Restore ' + label, left)
                 +icon('rotate-left')
 
+    unbind
+
 
 mixin modalFooter()
     .row.alert.alert-danger(ng-show='modal.$dirty && modal.$invalid')
