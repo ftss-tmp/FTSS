@@ -261,99 +261,128 @@ FTSS.controller = (function () {
 			 */
 			'postProcess': function (data) {
 
-				// Only post-process if we actually have data to work with
-				if (data) {
+				var doProcess = function () {
 
-					var sifter, results, watcher, exec;
+					// Only post-process if we actually have data to work with
+					if (data) {
 
-					// Initialize sifter with the array of data after passing through some string sanitization
-					sifter = new Sifter(_.map(data, function (d) {
+						var sifter, results, watcher, exec;
 
-						return {
-							/* We're using JSON stringify to fast deep-read our data & then stripping out the JSON junk
-							 * with a regex & then setting lowercase for faster text-processing
-							 */
-							'search': JSON.stringify(d).replace(/([,{]"\w+":)|([{}"])/gi, ' ').toLowerCase(),
+						// Initialize sifter with the array of data after passing through some string sanitization
+						sifter = new Sifter(
+							_(data)
 
-							// Also, send the data to sifter for use later on
-							'data'  : d
+								// Wrap our dataset in an array with a search property (just a flattened version of the data)
+								.map(function (d) {
+
+									     // Use our search prop if it already exists
+									     d.search = d.search ||
+									                JSON.stringify(d)
+										                .replace(/([,{]"\w+":)|([{}"])/gi, ' ')
+										                .toLowerCase();
+
+									     return {
+										     /* We're using JSON stringify to fast deep-read our data & then stripping out the JSON junk
+										      * with a regex & then setting lowercase for faster text-processing
+										      */
+										     'search': d.search,
+
+										     // Also, send the data to sifter for use later on
+										     'data'  : d
+									     };
+
+								     })
+
+								// Perform filtering for Archived so we can shrink our processing load down
+								.filter(function (test) {
+
+									        // Add if this object does not have an Archived property or if showArchive is enabled
+									        return !test.data.Archived || !!$scope.showArchive;
+
+								        })
+
+								.value()
+						);
+
+						// Try to set our searchText to the first word of the first tag from our tagBox
+						if (!tagBox && !$scope.searchText.$) {
+
+							try {
+								var val = FTSS.search.getValue().slice(0, 1);
+								$scope.searchText.$ = FTSS.search.options[val].data.text.split(' ')[0];
+							} catch (e) {}
+
+						}
+
+						// De-register the watcher if it exists
+						(FTSS.searchWatch || Function)();
+
+						watcher = _.debounce(function (newVal, oldVal) {
+
+							!_.isEqual(newVal, oldVal) && timeout(exec);
+
+						}, 300);
+
+						exec = function () {
+
+							// reference for our searchText
+							var text = $scope.searchText.$;
+
+							// Reset groups, counter & count
+							$scope.groups = false;
+							$scope.counter('-', false);
+							$scope.count = 0;
+
+							// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
+							results = sifter.search(text, {
+								'fields'     : [
+									'search'
+								],
+								'limit'      : $scope.pageLimit,
+								'conjunction': 'and'
+							});
+
+							// Create our sorted groups and put in our scope
+							$scope.groups = _(results.items)
+
+								.map(function (match) {
+									     return sifter.items[match.id].data;
+								     })
+
+								.sortBy(function (srt) {
+									        return utils.deepRead(srt, $scope.sortBy.$);
+								        })
+
+								.groupBy(function (gp) {
+									         $scope.count++;
+									         return utils.deepRead(gp, $scope.groupBy.$) || '* No Grouping Data Found';
+								         })
+
+								.value();
+
+							// Update the scope counter + overoad indicator
+							$scope.counter($scope.count, $scope.count !== results.total);
+
+							// Finally, do our tagHighlighting if this is a tagBox
+							tagBox && utils.tagHighlight(data);
+
+							// Perform final loading
+							$scope.fn.setLoaded();
+
 						};
 
-					}));
+						exec();
 
-					// Try to set our searchText to the first word of the first tag from our tagBox
-					if (!tagBox && !$scope.searchText.$) {
-
-						try {
-							var val = FTSS.search.getValue().slice(0, 1);
-							$scope.searchText.$ = FTSS.search.options[val].data.text.split(' ')[0];
-						} catch (e) {}
+						// Create a watcher that monitors our searchText, groupBy & sortBy for changes
+						FTSS.searchWatch = $scope.$watchCollection('[searchText.$,groupBy.$,sortBy.$]', watcher);
 
 					}
 
-					// De-register the watcher if it exists
-					(FTSS.searchWatch || Function)();
+				};
 
-					watcher = _.debounce(function (newVal, oldVal) {
-
-						!_.isEqual(newVal, oldVal) && timeout(exec);
-
-					}, 300);
-
-					exec = function () {
-
-						// reference for our searchText
-						var text = $scope.searchText.$;
-
-						// Reset groups, counter & count
-						$scope.groups = false;
-						$scope.counter('-', false);
-						$scope.count = 0;
-
-						// Perform the sifter search using the pageLimit, for no search, all results up to the pageLimit are returned
-						results = sifter.search(text, {
-							'fields'     : [
-								'search'
-							],
-							'limit'      : $scope.pageLimit,
-							'conjunction': 'and'
-						});
-
-						// Create our sorted groups and put in our scope
-						$scope.groups = _(results.items)
-
-							.map(function (match) {
-								     return sifter.items[match.id].data;
-							     })
-
-							.sortBy(function (srt) {
-								        return utils.deepRead(srt, $scope.sortBy.$);
-							        })
-
-							.groupBy(function (gp) {
-								         $scope.count++;
-								         return utils.deepRead(gp, $scope.groupBy.$) || '* No Grouping Data Found';
-							         })
-
-							.value();
-
-						// Update the scope counter + overoad indicator
-						$scope.counter($scope.count, $scope.count !== results.total);
-
-						// Finally, do our tagHighlighting if this is a tagBox
-						tagBox && utils.tagHighlight(data);
-
-						// Perform final loading
-						$scope.fn.setLoaded();
-
-					};
-
-					exec();
-
-					// Create a watcher that monitors our searchText, groupBy & sortBy for changes
-					FTSS.searchWatch = $scope.$watchCollection('[searchText.$,groupBy.$,sortBy.$]', watcher);
-
-				}
+				// De-register the watcher if it exists
+				(FTSS.archiveWatch || Function)();
+				FTSS.archiveWatch = $scope.$watch('showArchive', doProcess);
 
 			},
 
