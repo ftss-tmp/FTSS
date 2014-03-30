@@ -64,7 +64,7 @@ mixin googleMap()
 
 
 mixin actions(view, edit, archive, label)
-    div
+    div.pull-right
         if view
             span.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view()', hover='View ' + label + ' Stats', left)
                 +icon('graph_pie')

@@ -317,12 +317,15 @@ FTSS.controller = (function () {
 						// De-register the watcher if it exists
 						(FTSS.searchWatch || Function)();
 
+						// This will let us debounce our searches to speed up responsiveness
 						watcher = _.debounce(function (newVal, oldVal) {
 
+							// Make sure the array of watchers are really different before running exec
 							!_.isEqual(newVal, oldVal) && timeout(exec);
 
 						}, 300);
 
+						// The main limiting, filtering, grouping, sorting function our views
 						exec = function () {
 
 							// reference for our searchText
@@ -345,14 +348,17 @@ FTSS.controller = (function () {
 							// Create our sorted groups and put in our scope
 							$scope.groups = _(results.items)
 
+								// we just need the data back into our $scope
 								.map(function (match) {
 									     return sifter.items[match.id].data;
 								     })
 
+								// Run sortBy first on our mapped data
 								.sortBy(function (srt) {
 									        return utils.deepRead(srt, $scope.sortBy.$);
 								        })
 
+								// Group the data by the given property
 								.groupBy(function (gp) {
 									         $scope.count++;
 									         return utils.deepRead(gp, $scope.groupBy.$) || '* No Grouping Data Found';

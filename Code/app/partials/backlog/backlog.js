@@ -6,45 +6,6 @@ FTSS.ng.controller('backlogController',
 	                   '$scope',
 	                   function ($scope) {
 
-		                   $scope.d3 = {
-
-			                   'colors': ['#39B4D7',
-			                              '#488EA1',
-			                              '#13718C',
-			                              '#69CEEB',
-			                              '#8CD6EB',
-			                              '#4966DD',
-			                              '#5363A6',
-			                              '#182F90',
-			                              '#778EEE',
-			                              '#97A8EE',
-			                              '#37E36B',
-			                              '#49AB67',
-			                              '#129439',
-			                              '#68F191',
-			                              '#8CF1AB'
-			                   ],
-
-			                   'x': function () {
-				                   return function (d) {
-					                   return d.k;
-				                   };
-			                   },
-
-			                   'y': function () {
-				                   return function (d) {
-					                   return d.v;
-				                   };
-
-			                   },
-
-			                   color: function () {
-				                   return function (d, i) {
-					                   return $scope.d3.colors[i];
-				                   };
-			                   }
-		                   };
-
 		                   var self = FTSS.controller($scope, {
 			                       'sort' : 'PDS',
 			                       'group': 'MDS',
