@@ -32,8 +32,11 @@ FTSS.controller = (function () {
 
 		var model, process, actions;
 
+		// We'll just make opts.grouping mandatory, we'll use an int here for perf reasons later on
+		opts.grouping[0] = 'None';
+
 		// Specify the groupBy parameter
-		$scope.$parent.grouping = opts.grouping || false;
+		$scope.$parent.grouping = opts.grouping;
 
 		// Specify the sortBy parameter
 		$scope.$parent.sorting = opts.sorting || false;
@@ -361,7 +364,7 @@ FTSS.controller = (function () {
 								// Group the data by the given property
 								.groupBy(function (gp) {
 									         $scope.count++;
-									         return utils.deepRead(gp, $scope.groupBy.$) || '* No Grouping Data Found';
+									         return $scope.groupBy.$ ? utils.deepRead(gp, $scope.groupBy.$) || '* No Grouping Data Found' : false;
 								         })
 
 								.value();

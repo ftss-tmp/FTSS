@@ -22,7 +22,7 @@ mixin grouping()
 
     div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
 
-        h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
+        h3(ng-if='header', style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
             | {{header}}
             span.pull-right {{group.length}}
         block
