@@ -1,10 +1,12 @@
+include ../_mixins
+
 form.form-horizontal(name='modal')
 
     traverse
 
     .modal-header
         h4
-            icon instructor
+            +icon('instructor')
             span(ng-if='createData') Add Instructor
             input(ng-if='!createData', ng-model='data.InstructorName')
 
@@ -15,7 +17,7 @@ form.form-horizontal(name='modal')
 
         .input-group
             .input-group-addon
-                icon envelope
+                +icon('envelope')
             input.form-control(ng-model='data.InstructorEmail', type='email')
 
         br
@@ -30,12 +32,12 @@ form.form-horizontal(name='modal')
 
                 .row.input-group.disabled(ng-if='data.Instructor.WorkEMail')
                     .input-group-addon.w17
-                        icon envelope
+                        +icon('envelope')
                     input.form-control(disabled, ng-model='data.Instructor.WorkEMail')
 
                 .row.input-group.disabled(ng-if='data.Instructor.WorkPhone')
                     .input-group-addon.w17
-                        icon phone
+                        +icon('phone')
                     input.form-control(disabled, ng-model='data.Instructor.WorkPhone')
 
                 .row.input-group

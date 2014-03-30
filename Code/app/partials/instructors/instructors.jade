@@ -1,4 +1,4 @@
-page-help-message
+include ../_mixins
 
 .add-button.btn.btn-success(ng-click='edit(true)')
     icon add
@@ -7,6 +7,7 @@ page-help-message
 div(class='{{wellCollapse}}')
 
     div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+            +icon('flag')
 
         h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px')
             | {{header}}

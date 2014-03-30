@@ -1,4 +1,5 @@
 page-help-message
+include ../_mixins
 
 .add-button.btn.btn-success(ng-click='edit(true)')
     icon add
@@ -28,4 +29,4 @@ div(class='{{wellCollapse}}')
                         td: b {{row.Unit}}
                         td {{row.det.LongName}}
                         td.invert(ng-once)
-                            actions(view, edit, label='Host Unit')
+                            actions(view, edit, label='Host Unit')    td: +icon('flag')

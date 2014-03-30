@@ -78,16 +78,6 @@
     width: 150px;
 }
 
-.well:hover .invert .icon *, tr:hover .invert .icon *, .invertSimple .icon * {
-    fill: #fff !important;
-    stroke: #fff !important;
-}
-
-.frozen .icon {
-    fill: #428bca !important;
-    stroke: #428bca !important;
-}
-
 #sort-group-search {
     margin-bottom: 25px;
 }

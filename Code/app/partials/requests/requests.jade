@@ -1,3 +1,5 @@
+include ../_mixins
+
 div(class='{{wellCollapse}}')
 
     div(ng-repeat='(header, group) in groups', style='margin-bottom: 50px')
@@ -16,7 +18,7 @@ div(class='{{wellCollapse}}')
                 | {{row.Course.PDS}} - {{row.reqSeats}} Requested ({{row.openSeats}} Open)
                 span.pull-right(style='letter-spacing: .1em')
                     | {{row.start}} - {{row.end}}
-                    icon calendar_range
+                    +icon('calendar_range')
 
             hr.rollup
 
@@ -28,24 +30,24 @@ div(class='{{wellCollapse}}')
                             tr
                                 td(style='width:150px') Location
                                 td(style='width:10px')
-                                    icon location
+                                    +icon('location')
                                 td
                                     b {{row.det.Base}} (Detachment {{row.det.Det}})
                             tr
                                 td Instructor
                                 td
-                                    icon instructor
+                                    +icon('instructor')
                                 td.truncate.bold {{row.instructor}}
                             tr
                                 td Requested
                                 td
-                                    icon sent
+                                    +icon('sent')
                                 td
                                     b {{row.Created}}
                             tr
                                 td Comments
                                 td
-                                    icon comments
+                                    +icon('comments')
                                 td.bold
                                     button.btn.btn-link.btn-inline.btn-muted(hover='{{row.CreatedBy.Name}} ({{row.CreatedBy.WorkPhone}})', content='{{row.Notes}}')
                                         | By Requester
@@ -56,7 +58,7 @@ div(class='{{wellCollapse}}')
                 
                 .col-lg-5.pull-right.text-right(style='margin-top: 10px')
                     p.truncate(ng-repeat='s in row.Students.results', style='margin-bottom: 10px')
-                        icon student_hand
+                        +icon('student_hand')
                         a(href='mailto:{{s.WorkEMail}}{{row.mail}}') {{s.Name}}
                         br
                         span(ng-show='s.WorkPhone') {{s.WorkPhone}}
@@ -98,10 +100,10 @@ div(class='{{wellCollapse}}')
                     .pull-right
                         button.btn.btn-success.btn-labeled.btn-muted(type='button')
                             span.btn-label.invert
-                                icon approve
+                                +icon('approve')
                             | Approve
                         button.btn.btn-dangerow.btn-labeled.btn-muted(type='button')
                             span.btn-label.invert
-                                icon deny
+                                +icon('deny')
                             | Deny
                     .clearfix

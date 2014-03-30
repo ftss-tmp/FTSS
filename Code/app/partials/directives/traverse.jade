@@ -1,3 +1,5 @@
+include ../_mixins
+
 div(ng-show='!submitted')
-    button.btn.btn-link.btn-mini.leftBigTraverse(ng-click='traverse(false)') &#9664;
-    button.btn.btn-link.btn-mini.rightBigTraverse(ng-click='traverse(true)', style='margin-left:0') &#9654;
+    button.btn.btn-link.btn-mini.leftBigTraverse.white(ng-click='traverse(false)'): +icon('arrow-left')
+    button.btn.btn-link.btn-mini.rightBigTraverse.white(ng-click='traverse(true)', style='margin-left:0'): +icon('arrow-right')

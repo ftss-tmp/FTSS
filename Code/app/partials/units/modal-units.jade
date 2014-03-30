@@ -1,3 +1,5 @@
+include ../_mixins
+
 form(name='modal')
 
     traverse.withMap
@@ -6,7 +8,7 @@ form(name='modal')
 
     .modal-header
         h3
-            icon location
+            +icon('location')
             | Update FTD {{data.Squadron}}/Det {{data.Det}}
 
     .modal-body
@@ -17,7 +19,7 @@ form(name='modal')
                     b Base
                 .input-group
                     .input-group-addon
-                        icon location_small
+                        +icon('location_small')
                     input.form-control(ng-model='data.Base', type='text')
 
             .col-lg-3
@@ -25,7 +27,7 @@ form(name='modal')
                     b Detachment
                 .input-group
                     .input-group-addon
-                        icon hash
+                        +icon('hash')
                     input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='units-edit-number', right)
 
             .col-lg-5
@@ -33,7 +35,7 @@ form(name='modal')
                     b Coordinates
                 .input-group
                     .input-group-addon
-                        icon location_small
+                        +icon('location_small')
                     input.form-control(ng-model='data.Location', type='text', explain='units-edit-coordinates', right)
 
         br
@@ -44,7 +46,7 @@ form(name='modal')
                     b FTD Production Supervisor E-mail
                 .input-group
                     .input-group-addon
-                        icon envelope
+                        +icon('envelope')
                     input.form-control(ng-model='data.Email', type='email', explain='units-edit-email', right)
 
         br
@@ -53,7 +55,7 @@ form(name='modal')
         .row
             .col-lg-12.pds(explain='units-edit-courses', right)
                 h4
-                    icon books
+                    +icon('books')
                     b {{data.CoursesCount}} Courses Taught
                 select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
 

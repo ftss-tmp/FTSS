@@ -33,43 +33,6 @@
 #dashboard-menu > li.active > .link, #dashboard-menu > li > .link:hover {
     text-decoration: none
 }
-/*
-.wait .hosts .hosts .loader-bar,
-.wait .backlog .backlog .loader-bar,
-.wait .requirements .requirements .loader-bar,
-.wait .scheduled .scheduled .loader-bar,
-.wait .requests .requests .loader-bar,
-.wait .catalog .catalog .loader-bar,
-.wait .units .units .loader-bar,
-.wait .instructors .instructors .loader-bar,
-.wait .students .students .loader-bar {
-    height: 12px;
-    border: 1px #ccc solid;
-    border-radius: 3px;
-    background-image: -webkit-linear-gradient(-45deg, #5bc0de 25%, transparent 25%, transparent 50%, #5bc0de 50%, #5bc0de 75%, transparent 75%, transparent);
-    background-image: -ms-linear-gradient(-45deg, #5bc0de 25%, transparent 25%, transparent 50%, #5bc0de 50%, #5bc0de 75%, transparent 75%, transparent);
-    background-size: 50px 50px;
-    -webkit-animation: move 2s linear infinite;
-    -ms-animation: move 2s linear infinite;
-}
-
-@-webkit-keyframes move {
-    0% {
-        background-position: 0 0;
-    }
-    100% {
-        background-position: 0 50px;
-    }
-}
-
-@-ms-keyframes move {
-    0% {
-        background-position: 0 0;
-    }
-    100% {
-        background-position: 0 50px;
-    }
-}*/
 
 .hosts .hosts .pointer,
 .backlog .backlog .pointer,
@@ -165,4 +128,14 @@
 
 .link {
     transition: 300ms ease;
+}
+
+.link svg {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.navbar-brand {
+    padding: .25em;
+    color: #fff!important;
 }

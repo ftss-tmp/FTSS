@@ -1,1 +1,6 @@
 // The icon mixin generates an SVG link to our SVG sprite
+mixin icon(tag)
+    svg.icon(class=tag + ' icon-' + tag, viewBox='0 0 32 32')
+        use(xlink:href='#icon-' + tag)
+
+

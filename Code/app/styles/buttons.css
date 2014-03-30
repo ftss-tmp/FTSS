@@ -70,17 +70,17 @@
     fill: #fff;
 }
 
-#toggleArchive .icon-trash_hide,
-#toggleArchive.archived .icon-trash_show,
-#toggleExpand .icon-expand,
-#toggleExpand.collapsed .icon-collapse {
-    display: inline-block !important;
+#toggleArchive .icon.trash_hide,
+#toggleArchive.archived .icon.trash_show,
+#toggleExpand .icon.expand,
+#toggleExpand.collapsed .icon.collapse {
+    display: inline !important;
 }
 
-#toggleArchive.archived .icon-trash_hide,
-#toggleArchive .icon-trash_show,
-#toggleExpand.collapsed .icon-expand,
-#toggleExpand .icon-collapse {
+#toggleArchive.archived .icon.trash_hide,
+#toggleArchive .icon.trash_show,
+#toggleExpand.collapsed .icon.expand,
+#toggleExpand .icon.collapse {
     display: none !important;
 }
 

@@ -1,5 +1,7 @@
+include ../_mixins
+
 label.btn.btn-info.btn-labeled.drop(style='fill:#fff')
     span.btn-label
-        icon insert
+        +icon('insert')
     text-parser
     input(type='file', style='display:none')

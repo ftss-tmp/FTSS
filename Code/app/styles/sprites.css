@@ -1,0 +1,27 @@
+.icon {
+	display: inline-block;
+	width: 1.25em;
+	height: 1.25em;
+    margin: .2em .3em -.2em;
+	fill: #333333;
+}
+
+.white.icon, .white .icon {
+    fill: #fff;
+}
+
+.icon.afg_021216_006 {
+    margin-left: 0;
+    width:2.5em;
+    height: 2em;
+}
+
+.well:hover .invert .icon, tr:hover .btn .icon, .invertSimple .icon {
+    fill: #fff !important;
+    stroke: #fff !important;
+}
+
+.frozen .icon {
+    fill: #428bca !important;
+    stroke: #428bca !important;
+}

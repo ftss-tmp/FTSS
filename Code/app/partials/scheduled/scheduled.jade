@@ -1,3 +1,4 @@
+include ../_mixins
 
 div(class='{{wellCollapse}}')
     div(ng-repeat='(header, group) in groups')
@@ -10,7 +11,7 @@ div(class='{{wellCollapse}}')
                 span.rollupOnly {{row.Course.PDS}} - {{row.Course.Number}}
                 span.pull-right(style='letter-spacing: .1em')
                     | {{row.start}} - {{row.end}}
-                    icon calendar_range
+                    +icon('calendar_range')
             hr.rollup
             .rollup
                 .col-lg-8.pull-left
@@ -73,18 +74,18 @@ div(class='{{wellCollapse}}')
                     .pull-right.invert
                         button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='row.openSeats')
                             span.btn-label
-                                icon add
+                                +icon('add')
                             | Request Seats
                         button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='row.requestCount', ng-click='view(r)')
                             span.btn-label
-                                icon search
+                                +icon('search')
                             | View Requests
                         button.btn.btn-warning.btn-labeled.btn-muted(type='button', ng-click='edit(r)')
                             span.btn-label
-                                icon edit
+                                +icon('edit')
                             | Edit Class
                         button.btn.btn-dangerow.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
                             span.btn-label
-                                icon delete
+                                +icon('delete')
                             | Cancel Class
                     .clearfix

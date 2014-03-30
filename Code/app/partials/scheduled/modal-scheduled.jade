@@ -1,8 +1,10 @@
+include ../_mixins
+
 form.form-horizontal(name='modal')
 
     .modal-header
         h3
-            icon calendar_range
+            +icon('calendar_range')
             | Scheduled Class Update
 
     .modal-body
@@ -11,7 +13,7 @@ form.form-horizontal(name='modal')
 
             .input-group
                 .input-group-addon
-                    icon books
+                    +icon('books')
                 .input-group-selectize.show-em
                     select(selectize='MasterCourseList', bind='CourseId', 'Course')
 
@@ -19,7 +21,7 @@ form.form-horizontal(name='modal')
 
             .input-group
                 .input-group-addon
-                    icon location_small
+                    +icon('location_small')
                 .input-group-selectize
                     select(selectize='Units', bind='UnitId', 'FTD')
             br
@@ -41,10 +43,10 @@ form.form-horizontal(name='modal')
         .col-lg-12
             .input-group
                 .input-group-addon
-                    icon instructor
+                    +icon('instructor')
                 .input-group-selectize
                     select(selectize='Instructors', bind='InstructorId', watch='UnitId')
 
         .clearfix
 
-    ng-include(src='"/partials/modal-footer.html"')
+    +modalFooter()

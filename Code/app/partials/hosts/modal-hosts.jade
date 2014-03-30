@@ -1,3 +1,5 @@
+include ../_mixins
+
 form(name='modal')
 
     traverse.withMap
@@ -6,7 +8,7 @@ form(name='modal')
 
     .modal-header
         h3
-            icon location
+            +icon('location')
             | {{data.Unit}}
 
     .modal-body
@@ -29,7 +31,7 @@ form(name='modal')
                     b Coordinates
                 .input-group
                     .input-group-addon
-                        icon location_small
+                        +icon('location_small')
                     input.form-control(ng-model='data.Location', type='text')
 
         br
