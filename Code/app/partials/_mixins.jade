@@ -16,3 +16,20 @@ mixin link(page, tag, name)
             span= name
 
 
+mixin modalFooter()
+    .row.alert.alert-danger(ng-show='modal.$dirty && modal.$invalid')
+        +icon('info')
+        | All fields are required.
+    .row.alert.alert-danger(ng-show='error')
+        +icon('info')
+        | {{error}}
+
+    .modal-footer
+        .sending(ng-show='submitted')
+            spinner(size='2em')
+            | Please wait, sending data...
+        button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='!modal.$dirty || modal.$invalid || submitted')
+            span.btn-label.white
+                +icon('check-alt')
+            | Submit
+        button.btn.btn-default(ng-click='close()') Cancel

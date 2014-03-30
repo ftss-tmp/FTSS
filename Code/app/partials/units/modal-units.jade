@@ -4,7 +4,7 @@ form(name='modal')
 
     traverse.withMap
 
-    ng-include(src='"/partials/google-maps.html"')
+    +googleMap()
 
     .modal-header
         h3
@@ -59,14 +59,4 @@ form(name='modal')
                     b {{data.CoursesCount}} Courses Taught
                 select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
 
-        .row(style='height: 25px')
-
-        .row.alert.alert-danger(ng-if='!data.Base || !data.Det')
-            icon alert
-            | Please ensure you enter a valid base and detachment number.
-
-        .row.alert.alert-danger(ng-if='error')
-            icon alert
-            | {{error}}
-
-    ng-include(src='"/partials/modal-footer.html"')
+    +modalFooter()

@@ -1,10 +1,12 @@
+include ../_mixins
+
 form.form-horizontal(name='modal', ng-any-drop)
 
     traverse
 
     .modal-header
         h4
-            icon student_hand
+            +icon('student_hand')
             span(ng-if='createData') Student Inprocessing
             input(ng-if='!createData', ng-model='data.StudentName')
 
@@ -15,7 +17,7 @@ form.form-horizontal(name='modal', ng-any-drop)
 
         .input-group
             .input-group-addon
-                icon envelope
+                +icon('envelope')
             input.form-control(ng-model='data.StudentEmail', type='email')
 
         br
@@ -29,7 +31,7 @@ form.form-horizontal(name='modal', ng-any-drop)
             .col-lg-6
                 .input-group(explain='students-inprocessing-date', left)
                     .input-group-addon
-                        icon calendar_range
+                        +icon('calendar_range')
                     input.form-control(ng-model='data.ProcessDate', bs-datepicker, data-max-date='today')
                 time-ago(prefix='inprocessed') data.ProcessDate
 
@@ -49,7 +51,7 @@ form.form-horizontal(name='modal', ng-any-drop)
         br
 
         h4.light-bottom
-            icon location_small
+            +icon('location_small')
             b Assigned Unit & Local FTD
 
         .row
@@ -66,7 +68,7 @@ form.form-horizontal(name='modal', ng-any-drop)
         .row.imds-import
             .col-lg-12(explain='students-training-requirements', right)
                 h4
-                    icon checklist
+                    +icon('checklist')
                     b Required Training
 
                 select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
@@ -76,4 +78,4 @@ form.form-horizontal(name='modal', ng-any-drop)
 
         .clearfix
 
-    ng-include(src='"/partials/modal-footer.html"')
+    +modalFooter()

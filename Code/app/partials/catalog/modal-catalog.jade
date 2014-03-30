@@ -1,16 +1,18 @@
+include ../_mixins
+
 form.form-horizontal(name='modal')
 
     traverse
 
     .modal-header
         h3
-            icon books
+            +icon('alert')
             | {{createData ? 'Add New Course' : data.PDS + ' - ' + data.Number}}
 
     .modal-body
 
         h4.light-bottom
-            icon search
+            +icon('alert')
             | Course Identifiers & Description
 
         .row
@@ -59,7 +61,7 @@ form.form-horizontal(name='modal')
 
             .col-lg-6
                 h4.light-bottom
-                    icon time
+                    +icon('alert')
                     | Course Length
                 .col-lg-6.no-pad
                     .input-group
@@ -73,7 +75,7 @@ form.form-horizontal(name='modal')
 
             .col-lg-5.pull-right
                 h4.light-bottom
-                    icon student_hand
+                    +icon('alert')
                     | Course Seat Limits
                 .col-lg-5.no-pad
                     .input-group
@@ -102,11 +104,11 @@ form.form-horizontal(name='modal')
         br
 
         .row.alert.alert-danger(ng-if='!data.PDS || !data.MDS')
-            icon alert
+            +icon('alert')
             | All fields are required.
 
         .row.alert.alert-danger(ng-if='error')
-            icon alert
+            +icon('alert')
             | {{error}}
 
-    ng-include(src='"/partials/modal-footer.html"')
+    +modalFooter()
