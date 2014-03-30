@@ -46,8 +46,8 @@ mixin tableHeader(addNew, columns)
                 thead
                     th
                     each width, label in columns
-                        th(class='w{width}')= label
-                    th.w15 Actions
+                        th(class='w' + width)= label
+                    th.w15.text-center Actions
 
                 tbody
                     tr.middle(ng-repeat='row in group',
