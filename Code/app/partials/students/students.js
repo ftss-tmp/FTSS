@@ -18,9 +18,9 @@ FTSS.ng.controller(
 				},
 
 				'sorting': {
-					'Name'         : 'Name',
-					'HostUnit.Text': 'Unit',
-					'ftd.LongName' : 'FTD'
+					'Name'   : 'Name',
+					'numReqs': '# Courses',
+					'days'   : 'Wait Time'
 				},
 
 				'model': 'students',
@@ -74,12 +74,17 @@ FTSS.ng.controller(
 
 						      .then(function (d) {
 
+							            var momentObj = moment(d.ProcessDate);
+
 							            FTSS.people.students[d.StudentName] = null;
 
 							            d.HostUnit = caches.Hosts[d.HostUnitId];
 							            d.ftd = caches.Units[d.HostUnit.FTD];
 
-							            d.wait = moment(d.ProcessDate).fromNow();
+							            d.days = moment().diff(momentObj, 'days');
+							            d.wait = momentObj.fromNow();
+
+							            d.numReqs = _.size(d.Requirements_JSON);
 
 							            d.requirements = _(d.Requirements_JSON)
 
