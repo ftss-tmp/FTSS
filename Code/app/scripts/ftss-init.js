@@ -2,10 +2,7 @@
 /**
  * FTSS Initializer
  *
- * @type {{}}
  */
-
-var FTSS = {}, utils = {}, caches = {}, PRODUCTION = (location.hostname !== 'localhost');
 
 (function () {
 

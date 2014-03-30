@@ -8,10 +8,17 @@ html(lang='en', ng-app='FTSS')
 
         link(rel='stylesheet', href='css/app.css')
 
+        script.
+            window.FTSS = {};
+            window.utils = {};
+            window.caches = {};
+            window.PRODUCTION = (location.hostname !== 'localhost');
+
         script(src='js/vendor.js')
 
     body(ng-controller='mainController')
 
+        ng-include(src='"/partials/sprites.html"')
         ng-include(src='"/partials/topbar.html"')
         ng-include(src='"/partials/leftbar.html"')
 
