@@ -1,4 +1,4 @@
-/*global FTSS, PRODUCTION */
+/*global FTSS, PRODUCTION, utils */
 
 /**
  * Photo directive
@@ -64,6 +64,7 @@
 					$scope.$watch($attrs.data + '.Photo', linker);
 				} else {
 					linker();
+					utils.ignore($scope);
 				}
 
 			}

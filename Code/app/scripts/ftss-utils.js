@@ -54,6 +54,52 @@ utils.generateUUID = function () {
 
 
 /**
+ * A simple watch destoyer for when we know we don't need all those dirty checks
+ */
+utils.ignore = (function () {
+
+	var timeout;
+
+	FTSS.ng.run(
+		function ($timeout) {
+			timeout = $timeout;
+		}
+	);
+
+	return function (scope) {
+
+		timeout(function () {
+			scope.$$watchers = [];
+		});
+
+	};
+
+}());
+
+
+utils.watchCount = function (log) {
+	var root = angular.element(document.getElementsByTagName('body'));
+	var watchers = [];
+
+	var f = function (element) {
+		if (element.data().hasOwnProperty('$scope')) {
+			angular.forEach(element.data().$scope.$$watchers, function (watcher) {
+				log && console.log(watcher.last);
+				watchers.push(watcher);
+			});
+		}
+
+		angular.forEach(element.children(), function (childElement) {
+			f(angular.element(childElement));
+		});
+	};
+
+	f(root);
+
+	return watchers.length;
+};
+
+/**
  * Performs highlighting of matched search tags to allow users to see exactly what search terms had hits
  *
  * @param {Array} [data] - the data returned from SharePoint.read()
