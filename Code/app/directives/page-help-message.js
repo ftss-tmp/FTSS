@@ -1,4 +1,4 @@
-/*global FTSS */
+/*global FTSS, utils */
 
 /**
  * Page Help Message directive
@@ -19,17 +19,21 @@
 				'restrict': 'E',
 				'replace' : true,
 				'templateUrl': '/partials/page-help-message.html',
-				'link'    : function ($scope) {
+				'scope': {},
+				'link'    : function ($scope, $el) {
 
-					var page = $scope.fn.getPage();
+					var $parent = $scope.$parent,
 
-					$scope.showHelp = (localStorage['FTSS_Pref_Help_' + page] !== 'false');
+					    page = $parent.fn.getPage();
 
-					$scope.pageMessage = FTSS.messages.page[page];
+					$parent.showHelp = (localStorage['FTSS_Pref_Help_' + page] !== 'false');
 
-					$scope.hideHelp = function () {
+					$parent.pageMessage = FTSS.messages.page[page];
 
-						$scope.showHelp = localStorage['FTSS_Pref_Help_' + page] = false;
+					$parent.hideHelp = function () {
+
+						localStorage['FTSS_Pref_Help_' + page] = false;
+						$el.remove();
 
 					};
 
