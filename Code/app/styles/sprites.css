@@ -4,6 +4,7 @@
 	height: 1.25em;
     margin: .2em .3em -.2em;
 	fill: #333333;
+    pointer-events: none;
 }
 
 .white.icon, .white .icon {
