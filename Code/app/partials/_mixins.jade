@@ -17,6 +17,17 @@ mixin link(page, tag, name)
 
 
 
+mixin grouping()
+    div(class='{{wellCollapse}}')
+
+    div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+
+        h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
+            | {{header}}
+            span.pull-right {{group.length}}
+        block
+
+
 // This is the page header for views that use a table instead of wells
 mixin tableHeader(addNew, columns)
     page-help-message
@@ -27,29 +38,24 @@ mixin tableHeader(addNew, columns)
             | &nbsp;Add&nbsp;
             =addNew
 
-    div(class='{{wellCollapse}}')
+    +grouping()
 
-        div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+        .rollupContainer
+            table.table.table-striped.table-expanded.table-hover.rollup
 
-            h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px') {{header}}
-                span.pull-right {{group.length}}
+                thead
+                    th
+                    each width, label in columns
+                        th(class='w{width}')= label
+                    th.w15 Actions
 
-            .rollupContainer
-                table.table.table-striped.table-expanded.table-hover.rollup
-
-                    thead
-                        th
-                        each width, label in columns
-                            th(class='w{width}')= label
-                        th.w15 Actions
-
-                    tbody
-                        tr.middle(ng-repeat='row in group',
-                        ng-class='{archived:row.Archived, updated:row.updated}',
-                        ng-dblclick='edit(false)',
-                        id='row-{{row.Id}}')
-                            once
-                                block
+                tbody
+                    tr.middle(ng-repeat='row in group',
+                    ng-class='{archived:row.Archived, updated:row.updated}',
+                    ng-dblclick='edit(false)',
+                    id='row-{{row.Id}}')
+                        once
+                            block
 
 
 mixin googleMap()

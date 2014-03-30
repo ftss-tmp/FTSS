@@ -1,6 +1,6 @@
 include ../_mixins
 
-#main-stats.am-slide-right
+#main-stats
     .row.stats-row
         #backlog BACKLOG
         .backlogGradient.stat
@@ -38,75 +38,69 @@ div
     .graph.pull-right(width='.38', height='300', type='pie')
     .clearfix
 
-div(class='{{wellCollapse}}')
++grouping()
 
-    div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+    .well(ng-repeat='row in group')
 
-        h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px')
-            | {{header}}
-            span.pull-right {{group.length}}
+        h4
+            span.btn.btn-info
+                span.bigLetter {{row.requirements.length}}
+                | {{row.Number}} Requirement
+            span.pull-right(style='margin-top:5px') {{row.Title}} -&nbsp;
+                b {{row.PDS}}
 
-        .well(ng-repeat='row in group', ng-once)
+        hr.rollup
 
-            h4
-                span.btn.btn-info
-                    span.bigLetter {{row.requirements.length}}
-                    | {{row.Number}} Requirement
-                span.pull-right(style='margin-top:5px') {{row.Title}} -&nbsp;
-                    b {{row.PDS}}
+        .rollup.slide
 
-            hr.rollup
-
-            .rollup.slide
-
-                .col-lg-3
+            .col-lg-3
 
 
-                    table.table.table-split
-                        tbody
-                            tr
-                                td MDS
-                                td {{row.MDS}}
-                            tr
-                                td AFSC
-                                td {{row.AFSC}}
-                            tr
-                                td Length
-                                td {{row.Days}} Days / {{row.Hours}} Hours
-                            tr
-                                td Limits
-                                td {{row.Min}} Min / {{row.Max}} Max
-                            tr
-                                td Local FTD
-                                td {{row.localFTD}}
+                table.table.table-split
+                    tbody
+                        tr
+                            td MDS
+                            td {{row.MDS}}
+                        tr
+                            td AFSC
+                            td {{row.AFSC}}
+                        tr
+                            td Length
+                            td {{row.Days}} Days / {{row.Hours}} Hours
+                        tr
+                            td Limits
+                            td {{row.Min}} Min / {{row.Max}} Max
+                        tr
+                            td Local FTD
+                            td {{row.localFTD}}
 
-                    table.table.table-split(ng-if='row.listFTD.length > 0')
-                        thead: tr: th.truncate(colspan='2') Additional Locations Taught
+                table.table.table-split(ng-if='row.listFTD.length > 0')
+                    thead: tr: th.truncate(colspan='2') Additional Locations Taught
 
-                        tbody
-                            tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
-                                td {{u.distance}}
-                                td {{u.LongName}}
+                    tbody
+                        tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
+                            td {{u.distance}}
+                            td {{u.LongName}}
 
-                .col-lg-1
-
-
-                .col-lg-3
-                    table.table.table-split
-                        tbody
-                            tr
-                                td Required #
-                                td {{row.requirements.length}} student(s)
-
-                            tr
-                                td Avg Wait
-                                td {{row.avgWait}}
-
-                            tr
-                                td Longest Wait
-                                td {{row.maxWait}}
+            .col-lg-1
 
 
-            .clearfix
+            .col-lg-3
+                table.table.table-split
+                    tbody
+                        tr
+                            td Required #
+                            td {{row.requirements.length}} student(s)
+
+                        tr
+                            td Avg Wait
+                            td {{row.avgWait}}
+
+                        tr
+                            td Longest Wait
+                            td {{row.maxWait}}
+
 
         .clearfix
+
+    .clearfix
