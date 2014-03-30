@@ -1,32 +1,9 @@
-page-help-message
 include ../_mixins
 
-.add-button.btn.btn-success(ng-click='edit(true)')
-    icon add
-    | &nbsp;Add Host Unit
+- var columns = {Unit:15, 'Local FTD':10}
++tableHeader('Host Unit', columns)
 
-div(class='{{wellCollapse}}')
-
-    div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
-
-        h3(style='border-bottom: 1px solid; margin-top:5px')
-            | {{header}}
-            span.pull-right {{group.length}}
-
-        .rollupContainer
-
-            table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
-
-                thead
-                    tr
-                        th.w5
-                        th.w15 Unit
-                        th.w10 Local FTD
-                        th.w10 Actions
-                tbody
-                    tr(ng-repeat='row in group', ng-dblclick='edit(false)')
-                        td: updated row
-                        td: b {{row.Unit}}
-                        td {{row.det.LongName}}
-                        td.invert(ng-once)
-                            actions(view, edit, label='Host Unit')    td: +icon('flag')
+    td: +icon('flag')
+    td: b {{row.Unit}}
+    td {{row.det.LongName}}
+    td: +actions(true, true, false, 'Host Unit')

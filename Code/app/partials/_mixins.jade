@@ -16,6 +16,65 @@ mixin link(page, tag, name)
             span= name
 
 
+
+// This is the page header for views that use a table instead of wells
+mixin tableHeader(addNew, columns)
+    page-help-message
+
+    if addNew
+        .add-button.btn.btn-success.white(ng-click='edit(true)')
+            +icon('add')
+            | &nbsp;Add&nbsp;
+            addNew
+
+    div(class='{{wellCollapse}}')
+
+        div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+
+            h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px') {{header}}
+                span.pull-right {{group.length}}
+
+            .rollupContainer
+                table.table.table-striped.table-expanded.table-hover.rollup
+
+                    thead
+                        th
+                        each width, label in columns
+                            th(class='w{width}')= label
+                        th.w15 Actions
+
+                    tbody
+                        tr.middle(ng-repeat='row in group',
+                        ng-class='{archived:row.Archived, updated:row.updated}',
+                        ng-dblclick='edit(false)',
+                        id='row-{{row.Id}}')
+                            once
+                                block
+
+
+mixin googleMap()
+    a(href='https://www.google.com/maps/@{{data.Location | nospace}},12z', target='_blank')
+        img#googleModalMap(src='http://maps.google.com/maps/api/staticmap?center={{data.Location | nospace}}&zoom=12&size=400x300&sensor=false')
+
+
+mixin actions(view, edit, archive, label)
+    div
+        if view
+            span.btn.btn-sm.btn-info.btn-muted.no-archive(type='button', ng-click='view()', hover='View ' + label + ' Stats', left)
+                +icon('graph_pie')
+
+        if edit
+            span.btn.btn-sm.btn-warning.btn-muted.no-archive(type='button', ng-click='edit(false)', hover='Edit ' + label, left)
+                +icon('edit')
+
+        if archive
+            span.btn.btn-sm.btn-danger.btn-muted.no-archive(type='button', ng-click='archive()', hover='Archive ' + label, left)
+                +icon('delete')
+
+            span.btn.btn-sm.btn-success.btn-muted.archive(type='button', ng-click='archive()', hover='Restore ' + label, left)
+                +icon('rotate-left')
+
+
 mixin modalFooter()
     .row.alert.alert-danger(ng-show='modal.$dirty && modal.$invalid')
         +icon('info')

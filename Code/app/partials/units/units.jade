@@ -1,38 +1,29 @@
-page-help-message
+include ../_mixins
 
-div(class='{{wellCollapse}}')
+- var columns = {Base:15, Detachment:10, Email:50, Details:15}
++tableHeader(false, columns)
 
-    div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+    td: +icon('flag')
 
-        h3(style='border-bottom: 1px solid; margin-top:5px')
-            | {{header}}
-            span.pull-right {{group.length}}
+    td: b {{row.Base}}
 
-        .rollupContainer
+    td {{row.Det}}
 
-            table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
+    td.lowercase
+        a(href='mailto:{{row.Email}}?subject=FTSS', tabindex='-1') {{row.Email}}
 
-                thead
-                    tr
-                        th
-                        th.w15 Base
-                        th.w10 Detachment
-                        th.w50 Email
-                        th.w15 Details
-                        th.w10 Actions
-                tbody
-                    tr(ng-repeat='row in group', ng-dblclick='edit(false)')
-                        td
-                            updated row
-                        td
-                            b {{row.Base}}
-                        td {{row.Det}}
-                        td.lowercase
-                            a(href='mailto:{{row.Email}}?subject=FTSS', tabindex='-1') {{row.Email}}
-                        td
-                            span(ng-if='row.CoursesHover', hover='There are {{row.CoursesMap.length}} courses taught at Det {{row.Det}}:', content='<dl class="dl-horizontal">{{row.CoursesHover}}</dl>', style='padding:5px')
-                                icon books
-                            span(ng-if='row.Instructors', hover='There are {{row.InstructorsCount}} instructors assigned to Det {{row.Det}}:', content='{{row.Instructors}}', left, style='padding:5px')
-                                icon instructor
-                        td.invert(ng-once)
-                            actions(view, edit, label='FTD')
+    td
+        span(ng-show='row.CoursesHover',
+                hover='There are {{row.CoursesMap.length}} courses taught at Det {{row.Det}}:',
+                content='<dl class="dl-horizontal">{{row.CoursesHover}}</dl>', style='padding:5px')
+            +icon('books')
+
+        span(ng-show='row.Instructors',
+                hover='There are {{row.InstructorsCount}} instructors assigned to Det {{row.Det}}:',
+                content='{{row.Instructors}}',
+                left,
+                style='padding:5px')
+            +icon('instructor')
+
+    td
+        +actions(true, true, false, 'FTD')

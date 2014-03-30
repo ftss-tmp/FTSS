@@ -1,49 +1,22 @@
-page-help-message
+include ../_mixins
 
-.add-button.btn.btn-success(ng-click='edit(true)')
-        icon add
-        |&nbsp;Add Student
+- var columns = {Student:40, Host:15, Inprocessed:15, Requiremenst:10}
++tableHeader(false, columns)
 
-div(class='{{wellCollapse}}')
+    td
+        +icon('flag')
+        b
+            span.archiveOnly ***ARCHIVED STUDENT***&nbsp;
+            | {{row.StudentName}}
 
-    div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+    td {{row.HostUnit.Unit}}
 
-        h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px') {{header}}
-            span.pull-right {{group.length}}
+    td {{row.wait}}
 
-        .rollupContainer
+    td: b(ng-show='row.Requirements_JSON.length',
+            hover='Training Requirements',
+            content='<dl class="dl-horizontal">{{row.requirements}}</dl>')
+            +icon('checklist')
+            | {{row.Requirements_JSON.length}} Courses
 
-            table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
-
-                thead: tr
-
-                        th.w40 Student
-                        th.w15 Host Unit
-                        th.w15 Inprocessed
-                        th.w10 Requirements
-                        th.w10 Actions
-
-                tbody
-
-                    tr.middle(ng-repeat='row in group',
-                                ng-class='{archived:row.Archived}',
-                                ng-dblclick='edit(false)',
-                                ng-if='!row.Archived || showArchive')
-
-                        td
-                            updated row
-                            b
-                                span(ng-if='row.Archived') ***ARCHIVED STUDENT***&nbsp;
-                                | {{row.StudentName}}
-
-                        td: {{row.HostUnit.Unit}}
-
-                        td: {{row.wait}}
-
-                        td: b(ng-if='!row.Archived && row.Requirements_JSON.length',
-                                hover='Training Requirements',
-                                content='<dl class="dl-horizontal">{{row.requirements}}</dl>')
-                                icon checklist
-                                | {{row.Requirements_JSON.length}} Courses
-
-                        td.invert: actions(edit, archive, label='student')
+    td: +actions(false, true, true, 'student')

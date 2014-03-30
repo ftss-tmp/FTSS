@@ -144,3 +144,12 @@ tr.thin button {
 tr.modal-selected {
     border-left: 20px solid #333;
 }
+
+tr .flag {
+    display: none;
+}
+
+tr.updated .flag {
+    display: block;
+    float: left;
+}

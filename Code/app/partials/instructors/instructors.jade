@@ -1,42 +1,22 @@
 include ../_mixins
 
-.add-button.btn.btn-success(ng-click='edit(true)')
-    icon add
-    |&nbsp;Add Instructor
+- var columns = {Instructor:50, Unit:15, AFSC:10}
++tableHeader('Insctructor', columns)
 
-div(class='{{wellCollapse}}')
+    td.cleanPhoto(class='{{running(row)}}')
+        photo(size='75px', data='row')
 
-    div.am-fade-and-slide-bottom(ng-repeat='(header, group) in groups')
+    td
+        b
             +icon('flag')
+            span.archiveOnly
+                | ***ARCHIVED INSTRUCTOR***&nbsp;
+            | {{row.InstructorName}}
 
-        h3(style='border-bottom: 1px solid; margin-top:5px; margin-bottom:15px')
-            | {{header}}
-            span.pull-right {{group.length}}
+    td
+        b {{row.Unit.LongName}}
 
-        .rollupContainer
+    td
+        b {{row.AFSC}}
 
-            table.table.table-striped.table-expanded.table-hover.rollup(fixed-header)
-                thead
-                    tr
-                        th.w10
-                        th.w50 Instructor
-                        th.w15 Unit
-                        th.w10 AFSC
-                        th.w10 Actions
-                tbody
-                    tr.middle(ng-repeat='row in group', ng-class='{archived:row.Archived}', ng-dblclick='edit(false)', ng-if='!row.Archived || showArchive')
-
-                        td.cleanPhoto(class='{{running(row)}}')
-                            photo(size='75px', data='row', ng-if='!row.Archived')
-                        td
-                            updated row
-                            b
-                                span(ng-if='row.Archived')
-                                    | ***ARCHIVED INSTRUCTOR***&nbsp;
-                                | {{row.InstructorName}}
-                        td
-                            b {{row.Unit.LongName}}
-                        td
-                            b {{row.AFSC}}
-                        td.invert()
-                            actions(view, edit, archive, label='instructor')
+    td: +actions(true, true, true, 'instructor')
