@@ -4,3 +4,15 @@ mixin icon(tag)
         use(xlink:href='#icon-' + tag)
 
 
+
+// Creates the code for our links on the left navbar
+mixin link(page, tag, name)
+    li(class=page)
+        .pointer
+            .arrow
+            .arrow_border
+        span.link(ng-click='fn.doNavigate("' + page + '")')
+            +icon(tag)
+            span= name
+
+

@@ -1,16 +1,18 @@
+include _mixins
+
 div
-    ul#dashboard-menu(ng-class='fn.getPage()', ng-cloak)
+    ul#dashboard-menu(ng-class='fn.getPage()')
         li: h4 Requirements
-        nav-link(link='students', name='Manage Students', icon='student_hand')
-        nav-link(link='backlog', name='Generate 898', icon='checklist2')
-        nav-link(link='requirements', name='898 Response', icon='agree')
+        +link('students', 'student_hand', 'Manage Students')
+        +link('backlog', 'checklist2', 'Generate 898')
+        +link('requirements', 'agree', '898 Response')
 
         li: h4 Classes
-        nav-link(link='scheduled', name='View Scheduled', icon='calendar_range')
-        nav-link(link='requests', name='Manage Requests', icon='sent')
+        +link('scheduled', 'calendar_range', 'View Scheduled')
+        +link('requests', 'sent', 'Manage Requests')
 
         li: h4 Manage FTSS
-        nav-link(link='catalog', name='Course Catalog', icon='books')
-        nav-link(link='instructors', name='Instructors', icon='instructor')
-        nav-link(link='units', name='FTDs', icon='location')
-        nav-link(link='hosts', name='Host Units', icon='location')
+        +link('catalog', 'books', 'Course Catalog')
+        +link('instructors', 'instructor', 'Insructors')
+        +link('units', 'location', 'FTDs')
+        +link('hosts', 'building-o', 'Host Units')
