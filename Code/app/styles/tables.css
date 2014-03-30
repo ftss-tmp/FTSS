@@ -153,3 +153,7 @@ tr.updated .flag {
     display: block;
     float: left;
 }
+
+tr.archived photo {
+    display: none;
+}
