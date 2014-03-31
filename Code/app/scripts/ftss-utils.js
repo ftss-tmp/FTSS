@@ -1,4 +1,4 @@
-/*global utils, FTSS, _, LZString */
+/*global utils, FTSS, _, pako */
 
 /**
  * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
@@ -264,10 +264,16 @@ utils.$ajaxFailure = function (req) {
 	               });
 };
 
+
+// http://stackoverflow.com/a/12713326/467373
 utils.compress = function (str) {
-	return str ? LZString.compressToBase64(str).match(/.{1,5}/g).join('-').replace(/=/g, '') : '';
+	return str ? btoa(String.fromCharCode.apply(null, pako.deflateRaw(str))) : '';
 };
 
 utils.decompress = function (str) {
-	return str ? LZString.decompressFromBase64(str.replace(/\-/g, '')) : '';
+
+	return str ? new Uint8Array(atob(str).split('').map(function(c) {
+		return c.charCodeAt(0); })
+	) : '';
+
 };
