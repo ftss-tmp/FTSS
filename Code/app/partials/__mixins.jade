@@ -52,7 +52,7 @@ mixin tableHeader(addNew, columns)
                     th.w15.text-center Actions
 
                 tbody
-                    tr.middle(ng-repeat='row in group',
+                    tr.middle.am-fade-and-scale(ng-repeat='row in group',
                     ng-class='{archived:row.Archived, updated:row.updated}',
                     ng-dblclick='edit(false)',
                     id='row-{{row.Id}}')
