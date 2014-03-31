@@ -8,10 +8,17 @@ html(lang='en', ng-app='FTSS')
 
         link(rel='stylesheet', href='https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/app.css')
 
+        script.
+            window.FTSS = {};
+            window.utils = {};
+            window.caches = {};
+            window.PRODUCTION = (location.hostname !== 'localhost' && location.hostname !== '192.168.2.1');
+
         script(src='https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/vendor.js')
 
     body(ng-controller='mainController')
 
+        ng-include(src='"/partials/sprites.html"')
         ng-include(src='"/partials/topbar.html"')
         ng-include(src='"/partials/leftbar.html"')
 

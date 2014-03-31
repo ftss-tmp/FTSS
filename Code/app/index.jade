@@ -25,6 +25,7 @@ html(lang='en', ng-app='FTSS')
         #content
 
             #pad-wrapper
+
                 .row(ng-show='loaded && fn.getPage() !== "home"', ng-cloak)
                     ng-include(src='"/partials/searchbox-buttons.html"')
                     ng-include(src='"/partials/stats.html"')
