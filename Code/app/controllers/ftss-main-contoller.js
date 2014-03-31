@@ -40,7 +40,9 @@
 
 				var _fn = $scope.fn = {
 
-					'setLoaded': function () {
+					'setLoaded': function (callback) {
+
+						callback && callback();
 
 						utils.loading(false);
 						$scope.loaded = true;
@@ -51,17 +53,17 @@
 
 						var view = {
 
-							'g': $scope.groupBy,
-							's': $scope.sortBy,
+							'g': $scope.groupBy.$,
+							's': $scope.sortBy.$,
 							'c': $scope.wellCollapse,
 							'a': $scope.showArchive,
-							'S': $scope.searchText
+							'S': $scope.searchText.$
 
 						};
 
 						$scope.permaLink = [
 
-							utils.compress(JSON.stringify(FTSS.tags || false)),
+							utils.compress(JSON.stringify(FTSS.tags)),
 							utils.compress(JSON.stringify(view))
 
 						].join('/');
@@ -326,12 +328,14 @@
 						$scope.noSearch = false;
 					}
 
-					(FTSS.searchWatch || Function)();
-
-					$scope.pageLimit = 50;
+					$scope.pageLimit = 25;
 					$scope.count = '-';
 					$scope.overload = false;
 					$scope.filter = false;
+					$scope.sortBy = {};
+					$scope.groupBy = {};
+					$scope.searchText = {};
+
 
 					FTSS.selectizeInstances = {};
 					FTSS.pasteAction = false;
@@ -344,9 +348,9 @@
 
 					$scope.permaLink = $routeParams.link || '';
 
-					$scope.sortBy = prefs.s || {};
-					$scope.groupBy = prefs.g || {};
-					$scope.searchText = prefs.S || $scope.searchText || {};
+					$scope.sortBy.$ = prefs.s || '';
+					$scope.groupBy.$ = prefs.g || '';
+					$scope.searchText.$ = $scope.searchText.$ || prefs.S || '';
 					$scope.showArchive = prefs.a || false;
 					$scope.wellCollapse = prefs.c || false;
 
