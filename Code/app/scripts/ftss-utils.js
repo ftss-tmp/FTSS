@@ -265,9 +265,9 @@ utils.$ajaxFailure = function (req) {
 };
 
 utils.compress = function (str) {
-	return LZString.compressToBase64(str).match(/.{1,5}/g).join('-').replace(/=/g, '');
+	return str ? LZString.compressToBase64(str).match(/.{1,5}/g).join('-').replace(/=/g, '') : '';
 };
 
 utils.decompress = function (str) {
-	return LZString.decompressFromBase64(str.replace(/\-/g, ''));
+	return str ? LZString.decompressFromBase64(str.replace(/\-/g, '')) : '';
 };
