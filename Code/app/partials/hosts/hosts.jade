@@ -1,9 +1,12 @@
 include ../_mixins
 
-- var columns = {Unit:15, 'Local FTD':10}
+- var columns = {Unit:70, 'Local FTD':20}
 +tableHeader('Host Unit', columns)
 
     td: +icon('flag')
+
     td: b {{row.Unit}}
+
     td {{row.det.LongName}}
+
     td: +actions(true, true, false, 'Host Unit')
