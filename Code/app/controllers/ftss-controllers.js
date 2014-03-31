@@ -30,8 +30,6 @@ FTSS.controller = (function () {
 
 	return function ($scope, opts) {
 
-		FTSS.utils.log($scope.groupBy.$);
-
 		var model, process, actions;
 
 		// We'll just make opts.grouping mandatory, we'll use an int here for perf reasons later on
@@ -110,7 +108,13 @@ FTSS.controller = (function () {
 								// If this is a bind-once and has been called, delete the watch
 								single && unwatch();
 
+							} else {
+
+								// Perform final loading
+								$scope.fn.setLoaded();
+
 							}
+
 						});
 
 					}
