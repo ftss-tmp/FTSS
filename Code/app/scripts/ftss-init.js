@@ -136,9 +136,11 @@ var LOG;
 				var stamp = (new Date()).getTime();
 
 				if (noStamp) {
-					console.info(data);
+					console.dir(data);
 				} else {
-					console.log(stamp, data, stamp - last);
+					console.log(stamp);
+					console.dir(data);
+					console.info(stamp - last);
 				}
 
 				last = stamp;
