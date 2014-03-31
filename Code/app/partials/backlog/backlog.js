@@ -11,9 +11,9 @@ FTSS.ng.controller('backlogController',
 			                       'group': 'MDS',
 
 			                       'grouping': {
-				                       'MDS' : 'MDS',
-				                       'PDS' : 'PDS',
-				                       'AFSC': 'AFSC'
+				                       'MDS'   : 'MDS',
+				                       'CAFMCL': 'CAF/MCL',
+				                       'AFSC'  : 'AFSC'
 			                       },
 
 			                       'sorting': {
@@ -94,8 +94,8 @@ FTSS.ng.controller('backlogController',
 
 							                         if (!req) {
 								                         req = reqs[r] = _(caches.MasterCourseList[r]).clone();
+								                         req.CAFMCL = req.CAFMCL ? 'CAF/MCL Course(s)' : 'Regular Course(s)';
 								                         req.listFTD = [];
-								                         req.localFTD = 'Not Available';
 								                         req.days = 0;
 								                         req.requirements = [
 								                         ];
@@ -128,9 +128,13 @@ FTSS.ng.controller('backlogController',
 
 						                         'k': 'All Others',
 
-						                         'v': $scope.totals.reqs - _($scope.graphs.reqs).pluck('v').reduce(function (sum, el) {
-							                         return sum + el;
-						                         })
+						                         'v': $scope.totals.reqs - _($scope.graphs.reqs)
+
+							                         .pluck('v')
+
+							                         .reduce(function (sum, el) {
+								                                 return sum + el;
+							                                 })
 
 					                         });
 
@@ -144,14 +148,18 @@ FTSS.ng.controller('backlogController',
 
 						                         if (req) {
 
-							                         u.distance =
-							                         utils.distanceCalc(req.Location, u.Location) || 'unknown';
+							                         var d = utils.distanceCalc(req.Location, u.Location) || 'unknown';
 
-							                         u.distanceInt = parseInt(u.distance, 10) || 99999999;
+							                         u.distanceInt = parseInt(d, 10) || 99999999;
 
-							                         if (req.FTD.Id === u.Id) {
+							                         u.distance = d.toLocaleString('en');
+
+							                         req.local = (req.FTD.Id === u.Id);
+
+							                         if (req.local) {
 								                         req.localFTD = u.LongName;
 							                         } else {
+								                         req.localFTD = 'Not Available';
 								                         if (!counted) {
 									                         counted = true;
 									                         $scope.totals.reqsTDY++;
