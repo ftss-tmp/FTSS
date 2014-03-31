@@ -343,7 +343,7 @@ FTSS.controller = (function () {
 								var text = $scope.searchText.$ || '';
 
 								// Update our permalink for this custom view
-								//$scope.fn.setPermaLink();
+								$scope.fn.setPermaLink();
 
 								// Reset groups, counter & count
 								$scope.groups = false;
@@ -375,8 +375,9 @@ FTSS.controller = (function () {
 									// Group the data by the given property
 									.groupBy(function (gp) {
 										         $scope.count++;
-										         return $scope.groupBy.$ ? utils.deepRead(gp, $scope.groupBy.$)
-											         || '* No Grouping Data Found' : false;
+										         return $scope.groupBy.$ ?
+										                utils.deepRead(gp, $scope.groupBy.$) ||
+										                '* No Grouping Data Found' : false;
 									         })
 
 									.value();
