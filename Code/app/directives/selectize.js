@@ -101,18 +101,17 @@
 
 				if (val && val.length > 0) {
 
-					var tags = {};
+					var tags = FTSS.tags = {};
 
 					_.each(val, function (v) {
 
 						var split = v.split(':');
 
-						tags[split[0]] = tags[split[0]] || [
-						];
+						tags[split[0]] = tags[split[0]] || [];
 
 						tags[split[0]].push(Number(split[1]) || split[1]);
 
-						scope.fn.setPermaLink(tags);
+						scope.fn.setPermaLink();
 						scope.fn.doNavigate();
 
 					});
