@@ -1,106 +1,110 @@
 include ../_mixins
+//
+    #main-stats
+        .row.stats-row
+            #backlog BACKLOG
+            .backlogGradient.stat
+            .col-md-3.stat
+                .data
+                    span.number {{totals.reqs}}
+                    | Courses
+                span.date
+                    b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
+                    | Require TDY
 
-#main-stats
-    .row.stats-row
-        #backlog BACKLOG
-        .backlogGradient.stat
-        .col-md-3.stat
-            .data
-                span.number {{totals.reqs}}
-                | Courses
-            span.date
-                b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
-                | Require TDY
+            .col-md-3.stat
+                .data
+                    span.number {{totals.students}}
+                    | Students
+                span.date
+                    b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
+                    | Backlogged
 
-        .col-md-3.stat
-            .data
-                span.number {{totals.students}}
-                | Students
-            span.date
-                b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
-                | Backlogged
+            .col-md-3.stat
+                .data
+                    span.number {{totals.avg[1]}}
+                    | {{totals.avg[2]}}
+                span.date Average Wait Time
 
-        .col-md-3.stat
-            .data
-                span.number {{totals.avg[1]}}
-                | {{totals.avg[2]}}
-            span.date Average Wait Time
+            .col-md-2.stat.last
+                .data
+                    span.number {{totals.max[1]}}
+                    | {{totals.max[2]}}
+                span.date Longest Wait Time
 
-        .col-md-2.stat.last
-            .data
-                span.number {{totals.max[1]}}
-                | {{totals.max[2]}}
-            span.date Longest Wait Time
-
-br
-div
-    .graph.pull-left(width='.58', height='300', type='bar')
-    .graph.pull-right(width='.38', height='300', type='pie')
-    .clearfix
-
-+grouping()
-
-    .well(ng-repeat='row in group')
-
-        h4
-            span.btn.btn-info
-                span.bigLetter {{row.requirements.length}}
-                | {{row.Number}} Requirement
-            span.pull-right(style='margin-top:5px') {{row.Title}} -&nbsp;
-                b {{row.PDS}}
-
-        hr.rollup
-
-        .rollup.slide
-
-            .col-lg-3
-
-
-                table.table.table-split
-                    tbody
-                        tr
-                            td MDS
-                            td {{row.MDS}}
-                        tr
-                            td AFSC
-                            td {{row.AFSC}}
-                        tr
-                            td Length
-                            td {{row.Days}} Days / {{row.Hours}} Hours
-                        tr
-                            td Limits
-                            td {{row.Min}} Min / {{row.Max}} Max
-                        tr
-                            td Local FTD
-                            td {{row.localFTD}}
-
-                table.table.table-split(ng-if='row.listFTD.length > 0')
-                    thead: tr: th.truncate(colspan='2') Additional Locations Taught
-
-                    tbody
-                        tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
-                            td {{u.distance}}
-                            td {{u.LongName}}
-
-            .col-lg-1
-
-
-            .col-lg-3
-                table.table.table-split
-                    tbody
-                        tr
-                            td Required #
-                            td {{row.requirements.length}} student(s)
-
-                        tr
-                            td Avg Wait
-                            td {{row.avgWait}}
-
-                        tr
-                            td Longest Wait
-                            td {{row.maxWait}}
-
-        unbind
+    br
+    div
+        .graph.pull-left(width='.58', height='300', type='bar')
+        .graph.pull-right(width='.38', height='300', type='pie')
         .clearfix
 
-    .clearfix
+.col-lg-8
+    +grouping()
+
+        .well(ng-repeat='row in group')
+
+            h4
+                +icon('flag')
+                span.btn.w15(ng-class='{"btn-info":row.local,"btn-warning":!row.local}')
+                    span.bigLetter {{row.requirements.length}}
+                    span(style='font-size:1.25em') {{row.PDS}}&nbsp;
+                span.pull-right(style='margin-top:5px') {{row.Number}}
+
+            hr.rollup
+
+            .rollup.slide
+
+                h4.truncate {{row.Title}}
+
+                .col-lg-5
+
+                    table.table.table-split
+                        tbody
+
+                            tr
+                                td Length
+                                td {{row.Days}} Days / {{row.Hours}} Hours
+
+                            tr
+                                td Limits
+                                td {{row.Min}} Min / {{row.Max}} Max
+
+                            tr
+                                td Local FTD
+                                td {{row.localFTD}}
+
+                    table.table.table-split(ng-if='row.listFTD.length > 0')
+                        thead: tr: th.truncate(colspan='2') Additional Locations Taught
+
+                        tbody
+                            tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
+                                td {{u.distance}}
+                                td {{u.LongName}}
+
+                .col-lg-1
+
+                .col-lg-5.pull-right
+                    table.table.table-split
+                        tbody
+                            tr
+                                td Backlog
+                                td {{row.requirements.length}} student(s)
+
+                            tr
+                                td Avg Wait
+                                td {{row.avgWait}}
+
+                            tr
+                                td Longest Wait
+                                td {{row.maxWait}}
+
+            unbind
+            .clearfix
+
+        .clearfix
+
+.col-lg-4
+
+    .well
+
+        |Some random text and stuff.
