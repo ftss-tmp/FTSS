@@ -1,8 +1,18 @@
 #searchContainer(ng-class='{tagBox:tagBox}')
 
-    #tagBox(explain='tagBox', top, instant, no-arrow)
-        select.hide(selectize='appInit', multiple, placeholder='Click or type to add search terms', style='width:100%', tabindex='-1')
+    #tagBox(explain='tagBox', top, no-arrow)
+
+        select.hide(selectize='appInit',
+                    multiple,
+                    placeholder='Click or type to add search terms',
+                    style='width:100%',
+                    tabindex='-1')
+
             optgroup(label='SMART FILTERS')
 
-    #searchBox(explain='searchBox', top, no-arrow='')
-        input.search.search-large(type='search', ng-model='searchText.$', placeholder='Type in a search to limit the results for this list.', tabindex='-1')
+    #searchBox(explain='searchBox', top, no-arrow)
+
+        input.search.search-large(type='search',
+                                    ng-model='searchText.$',
+                                    placeholder='Type in a search to limit the results for this list.',
+                                    tabindex='-1')

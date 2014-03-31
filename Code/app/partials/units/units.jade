@@ -5,7 +5,8 @@ include ../_mixins
 
     td: +icon('flag')
 
-    td: b {{row.Base}}
+    td
+        b {{row.Base}}
 
     td {{row.Det}}
 
@@ -25,5 +26,4 @@ include ../_mixins
                 style='padding:5px')
             +icon('instructor')
 
-    td
-        +actions(true, true, false, 'FTD')
+    td: +actions(true, true, false, 'FTD')
