@@ -75,7 +75,7 @@
 								        ]);
 							}
 						}
-
+console.log(d1,d2,d3);
 						graph = Flotr.draw($el[0], [
 							{ data: d1, label: 'Serie 1' },
 							{ data: d2, label: 'Serie 2' },
