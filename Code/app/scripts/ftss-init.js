@@ -1,8 +1,10 @@
-/*global _, angular */
+/*global _, angular, LOG, FTSS */
 /**
  * FTSS Initializer
  *
  */
+
+var LOG;
 
 (function () {
 
@@ -123,7 +125,7 @@
 
 	}());
 
-	FTSS.utils.log = (function () {
+	LOG = FTSS.utils.log = (function () {
 
 		var last = (new Date()).getTime();
 

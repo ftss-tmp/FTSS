@@ -61,7 +61,7 @@
 
 						$scope.permaLink = [
 
-							utils.compress(JSON.stringify(FTSS.tags)),
+							utils.compress(JSON.stringify(FTSS.tags || false)),
 							utils.compress(JSON.stringify(view))
 
 						].join('/');
@@ -250,7 +250,7 @@
 											FTSS.search.setValue(valMap);
 
 											if (filter) {
-console.log(tagMap);
+
 												FTSS.tags = tagMap;
 												$scope.filter = filter;
 
