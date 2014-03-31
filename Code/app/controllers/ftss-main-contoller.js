@@ -47,8 +47,25 @@
 
 					},
 
-					'setPermaLink': function (tags) {
-						$scope.permaLink = utils.compress(JSON.stringify(tags));
+					'setPermaLink': function () {
+
+						var view = {
+
+							'g': $scope.groupBy,
+							's': $scope.sortBy,
+							'c': $scope.wellCollapse,
+							'a': $scope.showArchive,
+							'S': $scope.searchText
+
+						};
+
+						$scope.permaLink = [
+
+							utils.compress(JSON.stringify(FTSS.tags)),
+							utils.compress(JSON.stringify(view))
+
+						].join('/');
+
 					},
 
 					'getPage': function () {
@@ -58,6 +75,7 @@
 					'doNavigate': function (pg) {
 
 						$timeout(function () {
+
 							$location.path(
 								[
 									'',
@@ -232,7 +250,7 @@
 											FTSS.search.setValue(valMap);
 
 											if (filter) {
-
+console.log(tagMap);
 												FTSS.tags = tagMap;
 												$scope.filter = filter;
 
@@ -266,6 +284,7 @@
 				/**
 				 * User feedback function, provides alerts, errors and general instructions to users
 				 *
+				 * @todo do something with this garbage code.....
 				 * @param Object msg
 				 */
 				utils.$message = function (msg) {
@@ -313,9 +332,7 @@
 					$scope.count = '-';
 					$scope.overload = false;
 					$scope.filter = false;
-					$scope.sortBy = {};
-					$scope.groupBy = {};
-					$scope.searchText = $scope.searchText || {};
+
 					FTSS.selectizeInstances = {};
 					FTSS.pasteAction = false;
 
@@ -323,7 +340,15 @@
 
 				$scope.$on('$routeChangeSuccess', function () {
 
+					var prefs = JSON.parse(utils.decompress($routeParams.view) || '{}');
+
 					$scope.permaLink = $routeParams.link || '';
+
+					$scope.sortBy = prefs.s || {};
+					$scope.groupBy = prefs.g || {};
+					$scope.searchText = prefs.S || $scope.searchText || {};
+					$scope.showArchive = prefs.a || false;
+					$scope.wellCollapse = prefs.c || false;
 
 				});
 

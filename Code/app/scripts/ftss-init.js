@@ -53,7 +53,7 @@
 
 				_.each(routes, function (route) {
 
-					$routeProvider.when('/' + route + '/:link?', {
+					$routeProvider.when('/' + route + '/:link?/:view?', {
 
 						'templateUrl': '/partials/' + route + '.html',
 						'controller' : route + 'Controller'

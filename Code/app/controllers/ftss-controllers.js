@@ -30,6 +30,8 @@ FTSS.controller = (function () {
 
 	return function ($scope, opts) {
 
+		FTSS.utils.log($scope.groupBy.$);
+
 		var model, process, actions;
 
 		// We'll just make opts.grouping mandatory, we'll use an int here for perf reasons later on
@@ -195,9 +197,12 @@ FTSS.controller = (function () {
 				// If there is a defined data processor, then execute it against the data as well
 				process && _(data).each(process);
 
+				var g = $scope.groupBy,
+			        s = $scope.sortBy;
+
 				// (re)bind our groupBy & sortBy values
-				$scope.groupBy.$ = $scope.groupBy.$ || opts.group;
-				$scope.sortBy.$ = $scope.sortBy.$ || opts.sort;
+				g.$ = $scope.grouping.hasOwnProperty(g.$) ? g.$ : opts.group;
+				s.$ = $scope.sorting && $scope.sorting.hasOwnProperty(s.$) ? s.$ : opts.group;
 
 				// If this is a tagBox then we should call taghighlight as well
 				if (tagBox) {
@@ -334,6 +339,9 @@ FTSS.controller = (function () {
 							// reference for our searchText
 							var text = $scope.searchText.$;
 
+							// Update our permalink for this custom view
+							$scope.fn.setPermaLink();
+
 							// Reset groups, counter & count
 							$scope.groups = false;
 							$scope.counter('-', false);
@@ -392,6 +400,8 @@ FTSS.controller = (function () {
 				// De-register the watcher if it exists
 				(FTSS.archiveWatch || Function)();
 				FTSS.archiveWatch = $scope.$watch('showArchive', doProcess);
+
+				$scope.$watch('wellCollapse', $scope.fn.setPermaLink);
 
 			},
 
