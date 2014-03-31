@@ -20,9 +20,10 @@
     "angular-strap": "~2.0.0",
     "momentjs": "~2.5.1",
     "angular-animate": "~1.2.14",
-    "lz-string": "*",
     "lodash": "~2.4.1",
-    "bean": "~1.0.6"
+    "bean": "~1.0.6",
+    "pako": "~0.1.1",
+    "db.js": "~0.9.0"
   },
   "overrides": {
     "angular-mocks": {
