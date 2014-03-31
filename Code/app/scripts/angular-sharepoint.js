@@ -33,9 +33,9 @@
 				                       'offline': false,
 				                       'noCache': false
 			                       } : {
-				                       'baseURL': 'http://dev/_vti_bin/ListData.svc/',
-				                       'userURL': 'http://dev/_layouts/userdisp.aspx?Force=True',
-				                       'pplURL' : 'http://dev/_vti_bin/ListData.svc/UserInformationList',
+				                       'baseURL': 'http://192.168.2.1/_vti_bin/ListData.svc/',
+				                       'userURL': 'http://192.168.2.1/_layouts/userdisp.aspx?Force=True',
+				                       'pplURL' : 'http://192.168.2.1/_vti_bin/ListData.svc/UserInformationList',
 				                       'offline': false,
 				                       'noCache': false
 			                       };
