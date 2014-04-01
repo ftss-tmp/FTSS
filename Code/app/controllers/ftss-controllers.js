@@ -58,7 +58,9 @@ FTSS.controller = (function () {
 			'bind': function (prop) {
 
 				// If loaded we only want to bind the first time
-				var single = !prop;
+				var single = !prop,
+
+					page  = FTSS._fn.getPage();
 
 				// Default to cached mode & watch cleanSlate
 				prop = prop || 'cleanSlate';
@@ -72,6 +74,14 @@ FTSS.controller = (function () {
 				// Bind archive() & edit() to the scope in case they are needed
 				$scope.archive = actions.archive;
 				$scope.edit = actions.edit(opts.edit);
+
+				$scope.pageMessage = FTSS.messages.page[page];
+
+				$scope.showHelp = (localStorage['FTSS_show_help_' + page] !== '');
+
+				$scope.hideHelp = function () {
+					$scope.showHelp = localStorage['FTSS_show_help_' + page] = '';
+				};
 
 				// Return the promise, then()
 				return {
