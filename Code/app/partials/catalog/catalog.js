@@ -39,7 +39,7 @@ FTSS.ng.controller(
 
 						      try {
 
-							      _(u.Courses).each(function (c) {
+							      _(u.Courses_JSON).each(function (c) {
 
 								      var d = data[c].Units = data[c].Units ||
 									      [
