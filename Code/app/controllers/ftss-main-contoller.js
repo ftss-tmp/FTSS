@@ -344,7 +344,7 @@
 
 				$scope.$on('$routeChangeSuccess', function () {
 
-					var prefs = JSON.parse(atob($routeParams.view) || '{}');
+					var prefs = $routeParams.view ?  JSON.parse(atob($routeParams.view)) : {};
 
 					$scope.permaLink = $routeParams.link || '';
 

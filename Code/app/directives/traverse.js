@@ -20,11 +20,11 @@
 					'templateUrl': '/partials/traverse.html',
 					'link'       : function (scope, $el) {
 
-						var view = $('#mainView');
+						var view = $('#mainView'),
+
+						    content = $('#content');
 
 						if (!scope.createData) {
-
-							var content = $('#content');
 
 							// Let the view CSS know about this modal so we can do some fun stuff
 							view.addClass('hasModal');

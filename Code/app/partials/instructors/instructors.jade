@@ -1,16 +1,16 @@
 include ../__mixins
 
-- var columns = {Instructor:50, Unit:15, AFSC:10}
+- var columns = {'':10,Instructor:50, Unit:15, AFSC:10}
 +tableHeader('Insctructor', columns)
+
+    td: +icon('flag')
 
     td.cleanPhoto(class='{{running(row)}}')
         photo(size='75px', data='row')
 
     td
         b
-            +icon('flag')
-            span.archiveOnly
-                | ***ARCHIVED INSTRUCTOR***&nbsp;
+            span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
             | {{row.InstructorName}}
 
     td

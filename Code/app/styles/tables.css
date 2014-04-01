@@ -23,7 +23,7 @@
     text-align: center;
 }
 
-.table thead.slim, #mainView.hasModal .table thead {
+.table thead.slim {
     visibility: hidden!important;
     display: table-footer-group!important;
 }
@@ -141,8 +141,8 @@ tr.thin button {
     transition: all 500ms ease;
 }
 
-tr.modal-selected {
-    border-left: 20px solid #333;
+tr.modal-selected td:first-child {
+    background: #333!important;
 }
 
 tr .flag {

@@ -1,4 +1,4 @@
-/*global utils, FTSS, _, pako */
+/*global utils, FTSS, _, angular */
 
 /**
  * Performs nested property lookups without eval or switch(e.length), removed try {} catch(){}
@@ -202,8 +202,7 @@ utils.loading = (function () {
 	var loader = $('#content')[0], loadingState;
 
 	return function (loading) {
-		console.trace();
-		LOG('loading: ' + loading);
+
 		setTimeout(function () {
 
 			if (loadingState !== loading) {

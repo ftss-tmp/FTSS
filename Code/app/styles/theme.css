@@ -146,7 +146,3 @@ right {
     position: absolute;
     right: 50px;
 }
-
-#mainView.hasModal h3 {
-    display: none!important;
-}
