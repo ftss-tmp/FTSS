@@ -17,14 +17,14 @@ form.form-horizontal(name='modal')
 
         .input-group
             .input-group-addon
-                +icon('envelope')
+                +icon('envelope2')
             input.form-control(ng-model='data.InstructorEmail', type='email')
 
         br
 
         .row
 
-            .col-lg-4(style='margin-left:5%')
+            .col-lg-4.drag-target(style='margin-left:5%')
                 photo.img-rounded(size='150px', shape='rectangle', data='data', watch, force)
                 small: i Add or update by drag & drop
 
@@ -32,7 +32,7 @@ form.form-horizontal(name='modal')
 
                 .row.input-group.disabled(ng-if='data.Instructor.WorkEMail')
                     .input-group-addon.w17
-                        +icon('envelope')
+                        +icon('envelope2')
                     input.form-control(disabled, ng-model='data.Instructor.WorkEMail')
 
                 .row.input-group.disabled(ng-if='data.Instructor.WorkPhone')

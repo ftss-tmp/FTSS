@@ -13,14 +13,14 @@ FTSS.ng.controller('instructorsController',
 			                   'group': 'Unit.LongName',
 
 			                   'grouping': {
-				                   'Squadron'     : 'Squadron',
+				                   'Unit.Squadron': 'Squadron',
 				                   'Unit.LongName': 'Detachment',
 				                   'AFSC'         : 'AFSC'
 			                   },
 
 			                   'sorting': {
-				                   'Instructor.Name': 'Name',
-				                   'AFSC'           : 'AFSC'
+				                   'Name': 'Name',
+				                   'AFSC': 'AFSC'
 			                   },
 			                   'model'  : 'instructors',
 
@@ -34,17 +34,25 @@ FTSS.ng.controller('instructorsController',
 
 						                   var rawBuffer = result.target.result,
 
-							                   rand = utils.generateUUID();
+						                       rand = utils.generateUUID(),
+
+						                       url = (PRODUCTION ?
+
+						                              'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype' :
+
+						                              'http://192.168.2.1:8080') + '/_vti_bin/ListData.svc/Bios',
+
+						                       slug = (PRODUCTION ? '/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' : '/Bios/');
 
 						                   $.ajax({
-							                          'url'        : (PRODUCTION ? 'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype' : 'http://dev') + '/_vti_bin/ListData.svc/Bios',
+							                          'url'        : url,
 							                          'type'       : 'POST',
 							                          'data'       : rawBuffer,
 							                          'processData': false,
 							                          'contentType': 'multipart/form-data',
 							                          'headers'    : {
 								                          'accept': "application/json;odata=verbose",
-								                          'slug'  : '/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' + rand + '.jpg'
+								                          'slug'  : slug + rand + '.jpg'
 							                          },
 							                          'success'    : function () {
 								                          $timeout(function () {

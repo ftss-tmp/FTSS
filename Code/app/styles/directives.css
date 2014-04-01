@@ -28,7 +28,7 @@ photo img {
     overflow: hidden;
     box-shadow: #666 0px 2px 3px;
     border-radius: 3%;
-    background: rgb(233, 233, 233);
+    background-color: rgb(233, 233, 233);
 }
 
 .mask-img.circle {
