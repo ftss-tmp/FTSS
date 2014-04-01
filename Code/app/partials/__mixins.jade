@@ -1,4 +1,24 @@
-// The icon mixin generates an SVG link to our SVG sprite
+mixin pageHead()
+    doctype html
+    html(lang='en', ng-app='FTSS')
+
+        head
+
+            //  The MIT License (MIT)
+
+                982 TRG Field Training Support System v3
+
+                Copyright (C) 2014 Jeff McCoy < code@jeffm.us >
+
+                jeffmccoy.mit-license.org
+
+            meta(charset='utf-8')
+            meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+            title(ng-bind-template='FTSS {{page()}}')
+
+            block
+
+
 mixin icon(tag)
     label
         svg.icon(class=tag + ' icon-' + tag, viewBox='0 0 32 32')
@@ -6,7 +26,6 @@ mixin icon(tag)
 
 
 
-// Creates the code for our links on the left navbar
 mixin link(page, tag, name)
     li(class=page)
         .pointer
@@ -30,7 +49,6 @@ mixin grouping()
 
 
 
-// This is the page header for views that use a table instead of wells
 mixin tableHeader(addNew, columns)
     page-help-message
 

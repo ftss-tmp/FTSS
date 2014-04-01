@@ -2,7 +2,7 @@ exports.config =
   # See docs at http://brunch.readthedocs.org/en/latest/config.html.
   conventions:
     assets:  /^app\/assets\//
-    ignored: /^(app\/styles\/overrides|(.*?\/)?[_][a-zA-Z0-9]*)/
+    ignored: /^(app\/styles\/overrides|(.*?\/|app\/partials\/includes)?[_][a-zA-Z0-9]*)/
   modules:
     definition: false
     wrapper: false
@@ -15,6 +15,7 @@ exports.config =
         'js/vendor.js': /^(bower_components|vendor)/
       order :
         before: [
+          'vendor/init_globals.js',
           'bower_components/jquery/dist/jquery.js',
           'app/scripts/angular-sharepoint.js',
           'app/scripts/ftss-init.js'
