@@ -63,8 +63,8 @@
 
 						$scope.permaLink = [
 
-							utils.compress(JSON.stringify(FTSS.tags)),
-							utils.compress(JSON.stringify(view))
+								btoa(JSON.stringify(FTSS.tags)) || '',
+								btoa(JSON.stringify(view)) || ''
 
 						].join('/');
 
@@ -178,7 +178,7 @@
 								FTSS.filters.$refresh();
 
 								var pending =
-									    $scope.permaLink && JSON.parse(utils.decompress($scope.permaLink));
+									    $scope.permaLink && JSON.parse(atob($scope.permaLink));
 
 								if (pending) {
 
@@ -344,7 +344,7 @@
 
 				$scope.$on('$routeChangeSuccess', function () {
 
-					var prefs = JSON.parse(utils.decompress($routeParams.view) || '{}');
+					var prefs = JSON.parse(atob($routeParams.view) || '{}');
 
 					$scope.permaLink = $routeParams.link || '';
 

@@ -2,7 +2,7 @@ exports.config =
   # See docs at http://brunch.readthedocs.org/en/latest/config.html.
   conventions:
     assets:  /^app\/assets\//
-    ignored: /^(app\/styles\/overrides|(.*?\/)?[_]\w*)/
+    ignored: /^(app\/styles\/overrides|(.*?\/)?[_][a-zA-Z0-9]*)/
   modules:
     definition: false
     wrapper: false

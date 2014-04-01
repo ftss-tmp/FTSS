@@ -202,7 +202,8 @@ utils.loading = (function () {
 	var loader = $('#content')[0], loadingState;
 
 	return function (loading) {
-
+		console.trace();
+		LOG('loading: ' + loading);
 		setTimeout(function () {
 
 			if (loadingState !== loading) {
@@ -262,18 +263,4 @@ utils.$ajaxFailure = function (req) {
 			               this.url
 		               ].join(' ')
 	               });
-};
-
-
-// http://stackoverflow.com/a/12713326/467373
-utils.compress = function (str) {
-	return str ? btoa(String.fromCharCode.apply(null, pako.deflateRaw(str))) : '';
-};
-
-utils.decompress = function (str) {
-
-	return str ? new Uint8Array(atob(str).split('').map(function(c) {
-		return c.charCodeAt(0); })
-	) : '';
-
 };
