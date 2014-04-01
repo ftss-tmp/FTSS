@@ -145,11 +145,11 @@ tr.modal-selected td:first-child {
     background: #333;
 }
 
-tr .flag, tr .asterisk {
+[ng-repeat] .flag, [ng-repeat] .asterisk {
     display: none;
 }
 
-tr.updated .flag, tr.priority .asterisk {
+[ng-repeat].updated .flag, [ng-repeat].priority .asterisk {
     display: block;
     float: left;
 }
