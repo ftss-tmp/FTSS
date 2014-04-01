@@ -1,54 +1,62 @@
 include ../__mixins
-//
-    #main-stats
-        .row.stats-row
-            #backlog BACKLOG
-            .backlogGradient.stat
-            .col-md-3.stat
-                .data
-                    span.number {{totals.reqs}}
-                    | Courses
-                span.date
-                    b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
-                    | Require TDY
 
-            .col-md-3.stat
-                .data
-                    span.number {{totals.students}}
-                    | Students
-                span.date
-                    b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
-                    | Backlogged
+#main-stats
+    .row.stats-row
+        #backlog BACKLOG
+        .backlogGradient.stat
+        .col-md-3.stat
+            .data
+                span.number {{totals.reqs}}
+                | Courses
+            span.date
+                b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
+                | Require TDY
 
-            .col-md-3.stat
-                .data
-                    span.number {{totals.avg[1]}}
-                    | {{totals.avg[2]}}
-                span.date Average Wait Time
+        .col-md-3.stat
+            .data
+                span.number {{totals.students}}
+                | Students
+            span.date
+                b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
+                | Backlogged
 
-            .col-md-2.stat.last
-                .data
-                    span.number {{totals.max[1]}}
-                    | {{totals.max[2]}}
-                span.date Longest Wait Time
+        .col-md-3.stat
+            .data
+                span.number {{totals.avg[1]}}
+                | {{totals.avg[2]}}
+            span.date Average Wait Time
 
-    br
-    div
-        .graph.pull-left(width='.58', height='300', type='bar')
-        .graph.pull-right(width='.38', height='300', type='pie')
-        .clearfix
+        .col-md-2.stat.last
+            .data
+                span.number {{totals.max[1]}}
+                | {{totals.max[2]}}
+            span.date Longest Wait Time
+
+br
+div
+    .graph.pull-left(width='.58', height='300', type='bar')
+    .graph.pull-right(width='.38', height='300', type='pie')
+    .clearfix
+
+br
 
 .col-lg-8
     +grouping()
 
-        .well(ng-repeat='row in group')
+        .well(ng-repeat='row in group',
+               ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
 
             h4
                 +icon('flag')
+
                 span.btn.w15(ng-class='{"btn-info":row.local,"btn-warning":!row.local}')
                     span.bigLetter {{row.requirements.length}}
                     span(style='font-size:1.25em') {{row.PDS}}&nbsp;
+
+                span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
+                    +icon('asterisk')
                 span.pull-right(style='margin-top:5px') {{row.Number}}
+
 
             hr.rollup
 
@@ -105,6 +113,8 @@ include ../__mixins
 
 .col-lg-4
 
+    h3.text-right(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px') Requested Training
+
     .well
 
-        |Some random text and stuff.
+        |This will hold our collection of chosen students to create 898s for.

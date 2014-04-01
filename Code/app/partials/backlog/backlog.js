@@ -94,6 +94,7 @@ FTSS.ng.controller('backlogController',
 
 							                         if (!req) {
 								                         req = reqs[r] = _(caches.MasterCourseList[r]).clone();
+								                         req.priority = req.CAFMCL;
 								                         req.CAFMCL = req.CAFMCL ? 'CAF/MCL Course(s)' : 'Regular Course(s)';
 								                         req.listFTD = [];
 								                         req.days = 0;
