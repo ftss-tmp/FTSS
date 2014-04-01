@@ -63,7 +63,7 @@
 
 						$scope.permaLink = [
 
-								btoa(JSON.stringify(FTSS.tags)) || '',
+								FTSS.tags && btoa(JSON.stringify(FTSS.tags)) || '',
 								btoa(JSON.stringify(view)) || ''
 
 						].join('/');
@@ -267,7 +267,10 @@
 
 								} else {
 
-									utils.updateSearch('');
+									if ($scope.tagBox) {
+										utils.updateSearch('');
+										_fn.setLoaded();
+									}
 
 								}
 
@@ -344,7 +347,7 @@
 
 				$scope.$on('$routeChangeSuccess', function () {
 
-					var prefs = $routeParams.view ?  JSON.parse(atob($routeParams.view)) : {};
+					var prefs = $routeParams.view ? JSON.parse(atob($routeParams.view)) : {};
 
 					$scope.permaLink = $routeParams.link || '';
 
