@@ -12,11 +12,11 @@
     max-width: 500px
 }
 
-#mainView, .wait #spinner {
+#mainView {
     display: block;
 }
 
-.wait #mainView, #spinner {
+.wait #mainView {
     display: none;
 }
 
@@ -70,14 +70,6 @@
     margin-bottom: 0;
 }
 
-.MDS, .AFSC, .HOURS {
-    width: 125px;
-}
-
-.ACTIONS {
-    width: 150px;
-}
-
 #sort-group-search {
     margin-bottom: 25px;
 }
@@ -86,6 +78,20 @@
     background-color: #f3f7f8;
     color: #3a87ad;
     font-weight: 800;
+}
+
+.wait #spinner {
+    visibility: visible;
+    opacity: 1;
+}
+
+#spinner {
+    visibility: hidden;
+    transition: opacity 500ms linear;
+    opacity: 0;
+    width: 10%;
+    margin: 10% 40%;
+    position: absolute;
 }
 
 right {
