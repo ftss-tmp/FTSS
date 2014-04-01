@@ -6,13 +6,13 @@ form.form-horizontal(name='modal')
 
     .modal-header
         h3
-            +icon('alert')
+            +icon('books')
             | {{createData ? 'Add New Course' : data.PDS + ' - ' + data.Number}}
 
     .modal-body
 
         h4.light-bottom
-            +icon('alert')
+            +icon('search')
             | Course Identifiers & Description
 
         .row
@@ -61,7 +61,7 @@ form.form-horizontal(name='modal')
 
             .col-lg-6
                 h4.light-bottom
-                    +icon('alert')
+                    +icon('wait')
                     | Course Length
                 .col-lg-6.no-pad
                     .input-group
@@ -75,7 +75,7 @@ form.form-horizontal(name='modal')
 
             .col-lg-5.pull-right
                 h4.light-bottom
-                    +icon('alert')
+                    +icon('student_hand')
                     | Course Seat Limits
                 .col-lg-5.no-pad
                     .input-group
