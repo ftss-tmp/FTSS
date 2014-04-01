@@ -61,9 +61,11 @@ utils.ignore = (function () {
 	var timeout;
 
 	FTSS.ng.run(
-		function ($timeout) {
-			timeout = $timeout;
-		}
+		['$timeout',
+		 function ($timeout) {
+			 timeout = $timeout;
+		 }
+		]
 	);
 
 	return function (scope) {
@@ -199,7 +201,7 @@ utils.updateSearch = function (action) {
  */
 utils.loading = (function () {
 
-	var loader = $('#content')[0], loadingState;
+	var body = $('#content')[0], loadingState;
 
 	return function (loading) {
 
@@ -209,7 +211,7 @@ utils.loading = (function () {
 
 				loadingState = loading;
 
-				document.body.style.cursor = loader.className = loading ? 'wait' : '';
+				document.body.style.cursor = body.className = loading ? 'wait' : '';
 				FTSS.search && FTSS.search.close();
 
 			}
