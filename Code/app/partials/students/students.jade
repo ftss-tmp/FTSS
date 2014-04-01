@@ -3,7 +3,11 @@ include ../__mixins
 - var columns = {Student:40, Host:15, Inprocessed:15, Requiremenst:10}
 +tableHeader(false, columns)
 
-    td: +icon('flag')
+    td
+        span(hover='This student was recently updated.')
+            +icon('flag')
+        span(hover='This student has priority training requirements (on the CAF/MCL).')
+            +icon('asterisk')
 
     td
         b

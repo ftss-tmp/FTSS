@@ -90,13 +90,16 @@ FTSS.ng.controller(
 
 								            .map(function (r) {
 
-									                 var cache = caches.MasterCourseList[r] || false;
-									                 return cache ? '<dt class="tiny">'
-										                                + cache.PDS
+									                 var course = caches.MasterCourseList[r] || false;
+
+									                 d.priority = d.priority || course.CAFMCL || false;
+
+									                 return course ? '<dt class="tiny">'
+										                                + course.PDS
 										                                + '</dt><dd>'
-										                                + cache.Number
+										                                + course.Number
 										                                + '<br><small class="truncate">'
-										                                + cache.Title
+										                                + course.Title
 										                 + '</small></dd>' : '';
 
 								                 })
