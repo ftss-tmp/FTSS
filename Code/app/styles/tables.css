@@ -142,14 +142,14 @@ tr.thin button {
 }
 
 tr.modal-selected td:first-child {
-    background: #333!important;
+    background: #333;
 }
 
-tr .flag {
+tr .flag, tr .asterisk {
     display: none;
 }
 
-tr.updated .flag {
+tr.updated .flag, tr.priority .asterisk {
     display: block;
     float: left;
 }

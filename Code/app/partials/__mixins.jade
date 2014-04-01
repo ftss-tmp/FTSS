@@ -75,7 +75,7 @@ mixin tableHeader(addNew, columns)
 
                 tbody
                     tr.middle.am-fade-and-scale(ng-repeat='row in group',
-                    ng-class='{archived:row.Archived, updated:row.updated}',
+                    ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}',
                     ng-dblclick='edit(false)',
                     id='row-{{row.Id}}')
                         once
@@ -124,6 +124,6 @@ mixin modalFooter()
             | Please wait, sending data...
         button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='!modal.$dirty || modal.$invalid || submitted')
             span.btn-label.white
-                +icon('check-alt')
+                +icon('check-circle')
             | Submit
         button.btn.btn-default(ng-click='close()') Cancel

@@ -3,7 +3,11 @@ include ../__mixins
 - var columns = {Course:55, MDS:10, AFSC:10, Length:15}
 +tableHeader('Course', columns)
 
-    td: +icon('flag')
+    td
+        span(hover='This course was recently updated.')
+            +icon('flag')
+        span(hover='This course is on the CAF/MCL.')
+            +icon('asterisk')
 
     td(style='text-transform: uppercase')
 
