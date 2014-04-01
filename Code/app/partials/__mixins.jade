@@ -19,10 +19,14 @@ mixin pageHead()
             block
 
 
-mixin icon(tag)
+mixin icon(tag, viewbox)
     label
-        svg.icon(class=tag + ' icon-' + tag, viewBox='0 0 32 32')
-            use(xlink:href='#icon-' + tag)
+        if viewbox
+            svg.icon(class=tag + ' icon-' + tag, viewBox=viewbox)
+                use(xlink:href='#icon-' + tag)
+        else
+            svg.icon(class=tag + ' icon-' + tag, viewBox='0 0 32 32')
+                use(xlink:href='#icon-' + tag)
 
 
 
