@@ -108,11 +108,6 @@ FTSS.controller = (function () {
 								// If this is a bind-once and has been called, delete the watch
 								single && unwatch();
 
-							} else {
-
-								// Perform final loading
-								$scope.fn.setLoaded();
-
 							}
 
 						});
