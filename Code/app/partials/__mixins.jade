@@ -84,9 +84,15 @@ mixin tableHeader(addNew, columns)
 
 
 
-mixin googleMap()
-    a(href='https://www.google.com/maps/@{{data.Location | nospace}},12z', target='_blank')
-        img#googleModalMap(ng-src='http://maps.google.com/maps/api/staticmap?center={{data.Location | nospace}}&zoom=12&size=400x300&sensor=false')
+mixin googleMap(small)
+    if small
+        a.no-toggle(href='https://www.google.com/maps/@{{row.Location | nospace}},12z', target='_blank', right
+            hover="<img style='width:600px;height:500px' src='http://maps.google.com/maps/api/staticmap?center={{row.Location | nospace}}&zoom=12&size=600x500&sensor=false'/>")
+            img.img-thumbnail(ng-src='http://maps.google.com/maps/api/staticmap?center={{row.Location | nospace}}&zoom=10&size=100x50&sensor=false')
+
+    else
+        a(href='https://www.google.com/maps/@{{data.Location | nospace}},12z', target='_blank')
+            img#googleModalMap(ng-src='http://maps.google.com/maps/api/staticmap?center={{data.Location | nospace}}&zoom=12&size=400x300&sensor=false')
 
 
 
