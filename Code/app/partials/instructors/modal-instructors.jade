@@ -8,9 +8,7 @@ form.form-horizontal(name='modal')
 
     .modal-body(ng-file-drop='onFileSelect($files)')
 
-        .alert.alert-warning.pageMessage.
-            Here you can add or update an instructor's profile.  Only the instructor's name and unit
-            are required.  To add or change a photo, drag a new one into the widow and press "Submit".
+        +userInstructions('modal-instructors')
 
         // This will only be shown if we are adding a student
         people-picker(field='Instructor', filter='Instructors')
@@ -26,19 +24,21 @@ form.form-horizontal(name='modal')
 
         .row
 
-            .col-lg-4.drag-target(style='margin-left:8%')
+            .col-lg-4.drag-target(style='margin-left:8%', hover='instructors-photo', left)
                 photo.img-rounded(size='150px', shape='rectangle', data='data', watch, force)
                 small: i Add or update by drag & drop
 
             .col-lg-6
 
-                h4(explain='instructors-unit', right) Unit
-                select(selectize='Units', bind='UnitId', required)
-                .helper You must choose a FTD.
+                h4 Unit
+                div(explain='instructors-unit', right)
+                    select(selectize='Units', bind='UnitId', required)
+                    .helper You must choose a FTD.
 
                 br
 
-                h4(explain='instructors-afsc', right) AFSC
-                select(selectize='AFSC', bind='AFSC')
+                h4 AFSC
+                div(explain='instructors-afsc', right)
+                    select(selectize='AFSC', bind='AFSC')
 
     +modalFooter()

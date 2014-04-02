@@ -10,26 +10,25 @@ form(name='modal')
 
     .modal-body
 
-        .alert.alert-warning.pageMessage.
-            Update Det. {{data.Det}}'s contact email and list of courses taught.  An 898 cannot be generated or class
-            built unless the course is first listed below.
+        +userInstructions('modal-units')
 
         h4
             b FTD Scheduling E-mail
-        .input-group(explain='units-email', left)
-            .input-group-addon.w10
-                +icon('envelope')
-            input.form-control(ng-model='data.Email', type='email', required)
-            .helper Please ensure you enter a valid email address.
+        div(explain='units-email', left)
+            .input-group
+                .input-group-addon.w10
+                    +icon('envelope')
+                input.form-control(ng-model='data.Email', type='email', required)
+                .helper Please ensure you enter a valid email address.
 
         br
         br
 
-        .row
-            .col-lg-12.pds(explain='units-edit-courses', right)
-                h4
-                    b Courses Taught
-                    .pull-right {{data.Courses_JSON.length}}
-                select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
+        h4
+            b Courses Taught
+            .pull-right {{data.Courses_JSON.length}}
+
+        .pds(explain='units-courses', left)
+            select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
 
     +modalFooter()

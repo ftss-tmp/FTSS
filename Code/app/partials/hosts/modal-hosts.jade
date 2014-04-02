@@ -10,10 +10,7 @@ form(name='modal')
 
     .modal-body
 
-        .alert.alert-warning.pageMessage.
-            The Host Unit must first be added before students can be loaded into FTSS.  Ideally, you should keep host
-            units no lower than a group level but any level is permitted.  Be sure to choose a local FTD only if this
-            unit is co-located with a FTD.
+        +userInstructions('modal-hosts')
 
         .form-horizontal(style='margin-left:20px;margin-right:-25px')
 

@@ -8,6 +8,8 @@ form.form-horizontal(name='modal', ng-any-drop)
 
     .modal-body
 
+        +userInstructions('modal-students')
+
         // This will only be shown if we are adding a student
         people-picker(field='Student', filter='students')
 
@@ -38,7 +40,7 @@ form.form-horizontal(name='modal', ng-any-drop)
                         input(value='3', type='radio')
                         | Civilian
 
-            +formGroup('Training Needs', 'students-requirements')
+            +formGroup('Training Needs', 'students-training')
                 .imds-import
                     select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
 

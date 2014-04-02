@@ -8,12 +8,7 @@ form.form-horizontal(name='modal')
 
     .modal-body
 
-        .alert.alert-warning.pageMessage
-            h4
-                b APPLICATION-WIDE CHANGE
-            p.
-                Editing the Course Catalog will affect all uses of this course.  Please ensure you are aware of the
-                implications of any changes before continuing.
+        +userInstructions('modal-catalog')
 
         .row
             .col-lg-3(explain='catalog-pds', left)
@@ -99,16 +94,5 @@ form.form-horizontal(name='modal')
                     span &#x2717;
                     span &#x2713;
                 a
-
-        br
-        br
-
-        .row.alert.alert-danger(ng-if='!data.PDS || !data.MDS')
-            +icon('alert')
-            | All fields are required.
-
-        .row.alert.alert-danger(ng-if='error')
-            +icon('alert')
-            | {{error}}
 
     +modalFooter()
