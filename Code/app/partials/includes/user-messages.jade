@@ -1,0 +1,180 @@
+include ../__mixins
+
+#language
+
+
+    //- These are the top navigation area buttons & search boxes listed from left to right
+
+    #record-count.
+        Displays the record  count for your search.  If the background is <span style="color:#d58512;font-weight:800">orange</span>,
+        there were too many records found so you'll want to refine your search a little by adding more search tags.
+
+    #tagBox.
+        [icon=info]Use this search box to create custom queries that you can<i>bookmark or share</i>.
+        Combine as many as you like, the first row of tags in <i><b>bold-italics</b></i> are custom searches for this page.
+
+    #searchBox.
+        [icon=info]This search box lets you do full-text instant searches.  The more words you add,
+        the more specific your search will be.  I.e., "robins engines" would find any data that included <i>both</i> robins and engines.
+
+    #button-clear Clear this search
+
+    #button-grouping Change how data is grouped
+
+    #button-sorting Change the sorting order
+
+    #button-collapse Toggle expanded or collapsed rows
+
+    #button-archive Toggle visibility of archived data
+
+
+
+    //- This is the instructions users see on each page
+    #backlog.
+        TODO:  replace this text with instructions for the users regarding this page.
+
+    #catalog.
+        TODO:  replace this text with instructions for the users regarding this page.
+
+    #hosts.
+        Before a student can be added to FTSS (required for 898s), the host unit must be added.
+        Use this page to add or edit hosts units.  If the unit has a local FTD, be sure to add
+        that to the unit as this is used in determining if this is a local or TDY request.
+
+    #instructors.
+        Use this page to add, edit or archive instructors, instructor bio photos are optional.
+
+    #requests.
+        TODO:  replace this text with instructions for the users regarding this page.
+
+    #requirements.
+        TODO:  replace this text with instructions for the users regarding this page.
+
+    #scheduled.
+        TODO:  replace this text with instructions for the users regarding this page.
+
+    #students.
+        TODO:  replace this text with instructions for the users regarding this page.
+
+    #units.
+        Use this page to edit the info for FTDs.  Here you can add courses that are taught
+        at a particular unit to FTSS as well as annotate the contact email.
+
+    #students.
+        In FTSS, you should add all Airmen requiring FTD training upfront.
+        By doing so, we can automate the backlog tracking required by AFI.
+        After establishing your training requirements here, you can generate 898
+        requirements from your backlog.  If you use IMDS to track FTD training,
+        the course codes are already loaded into FTSS so you can just drag and drop
+        a student's 593 to load their training requirements.
+
+
+    //- These are the modal/popup window user instructions for each page
+
+    #modal-catalog
+        h4:b APPLICATION-WIDE CHANGE
+        p.
+            Editing the Course Catalog will affect all uses of this course.  Please ensure you are aware of the
+            implications of any changes before continuing.
+
+    #modal-hosts.
+        The Host Unit must first be added before students can be loaded into FTSS.
+        Ideally, you should keep host units no lower than a group level but any level is permitted.
+        Be sure to choose a local FTD only if this unit is co-located with a FTD.
+
+    #modal-instructors.
+        Here you can add or update an instructor's profile.  Only the instructor's name and unit
+        are required.  To add or change a photo, drag a new one into the widow and press "Submit".
+
+    #modal-students.
+        TODO: Need to add some instructions here....
+
+    #modal-units.
+        Update FTD contact email and list of courses taught.
+        An 898 cannot be generated or class built unless the course is first listed below.
+
+
+
+
+
+
+
+    #people-picker  Use this search box to find the name from the AFNET Global Address List.  The format should be the same as in Outlook.
+        example Doe, John A SSgt...
+
+    #request-seats Search for students to add to the request.
+        example Please ensure you have already loaded these students into FTSS.
+
+    #request-comments Leave any comments for the FTD or MAJCOM as applicable (optional).
+
+
+    #catalog-pds The unique, short-code for this course
+
+    #catalog-mds @TODO
+
+    #catalog-afsc @TODO
+
+    #catalog-number @TODO
+
+    #catalog-imds (optional) The IMDS course number used for 593 imports and searching by course number
+
+    #catalog-title @TODO
+
+    #catalog-days The number of training days
+
+    #catalog-hours The number of training hours
+
+    #catalog-min The minimum number of seats
+
+    #catalog-max The maximum number of seats
+
+    #catalog-cafmcl Indicates whether this course is listed on the CAF/MCL, used for prioritizing 898 requirments
+
+
+
+    #hosts-name @TODO
+
+    #hosts-email @TODO
+
+    #hosts-ftd @TODO
+
+    #hosts-location @TODO
+
+
+    #instructors-name @TODO
+
+    #instructors-email @TODO
+
+    #instructors-unit @TODO
+
+    #instructors-afsc @TODO
+
+    #instructors-photo (optional) Drag a photo here to add or update for this instructor
+
+
+    #students-category  Choose the student type, used in conjunction with TDY status to determine the seat request type.
+
+    #students-date (optional) This is the in-processing date for the student,<br>it is used to sort students by longest wait-time.
+
+    #students-ftd If applicable, the local FTD for this student.  This is used to determine if the seat request is a local or TDY allocation.
+
+    #students-training
+        p.
+            This is a list of all the training requirements for this student.
+            When a student is scheduled for a given course, it is automatically removed from this list.<br>
+        example This data can also be imported from an IMDS 593 using one of three ways:<br>
+        ol
+            li Copy & paste the text anywhere on this screen.
+            li Drag & drop the text file onto this window.
+            li Click the import button below & load the text file.
+
+    #students-unit The unit this student is assigned to.
+
+
+
+    #units-number  Type the detachment number as 2XX or 3XX.
+        example 373 TRS/Det 6 is 306.
+
+    #units-email This email address will be used to send FTSS notifications to the FTD
+
+    #units-courses Adds all courses taught by this FTD here.  You can search by PFS, MDS, AFSC, Number, etc or copy & paste a list of PDSs
