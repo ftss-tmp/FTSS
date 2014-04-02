@@ -54,8 +54,6 @@ mixin grouping()
 
 
 mixin tableHeader(addNew, columns)
-    +pageHelpMessage()
-
     if addNew
         .add-button.btn.btn-labeled.btn-success(ng-click='edit(true)')
             span.btn-label.white
@@ -116,14 +114,13 @@ mixin actions(view, edit, archive, label)
     unbind
 
 
-
-mixin pageHelpMessage()
-    .alert.alert-warning.alert-dismissable.am-fade-and-slide-bottom(ng-if='showHelp')
+mixin userInstructions(text, ignore)
+    .alert.alert-warning.alert-dismissable.am-fade-and-slide-bottom(ng-if= ignore ? 'showHelp' : 'true')
         .close(data-dismiss='alert') &times;
-        .pageMessage {{pageMessage}}
-        .hideHelp.btn.btn-link(ng-click='hideHelp()', data-dismiss='alert') Don't show this anymore
+        .pageMessage(user-message=text)
+        if ignore
+            .hideHelp.btn.btn-link(ng-click='hideHelp()', data-dismiss='alert') Don't show this anymore
         .clearfix
-
 
 mixin modalHeader(create, update)
     .modal-header.caps
