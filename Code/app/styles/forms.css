@@ -110,6 +110,16 @@ input.ng-invalid.ng-dirty {
     color: white;
 }
 
+form .helper {
+    padding-top: 4px;
+    font-style: italic;
+    color: #a94442;
+    display: none;
+}
+input.ng-invalid.ng-dirty + .helper {
+    display: block;
+}
+
 .btn-group .active:before,
 .btn-group-vertical .active:before {
     content: "\2713\00a0";
