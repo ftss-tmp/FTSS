@@ -1,9 +1,11 @@
 include ../__mixins
 
-- var columns = {Base:15, Detachment:10, Email:50, Details:15}
+- var columns = {'': 10, Base:15, Detachment:10, Email:40, Details:15}
 +tableHeader(false, columns)
 
     td: +icon('flag')
+
+    td: +googleMap(true)
 
     td
         b {{row.Base}}
