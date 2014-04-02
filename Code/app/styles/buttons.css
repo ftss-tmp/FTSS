@@ -16,6 +16,13 @@
     padding-top: 0
 }
 
+.btn-labeled .text {
+    position: relative;
+    padding: 6px 0;
+    top:4px;
+    left: -10px;
+    font-size: 1.5em;
+}
 .btn-group .text {
     background-color: #fff;
     color: #285e8e;
@@ -38,15 +45,13 @@
 }
 
 .btn {
-    margin-right: .25em;
+    transition: background 750ms ease;
+    margin:1px!important;
 }
 
-.btn:hover {
-    box-shadow: #666 0px 2px 3px;
-}
-
-.btn-link {
-    box-shadow: none !important;
+.btn:hover:not(.btn-link) {
+    border:1px solid #999;
+    margin:0!important;
 }
 
 .btn-group .btn {
@@ -88,4 +93,27 @@ traverse * {
     color:#333!important;
     text-decoration: none!important;
     outline:none!important;
+}
+
+.btn {
+    border:none;
+}
+
+.table-hover tbody tr .btn-muted, .well .btn-muted {
+    transition: opacity 500ms ease;
+}
+
+.table-hover tbody tr:not(:hover) .btn-muted, .well:not(:hover) .btn-muted {
+    color: #111;
+    background-color: transparent;
+    opacity: .2;
+    transition: opacity 500ms ease;
+}
+
+#searchButtons svg {
+    fill: #777;
+}
+
+.btn:hover svg {
+    fill:#000!important;
 }

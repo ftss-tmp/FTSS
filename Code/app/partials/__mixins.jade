@@ -57,10 +57,11 @@ mixin tableHeader(addNew, columns)
     +pageHelpMessage()
 
     if addNew
-        .add-button.btn.btn-success.white(ng-click='edit(true)')
-            +icon('add')
-            | &nbsp;Add&nbsp;
-            =addNew
+        .add-button.btn.btn-labeled.btn-success(ng-click='edit(true)')
+            span.btn-label.white
+                +icon('add')
+            span.text  &nbsp;Add&nbsp;
+                =addNew
 
     +grouping()
 
@@ -125,7 +126,7 @@ mixin modalFooter()
         button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-disabled='!modal.$dirty || modal.$invalid || submitted')
             span.btn-label.white
                 +icon('check-circle')
-            | Submit
+            span.text &nbsp;Submit
         button.btn.btn-default(ng-click='close()') Cancel
 
 

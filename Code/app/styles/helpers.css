@@ -49,7 +49,6 @@ dt.tiny + dd {
     margin-left: 65px;
 }
 
-
 [ng-dblclick] {
     cursor: pointer;
     -khtml-user-select: none;
