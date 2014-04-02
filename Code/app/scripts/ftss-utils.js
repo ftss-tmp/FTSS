@@ -82,8 +82,8 @@ utils.masterReset = function() {
 
 	try {
 
-		indexedDB.deleteDatabase('FTSS');
-		localStorage.clear();
+		window.localStorage.clear();
+		window.indexedDB.deleteDatabase('FTSS');
 
 	} catch(e) {
 
@@ -91,7 +91,7 @@ utils.masterReset = function() {
 
 	location.reload();
 
-}
+};
 
 utils.watchCount = function (log) {
 	var root = angular.element(document.getElementsByTagName('body'));
