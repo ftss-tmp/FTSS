@@ -67,7 +67,8 @@
 						'Id',
 						'Unit',
 						'FTD',
-					    'Location'
+					    'Location',
+					    'Email'
 					]
 			}
 
