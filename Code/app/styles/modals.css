@@ -1,12 +1,4 @@
 
-.modal-header input {
-    position: absolute;
-    left: 0;
-    border: none!important;
-    padding: 5px 10px 0 55px;
-    background: none;
-    right: 0;
-}
 .modal-dialog .row {
     clear: both;
     margin-bottom: .75em;
