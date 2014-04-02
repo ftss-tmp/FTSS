@@ -3,7 +3,7 @@
 	width: 1.35em;
 	height: 1.25em;
     margin: .2em .3em -.2em;
-    fill: #333333;
+    fill: #333;
     pointer-events: none;
 }
 
@@ -16,7 +16,7 @@ h4 .icon,.input-group-addon .icon {
 }
 
 .white.icon, .white .icon {
-    fill: #fff;
+    fill: #fff!important;
 }
 
 .icon.af_logo {
