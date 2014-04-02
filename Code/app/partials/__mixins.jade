@@ -125,6 +125,21 @@ mixin modalFooter()
         +icon('info')
         | {{error}}
 
+mixin modalHeader(create, update)
+    .modal-header.caps
+        if create
+            h3(ng-show='createData')
+                +icon('plus-circle')
+                | Add&nbsp;
+                =create
+
+        if update
+            h3(ng-hide='createData')
+                +icon('edit')
+                | Update&nbsp;
+                =update
+
+
     .modal-footer
         .sending(ng-show='submitted')
             spinner(size='2em')
