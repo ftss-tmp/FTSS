@@ -117,13 +117,6 @@ mixin actions(view, edit, archive, label)
 
 
 
-mixin modalFooter()
-    .row.alert.alert-danger(ng-show='modal.$dirty && modal.$invalid')
-        +icon('info')
-        | All fields are required.
-    .row.alert.alert-danger(ng-show='error')
-        +icon('info')
-        | {{error}}
 
 mixin modalHeader(create, update)
     .modal-header.caps
@@ -140,6 +133,7 @@ mixin modalHeader(create, update)
                 =update
 
 
+mixin modalFooter()
     .modal-footer
         .sending(ng-show='submitted')
             spinner(size='2em')
