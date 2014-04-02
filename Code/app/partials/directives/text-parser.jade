@@ -2,6 +2,7 @@ include ../__mixins
 
 label.btn.btn-info.btn-labeled.drop(style='fill:#fff')
     span.btn-label
-        +icon('insert')
+        svg.icon.white(viewBox="0 0 32 32")
+            use(xlink:href="#icon-insert")
     text-parser
     input(type='file', style='display:none')
