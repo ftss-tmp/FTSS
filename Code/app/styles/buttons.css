@@ -117,3 +117,7 @@ traverse * {
 .btn:hover svg {
     fill:#000!important;
 }
+
+.btn.white label svg {
+    fill:#fff!important;
+}
