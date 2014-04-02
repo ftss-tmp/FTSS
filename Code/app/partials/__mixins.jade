@@ -117,6 +117,13 @@ mixin actions(view, edit, archive, label)
 
 
 
+mixin pageHelpMessage()
+    .alert.alert-warning.alert-dismissable.am-fade-and-slide-bottom(ng-if='showHelp')
+        .close(data-dismiss='alert') &times;
+        .pageMessage {{pageMessage}}
+        .hideHelp.btn.btn-link(ng-click='hideHelp()', data-dismiss='alert') Don't show this anymore
+        .clearfix
+
 
 mixin modalHeader(create, update)
     .modal-header.caps
