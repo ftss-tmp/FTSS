@@ -67,20 +67,6 @@ time-ago {
     box-shadow: none !important;
 }
 
-.pageMessage {
-    font-size: 1.1em;
-    letter-spacing: .1em;
-    line-height: 1.75em;
-}
-
-.hideHelp {
-    float: right;
-    right: -40px;
-    position: relative;
-    margin-top: -20px;
-    bottom: -15px;
-}
-
 .modal-header, .modal-body, .modal-footer {
     z-index: 999;
 }
