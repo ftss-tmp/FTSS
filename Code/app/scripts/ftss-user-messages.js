@@ -72,7 +72,9 @@
 
 			'units': "Use this page to edit the info for FTDs.  Here you can add courses that are taught at a particular unit to FTSS as well as annotate the contact email.",
 
-			'instructors': "Use this page to add or edit instructors in FTSS, Instructor bio photos are optional."
+			'instructors': "Use this page to add, edit or archive instructors, instructor bio photos are optional.",
+
+			'catalog': "TODO:  replace this text with instructions for the users regarding this page."
 
 		}
 	};
