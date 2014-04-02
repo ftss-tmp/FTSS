@@ -78,6 +78,20 @@ utils.ignore = (function () {
 
 }());
 
+utils.masterReset = function() {
+
+	try {
+
+		indexedDB.deleteDatabase('FTSS');
+		localStorage.clear();
+
+	} catch(e) {
+
+	}
+
+	location.reload();
+
+}
 
 utils.watchCount = function (log) {
 	var root = angular.element(document.getElementsByTagName('body'));
