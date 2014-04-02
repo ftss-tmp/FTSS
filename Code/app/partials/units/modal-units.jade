@@ -6,48 +6,21 @@ form(name='modal')
 
     +googleMap()
 
-    .modal-header
-        h3
-            +icon('location')
-            | Update FTD {{data.Squadron}}/Det {{data.Det}}
+    +modalHeader(false, "{{data.Base}} FTD - {{data.Det}}")
 
     .modal-body
 
-        .row
-            .col-lg-4
-                h4
-                    b Base
-                .input-group
-                    .input-group-addon
-                        +icon('location_small')
-                    input.form-control(ng-model='data.Base', type='text')
+        .alert.alert-warning.pageMessage.
+            Update Det. {{data.Det}}'s contact email and list of courses taught.  An 898 cannot be generated or class
+            built unless the course is first listed below.
 
-            .col-lg-3
-                h4
-                    b Detachment
-                .input-group
-                    .input-group-addon
-                        +icon('hash')
-                    input.form-control(ng-model='data.Det', type='number', min='201', max='399', explain='units-edit-number', right)
-
-            .col-lg-5
-                h4
-                    b Coordinates
-                .input-group
-                    .input-group-addon
-                        +icon('location_small')
-                    input.form-control(ng-model='data.Location', type='text', explain='units-edit-coordinates', right)
-
-        br
-
-        .row
-            .col-lg-12
-                h4
-                    b FTD Production Supervisor E-mail
-                .input-group
-                    .input-group-addon
-                        +icon('envelope2')
-                    input.form-control(ng-model='data.Email', type='email', explain='units-edit-email', right)
+        h4
+            b FTD Scheduling E-mail
+        .input-group(explain='units-email', left)
+            .input-group-addon.w10
+                +icon('envelope')
+            input.form-control(ng-model='data.Email', type='email', required)
+            .helper Please ensure you enter a valid email address.
 
         br
         br
@@ -55,8 +28,8 @@ form(name='modal')
         .row
             .col-lg-12.pds(explain='units-edit-courses', right)
                 h4
-                    +icon('books')
-                    b {{data.CoursesCount}} Courses Taught
+                    b Courses Taught
+                    .pull-right {{data.Courses_JSON.length}}
                 select(selectize='MasterCourseList', bind='Courses_JSON', multiple)
 
     +modalFooter()

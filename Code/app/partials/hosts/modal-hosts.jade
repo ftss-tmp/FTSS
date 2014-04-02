@@ -6,36 +6,25 @@ form(name='modal')
 
     +googleMap()
 
-    .modal-header
-        h3
-            +icon('puzzle-piece')
-            | {{data.Unit}}
+    +modalHeader('New Host Unit', "{{data.Unit}}")
 
     .modal-body
 
-        .row
-            .col-lg-6
-                .input-group
-                    .input-group-addon Unit Name
-                    input.form-control(ng-model='data.Unit', type='text')
+        .alert.alert-warning.pageMessage.
+            The Host Unit must first be added before students can be loaded into FTSS.  Ideally, you should keep host
+            units no lower than a group level but any level is permitted.  Be sure to choose a local FTD only if this
+            unit is co-located with a FTD.
 
-        br
+        .form-horizontal(style='margin-left:20px;margin-right:-25px')
 
-        .row
+            +formGroupText('Host Unit', 'data.Unit', 'text', true, 'You must enter a unit name.', 'hosts-name')
 
-            .col-lg-6
-                h4
+            +formGroup('Local FTD', 'hosts-ftd')
+                .input-group-selectize
+                    select(selectize='Units', bind='FTD')
 
-            .col-lg-6
-                h4
-                    b Coordinates
-                .input-group
-                    .input-group-addon
-                        +icon('location_small')
-                    input.form-control(ng-model='data.Location', type='text')
+            +formGroupIcon('Unit Email', 'data.Email', 'email', false, 'Make sure you enter a valid email address.', 'hosts-email', 'envelope')
 
-        br
-        br
-
+            +formGroupIcon('Location', 'data.Location', 'text', false, false, 'hosts-location', 'globe')
 
     +modalFooter()

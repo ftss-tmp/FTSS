@@ -1,12 +1,13 @@
 /*global utils, FTSS, _, caches, angular */
 
 FTSS.ng.controller(
-
 	'unitsController',
 
 	[
 		'$scope',
 		function ($scope) {
+
+			$scope.pageLimit = 50;
 
 			var self = FTSS.controller($scope, {
 
@@ -26,15 +27,13 @@ FTSS.ng.controller(
 
 				edit: function () {
 
-					FTSS.pasteAction = function (text) {
+					/*FTSS.pasteAction = function (text) {
 
 						var match = text.split(','),
 
-							courses = _(caches.MasterCourseList),
+						    courses = _(caches.MasterCourseList),
 
-							collection =
-								[
-								];
+						    collection = [];
 
 						_(match).each(function (val) {
 
@@ -46,7 +45,7 @@ FTSS.ng.controller(
 						collection.length && FTSS.selectizeInstances.Courses_JSON.setValue(collection);
 
 					};
-
+*/
 				}
 
 			});
@@ -106,9 +105,21 @@ FTSS.ng.controller(
 								            unit.CoursesHover = _.map(unit.CoursesMap, function (c) {
 
 									            if (unit.CoursesMap.length > 10) {
-										            return '<div class="col-lg-4" hover="' + c.Title + '" left><b>' + c.PDS + '</b>: ' + c.Number + '</div>';
+										            return '<div class="col-lg-4" hover="' +
+										                   c.Title +
+										                   '" left><b>' +
+										                   c.PDS +
+										                   '</b>: ' +
+										                   c.Number +
+										                   '</div>';
 									            } else {
-										            return '<dt class="tiny">' + c.PDS + '</dt><dd>' + c.Number + '<br><small class="truncate">' + c.Title + '</small></dd>';
+										            return '<dt class="tiny">' +
+										                   c.PDS +
+										                   '</dt><dd>' +
+										                   c.Number +
+										                   '<br><small class="truncate">' +
+										                   c.Title +
+										                   '</small></dd>';
 									            }
 
 								            }).join('');

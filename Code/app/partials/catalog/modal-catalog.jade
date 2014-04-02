@@ -4,55 +4,55 @@ form.form-horizontal(name='modal')
 
     traverse
 
-    .modal-header
-        h3
-            +icon('books')
-            | {{createData ? 'Add New Course' : data.PDS + ' - ' + data.Number}}
+    +modalHeader('New Course', "{{data.Number | courseNumber}}")
 
     .modal-body
 
-        h4.light-bottom
-            +icon('search')
-            | Course Identifiers & Description
+        .alert.alert-warning.pageMessage
+            h4
+                b APPLICATION-WIDE CHANGE
+            p.
+                Editing the Course Catalog will affect all uses of this course.  Please ensure you are aware of the
+                implications of any changes before continuing.
 
         .row
-            .col-lg-3
+            .col-lg-3(explain='catalog-pds', left)
                 .input-group
                     .input-group-addon(style='width:55%') PDS
-                    input.form-control(ng-model='data.PDS', type='text', explain='catalog-edit-pds', right)
+                    input.form-control(ng-model='data.PDS', type='text', required)
 
-            .col-lg-5
+            .col-lg-5(explain='catalog-mds', top)
                 .input-group
                     .input-group-addon MDS
                     .input-group-selectize
-                        select(selectize='MDS', bind='MDS')
+                        select(selectize='MDS', bind='MDS', required)
 
-            .col-lg-4
+            .col-lg-4(explain='catalog-afsc', right)
                 .input-group
                     .input-group-addon AFSC
                     .input-group-selectize
-                        select(selectize='AFSC', bind='AFSC')
+                        select(selectize='AFSC', bind='AFSC', required)
 
         .clearfix(style='height:1em')
 
         .row
-            .col-lg-8
+            .col-lg-8(explain='catalog-number', left)
                 .input-group
                     .input-group-addon Number
-                    input.form-control(ng-model='data.Number', type='text', explain='catalog-edit-number', right)
+                    input.form-control(ng-model='data.Number', type='text', required)
 
-            .col-lg-4
+            .col-lg-4(explain='catalog-imds', right)
                 .input-group
                     .input-group-addon IMDS
-                    input.form-control(ng-model='data.IMDS', type='text', explain='catalog-edit-imds', right)
+                    input.form-control(ng-model='data.IMDS', type='text')
 
         .clearfix(style='height:1em')
 
         .row
-            .col-lg-12
+            .col-lg-12(explain='catalog-title', left)
                 .input-group
                     .input-group-addon(style='width:11.5%') Title
-                    input.form-control(ng-model='data.Title', explain='catalog-edit-title', right)
+                    input.form-control(ng-model='data.Title', required)
 
         br
         br
@@ -61,30 +61,30 @@ form.form-horizontal(name='modal')
 
             .col-lg-6
                 h4.light-bottom
-                    +icon('wait')
+                    +icon('calendar_range')
                     | Course Length
-                .col-lg-6.no-pad
+                .col-lg-6.no-pad(explain='catalog-days', left)
                     .input-group
-                        input.form-control(ng-model='data.Days', type='number', explain='catalog-edit-days', left, min='1', max='120')
+                        input.form-control(ng-model='data.Days', type='number', min='1', max='120', required)
                         .input-group-addon Days
 
-                .col-lg-5.no-pad.pull-right
+                .col-lg-5.no-pad.pull-right(explain='catalog-hours', bottom)
                     .input-group
-                        input.form-control(ng-model='data.Hours', type='number', explain='catalog-edit-hours', left, min='8', max='999')
+                        input.form-control(ng-model='data.Hours', type='number', min='8', max='999', required)
                         .input-group-addon Hrs
 
             .col-lg-5.pull-right
                 h4.light-bottom
                     +icon('student_hand')
                     | Course Seat Limits
-                .col-lg-5.no-pad
+                .col-lg-5.no-pad(explain='catalog-min', bottom)
                     .input-group
-                        input.form-control(ng-model='data.Min', type='number', explain='catalog-edit-min', left, min='1', max='9')
+                        input.form-control(ng-model='data.Min', type='number', min='1', max='9', required)
                         .input-group-addon Min
 
-                .col-lg-6.no-pad.pull-right
+                .col-lg-6.no-pad.pull-right(explain='catalog-max', right)
                     .input-group
-                        input.form-control(ng-model='data.Max', type='number', explain='catalog-edit-max', left, min='1', max='99')
+                        input.form-control(ng-model='data.Max', type='number', min='1', max='99', required)
                         .input-group-addon Max
 
         br
@@ -92,7 +92,7 @@ form.form-horizontal(name='modal')
 
         .col-lg-4.pull-right.switch-wrapper
 
-            label.switch-light.switch-android
+            label.switch-light.switch-android(hover='catalog-cafmcl', right)
                 input(ng-model='data.CAFMCL', type='checkbox')
                 span
                     em CAF/MCL

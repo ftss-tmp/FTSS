@@ -4,39 +4,30 @@ form.form-horizontal(name='modal', ng-any-drop)
 
     traverse
 
-    .modal-header
-        h4
-            +icon('student_hand')
-            span(ng-if='createData') Student Inprocessing
-            input(ng-if='!createData', ng-model='data.StudentName')
+    +modalHeader('New Student', "{{data.StudentName | firstName}}'s Profile")
 
     .modal-body
 
         // This will only be shown if we are adding a student
         people-picker(field='Student', filter='students')
 
-        .input-group
-            .input-group-addon
-                +icon('envelope2')
-            input.form-control(ng-model='data.StudentEmail', type='email')
+        .form-horizontal(style='margin-right:-20px')
+            +formGroupText('Name', 'data.StudentName', type='text', true, 'You must enter a valid name.', 'students-name')
 
-        br
+            +formGroup('Unit', 'students-unit')
+                .input-group-selectize
+                    select(selectize='Hosts', bind='HostUnitId')
 
-        h4.light-bottom
-            b Inprocessing Date & Student Type
+            +formGroupIcon('Email', 'data.StudentEmail', type='email', false, 'Please ensure you enter a valid email address', 'students-email', 'envelope')
 
-        br
-        .row
-
-            .col-lg-6
+            +formGroup('Date', 'students-date')
                 .input-group(explain='students-inprocessing-date', left)
-                    .input-group-addon
-                        +icon('calendar_range')
+                    .input-group-addon.w15: +icon('calendar_range')
                     input.form-control(ng-model='data.ProcessDate', bs-datepicker, data-max-date='today')
                 time-ago(prefix='inprocessed') data.ProcessDate
 
-            .col-lg-6
-                .btn-group.pull-right.no-toggle(hover='students-category', right, bs-radio-group, ng-model='data.StudentType')
+            +formGroup('Type')
+                .btn-group.no-toggle(hover='students-category', right, bs-radio-group, ng-model='data.StudentType')
                     label.btn.btn-default
                         input(value='1', type='radio')
                         | Enlisted
@@ -47,34 +38,11 @@ form.form-horizontal(name='modal', ng-any-drop)
                         input(value='3', type='radio')
                         | Civilian
 
-        br
-        br
+            +formGroup('Training Needs', 'students-requirements')
+                .imds-import
+                    select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
 
-        h4.light-bottom
-            +icon('location_small')
-            b Assigned Unit & Local FTD
-
-        .row
-
-            .col-lg-12
-                .input-group.caps(explain='students-host-unit', left)
-                    .input-group-addon Unit
-                    .input-group-selectize
-                        select(selectize='Hosts', bind='HostUnitId')
-
-        br
-        br
-
-        .row.imds-import
-            .col-lg-12(explain='students-training-requirements', right)
-                h4
-                    +icon('checklist')
-                    b Required Training
-
-                select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
-
-                .pull-right(hover="Click to import {{data.firstName}}'s 593 from IMDS; you can also just drag & drop the file or text onto this window or copy/paste straight from IMDS.", right, text-parser='Import IMDS 593')
-
+                    .pull-right(hover="Click to import a 593 from IMDS; you can also just drag & drop the file or text onto this window or copy/paste straight from IMDS.", right, text-parser='Import IMDS 593')
 
         .clearfix
 

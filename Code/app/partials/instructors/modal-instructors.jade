@@ -4,50 +4,41 @@ form.form-horizontal(name='modal')
 
     traverse
 
-    .modal-header
-        h4
-            +icon('instructor')
-            span(ng-if='createData') Add Instructor
-            input(ng-if='!createData', ng-model='data.InstructorName')
+    +modalHeader('New FTD Instructor', "{{data.InstructorName | firstName}}'s Profile")
 
     .modal-body(ng-file-drop='onFileSelect($files)')
+
+        .alert.alert-warning.pageMessage.
+            Here you can add or update an instructor's profile.  Only the instructor's name and unit
+            are required.  To add or change a photo, drag a new one into the widow and press "Submit".
 
         // This will only be shown if we are adding a student
         people-picker(field='Instructor', filter='Instructors')
 
-        .input-group
-            .input-group-addon
-                +icon('envelope2')
-            input.form-control(ng-model='data.InstructorEmail', type='email')
+        .form-horizontal
+
+            div(ng-hide='createData')
+                +formGroupText('Name', 'data.InstructorName', 'text', true, 'You must enter a name.', 'instructors-name')
+
+            +formGroupIcon('Email', 'data.InstructorEmail', 'email', false, 'Make sure you enter a valid email address.', 'instructors-email', 'envelope2')
 
         br
 
         .row
 
-            .col-lg-4.drag-target(style='margin-left:5%')
+            .col-lg-4.drag-target(style='margin-left:8%')
                 photo.img-rounded(size='150px', shape='rectangle', data='data', watch, force)
                 small: i Add or update by drag & drop
 
-            .col-lg-7
+            .col-lg-6
 
-                .row.input-group.disabled(ng-if='data.Instructor.WorkEMail')
-                    .input-group-addon.w17
-                        +icon('envelope2')
-                    input.form-control(disabled, ng-model='data.Instructor.WorkEMail')
+                h4(explain='instructors-unit', right) Unit
+                select(selectize='Units', bind='UnitId', required)
+                .helper You must choose a FTD.
 
-                .row.input-group.disabled(ng-if='data.Instructor.WorkPhone')
-                    .input-group-addon.w17
-                        +icon('phone')
-                    input.form-control(disabled, ng-model='data.Instructor.WorkPhone')
+                br
 
-                .row.input-group
-                    .input-group-addon.w17 Unit
-                    .input-group-selectize(explain='instructors-edit-unit', right)
-                        select(selectize='Units', bind='UnitId')
-
-                .row.input-group
-                    .input-group-addon AFSC
-                    .input-group-selectize(explain='instructors-edit-afsc', right)
-                        select(selectize='AFSC', bind='AFSC')
+                h4(explain='instructors-afsc', right) AFSC
+                select(selectize='AFSC', bind='AFSC')
 
     +modalFooter()
