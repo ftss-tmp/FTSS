@@ -305,7 +305,7 @@ utils.alert = (function () {
 						'type': 'danger',
 				        'title'   : 'Sorry, something went wrong!',
 				        'content'  : "Please refresh the page and try again.",
-				        'duration': null
+				        'duration': 10
 			        });
 		}
 	};
