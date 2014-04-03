@@ -25,7 +25,8 @@ var LOG;
 		                         'monospaced.elastic',
 		                         'partials',
 		                         'angularFileUpload',
-		                         'ngAnimate'
+		                         'ngAnimate',
+	                             'ngSanitize'
 	                         ]);
 
 	/*
