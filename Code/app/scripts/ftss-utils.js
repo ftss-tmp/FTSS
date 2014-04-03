@@ -250,12 +250,12 @@ utils.distanceCalc = function (start, end) {
 		var R = 3963.1676; // Radius of the earth in miles
 		var dLat = deg2rad(end[0] - start[0]);  // deg2rad below
 		var dLon = deg2rad(end[1] - start[1]);
-		var a = Math.sin(dLat / 2)
-			        * Math.sin(dLat / 2)
-			+ Math.cos(deg2rad(start[0]))
-				  * Math.cos(deg2rad(end[0]))
-				  * Math.sin(dLon / 2)
-			        * Math.sin(dLon / 2);
+		var a = Math.sin(dLat / 2) *
+		        Math.sin(dLat / 2) +
+		        Math.cos(deg2rad(start[0])) *
+		        Math.cos(deg2rad(end[0])) *
+		        Math.sin(dLon / 2) *
+		        Math.sin(dLon / 2);
 		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 		return Math.ceil(R * c); // Distance in miles
@@ -263,7 +263,9 @@ utils.distanceCalc = function (start, end) {
 	}
 };
 
-
+/**
+ * Our app-wide alert notification system, this will eventually replace all the other message garbage polluting MainController
+ */
 utils.alert = (function () {
 
 	var $alert, builder;
