@@ -104,7 +104,7 @@ FTSS.ng.controller('backlogController',
 
 							                         graphCount(req);
 
-							                         req.requirements.push(s);
+							                         req.requirements.push(angular.copy(s));
 
 							                         req.days += s.days;
 
@@ -200,7 +200,7 @@ FTSS.ng.controller('backlogController',
 
 						                               // Generate a human-friendly max wait time
 						                               d.maxWait = timeMax(d.requirements);
-
+						                               LOG(d);
 					                               });
 
 

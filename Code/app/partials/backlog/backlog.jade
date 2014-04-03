@@ -1,46 +1,46 @@
 include ../__mixins
+//
+    #main-stats
+        .row.stats-row
+            #backlog BACKLOG
+            .backlogGradient.stat
+            .col-md-3.stat
+                .data
+                    span.number {{totals.reqs}}
+                    | Courses
+                span.date
+                    b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
+                    | Require TDY
 
-#main-stats
-    .row.stats-row
-        #backlog BACKLOG
-        .backlogGradient.stat
-        .col-md-3.stat
-            .data
-                span.number {{totals.reqs}}
-                | Courses
-            span.date
-                b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
-                | Require TDY
+            .col-md-3.stat
+                .data
+                    span.number {{totals.students}}
+                    | Students
+                span.date
+                    b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
+                    | Backlogged
 
-        .col-md-3.stat
-            .data
-                span.number {{totals.students}}
-                | Students
-            span.date
-                b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
-                | Backlogged
+            .col-md-3.stat
+                .data
+                    span.number {{totals.avg[1]}}
+                    | {{totals.avg[2]}}
+                span.date Average Wait Time
 
-        .col-md-3.stat
-            .data
-                span.number {{totals.avg[1]}}
-                | {{totals.avg[2]}}
-            span.date Average Wait Time
+            .col-md-2.stat.last
+                .data
+                    span.number {{totals.max[1]}}
+                    | {{totals.max[2]}}
+                span.date Longest Wait Time
 
-        .col-md-2.stat.last
-            .data
-                span.number {{totals.max[1]}}
-                | {{totals.max[2]}}
-            span.date Longest Wait Time
+    br
+    div
+        .graph.pull-left(width='.65', height='250', type='bar')
+        .graph.pull-right(width='.32', height='250', type='pie')
+        .clearfix
 
-br
-div
-    .graph.pull-left(width='.65', height='250', type='bar')
-    .graph.pull-right(width='.32', height='250', type='pie')
-    .clearfix
+    br
 
-br
-
-.col-lg-8
+.col-lg-9
     +grouping()
 
         .well(ng-repeat='row in group',
@@ -64,7 +64,9 @@ br
 
                 h4.truncate {{row.Title}}
 
-                .col-lg-5
+                br
+
+                .col-lg-4
 
                     table.table.table-split
                         tbody
@@ -91,30 +93,27 @@ br
 
                 .col-lg-1
 
-                .col-lg-5.pull-right
-                    table.table.table-split
+                .col-lg-7
+                    table.table.table-split.table-hover(style='table-layout: fixed')
                         tbody
-                            tr
-                                td Backlog
-                                td {{row.requirements.length}} student(s)
-
-                            tr
-                                td Avg Wait
-                                td {{row.avgWait}}
-
-                            tr
-                                td Longest Wait
-                                td {{row.maxWait}}
+                            tr(ng-repeat="r in row.requirements | orderBy:'days':true")
+                                td(style='width:125px;border-right:none') {{r.waited}}
+                                td.truncate
+                                    input.css-checkbox(type='checkbox', ng-model='r.selected', id='{{row.Id}}{{r.Id}}')
+                                    label.css-label(for='{{row.Id}}{{r.Id}}') &nbsp;&nbsp;&nbsp;{{r.StudentName}}
 
             unbind
             .clearfix
 
         .clearfix
 
-.col-lg-4
+.col-lg-3
 
     h3.text-right(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px') Requested Training
 
     .well
 
-        |This will hold our collection of chosen students to create 898s for.
+        ul.list-group(ng-repeat='group in groups') {{group.MDS}}
+            li.list-group-item(ng-repeat='row in group', ng-show='count')
+                span.badge {{count = (row.requirements|filter:{selected:true}).length}}
+                | {{row.Number}}
