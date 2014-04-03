@@ -13,7 +13,7 @@
  */
 FTSS.controller = (function () {
 
-	var tagBox, modal, sharePoint, timeout;
+	var tagBox, $modal, SharePoint, $timeout, $alert;
 
 	// Grab some angular variables for use later on
 	FTSS.ng.run(
@@ -21,10 +21,12 @@ FTSS.controller = (function () {
 			'$modal',
 			'SharePoint',
 			'$timeout',
-			function ($modal, SharePoint, $timeout) {
-				modal = $modal;
-				sharePoint = SharePoint;
-				timeout = $timeout;
+			'$alert',
+			function (_modal, _SharePoint, _timeout, _alert) {
+				$modal = _modal;
+				SharePoint = _SharePoint;
+				$timeout = _timeout;
+				$alert = _alert;
 			}
 		]);
 
@@ -60,7 +62,7 @@ FTSS.controller = (function () {
 				// If loaded we only want to bind the first time
 				var single = !prop,
 
-					page  = FTSS._fn.getPage();
+				    page = FTSS._fn.getPage();
 
 				// Default to cached mode & watch cleanSlate
 				prop = prop || 'cleanSlate';
@@ -103,7 +105,7 @@ FTSS.controller = (function () {
 
 									model.params.$filter = filters.join(' and ');
 
-									sharePoint
+									SharePoint
 
 										.read(model)
 
@@ -240,9 +242,9 @@ FTSS.controller = (function () {
 
 					req.Instructor = caches.Instructors[schedClass.InstructorId] || false;
 
-					req.instructor = req.Instructor.Instructor
-						                 && req.Instructor.Instructor.Name
-						|| 'No Instructor Identified';
+					req.instructor = req.Instructor.Instructor &&
+					                 req.Instructor.Instructor.Name ||
+					                 'No Instructor Identified';
 
 					req.start = FTSS.utils.fixDate(schedClass.Start);
 
@@ -276,7 +278,7 @@ FTSS.controller = (function () {
 			 */
 			'postProcess': function (data) {
 
-				timeout(function () {
+				$timeout(function () {
 
 					var doProcess = function (oldVal, newVal) {
 
@@ -335,7 +337,7 @@ FTSS.controller = (function () {
 							watcher = _.debounce(function (newVal, oldVal) {
 
 								// Make sure the array of watchers are really different before running exec
-								!_.isEqual(newVal, oldVal) && timeout(exec);
+								!_.isEqual(newVal, oldVal) && $timeout(exec);
 
 							}, 300);
 
@@ -445,11 +447,11 @@ FTSS.controller = (function () {
 					scope.createData = isNew || false;
 
 					// Create the angular-strap modal using this model's modal template
-					instance = modal({
-						                 'scope'          : scope,
-						                 'backdrop'       : 'static',
-						                 'contentTemplate': '/partials/modal-' + opts.model + '.html'
-					                 });
+					instance = $modal({
+						                  'scope'          : scope,
+						                  'backdrop'       : 'static',
+						                  'contentTemplate': '/partials/modal-' + opts.model + '.html'
+					                  });
 
 					// Bind close to instance.destroy to remove this modal
 					scope.close = instance.destroy;
@@ -490,10 +492,12 @@ FTSS.controller = (function () {
 					};
 
 					// Call sharePoint.update() with our data and handle the success/failure response
-					sharePoint.update(send).then(function (resp) {
+					SharePoint.update(send).then(function (resp) {
 
 						// HTTP 204 is the status given for a successful update, there will be no body
 						if (resp.status === 204) {
+
+							utils.alert.update();
 
 							// Update the etag so we can rewrite this data again during the session if we want
 							data.__metadata.etag = resp.headers('etag');
@@ -508,11 +512,7 @@ FTSS.controller = (function () {
 
 						}
 
-					}, utils.$ajaxFailure);
-
-				} else {
-
-					FTSS.utils.log('Invalid call to Archive() :-/');
+					}, utils.alert.error);
 
 				}
 
@@ -573,26 +573,30 @@ FTSS.controller = (function () {
 
 						if (isNew) {
 
-							sharePoint.create(send).then(function (resp) {
+							SharePoint.create(send).then(function (resp) {
 
 								if (resp.status === 201) {
+
+									utils.alert.create();
 
 									callback(eventData, true);
 									actions.reload();
 
 								}
 
-							}), utils.$ajaxFailure;
+							}), utils.alert.error;
 
 						} else {
 
 							// Call sharePoint.update() with our data and handle the success/failure response
-							sharePoint.update(send).then(function (resp) {
+							SharePoint.update(send).then(function (resp) {
 
 								scope.submitted = false;
 
 								// HTTP 204 is the status given for a successful update, there will be no body
 								if (resp.status === 204) {
+
+									utils.alert.update();
 
 									// Update the etag so we can rewrite this data again during the session if we want
 									scope.data.__metadata.etag = resp.headers('etag');
@@ -608,9 +612,13 @@ FTSS.controller = (function () {
 
 									callback(eventData, true);
 
+								} else {
+
+									utils.alert.error('unknown update issue');
+
 								}
 
-							}, utils.$ajaxFailure);
+							}, utils.alert.error);
 
 						}
 

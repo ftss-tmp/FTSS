@@ -78,14 +78,14 @@ utils.ignore = (function () {
 
 }());
 
-utils.masterReset = function() {
+utils.masterReset = function () {
 
 	try {
 
 		window.localStorage.clear();
 		window.indexedDB.deleteDatabase('FTSS');
 
-	} catch(e) {
+	} catch (e) {
 
 	}
 
@@ -263,19 +263,51 @@ utils.distanceCalc = function (start, end) {
 	}
 };
 
-/**
- *
- * @param req
- */
-utils.$ajaxFailure = function (req) {
-	utils.$message({
-		               'newLine': true,
-		               'class'  : 'danger',
-		               'intro'  : 'Hmmm, something went wrong:',
-		               'message': [
-			               this.type,
-			               '(' + req.status + ')',
-			               this.url
-		               ].join(' ')
-	               });
-};
+
+utils.alert = (function () {
+
+	var $alert, builder;
+
+	FTSS.ng.run(
+		['$alert',
+		 function (alert) {
+			 $alert = alert;
+		 }
+		]
+	);
+
+	builder = function (opts) {
+
+		$alert(_.defaults(opts || {}, {
+			'title'    : 'Record Updated!',
+			'content'  : 'Your changes were saved successfully.',
+			'placement': 'top-right',
+			'type'     : 'success',
+			'duration' : 3,
+			'show'     : true
+		}));
+
+	};
+
+	return {
+
+		'create': function () {
+			builder({'title': 'Record Created!'});
+		},
+
+		'update': builder,
+
+		'error': function (err) {
+
+			FTSS.utils.log(err);
+
+			builder({
+						'type': 'danger',
+				        'title'   : 'Sorry, something went wrong!',
+				        'content'  : "Please refresh the page and try again.",
+				        'duration': null
+			        });
+		}
+	};
+
+}());

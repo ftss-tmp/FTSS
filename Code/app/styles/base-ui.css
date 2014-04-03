@@ -54,21 +54,32 @@ a, a:hover {
     height: 35px;
 }
 
-.alert-dismissable {
+#mainView .alert-dismissable,
+.modal .alert-dismissable {
     padding: 10px 10px 0;
     font-size: 1.1em;
     letter-spacing: .1em;
     line-height: 1.75em;
 }
 
-.alert-dismissable .hideHelp {
+#mainView .alert-dismissable .hideHelp,
+.modal .alert-dismissable .hideHelp {
     right: -15px;
     float: right;
     position: relative;
 
 }
 
-.alert-dismissable .close {
+#mainView .alert-dismissable .close,
+.modal .alert-dismissable .close {
     right: 0;
     top: -3px;
+}
+
+.top.alert-dismissable {
+    display: block;
+    top: 0;
+    margin: 0;
+    padding: 15px;
+    padding-left: 190px;
 }
