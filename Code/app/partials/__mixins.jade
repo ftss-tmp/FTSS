@@ -67,10 +67,10 @@ mixin tableHeader(addNew, columns)
             table.table.table-striped.table-expanded.table-hover.rollup
 
                 thead
-                    th
+                    th.w5
                     each width, label in columns
                         th(class='w' + width)= label
-                    th.w15.text-center Actions
+                    th.w10
 
                 tbody
                     tr.middle.am-fade-and-scale(ng-repeat='row in group',

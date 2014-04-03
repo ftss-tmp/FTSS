@@ -15,10 +15,8 @@ include ../__mixins
             span.archiveOnly  ***ARCHIVED INSTRUCTOR***&nbsp;
             | {{row.InstructorName}}
 
-    td
-        b {{row.Unit.LongName}}
+    td: b {{row.Unit.LongName}}
 
-    td
-        b {{row.AFSC}}
+    td: b {{row.AFSC}}
 
     td: +actions(true, true, true, 'instructor')

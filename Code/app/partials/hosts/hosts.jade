@@ -2,7 +2,7 @@ include ../__mixins
 
 +userInstructions('hosts', true)
 
-- var columns = {'': 10, Unit:20, Email:30, 'Local FTD':20}
+- var columns = {'': 15, 'Host Unit':20, 'Local FTD':20, Email:30}
 +tableHeader('Host Unit', columns)
 
     td: +icon('flag')
@@ -11,8 +11,8 @@ include ../__mixins
 
     td: b {{row.Unit}}
 
-    td {{row.Email}}
-
     td {{row.det.LongName}}
+
+    td {{row.Email}}
 
     td: +actions(true, true, false, 'Host Unit')

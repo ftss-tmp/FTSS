@@ -2,32 +2,31 @@ include ../__mixins
 
 +userInstructions('units', true)
 
-- var columns = {'': 10, Base:15, Detachment:10, Email:40, Details:15}
+- var columns = {'': 15, Unit:10, Base:15, Details:15, Email:30}
 +tableHeader(false, columns)
 
     td: +icon('flag')
 
     td: +googleMap(true)
 
-    td
-        b {{row.Base}}
+    td.bigLetter {{row.Det}}
 
-    td {{row.Det}}
-
-    td.lowercase
-        a(href='mailto:{{row.Email}}?subject=FTSS', tabindex='-1') {{row.Email}}
+    td: b {{row.Base}}
 
     td
-        span(ng-show='row.CoursesHover',
+        p(ng-show='row.CoursesHover',
                 hover='There are {{row.CoursesMap.length}} courses taught at Det {{row.Det}}:',
                 content='<dl class="dl-horizontal">{{row.CoursesHover}}</dl>', style='padding:5px')
             +icon('books')
+            | {{row.CoursesMap.length}} Courses
 
-        span(ng-show='row.Instructors',
+        p(ng-show='row.Instructors',
                 hover='There are {{row.InstructorsCount}} instructors assigned to Det {{row.Det}}:',
-                content='{{row.Instructors}}',
-                left,
-                style='padding:5px')
+                content='{{row.Instructors}}', left, style='padding:5px')
             +icon('instructor')
+            | {{row.InstructorsCount}} Instructors
+
+    td.lowercase
+        a(href='mailto:{{row.Email}}?subject=FTSS', tabindex='-1') {{row.Email}}
 
     td: +actions(true, true, false, 'FTD')

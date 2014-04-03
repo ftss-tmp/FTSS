@@ -2,4 +2,4 @@ div(style='width:300px')
     p Copy this link to share this view with others.
 
     .well.well-sm
-        b(style='font-size:2em'): {{bitlyResponse}}
+        b(style='font-size:2em'): {{bitlyResponse || 'Loading...'}}
