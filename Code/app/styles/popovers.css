@@ -1,3 +1,6 @@
+#searchBox .popover, #tagBox .popover {
+    max-width: 50%;
+}
 
 .popover {
     max-width: 30%;

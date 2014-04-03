@@ -19,7 +19,9 @@
 		e.preventDefault();
 	}, false);
 
-	var popover, pasteAction;
+	var body, popover, pasteAction;
+
+	body = $('body');
 
 	/**
 	 * Intercepts paste events and handles if we have a paste handler set (FTSS.pasteAction)
@@ -78,6 +80,11 @@
 					title = $el.attr('hover') || $el.attr('explain');
 				} else {
 					content = $el.attr('hover') || $el.attr('explain');
+					if (content === 'tagBox' || content === 'searchBox') {
+						body.attr('id', content);
+					} else {
+						body.attr('id', '');
+					}
 					content = FTSS.messages[content] || content;
 				}
 
@@ -109,7 +116,7 @@
 
 					$el.popover('show');
 
-					if (typeof $el.attr('no-arrow') === 'string') {
+					if ($el[0].hasAttribute('no-arrow')) {
 
 						$el.data('bs.popover').$tip.addClass('no-arrow');
 
