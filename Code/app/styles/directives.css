@@ -78,7 +78,7 @@ time-ago {
     border: none !important;
     transition: opacity 500ms ease;
     text-decoration: none !important;
-    top: 0px;
+    top: 50px;
     opacity: .1;
     color: #fff !important;
     position: absolute;
