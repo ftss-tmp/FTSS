@@ -387,8 +387,6 @@
 
 		'people': function (scope, SharePoint, field) {
 
-			var filter = scope.picker.filter;
-
 			return {
 				'labelField' : 'label',
 				'valueField' : 'Name',
@@ -413,18 +411,21 @@
 				},
 				'load'       : function (query, callback) {
 
-					if (!PRODUCTION || query.indexOf(',') > 1) {
+					// Dont start searching until after four characters
+					if (!PRODUCTION || query.length > 4) {
 
-						SharePoint.people(query, filter)
+						SharePoint
+
+							.people(query)
 
 							.then(function (data) {
 
 								      _(data).each(function (d) {
-									      d.label = '<div><h5>'
-										                + d.Name
-										                + '</h5><small>'
-										                + d.WorkEMail
-										      + '</small></div>';
+									      d.label = '<div><h5>' +
+									                d.Name +
+									                '</h5><small>' +
+									                d.WorkEMail +
+									                '</small></div>';
 								      });
 
 								      callback(data);
