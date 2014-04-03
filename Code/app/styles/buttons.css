@@ -1,5 +1,6 @@
 .add-button {
     margin: 10px -10px;
+    font-size:.75em;
 }
 
 .btn-label {
@@ -110,7 +111,7 @@ traverse * {
     transition: opacity 500ms ease;
 }
 
-#searchButtons svg {
+#searchButtons svg.icon {
     fill: #777;
 }
 
@@ -118,6 +119,6 @@ traverse * {
     fill:#000!important;
 }
 
-.btn.white label svg {
+.white label svg.icon {
     fill:#fff!important;
 }
