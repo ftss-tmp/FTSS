@@ -153,7 +153,7 @@ FTSS.ng.controller('backlogController',
 
 							                         u.distanceInt = parseInt(d, 10) || 99999999;
 
-							                         u.distance = d.toLocaleString('en');
+							                         u.distance = utils.prettyNumber(d);
 
 							                         req.local = (req.FTD.Id === u.Id);
 

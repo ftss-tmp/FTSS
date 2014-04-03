@@ -264,6 +264,18 @@ utils.distanceCalc = function (start, end) {
 };
 
 /**
+ * IE's version of toLocaleString() is apparently stupid so we'll just do it manually using a regex couretsy of SO
+ *
+ * http://stackoverflow.com/a/2901298/467373
+ *
+ * @param x Number the number to chop up
+ * @returns {*} String the pretty version of our number
+ */
+utils.prettyNumber = function (x) {
+	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+/**
  * Our app-wide alert notification system, this will eventually replace all the other message garbage polluting MainController
  */
 utils.alert = (function () {
