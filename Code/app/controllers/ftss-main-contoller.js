@@ -268,7 +268,6 @@
 								} else {
 
 									if ($scope.tagBox) {
-										utils.updateSearch('');
 										_fn.setLoaded();
 									}
 
