@@ -79,27 +79,26 @@ include ../__mixins
                                 td Limits
                                 td {{row.Min}} Min / {{row.Max}} Max
 
-                            tr
-                                td Local FTD
-                                td {{row.localFTD}}
 
+                .col-lg-3
                     table.table.table-split(ng-if='row.listFTD.length > 0')
                         thead: tr: th.truncate(colspan='2') Additional Locations Taught
-
-                        tbody
+                            tbody
                             tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
-                                td {{u.distance}}
-                                td {{u.LongName}}
+                                td(style='width:125px;border-right:none') {{u.distance}}
+                                td.truncate
+                                    input.css-checkbox(type='radio', name='unit', ng-model='row.detRequest', ng-value='u.Id', id='{{row.Id}}{{u.Id}}')
+                                    label.css-label(for='{{row.Id}}{{u.Id}}') &nbsp;&nbsp;&nbsp;{{u.LongName}}
 
                 .col-lg-1
 
-                .col-lg-7
+                .col-lg-8
                     table.table.table-split.table-hover(style='table-layout: fixed')
                         tbody
                             tr(ng-repeat="r in row.requirements | orderBy:'days':true")
                                 td(style='width:125px;border-right:none') {{r.waited}}
                                 td.truncate
-                                    input.css-checkbox(type='checkbox', ng-model='r.selected', id='{{row.Id}}{{r.Id}}')
+                                    input.css-checkbox(type='checkbox', checklist-model='requests.$', checklist-value='{row:row,student:r}', id='{{row.Id}}{{r.Id}}')
                                     label.css-label(for='{{row.Id}}{{r.Id}}') &nbsp;&nbsp;&nbsp;{{r.StudentName}}
 
             unbind
@@ -113,7 +112,11 @@ include ../__mixins
 
     .well
 
-        ul.list-group(ng-repeat='group in groups') {{group.MDS}}
-            li.list-group-item(ng-repeat='row in group', ng-show='count')
-                span.badge {{count = (row.requirements|filter:{selected:true}).length}}
-                | {{row.Number}}
+        div(ng-repeat='reqs in requests.display')
+
+            h4 {{reqs.FTD.LongName}}
+
+            ul.list-group
+                li.list-group-item
+                    span.badge {{reqs.Students.length}}
+                    | {{reqs.Course.Number}}

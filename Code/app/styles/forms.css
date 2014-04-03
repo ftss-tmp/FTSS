@@ -151,7 +151,7 @@ input:-ms-input-placeholder {
     color: #aaa;
 }
 
-input[type=checkbox].css-checkbox {
+.css-checkbox {
     position: absolute;
     overflow: hidden;
     clip: rect(0 0 0 0);
@@ -162,7 +162,7 @@ input[type=checkbox].css-checkbox {
     border: 0;
 }
 
-input[type=checkbox].css-checkbox + label.css-label {
+.css-checkbox + label.css-label {
     padding-left: 20px;
     height: 20px;
     display: inline-block;
@@ -174,7 +174,7 @@ input[type=checkbox].css-checkbox + label.css-label {
     cursor: pointer;
 }
 
-input[type=checkbox].css-checkbox:checked + label.css-label {
+.css-checkbox:checked + label.css-label {
     background-position: 0 -20px;
     color: #36a8ca;
 }

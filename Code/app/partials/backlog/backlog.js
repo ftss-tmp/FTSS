@@ -38,6 +38,42 @@ FTSS.ng.controller('backlogController',
 
 		                       };
 
+		                   $scope.requests = {
+			                   '$'      : [],
+			                   'display': {}
+		                   };
+
+		                   $scope.$watch('requests.$', function (val) {
+
+			                   var data = {};
+
+
+			                   if (val.length) {
+
+				                   _(val).each(function (f) {
+
+					                   var key = f.row.detRequest,
+
+					                       req = data[key] = data[key] || {
+						                       'FTD'     : caches.Units[key],
+						                       'Course'  : caches.MasterCourseList[f.row.Id],
+						                       'CourseId': f.row.Id,
+						                       'Students': []
+					                       };
+
+					                   req.Students.push(f.student.Id);
+
+				                   });
+debugger;
+				                   console.log(data);
+
+				                   $scope.requests.display = data;
+
+			                   }
+
+		                   }, true);
+
+
 		                   self
 
 			                   .bind('filter')
@@ -98,8 +134,8 @@ FTSS.ng.controller('backlogController',
 								                         req.CAFMCL = req.CAFMCL ? 'CAF/MCL Course(s)' : 'Regular Course(s)';
 								                         req.listFTD = [];
 								                         req.days = 0;
-								                         req.requirements = [
-								                         ];
+								                         req.requirements = [];
+								                         req.detRequest = {};
 							                         }
 
 							                         graphCount(req);
@@ -157,6 +193,8 @@ FTSS.ng.controller('backlogController',
 
 							                         req.local = (req.FTD.Id === u.Id);
 
+							                         req.listFTD.push(u);
+
 							                         if (req.local) {
 								                         req.localFTD = u.LongName;
 							                         } else {
@@ -165,7 +203,6 @@ FTSS.ng.controller('backlogController',
 									                         counted = true;
 									                         $scope.totals.reqsTDY++;
 								                         }
-								                         req.listFTD.push(u);
 							                         }
 
 						                         }
