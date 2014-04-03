@@ -186,29 +186,6 @@ utils.tagHighlight = function (data) {
 };
 
 /**
- * Wrapper to handle search box value updates without triggering the onChange() event
- *
- * @param {function|string} [action] - calls the function or sets search to the given value if string
- */
-utils.updateSearch = function (action) {
-
-	FTSS.updating = true;
-
-	if (typeof action === 'string') {
-
-		FTSS.search.setValue(action);
-
-	} else {
-
-		action();
-
-	}
-
-	FTSS.updating = false;
-
-};
-
-/**
  * Handles the page loading indicators (mouse & spinner)
  *
  * @param loading

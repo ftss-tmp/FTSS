@@ -192,7 +192,7 @@
 
 									if (pending.special) {
 
-										utils.updateSearch(function () {
+										$timeout(function () {
 
 											$scope.noSearch = true;
 
@@ -245,7 +245,7 @@
 
 										});
 
-										utils.updateSearch(function () {
+										$timeout(function () {
 
 											var filter = FTSS.filters.$compile(tagMap);
 
