@@ -425,7 +425,7 @@
 								 // If we already have cached data we need to add the timestamp to the filter
 								 if (hasCache) {
 
-									 if (_debounce[cacheString] && oldStamp - _debounce[cacheString] < 15) {
+									 if (_debounce[cacheString] && cachedData.time -  _debounce[cacheString] < 15) {
 
 										 callback(cachedData.json);
 										 return;
