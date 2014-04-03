@@ -129,8 +129,13 @@ tr.thin button {
     transition: all 500ms ease;
 }
 
+tr.modal-selected td:first-child svg.icon {
+    fill: #fff!important;
+
+}
+
 tr.modal-selected td:first-child {
-    background: #333;
+    background: #333!important;
 }
 
 [ng-repeat] .flag, [ng-repeat] .asterisk {
@@ -142,6 +147,6 @@ tr.modal-selected td:first-child {
     float: left;
 }
 
-tr.archived photo {
+tr.archived photo, tr.archived .archiveExclude {
     display: none;
 }
