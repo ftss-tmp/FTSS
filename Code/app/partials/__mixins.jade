@@ -177,3 +177,8 @@ mixin formGroupIcon(label, model, type, required, helper, explain, ico)
                 +icon(ico)
             +formGroupTail(model, type, required, helper)
 
+
+mixin peoplePicker(field)
+
+    +formGroup('Name', 'people-picker')
+        select(selectize='people', field=field, placeholder='Type a name to search...')

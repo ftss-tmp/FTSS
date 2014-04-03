@@ -10,12 +10,12 @@ form.form-horizontal(name='modal')
 
         +userInstructions('modal-instructors')
 
-        // This will only be shown if we are adding a student
-        people-picker(field='Instructor', filter='Instructors')
-
         .form-horizontal
 
-            div(ng-hide='createData')
+            div(ng-if='createData')
+                +peoplePicker('Instructor')
+
+            div(ng-if='!createData')
                 +formGroupText('Name', 'data.InstructorName', 'text', true, 'You must enter a name.', 'instructors-name')
 
             +formGroupIcon('Email', 'data.InstructorEmail', 'email', false, 'Make sure you enter a valid email address.', 'instructors-email', 'envelope')

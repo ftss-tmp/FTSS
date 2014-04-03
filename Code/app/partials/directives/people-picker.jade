@@ -1,9 +1,0 @@
-include ../__mixins
-
-.row(ng-if='createData', explain='people-picker', right)
-    .col-lg-12.people-picker
-        .input-group
-            .input-group-addon
-                +icon('search')
-            .input-group-selectize
-                select(selectize='people', field='{{picker.field}}', placeholder='Type a name to search...')
