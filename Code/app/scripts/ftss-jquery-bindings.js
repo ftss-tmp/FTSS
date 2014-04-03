@@ -80,11 +80,6 @@
 					title = $el.attr('hover') || $el.attr('explain');
 				} else {
 					content = $el.attr('hover') || $el.attr('explain');
-					if (content === 'tagBox' || content === 'searchBox') {
-						body.attr('id', content);
-					} else {
-						body.attr('id', '');
-					}
 					content = FTSS.messages[content] || content;
 				}
 

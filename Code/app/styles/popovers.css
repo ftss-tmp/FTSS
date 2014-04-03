@@ -1,8 +1,8 @@
-#searchBox .popover, #tagBox .popover {
+.popover {
     max-width: 50%;
 }
 
-.popover {
+.modal-open .popover {
     max-width: 28%;
     z-index: 9999 !important
 }
