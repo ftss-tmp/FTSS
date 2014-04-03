@@ -26,7 +26,8 @@ var LOG;
 		                         'partials',
 		                         'angularFileUpload',
 		                         'ngAnimate',
-		                         'ngSanitize'
+		                         'ngSanitize',
+	                             'checklist-model'
 	                         ]);
 
 	/*

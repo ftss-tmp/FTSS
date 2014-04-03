@@ -23,7 +23,8 @@
     "lodash": "~2.4.1",
     "bean": "~1.0.6",
     "db.js": "~0.9.0",
-    "angular-sanitize": "~1.2.15"
+    "angular-sanitize": "~1.2.15",
+    "checklist-model": "~0.1.3"
   },
   "overrides": {
     "angular-mocks": {
