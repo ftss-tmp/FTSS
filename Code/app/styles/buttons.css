@@ -1,6 +1,5 @@
 .add-button {
     margin: 10px -10px;
-    font-size:.75em;
 }
 
 .btn-label {
@@ -22,7 +21,7 @@
     padding: 6px 0;
     top:4px;
     left: -10px;
-    font-size: 1.5em;
+    font-size: 1.25em;
 }
 .btn-group .text {
     background-color: #fff;
