@@ -1,118 +1,136 @@
 include ../__mixins
-//
-    #main-stats
-        .row.stats-row
-            #backlog BACKLOG
-            .backlogGradient.stat
-            .col-md-3.stat
-                .data
-                    span.number {{totals.reqs}}
-                    | Courses
-                span.date
-                    b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
-                    | Require TDY
 
-            .col-md-3.stat
-                .data
-                    span.number {{totals.students}}
-                    | Students
-                span.date
-                    b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
-                    | Backlogged
+#main-stats
+    .row.stats-row
+        #backlog BACKLOG
+        .backlogGradient.stat
+        .col-md-3.stat
+            .data
+                span.number {{totals.reqs}}
+                | Courses
+            span.date
+                b(style='color:#32a0ee') {{totals.reqsTDY}}&nbsp;
+                | Require TDY
 
-            .col-md-3.stat
-                .data
-                    span.number {{totals.avg[1]}}
-                    | {{totals.avg[2]}}
-                span.date Average Wait Time
+        .col-md-3.stat
+            .data
+                span.number {{totals.students}}
+                | Students
+            span.date
+                b(style='color:#32a0ee') {{totals.pctStudents}}%&nbsp;
+                | Backlogged
 
-            .col-md-2.stat.last
-                .data
-                    span.number {{totals.max[1]}}
-                    | {{totals.max[2]}}
-                span.date Longest Wait Time
+        .col-md-3.stat
+            .data
+                span.number {{totals.avg[1]}}
+                | {{totals.avg[2]}}
+            span.date Average Wait Time
 
-    br
-    div
-        .graph.pull-left(width='.65', height='250', type='bar')
-        .graph.pull-right(width='.32', height='250', type='pie')
-        .clearfix
-
-    br
-
-.col-lg-9
-    +grouping()
-
-        .well(ng-repeat='row in group',
-               ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
-
-            h4
-                +icon('flag')
-
-                span.btn.w15(ng-class='{"btn-info":row.local,"btn-warning":!row.local}')
-                    span.bigLetter {{row.requirements.length}}
-                    span(style='font-size:1.25em') {{row.PDS}}&nbsp;
-
-                span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
-                    +icon('asterisk')
-                span.pull-right(style='margin-top:5px') {{row.Number}}
-
-
-            hr.rollup
-
-            .rollup.slide
-
-                h4.truncate {{row.Title}}
-
-                br
-
-                .col-lg-4
-
-                    table.table.table-split
-                        tbody
-
-                            tr
-                                td Length
-                                td {{row.Days}} Days / {{row.Hours}} Hours
-
-                            tr
-                                td Limits
-                                td {{row.Min}} Min / {{row.Max}} Max
-
-
-                .col-lg-3
-                    table.table.table-split(ng-if='row.listFTD.length > 0')
-                        thead: tr: th.truncate(colspan='2') Additional Locations Taught
-                            tbody
-                            tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
-                                td(style='width:125px;border-right:none') {{u.distance}}
-                                td.truncate
-                                    input.css-checkbox(type='radio', name='unit{{row.Id}}', ng-model='row.detRequest', ng-value='u.Id', id='{{row.Id}}{{u.Id}}')
-                                    label.css-label(for='{{row.Id}}{{u.Id}}') &nbsp;&nbsp;&nbsp;{{u.LongName}}
-
-                .col-lg-1
-
-                .col-lg-8
-                    table.table.table-split.table-hover(style='table-layout: fixed')
-                        tbody
-                            tr(ng-repeat="r in row.requirements | orderBy:'days':true")
-                                td(style='width:125px;border-right:none') {{r.waited}}
-                                td.truncate
-                                    input.css-checkbox(type='checkbox', checklist-model='requests.$', checklist-value='{row:row,student:r}', id='{{row.Id}}{{r.Id}}')
-                                    label.css-label(for='{{row.Id}}{{r.Id}}') &nbsp;&nbsp;&nbsp;{{r.StudentName}}
-
-            unbind
+        .col-md-2.stat.last
+            .data
+                span.number {{totals.max[1]}}
+                | {{totals.max[2]}}
+            span.date Longest Wait Time
+    //
+        br
+        div
+            .graph.pull-left(width='.65', height='250', type='bar')
+            .graph.pull-right(width='.32', height='250', type='pie')
             .clearfix
 
-        .clearfix
+    br
 
-.col-lg-3
+.row
+    .col-lg-9
+        +grouping()
 
-    h3.text-right(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px') Requested Training
+            .well(ng-repeat='row in group',
+                   ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
 
-    .well
+                h4
+                    +icon('flag')
 
-        div(ng-repeat='(unit, course) in requests.display')
+                    span.btn.w15(ng-class='{"btn-info":row.local,"btn-warning":!row.local}')
+                        span.bigLetter {{row.requirements.length}}
+                        span(style='font-size:1.25em') {{row.PDS}}&nbsp;
+
+                    span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
+                        +icon('asterisk')
+                    .pull-right.w75.truncate.text-right(style='margin-top:5px') {{row.Title}}
+
+                hr.rollup
+
+                .rollup.slide
+
+                    .row(style='margin-top:-20px')
+                        .col-lg-4
+                            table.table.table-split
+                                tbody
+                                    tr
+                                        td {{row.MDS}}
+                                        td {{row.Number}}
+
+                        .col-lg-4
+                            table.table.table-split
+                                tbody
+                                    tr
+                                        td Length
+                                        td {{row.Days}} Days / {{row.Hours}} Hours
+
+                        .col-lg-3
+                            table.table.table-split
+                                tbody
+                                    tr
+                                        td Limits
+                                        td {{row.Min}} Min / {{row.Max}} Max
+
+                    br
+
+                    .row
+                        .col-lg-3
+                            table.table.table-split.table-hover
+                                thead: tr: th.truncate(colspan='2') Available FTD by Miles
+
+                                    tbody
+                                        tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
+                                            td(style='width:125px;border-right:none') {{u.distance}}
+                                            td.truncate
+                                                input.css-checkbox(type='radio',
+                                                                    name='unit{{row.Id}}',
+                                                                    ng-model='row.detRequest',
+                                                                    ng-value='u.Id',
+                                                                    id='{{row.Id}}{{u.Id}}')
+                                                label.css-label(for='{{row.Id}}{{u.Id}}') &nbsp;&nbsp;&nbsp;{{u.LongName}}
+
+                        .col-lg-2
+
+                        .col-lg-7(style='overflow:hidden;margin-left:-1%')
+                            table.table.table-split.table-hover
+                                thead: tr: th.truncate(colspan='2') Students Awaiting Training
+                                    tbody
+                                        tr(ng-repeat="r in row.requirements | orderBy:'days':true")
+                                            td(style='border-right:none') {{r.waited}}
+                                            td.w85.truncate(style='display:block')
+                                                input.css-checkbox(type='checkbox',
+                                                                    ng-disabled='!row.detRequest',
+                                                                    checklist-model='requests.$',
+                                                                    checklist-value='{row:row,student:r}',
+                                                                    id='{{row.Id}}{{r.Id}}')
+                                                label.css-label(for='{{row.Id}}{{r.Id}}') &nbsp;&nbsp;&nbsp;{{r.StudentName}}
+
+                unbind
+                .clearfix
+
+            .clearfix
+
+    .col-lg-3
+
+        h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px') Requested Training
+
+        div(ng-hide='requests.$.length')
+            +userInstructions('generate-898')
+
+        .well.well-sm(ng-repeat='(unit, course) in requests.display')
 
             h4 {{unit}}
 

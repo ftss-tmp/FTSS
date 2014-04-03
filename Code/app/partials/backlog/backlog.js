@@ -45,23 +45,20 @@ FTSS.ng.controller('backlogController',
 
 		                   $scope.$watch('requests.$', function (val) {
 
-			                   if (val.length) {
-				                   				                   
-				                   $scope.requests.display = _(val)
+			                   $scope.requests.display = val.length ? _(val)
 
-					                   .groupBy(function (gp) {
-						                            return caches.Units[gp.row.detRequest].LongName;
-					                            })
+				                   .groupBy(function (gp) {
+					                            return caches.Units[gp.row.detRequest].LongName;
+				                            })
 
-					                   .each(function (v, k, l) {
+				                   .each(function (v, k, l) {
 
-						                         l[k] = _.groupBy(v, function (x) {
-							                         return x.row.Number;
-						                         });
-					                         })
+					                         l[k] = _.groupBy(v, function (x) {
+						                         return x.row.Number;
+					                         });
+				                         })
 
-					                   .value();
-			                   }
+				                   .value() : [];
 
 		                   }, true);
 
@@ -127,7 +124,7 @@ FTSS.ng.controller('backlogController',
 								                         req.listFTD = [];
 								                         req.days = 0;
 								                         req.requirements = [];
-								                         req.detRequest = {};
+								                         req.detRequest = false;
 							                         }
 
 							                         graphCount(req);
@@ -177,20 +174,28 @@ FTSS.ng.controller('backlogController',
 
 						                         if (req) {
 
-							                         var d = utils.distanceCalc(req.Location, u.Location) || 'unknown';
-
-							                         u.distanceInt = parseInt(d, 10) || 99999999;
-
-							                         u.distance = utils.prettyNumber(d);
-
 							                         req.local = (req.FTD.Id === u.Id);
 
 							                         req.listFTD.push(u);
 
 							                         if (req.local) {
+
+								                         u.distance = 'Local';
+								                         u.distanceInt = 0;
 								                         req.localFTD = u.LongName;
+								                         req.detRequest = u.Id;
+
 							                         } else {
+
 								                         req.localFTD = 'Not Available';
+
+								                         var d = utils.distanceCalc(req.Location, u.Location) ||
+								                                 'unknown';
+
+								                         u.distanceInt = parseInt(d, 10) || 99999999;
+
+								                         u.distance = utils.prettyNumber(d);
+
 								                         if (!counted) {
 									                         counted = true;
 									                         $scope.totals.reqsTDY++;
