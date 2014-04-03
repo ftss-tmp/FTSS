@@ -87,7 +87,7 @@ include ../__mixins
                             tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
                                 td(style='width:125px;border-right:none') {{u.distance}}
                                 td.truncate
-                                    input.css-checkbox(type='radio', name='unit', ng-model='row.detRequest', ng-value='u.Id', id='{{row.Id}}{{u.Id}}')
+                                    input.css-checkbox(type='radio', name='unit{{row.Id}}', ng-model='row.detRequest', ng-value='u.Id', id='{{row.Id}}{{u.Id}}')
                                     label.css-label(for='{{row.Id}}{{u.Id}}') &nbsp;&nbsp;&nbsp;{{u.LongName}}
 
                 .col-lg-1
@@ -112,11 +112,11 @@ include ../__mixins
 
     .well
 
-        div(ng-repeat='reqs in requests.display')
+        div(ng-repeat='(unit, course) in requests.display')
 
-            h4 {{reqs.FTD.LongName}}
+            h4 {{unit}}
 
             ul.list-group
-                li.list-group-item
-                    span.badge {{reqs.Students.length}}
-                    | {{reqs.Course.Number}}
+                li.list-group-item(ng-repeat='(Number, req) in course')
+                    span.badge {{req.length}}
+                    | {{Number}}

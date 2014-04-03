@@ -45,30 +45,22 @@ FTSS.ng.controller('backlogController',
 
 		                   $scope.$watch('requests.$', function (val) {
 
-			                   var data = {};
-
-
 			                   if (val.length) {
+				                   				                   
+				                   $scope.requests.display = _(val)
 
-				                   _(val).each(function (f) {
+					                   .groupBy(function (gp) {
+						                            return caches.Units[gp.row.detRequest].LongName;
+					                            })
 
-					                   var key = f.row.detRequest,
+					                   .each(function (v, k, l) {
 
-					                       req = data[key] = data[key] || {
-						                       'FTD'     : caches.Units[key],
-						                       'Course'  : caches.MasterCourseList[f.row.Id],
-						                       'CourseId': f.row.Id,
-						                       'Students': []
-					                       };
+						                         l[k] = _.groupBy(v, function (x) {
+							                         return x.row.Number;
+						                         });
+					                         })
 
-					                   req.Students.push(f.student.Id);
-
-				                   });
-debugger;
-				                   console.log(data);
-
-				                   $scope.requests.display = data;
-
+					                   .value();
 			                   }
 
 		                   }, true);
@@ -237,7 +229,7 @@ debugger;
 
 						                               // Generate a human-friendly max wait time
 						                               d.maxWait = timeMax(d.requirements);
-						                               LOG(d);
+
 					                               });
 
 
