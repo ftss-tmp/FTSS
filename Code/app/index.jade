@@ -6,8 +6,7 @@ include partials/__mixins
 
         script(src='js/vendor.js')
 
-    body(ng-controller='mainController')
-
+    body(ng-controller='mainController', id='{{fn.getPage()}}')
         include partials/includes/content
 
         script(src='js/partials.js')
