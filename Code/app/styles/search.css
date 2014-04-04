@@ -100,7 +100,7 @@
 #tagBox .item:not(.processed):not(:hover), #tagBox .item:not(.processed):not(:hover) div * {
     color: #47a447 !important;
     font-weight: 800;
-    background: #eee;
+    background: transparent;
 }
 
 #searchContainer.tagBox #searchBox, #searchContainer #tagBox {
@@ -112,7 +112,7 @@
 }
 
 #tagBox .item.processed {
-    background-color: #fcfcfc;
+    background-color: transparent;
     color: #555;
 }
 
