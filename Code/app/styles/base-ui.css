@@ -38,6 +38,9 @@ a, a:hover {
     text-decoration: none;
 }
 
+#mainView {
+    font-size: 13px;
+}
 #mainView a {
     border-bottom: 1px dotted;
 }
