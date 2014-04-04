@@ -20,8 +20,8 @@
     display: inline-block;
 }
 
-.modal-dialog input {
-    width: 100%;
+.modal-dialog .selectize-input:not(.has-items) input {
+    width: 97%!important;
 }
 
 .modal-dialog .well {
