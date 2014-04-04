@@ -1,245 +1,252 @@
-/*global FTSS, caches, _, moment, utils */
+/*global FTSS, caches, _, moment, utils, angular */
 
-FTSS.ng.controller('backlogController',
+FTSS.ng.controller(
+	'backlogController',
 
-                   [
-	                   '$scope',
-	                   function ($scope) {
+	[
+		'$scope',
+		function ($scope) {
 
-		                   var self = FTSS.controller($scope, {
-			                       'sort' : 'PDS',
-			                       'group': 'MDS',
+			var self = FTSS.controller($scope, {
+				    'sort' : 'PDS',
+				    'group': 'MDS',
 
-			                       'grouping': {
-				                       'MDS'   : 'MDS',
-				                       'CAFMCL': 'CAF/MCL',
-				                       'AFSC'  : 'AFSC'
-			                       },
+				    'grouping': {
+					    'MDS'   : 'MDS',
+					    'CAFMCL': 'CAF/MCL',
+					    'AFSC'  : 'AFSC'
+				    },
 
-			                       'sorting': {
-				                       'PDS'         : 'PDS',
-				                       'days'        : 'Wait Time',
-				                       'requirements': '# Requirements'
-			                       },
+				    'sorting': {
+					    'PDS'         : 'PDS',
+					    'days'        : 'Wait Time',
+					    'requirements': '# Requirements'
+				    },
 
-			                       'model': 'students'
+				    'model': 'students'
 
-		                       }),
+			    }),
 
-		                       timeAvg = function (time, length) {
+			    timeAvg = function (time, length) {
 
-			                       return moment.duration(Math.ceil(time.days / length), 'days').humanize();
+				    return moment.duration(Math.ceil(time.days / length), 'days').humanize();
 
-		                       },
+			    },
 
-		                       timeMax = function (reqs) {
+			    timeMax = function (reqs) {
 
-			                       return moment.duration(_(reqs).pluck('days').max().value(), 'days').humanize();
+				    return moment.duration(_(reqs).pluck('days').max().value(), 'days').humanize();
 
-		                       };
+			    };
 
-		                   $scope.requests = {
-			                   '$'      : [],
-			                   'display': {}
-		                   };
+			$scope.requests = {
+				'$'      : [],
+				'display': {}
+			};
 
-		                   $scope.$watch('requests.$', function (val) {
+			$scope.$watch('requests.$', function (val) {
 
-			                   $scope.requests.display = val.length ? _(val)
+				$scope.requests.display = val.length ? _(val)
 
-				                   .groupBy(function (gp) {
-					                            return caches.Units[gp.row.detRequest].LongName;
-				                            })
+					.groupBy(function (gp) {
+						         return gp.row.detRequest.LongName;
+					         })
 
-				                   .each(function (v, k, l) {
+					.each(function (v, k, l) {
 
-					                         l[k] = _.groupBy(v, function (x) {
-						                         return x.row.Number;
-					                         });
-				                         })
+						      l[k] = _.groupBy(v, function (x) {
+							      return x.row.Number;
+						      });
+					      })
 
-				                   .value() : [];
+					.value() : [];
 
-		                   }, true);
+			}, true);
 
 
-		                   self
+			self
 
-			                   .bind('filter')
+				.bind('filter')
 
-			                   .then(function (data) {
+				.then(function (data) {
 
-				                         var reqs = {},
+					      var reqs = {},
 
-				                             graphCount = function (req) {
-					                             var reqs = $scope.graphs.reqs,
+					          graphCount = function (req) {
+						          var reqs = $scope.graphs.reqs,
 
-					                                 grp = req[$scope.groupBy.$ || 'MDS'];
+						              grp = req[$scope.groupBy.$ || 'MDS'];
 
-					                             reqs[grp] = reqs[grp] ? ++reqs[grp] : 1;
+						          reqs[grp] = reqs[grp] ? ++reqs[grp] : 1;
 
-				                             };
+					          };
 
-				                         $scope.totals = {
-					                         'allStudents': 0,
-					                         'max'        : [],
-					                         'days'       : 0,
-					                         'students'   : 0,
-					                         'reqs'       : 0,
-					                         'reqsTDY'    : 0
-				                         };
+					      $scope.totals = {
+						      'allStudents': 0,
+						      'max'        : [],
+						      'days'       : 0,
+						      'students'   : 0,
+						      'reqs'       : 0,
+						      'reqsTDY'    : 0
+					      };
 
-				                         $scope.graphs = {
-					                         'reqs': {}
-				                         };
+					      $scope.graphs = {
+						      'reqs': {}
+					      };
 
-				                         _(data).each(function (s) {
+					      _(data).each(function (s) {
 
-					                         !s.Archived && $scope.totals.allStudents++;
+						      !s.Archived && $scope.totals.allStudents++;
 
-					                         if (!s.Archived && !_(s.Requirements_JSON).isEmpty()) {
+						      if (!s.Archived && !_(s.Requirements_JSON).isEmpty()) {
 
-						                         var momentObj = moment(s.ProcessDate);
+							      var momentObj = moment(s.ProcessDate);
 
-						                         s.days = moment().diff(momentObj, 'days');
-						                         s.waited = momentObj.fromNow(true);
+							      s.days = moment().diff(momentObj, 'days');
+							      s.waited = momentObj.fromNow(true);
 
-						                         s.HostUnit = caches.Hosts[s.HostUnitId];
-						                         s.FTD = caches.Units[s.HostUnit.FTD];
+							      s.HostUnit = caches.Hosts[s.HostUnitId];
+							      s.FTD = caches.Units[s.HostUnit.FTD];
 
-						                         $scope.totals.days += s.days;
-						                         $scope.totals.max.push(s.days);
-						                         $scope.totals.students++;
+							      $scope.totals.days += s.days;
+							      $scope.totals.max.push(s.days);
+							      $scope.totals.students++;
 
-						                         _(s.Requirements_JSON).each(function (r) {
+							      _(s.Requirements_JSON).each(function (r) {
 
-							                         $scope.totals.reqs++;
+								      $scope.totals.reqs++;
 
-							                         var req = reqs[r];
+								      var req = reqs[r];
 
-							                         if (!req) {
-								                         req = reqs[r] = _(caches.MasterCourseList[r]).clone();
-								                         req.priority = req.CAFMCL;
-								                         req.CAFMCL = req.CAFMCL ? 'CAF/MCL Course(s)' : 'Regular Course(s)';
-								                         req.listFTD = [];
-								                         req.days = 0;
-								                         req.requirements = [];
-								                         req.detRequest = false;
-							                         }
+								      if (!req) {
+									      req = reqs[r] = _(caches.MasterCourseList[r]).clone();
+									      req.priority = req.CAFMCL;
+									      req.CAFMCL = req.CAFMCL ? 'CAF/MCL Course(s)' : 'Regular Course(s)';
+									      req.listFTD = [];
+									      req.days = 0;
+									      req.requirements = [];
+								      }
 
-							                         graphCount(req);
+								      graphCount(req);
 
-							                         req.requirements.push(angular.copy(s));
+								      req.requirements.push(angular.copy(s));
 
-							                         req.days += s.days;
+								      req.days += s.days;
 
-							                         req.FTD = s.FTD || {};
-							                         req.Location = s.HostUnit.Location;
+								      req.FTD = s.FTD || {};
+								      req.Location = s.HostUnit.Location;
 
-						                         });
+							      });
 
-					                         }
-				                         });
+						      }
+					      });
 
-				                         $scope.graphs.reqs = _($scope.graphs.reqs)
-					                         .map(function (v, k) {
-						                              return {'k': k, 'v': v};
-					                              })
-					                         .sortBy('v')
-					                         .slice(-7)
-					                         .value();
+					      $scope.graphs.reqs = _($scope.graphs.reqs)
+						      .map(function (v, k) {
+							           return {'k': k, 'v': v};
+						           })
+						      .sortBy('v')
+						      .slice(-7)
+						      .value();
 
-				                         $scope.graphs.reqs.push(
-					                         {
+					      $scope.graphs.reqs.push(
+						      {
 
-						                         'k': 'All Others',
+							      'k': 'All Others',
 
-						                         'v': $scope.totals.reqs - _($scope.graphs.reqs)
+							      'v': $scope.totals.reqs - _($scope.graphs.reqs)
 
-							                         .pluck('v')
+								      .pluck('v')
 
-							                         .reduce(function (sum, el) {
-								                                 return sum + el;
-							                                 })
+								      .reduce(function (sum, el) {
+									              return sum + el;
+								              })
 
-					                         });
+						      });
 
-				                         _(caches.Units).each(function (u) {
+					      _(caches.Units).each(function (u) {
 
-					                         var counted = false;
+						      var counted = false;
 
-					                         _(u.Courses_JSON).each(function (c) {
+						      _(u.Courses_JSON).each(function (c) {
 
-						                         var req = reqs[c];
+							      var req = reqs[c];
 
-						                         if (req) {
+							      if (req) {
 
-							                         req.local = (req.FTD.Id === u.Id);
+								      req.local = (req.FTD.Id === u.Id);
 
-							                         req.listFTD.push(u);
+								      req.listFTD.push(u);
 
-							                         if (req.local) {
+								      if (req.local) {
 
-								                         u.distance = 'Local';
-								                         u.distanceInt = 0;
-								                         req.localFTD = u.LongName;
-								                         req.detRequest = u.Id;
+									      u.distance = 'Local';
+									      u.distanceInt = 0;
+									      req.localFTD = u.LongName;
 
-							                         } else {
+								      } else {
 
-								                         req.localFTD = 'Not Available';
+									      req.localFTD = 'Not Available';
 
-								                         var d = utils.distanceCalc(req.Location, u.Location) ||
-								                                 'unknown';
+									      var d = utils.distanceCalc(req.Location, u.Location) ||
+									              'unknown';
 
-								                         u.distanceInt = parseInt(d, 10) || 99999999;
+									      u.distanceInt = parseInt(d, 10) || 99999999;
 
-								                         u.distance = utils.prettyNumber(d);
+									      u.distance = utils.prettyNumber(d);
 
-								                         if (!counted) {
-									                         counted = true;
-									                         $scope.totals.reqsTDY++;
-								                         }
-							                         }
+									      if (!counted) {
+										      counted = true;
+										      $scope.totals.reqsTDY++;
+									      }
+								      }
 
-						                         }
+							      }
 
-					                         });
+						      });
 
-				                         });
+					      });
 
-				                         $scope.totals.pctStudents =
-				                         Math.floor($scope.totals.students / $scope.totals.allStudents * 100);
+					      $scope.totals.pctStudents =
+					      Math.floor($scope.totals.students / $scope.totals.allStudents * 100);
 
-				                         $scope.totals.avg = timeAvg($scope.totals,
-				                                                     $scope.totals.students)
-					                         .match(/^(\S+)\s(.*)/);
+					      $scope.totals.avg = timeAvg($scope.totals,
+					                                  $scope.totals.students)
+						      .match(/^(\S+)\s(.*)/);
 
-				                         $scope.totals.max = moment
+					      $scope.totals.max = moment
 
-					                         .duration(_.max($scope.totals.max), 'days')
-					                         .humanize()
-					                         .match(/^(\S+)\s(.*)/);
+						      .duration(_.max($scope.totals.max), 'days')
+						      .humanize()
+						      .match(/^(\S+)\s(.*)/);
 
-				                         data = reqs;
+					      data = reqs;
 
-				                         self
+					      self
 
-					                         .initialize(data)
+						      .initialize(data)
 
-					                         .then(function (d) {
+						      .then(function (d) {
 
-						                               // Generate our human-friendly avg wait time
-						                               d.avgWait = timeAvg(d, d.requirements.length);
+							            // Sort the available FTDs by distance (closest first)
+							            d.listFTD = _.sortBy(d.listFTD, 'distanceInt');
 
-						                               // Generate a human-friendly max wait time
-						                               d.maxWait = timeMax(d.requirements);
+							            d.requirements = _.sortBy(d.requirements, 'days').reverse();
 
-					                               });
+							            // Pre-check our closest FTD if available
+							            d.detRequest = d.listFTD[0] || false;
 
+							            // Generate our human-friendly avg wait time
+							            d.avgWait = timeAvg(d, d.requirements.length);
 
-			                         });
+							            // Generate a human-friendly max wait time
+							            d.maxWait = timeMax(d.requirements);
 
-	                   }
-                   ])
+						            });
+
+
+				      });
+
+		}
+	])
 ;

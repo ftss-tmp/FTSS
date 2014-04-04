@@ -31,8 +31,8 @@ include ../__mixins
                 span.number {{totals.max[1]}}
                 | {{totals.max[2]}}
             span.date Longest Wait Time
-    //
-        br
+
+    //br
         div
             .graph.pull-left(width='.65', height='250', type='bar')
             .graph.pull-right(width='.32', height='250', type='pie')
@@ -50,7 +50,7 @@ include ../__mixins
                 h4
                     +icon('flag')
 
-                    span.btn.w15(ng-class='{"btn-info":row.local,"btn-warning":!row.local}')
+                    span.btn.w15(ng-class='{"btn-info":(row.detRequest.distanceInt < 50),"btn-warning":(row.detRequest.distanceInt > 49),"btn-danger":!row.detRequest}')
                         span.bigLetter {{row.requirements.length}}
                         span(style='font-size:1.25em') {{row.PDS}}&nbsp;
 
@@ -86,19 +86,25 @@ include ../__mixins
 
                     br
 
-                    .row
+                    .alert.alert-danger(ng-if='!row.detRequest')
+                        .lead *** No available FTD's found! ***
+                        p: b Please verify {{row.PDS}} is the course required for the student(s) listed below:
+                        p: ol: li(ng-repeat="r in row.requirements") {{r.StudentName}}
+
+
+                    .row(ng-if='row.detRequest')
                         .col-lg-3
                             table.table.table-split.table-hover
-                                thead: tr: th.truncate(colspan='2') Available FTD by Miles
+                                thead: tr: th.truncate(colspan='2') 1. Choose an FTD
 
                                     tbody
-                                        tr(ng-repeat="u in row.listFTD | orderBy:'distanceInt'")
+                                        tr(ng-repeat="u in row.listFTD")
                                             td(style='width:125px;border-right:none') {{u.distance}}
                                             td.truncate
                                                 input.css-checkbox(type='radio',
                                                                     name='unit{{row.Id}}',
-                                                                    ng-model='row.detRequest',
-                                                                    ng-value='u.Id',
+                                                                    ng-model='$parent.$parent.row.detRequest',
+                                                                    ng-value='u',
                                                                     id='{{row.Id}}{{u.Id}}')
                                                 label.css-label(for='{{row.Id}}{{u.Id}}') &nbsp;&nbsp;&nbsp;{{u.LongName}}
 
@@ -106,19 +112,17 @@ include ../__mixins
 
                         .col-lg-7(style='overflow:hidden;margin-left:-1%')
                             table.table.table-split.table-hover
-                                thead: tr: th.truncate(colspan='2') Students Awaiting Training
+                                thead: tr: th.truncate(colspan='2') 2. Choose students
                                     tbody
-                                        tr(ng-repeat="r in row.requirements | orderBy:'days':true")
+                                        tr(ng-repeat="r in row.requirements")
                                             td(style='border-right:none') {{r.waited}}
                                             td.w85.truncate(style='display:block')
                                                 input.css-checkbox(type='checkbox',
-                                                                    ng-disabled='!row.detRequest',
                                                                     checklist-model='requests.$',
                                                                     checklist-value='{row:row,student:r}',
-                                                                    id='{{row.Id}}{{r.Id}}')
-                                                label.css-label(for='{{row.Id}}{{r.Id}}') &nbsp;&nbsp;&nbsp;{{r.StudentName}}
+                                                                    id='{{row.Id + r.Id}}')
+                                                label.css-label(for='{{row.Id + r.Id}}') &nbsp;&nbsp;&nbsp;{{r.StudentName}}
 
-                unbind
                 .clearfix
 
             .clearfix
