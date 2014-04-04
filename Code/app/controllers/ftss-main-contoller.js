@@ -325,6 +325,9 @@
 				 */
 				$scope.$on('$locationChangeStart', function () {
 
+					// Fire our page listener for Google Analytics
+					window.ga && window.ga('send', 'pageview', { page: $location.path() });
+
 					utils.loading(true);
 
 					if (FTSS.search) {

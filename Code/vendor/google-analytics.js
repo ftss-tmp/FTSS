@@ -1,6 +1,5 @@
-/*global PRODUCTION *?
+/*global PRODUCTION */
 
- */
 /**
  * Google analytics feature enablement
  */
