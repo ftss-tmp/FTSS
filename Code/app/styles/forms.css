@@ -1,3 +1,8 @@
+input::-ms-clear {
+    width : 0;
+    height: 0;
+}
+
 .input-group.disabled * {
     box-shadow: none;
     font-weight: normal;
@@ -126,13 +131,13 @@ input.ng-invalid.ng-dirty + .helper {
     content: "\2713\00a0";
 }
 
-form * .ng-dirty, form .selectize-input.ng-dirty .item {
+form * .ng-dirty, form .selectize-input.ng-dirty .item, form .selectize-input.ng-dirty .item *   {
     color: #47a447 !important;
     font-weight: 800 !important;
 }
 
 form .selectize-input.ng-dirty .item {
-    background: #f3f3f3;
+    background: transparent;
 }
 
 form * .ng-dirty {
