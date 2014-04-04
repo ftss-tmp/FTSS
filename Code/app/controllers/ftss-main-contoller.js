@@ -256,13 +256,14 @@
 												FTSS.tags = tagMap;
 												$scope.filter = filter;
 
+												FTSS.search.$control.find('.item').addClass('processed');
+
 											}
 
 										});
 
 									}
 
-									FTSS.search.$control.find('.item').addClass('processed');
 									pending = false;
 
 								} else {
