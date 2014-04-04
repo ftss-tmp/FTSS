@@ -208,17 +208,16 @@ right {
 .pds .item {
     text-align: left;
     letter-spacing: .1em;
-    width:55px;
-}
-/*
-
-[data-group="SMART FILTERS"] {
-    width:100%!important;
+    width: 55px;
 }
 
-[data-group="SMART FILTERS"] .optgroup-header {
-    display:none;
+#backlog #searchContainer #tagBox {
+    float: left;
+    width: 40%;
 }
-[data-group="SMART FILTERS"] .option {
-    float:left;
-}*/
+
+#backlog #searchContainer #searchBox {
+    display: block !important;
+    width: 56%;
+    float: right;
+}
