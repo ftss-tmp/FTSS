@@ -37,6 +37,8 @@
 		'request-seats-students'        : 'Search for students to add to the request.<example>Please ensure you have already loaded these students into FTSS.</example>',
 		'request-seats-comments'        : 'Leave any comments for the FTD or MAJCOM as applicable (optional).',
 
+
+
 		// Catalog page
 		'catalog-edit-pds'              : 'The unique short-identifier.',
 		'catalog-edit-number'           : '',

@@ -1,9 +1,9 @@
 include ../__mixins
 
-#main-stats
-    .row.stats-row
-        #backlogStats BACKLOG
-        .backlogGradient.stat
+#main-stats.slideToggleEffect.slideOut
+    #backlogStats(hover='backlog-graph-view', left)
+        +icon('graph_pie')
+    .stats-row
         .col-md-3.stat
             .data
                 span.number {{totals.reqs}}
@@ -37,11 +37,26 @@ include ../__mixins
             .graph.pull-left(width='.65', height='250', type='bar')
             .graph.pull-right(width='.32', height='250', type='pie')
             .clearfix
+.clearfix
 
-    br
+#backlogRequests.col-lg-3
 
-.row
-    .col-lg-9
+    h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px') Requested Training
+
+    div(ng-show='requests.display === {}')
+        +userInstructions('generate-898')
+
+    .well.well-sm.am-fade-and-slide-bottom(ng-repeat='(unit, courses) in requests.display')
+
+        h4(class='btn-{{courses[0].Type}}', style='padding:.2em') {{unit}}
+
+        ul.list-group(style='margin:0')
+            li.list-group-item(ng-repeat='crs in courses')
+                span.badge {{crs.Count}}
+                h5 {{crs.Number}}
+
+.wrapped.addNew
+    .col-lg-9.no-pad
         +grouping()
 
             .well(ng-repeat='row in group',
@@ -50,7 +65,7 @@ include ../__mixins
                 h4
                     +icon('flag')
 
-                    span.btn.w15(ng-class='{"btn-info":(row.detRequest.distanceInt < 50),"btn-warning":(row.detRequest.distanceInt > 49),"btn-danger":!row.detRequest}')
+                    span.btn.w15(class='btn-{{requestType(row)}}')
                         span.bigLetter {{row.requirements.length}}
                         span(style='font-size:1.25em') {{row.PDS}}&nbsp;
 
@@ -90,7 +105,7 @@ include ../__mixins
                         .lead *** No available FTD's found! ***
                         p: b Please verify {{row.PDS}} is the course required for the student(s) listed below:
                         p: ol: li(ng-repeat="r in row.requirements") {{r.StudentName}}
-
+                        unbind
 
                     .row(ng-if='row.detRequest')
                         .col-lg-3
@@ -102,11 +117,11 @@ include ../__mixins
                                             td(style='width:125px;border-right:none') {{u.distance}}
                                             td.truncate
                                                 input.css-checkbox(type='radio',
-                                                                    name='unit{{row.Id}}',
-                                                                    ng-model='$parent.$parent.row.detRequest',
-                                                                    ng-value='u',
-                                                                    id='{{row.Id}}{{u.Id}}')
-                                                label.css-label(for='{{row.Id}}{{u.Id}}') &nbsp;&nbsp;&nbsp;{{u.LongName}}
+                                                                name='unit{{row.Id}}',
+                                                                ng-model='$parent.$parent.row.detRequest',
+                                                                ng-value='u'
+                                                                ng-change='checkStudent(row)')
+                                                label.css-label &nbsp;&nbsp;&nbsp;{{u.LongName}}
 
                         .col-lg-2
 
@@ -118,27 +133,10 @@ include ../__mixins
                                             td(style='border-right:none') {{r.waited}}
                                             td.w85.truncate(style='display:block')
                                                 input.css-checkbox(type='checkbox',
-                                                                    checklist-model='requests.$',
-                                                                    checklist-value='{row:row,student:r}',
-                                                                    id='{{row.Id + r.Id}}')
-                                                label.css-label(for='{{row.Id + r.Id}}') &nbsp;&nbsp;&nbsp;{{r.StudentName}}
+                                                                    ng-model='r.selected',
+                                                                    ng-change='checkStudent(row)')
+                                                label.css-label &nbsp;&nbsp;&nbsp;{{r.StudentName}}
 
                 .clearfix
 
             .clearfix
-
-    .col-lg-3
-
-        h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px') Requested Training
-
-        div(ng-hide='requests.$.length')
-            +userInstructions('generate-898')
-
-        .well.well-sm(ng-repeat='(unit, course) in requests.display')
-
-            h4 {{unit}}
-
-            ul.list-group
-                li.list-group-item(ng-repeat='(Number, req) in course')
-                    span.badge {{req.length}}
-                    | {{Number}}

@@ -58,7 +58,11 @@
 				.replace(/\[icon\=([a-z]+)\]/g,
 
 			             function (match, icon) {
-				             return '<svg class="icon icon-' + icon + '"><use xlink:href="#icon-' + icon + '"/></use></svg>';
+				             return '<svg class="icon icon-' +
+				                    icon +
+				                    '"><use xlink:href="#icon-' +
+				                    icon +
+				                    '"/></use></svg>';
 			             });
 
 		},
@@ -191,6 +195,11 @@
 
 	// Use jQuery on() to bind to future elements
 	$(document)
+
+		.on('click', '.slideToggleEffect *', function (evt) {
+			    evt.stopImmediatePropagation();
+			    $(this).parents('.slideToggleEffect').toggleClass('slideOut');
+		    })
 
 		// Bind to the click event of element with the [hover] attribute
 		.on('click', '[hover]:not(.no-toggle)', popover.toggle)

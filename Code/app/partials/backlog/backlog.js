@@ -39,29 +39,65 @@ FTSS.ng.controller(
 
 			    };
 
+			$scope.requestType = function (row) {
+
+				if (row.detRequest) {
+					switch (true) {
+						case (row.detRequest.distanceInt < 50):
+							return 'info';
+
+						case (row.detRequest.distanceInt > 49):
+							return 'warning';
+					}
+				}
+
+				return 'danger';
+
+			};
+
 			$scope.requests = {
 				'$'      : [],
 				'display': {}
 			};
 
-			$scope.$watch('requests.$', function (val) {
+			$scope.checkStudent = (function () {
 
-				$scope.requests.display = val.length ? _(val)
+				var data = {};
 
-					.groupBy(function (gp) {
-						         return gp.row.detRequest.LongName;
-					         })
+				return  function (row) {
 
-					.each(function (v, k, l) {
+					var count = _(row.requirements).filter('selected').size();
 
-						      l[k] = _.groupBy(v, function (x) {
-							      return x.row.Number;
-						      });
-					      })
+					$scope.requests.display = {};
 
-					.value() : [];
+					if (count) {
 
-			}, true);
+						data[row.Id] = {
+
+							'Number'  : row.Number,
+							'FTD'     : row.detRequest.Id,
+							'FTD_Name': row.detRequest.LongName,
+							'Students': _.pluck(row.requirements, 'Id'),
+							'Type'    : $scope.requestType(row),
+							'Count'   : count
+
+						};
+
+					} else {
+
+						delete data[row.Id];
+
+					}
+
+					$scope.requests.display = _.size(data) ? _.groupBy(data, function (gp) {
+						return gp.FTD_Name;
+					}) : false;
+
+				};
+
+			}());
+
+			//	$scope.$watch('requests.$', $scope.checkStudent, true);
 
 
 			self
