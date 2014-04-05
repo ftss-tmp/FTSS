@@ -1,7 +1,7 @@
 include ../__mixins
 
 div
-    ul#dashboard-menu(ng-class='fn.getPage()')
+    ul#dashboard-menu
         li: h4 Requirements
         +link('students', 'student_hand', 'Manage Students')
         +link('backlog', 'checklist2', 'Generate 898')

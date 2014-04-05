@@ -192,7 +192,7 @@ utils.tagHighlight = function (data) {
  */
 utils.loading = (function () {
 
-	var body = $('#content')[0], loadingState;
+	var body = $('body')[0], loadingState;
 
 	return function (loading) {
 

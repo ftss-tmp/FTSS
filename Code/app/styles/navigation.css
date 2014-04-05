@@ -34,27 +34,27 @@
     text-decoration: none
 }
 
-.hosts .hosts .pointer,
-.backlog .backlog .pointer,
-.requirements .requirements .pointer,
-.scheduled .scheduled .pointer,
-.requests .requests .pointer,
-.catalog .catalog .pointer,
-.units .units .pointer,
-.instructors .instructors .pointer,
-.students .students .pointer {
+#hosts .hosts .pointer,
+#backlog .backlog .pointer,
+#requirements .requirements .pointer,
+#scheduled .scheduled .pointer,
+#requests .requests .pointer,
+#catalog .catalog .pointer,
+#units .units .pointer,
+#instructors .instructors .pointer,
+#students .students .pointer {
     display: block !important;
 }
 
-.hosts .hosts *,
-.backlog .backlog *,
-.requirements .requirements *,
-.scheduled .scheduled *,
-.requests .requests *,
-.catalog .catalog *,
-.units .units *,
-.instructors .instructors *,
-.students .students * {
+#hosts .hosts *,
+#backlog .backlog *,
+#requirements .requirements *,
+#scheduled .scheduled *,
+#requests .requests *,
+#catalog .catalog *,
+#units .units *,
+#instructors .instructors *,
+#students .students * {
     font-weight: 600;
     text-shadow: 1px 1px 1px #fff;
     text-decoration: none;

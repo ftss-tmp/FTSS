@@ -1,9 +1,31 @@
 #searchContainer {
-    margin: 0 265px 0 50px;
+    left: 10px;
+    right:265px;
+    position: absolute;
+}
+
+#searchContainer #tagBox, #searchContainer #searchBox {
+    left:50px;
+    right: 0;
+    position: absolute;
+}
+
+#searchBox input {
+    margin-top: 0!important;
+    height: 34px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .optgroup.mastercourselist .optgroup-header {
     content: 'Course'
+}
+
+#tagBox .selectize-input:not(.focus) {
+    height: 34px;
+    overflow: hidden;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 #tagBox .selectize-dropdown-content {
@@ -220,4 +242,5 @@ right {
     display: block !important;
     width: 56%;
     float: right;
+    position: relative;
 }

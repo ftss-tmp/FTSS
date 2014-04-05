@@ -1,9 +1,7 @@
 include ../__mixins
 
-+userInstructions('instructors', true)
-
 - var columns = {'':10,Instructor:40, Unit:20, AFSC:10}
-+tableHeader('Instructor', columns)
++tableHeader('Instructor', columns, 'instructors')
 
     td: +icon('flag')
 

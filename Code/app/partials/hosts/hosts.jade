@@ -1,9 +1,7 @@
 include ../__mixins
 
-+userInstructions('hosts', true)
-
 - var columns = {'': 15, 'Host Unit':20, 'Local FTD':20, Email:30}
-+tableHeader('Host Unit', columns)
++tableHeader('Host Unit', columns, 'hosts')
 
     td: +icon('flag')
 

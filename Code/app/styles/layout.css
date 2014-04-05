@@ -1,21 +1,3 @@
-
-body.menu {
-    overflow-x: hidden
-}
-
-body.menu #content {
-    margin-left: 165px;
-    position: fixed;
-    width: 850px
-}
-
-body.menu #sidebar-nav {
-    border-right: 0;
-    box-shadow: none;
-    left: 0;
-    position: absolute
-}
-
 .header {
     margin-bottom: 60px
 }
@@ -25,40 +7,54 @@ body.menu #sidebar-nav {
     margin-top: 5px
 }
 
-#pad-wrapper {
-    margin-top: 15px;
-    padding: 0 25px
+#pad-wrapper, #mainView, .wrapped {
+    height: 100%;
 }
 
 #content {
     background: #fff;
-    border-bottom: 1px solid #dae3e9;
     border-left: 1px solid #dae3e9;
-    border-radius: 0 0 0 5px;
     bottom: 0;
-    box-shadow: -3px 3px 3px -2px #f1f1f3;
-    left: 0;
-    margin-bottom: 0;
-    margin-left: 177px;
-    min-height: 620px;
-    min-width: 400px;
-    overflow: auto;
-    padding-bottom: 50px;
+    left: 177px;
+    height: calc(100% - 50px);
     position: absolute;
     right: 0;
     top: 50px;
-    transition: margin-left .3s ease
 }
 
-#wrap {
-    height: auto;
-    margin: 0 auto -60px;
-    min-height: 100%;
-    padding: 0 0 60px
+.wrapped {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 50px 20px 5px;
 }
 
-#wrap > .container {
-    padding: 60px 15px 0
+.wrapped.addNew {
+    padding-top: 10px;
+}
+
+.wrapped.addNew .alert-dismissable {
+    width: calc(100% - 40px);
+}
+
+.wrapped.addNew h3 .pull-right {
+    margin-right: 40px;
+}
+
+#mainView {
+    height: calc(100% - 60px);
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#pageActions {
+    padding: 10px;
 }
 
 .page-header {
@@ -76,10 +72,6 @@ body.menu #sidebar-nav {
 
 .no-right-pad {
     padding-right: 0 !important;
-}
-
-.tab-pane {
-    padding-top: 1em;
 }
 
 .w5 {
@@ -131,5 +123,5 @@ body.menu #sidebar-nav {
 }
 
 .w75 {
-    width:75%;
+    width: 75%;
 }

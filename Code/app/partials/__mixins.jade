@@ -53,7 +53,7 @@ mixin grouping()
 
 
 
-mixin tableHeader(addNew, columns)
+mixin tableHeader(addNew, columns, instructions)
     if addNew
         .add-button.btn.btn-labeled.btn-success(ng-click='edit(true)')
             span.btn-label.white
@@ -61,24 +61,28 @@ mixin tableHeader(addNew, columns)
             span.text  &nbsp;Add&nbsp;
                 =addNew
 
-    +grouping()
+    .wrapped(class=addNew?'addNew':'noAdd')
 
-        .rollupContainer
-            table.table.table-striped.table-expanded.table-hover.rollup
+        +userInstructions(instructions, true)
 
-                thead
-                    th.w5
-                    each width, label in columns
-                        th(class='w' + width)= label
-                    th.w10
+        +grouping()
 
-                tbody
-                    tr.middle.am-fade-and-scale(ng-repeat='row in group',
-                    ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}',
-                    ng-dblclick='edit(false)',
-                    id='row-{{row.Id}}')
-                        once
-                            block
+            .rollupContainer
+                table.table.table-striped.table-expanded.table-hover.rollup
+
+                    thead
+                        th.w5
+                        each width, label in columns
+                            th(class='w' + width)= label
+                        th.w10
+
+                    tbody
+                        tr.middle.am-fade-and-scale(ng-repeat='row in group',
+                        ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}',
+                        ng-dblclick='edit(false)',
+                        id='row-{{row.Id}}')
+                            once
+                                block
 
 
 
@@ -115,12 +119,17 @@ mixin actions(view, edit, archive, label)
 
 
 mixin userInstructions(text, ignore)
-    .alert.alert-warning.alert-dismissable.am-fade-and-slide-bottom(ng-if= ignore ? 'showHelp' : 'true')
-        .close(data-dismiss='alert') &times;
-        .pageMessage(user-message=text)
-        if ignore
-            .hideHelp.btn.btn-link(ng-click='hideHelp()', data-dismiss='alert') Don't show this anymore
-        .clearfix
+    if ignore
+        .alert.alert-warning.alert-dismissable(ng-if= ignore ? 'showHelp' : 'true')
+            .close(data-dismiss='alert') &times;
+            .pageMessage(user-message=text)
+            if ignore
+                .hideHelp.btn.btn-link(ng-click='hideHelp()', data-dismiss='alert') Don't show this anymore
+            .clearfix
+    else
+        .alert.alert-warning.alert-dismissable
+            .close(data-dismiss='alert') &times;
+            .pageMessage(user-message=text)
 
 mixin modalHeader(create, update)
     .modal-header.caps

@@ -1,13 +1,18 @@
 include partials/__mixins
 
+- base = 'https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/'
+- base = ''
+
 +pageHead
 
-        link(rel='stylesheet', href='css/app.css')
+        link(rel='stylesheet', href=base + 'css/app.css')
 
-        script(src='js/vendor.js')
+        script(src=base + 'js/vendor.js')
 
-    body(ng-controller='mainController', id='{{fn.getPage()}}')
+    body.wait(ng-controller='mainController', id='{{fn.getPage()}}')
         include partials/includes/content
 
-        script(src='js/partials.js')
-        script(src='js/app.js')
+        #spinner: +icon('refresh', '0 0 27 32')
+
+        script(src=base + 'js/partials.js')
+        script(src=base + 'js/app.js')
