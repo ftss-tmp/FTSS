@@ -1,9 +1,8 @@
-/*global FTSS, moment */
+/*global FTSS, utils */
 
 /**
- * Time-ago directive
+ * Simple unbind directive
  *
- * Uses momentJS to give us a human-friendly time since measurement of the given field
  */
 (function () {
 
