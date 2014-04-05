@@ -56,8 +56,7 @@ FTSS.ng.controller(
 			};
 
 			$scope.requests = {
-				'$'      : [],
-				'display': {}
+				'display': false
 			};
 
 			$scope.checkStudent = (function () {
