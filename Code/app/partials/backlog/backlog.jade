@@ -48,7 +48,7 @@ include ../__mixins
 
     .well.well-sm.am-fade-and-slide-bottom(ng-repeat='(unit, courses) in requests.display')
 
-        h4(class='btn-{{courses[0].Type}}', style='padding:.2em') {{unit}}
+        h4(class='btn-{{courses[0].Type}}') {{unit}}
 
         ul.list-group(style='margin:0')
             li.list-group-item(ng-repeat='crs in courses')
