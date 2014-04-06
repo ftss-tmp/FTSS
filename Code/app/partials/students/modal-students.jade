@@ -21,7 +21,7 @@ form.form-horizontal(name='modal', ng-any-drop)
 
             +formGroup('Unit', 'students-unit')
                 .input-group-selectize
-                    select(selectize='Hosts', bind='HostUnitId')
+                    select(selectize='Hosts', bind='HostUnitId', placeholder='Choose the host unit')
 
             +formGroupIcon('Email', 'data.StudentEmail', type='email', false, 'Please ensure you enter a valid email address', 'students-email', 'envelope')
 
