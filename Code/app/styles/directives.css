@@ -108,8 +108,8 @@ time-ago {
 
 .spinner, #spinner svg {
     padding: 0;
-    animation: rotation 750ms infinite linear;
-    -webkit-animation: rotation 750ms infinite linear;
+    animation: rotation 1.5s infinite linear;
+    -webkit-animation: rotation 1.5s infinite linear;
 }
 
 @keyframes rotation {
