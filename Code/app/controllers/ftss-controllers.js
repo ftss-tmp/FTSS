@@ -216,7 +216,7 @@ FTSS.controller = (function () {
 				// If this is a tagBox then we should call taghighlight as well
 				if (tagBox) {
 					utils.tagHighlight(data);
-					$scope.searchText = {};
+					$scope.searchText.$ = '';
 				}
 
 				// Finally, send our data off to the post-processor
@@ -387,7 +387,7 @@ FTSS.controller = (function () {
 
 									.value();
 
-								// Update the scope counter + overoad indicator
+								// Update the scope counter + overload indicator
 								$scope.counter($scope.count, $scope.count !== results.total);
 
 								// Finally, do our tagHighlighting if this is a tagBox
