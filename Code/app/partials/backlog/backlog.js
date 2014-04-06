@@ -78,7 +78,8 @@ FTSS.ng.controller(
 							'FTD_Name': row.detRequest.LongName,
 							'Students': _.pluck(row.requirements, 'Id'),
 							'Type'    : $scope.requestType(row),
-							'Count'   : count
+							'Count'   : count,
+							'Limit'   : count < row.Min || count > row.Max || false
 
 						};
 
@@ -88,7 +89,10 @@ FTSS.ng.controller(
 
 					}
 
+					$scope.requests.count = 0;
+
 					$scope.requests.display = _.size(data) ? _.groupBy(data, function (gp) {
+						$scope.requests.count += gp.Count;
 						return gp.FTD_Name;
 					}) : false;
 
