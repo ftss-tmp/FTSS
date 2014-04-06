@@ -41,19 +41,21 @@ include ../__mixins
 
 #backlogRequests.col-lg-3
 
-    h3(style='border-bottom: 1px solid; margin-top:20px; margin-bottom:15px') Requested Training
+    h3 {{requests.count}} Seats Requested
 
     div(ng-hide='requests.display')
         +userInstructions('generate-898')
 
-    .well.well-sm.am-fade-and-slide-bottom(ng-repeat='(unit, courses) in requests.display')
+    .wrapped
 
-        h4(class='btn-{{courses[0].Type}}') {{unit}}
+        .well.well-sm.am-fade-and-slide-bottom(ng-repeat='(unit, courses) in requests.display')
 
-        ul.list-group(style='margin:0')
-            li.list-group-item(ng-repeat='crs in courses')
-                span.badge {{crs.Count}}
-                h5 {{crs.Number}}
+            h4(class='btn-{{courses[0].Type}}') {{unit}}
+
+            ul.list-group(style='margin:0')
+                li.list-group-item(ng-repeat='crs in courses', ng-class='{limit:crs.Limit}')
+                    span.badge {{crs.Count}}
+                    h5 {{crs.Number}}
 
 .wrapped.addNew
     .col-lg-9.no-pad

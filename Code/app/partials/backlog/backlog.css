@@ -2,19 +2,39 @@
     position: absolute;
     right: 5px;
     top: 10px;
+    height: 100%;
+}
+
+#backlogRequests .wrapped {
+    height: calc(100% - 50px);
+    padding-top: 0;
+    top: 70px;
+    z-index: 100;
+}
+
+#backlogRequests li.limit {
+    color: #a94442;
+}
+
+#backlogRequests li.limit .badge {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+#backlogRequests h3 {
+    border-bottom: 1px solid;
+    margin-top: 20px;
+    margin-bottom: 15px
 }
 
 #backlogRequests h4 {
     padding: .3em;
-    font-size: 1.2em;
-    letter-spacing: .05em;
+    font-size: 1em;
+    letter-spacing: .1em;
 }
 
-#backlogRequests .badge {
-    font-size: 1.25em;
-}
 #backlogRequests h5 {
-    line-height: 2em;
     font-weight: 800;
 }
 
