@@ -71,6 +71,8 @@ FTSS.ng.controller(
 
 					if (count) {
 
+						row.Limit = count < row.Min || count > row.Max || false;
+
 						data[row.Id] = {
 
 							'Number'  : row.Number,
@@ -79,11 +81,13 @@ FTSS.ng.controller(
 							'Students': _.pluck(row.requirements, 'Id'),
 							'Type'    : $scope.requestType(row),
 							'Count'   : count,
-							'Limit'   : count < row.Min || count > row.Max || false
+							'Limit'   : row.Limit
 
 						};
 
 					} else {
+
+						row.Limit = false;
 
 						delete data[row.Id];
 

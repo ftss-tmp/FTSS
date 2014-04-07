@@ -133,11 +133,14 @@ include ../__mixins
                                     tbody
                                         tr(ng-repeat="r in row.requirements")
                                             td(style='border-right:none') {{r.waited}}
-                                            td.w85.truncate(style='display:block')
+                                            td.truncate(style='display:block')
                                                 input.css-checkbox(type='checkbox',
                                                                     ng-model='r.selected',
                                                                     ng-change='checkStudent(row)')
                                                 label.css-label &nbsp;&nbsp;&nbsp;{{r.StudentName}}
+                            .alert.alert-danger.text-center.am-fade-and-slide-top(ng-if='row.Limit')
+                                +icon('info')
+                                | It seems you don't meet the seat min or max for this course.
 
                 .clearfix
 
