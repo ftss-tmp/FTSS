@@ -41,6 +41,7 @@ a, a:hover {
 #mainView {
     font-size: 13px;
 }
+
 #mainView a {
     border-bottom: 1px dotted;
 }
@@ -85,4 +86,25 @@ a, a:hover {
     margin: 0;
     padding: 15px;
     padding-left: 190px;
+}
+
+.modal.center {
+    overflow:hidden!important;
+}
+
+.modal-backdrop.am-fade {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.modal.center .modal-dialog {
+    max-width:700px;
+    width:700px;
+}
+
+#consent li {
+    margin-top: 15px;
+}
+
+.alert-danger .icon {
+    fill:#a94442!important;
 }

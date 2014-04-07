@@ -5,6 +5,8 @@
 
 	"use strict";
 
+	document.cookie = 'DodNoticeConsent=1';
+
 	window.FTSS = {};
 	window.utils = {};
 	window.caches = {};

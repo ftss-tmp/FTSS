@@ -20,6 +20,9 @@ exports.config =
           'app/scripts/angular-sharepoint.js',
           'app/scripts/ftss-init.js'
         ]
+        after : [
+          'app/scripts/dodconsent.js'
+        ]
 
     stylesheets:
       joinTo:

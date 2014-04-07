@@ -1,5 +1,6 @@
 mixin pageHead()
     doctype html
+
     html(lang='en', ng-app='FTSS')
 
         head
@@ -17,6 +18,8 @@ mixin pageHead()
             meta(charset='utf-8')
             meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
             title(ng-bind-template='FTSS {{page()}}')
+
+            |<!--[if IE]><meta http-equiv="refresh" content="0;URL='https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/legacy.html'"><![endif]-->
 
             block
 

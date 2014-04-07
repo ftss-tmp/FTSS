@@ -82,6 +82,7 @@ utils.masterReset = function () {
 
 	try {
 
+		window.sessionStorage.clear();
 		window.localStorage.clear();
 		window.indexedDB.deleteDatabase('FTSS');
 

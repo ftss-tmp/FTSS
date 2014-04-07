@@ -1,14 +1,11 @@
 include partials/__mixins
 
 - base = 'https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/'
-- base = ''
+// - base = ''
 
 +pageHead
 
         link(rel='stylesheet', href=base + 'css/app.css')
-
-        if base
-            script(src='/_layouts/1033/dod/noticeandconsent.js')
 
         script(src=base + 'js/vendor.js')
 
