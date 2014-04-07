@@ -372,7 +372,7 @@
 
 							      loaded(response, 'Instructors', function (val) {
 
-								      val.label = val.InstructorName.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+								      val.label = val.InstructorName && val.InstructorName.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
 
 								      return  val.InstructorName;
 

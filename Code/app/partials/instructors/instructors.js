@@ -30,6 +30,8 @@ FTSS.ng.controller('instructorsController',
 
 					                   var reader = new FileReader();
 
+					                   scope.submitted = true;
+
 					                   reader.onload = function (result) {
 
 						                   var rawBuffer = result.target.result,
@@ -59,6 +61,8 @@ FTSS.ng.controller('instructorsController',
 
 									                          scope.data.Photo = rand;
 									                          scope.modal.$setDirty();
+
+									                          scope.submitted = false;
 
 								                          });
 							                          },
@@ -90,7 +94,12 @@ FTSS.ng.controller('instructorsController',
 					                         .then(function (d) {
 
 						                               d.Unit = caches.Units[d.UnitId];
-						                               d.firstName = d.InstructorName.match(/[a-z]+,\s([a-z]+)/i)[1];
+
+						                               d.firstName = (
+							                               (d.InstructorName || '')
+								                               .match(/[a-z]+,\s([a-z]+)/i) || []
+							                               )
+							                               .slice(1, 1);
 
 					                               });
 
