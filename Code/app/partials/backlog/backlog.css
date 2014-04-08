@@ -1,3 +1,7 @@
+#scrollTarget.col-lg-9 .no-pad > .alert {
+    width: 100%;
+}
+
 #backlogRequests {
     position: absolute;
     right: 5px;
@@ -29,13 +33,19 @@
 }
 
 #backlogRequests h4 {
-    padding: .3em;
-    font-size: 1em;
+    padding: .4em;
+    font-size: 1.4em;
     letter-spacing: .1em;
+}
+
+#backlogRequests h4 .icon {
+    margin: 0;
+    font-size: 1.1em;
 }
 
 #backlogRequests h5 {
     font-weight: 800;
+    font-size: 1.2em;
 }
 
 #backlog #content {
@@ -109,7 +119,7 @@
 #backlogStats svg.icon {
     cursor: pointer;
     fill: #fff;
-    font-size: 1.5em;
+    font-size: 1.25em;
 }
 
 #backlogStats {
@@ -161,4 +171,50 @@
 
 .animateColor {
     transition: background 3s ease-in;
+}
+
+.h4 .icon-plane {
+    position: relative;
+    top: -.3em;
+    left: .2em;
+}
+
+.h4 .btn {
+    transition: all 500ms ease!important;
+}
+
+.h4 .btn .icon-exclamation-circle {
+    display: none;
+}
+
+.h4 .btn-danger .icon-exclamation-circle {
+    top: -.3em;
+    position: relative;
+    display: inline;
+}
+
+.h4 .btn .icon-plane {
+    transition: opacity 500ms ease;
+    width: 0;
+    opacity: 0;
+}
+
+.h4 .btn-warning .icon-plane {
+    transition: opacity 500ms ease;
+    opacity: 1;
+    width: 2em;
+}
+
+.h4 .btn .bigLetter {
+    border-right: 1px solid white;
+    font-size: 2em;
+    line-height: .75em;
+    vertical-align: middle;
+    padding-right: .35em;
+    margin-right: .35em;
+}
+
+#backlogRequests .badge {
+    font-size:1.35em;
+    margin:-.2em 0 0 0;
 }

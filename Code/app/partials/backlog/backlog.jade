@@ -39,41 +39,48 @@ include ../__mixins
             .clearfix
 .clearfix
 
-#backlogRequests.col-lg-3
+#backlogRequests.am-fade-and-slide-right.col-lg-3(ng-if='requests.display')
 
     h3 {{requests.count}} Seats Requested
-
-    div(ng-hide='requests.display')
-        +userInstructions('generate-898')
 
     .wrapped
 
         .well.well-sm.am-fade-and-slide-bottom(ng-repeat='(unit, courses) in requests.display')
 
             h4(class='btn-{{courses[0].Type}}') {{unit}}
+                .pull-right.white
+                    +icon('arrow-circle-o-right')
 
             ul.list-group(style='margin:0')
                 li.list-group-item(ng-repeat='crs in courses', ng-class='{limit:crs.Limit}')
                     span.badge {{crs.Count}}
-                    h5 {{crs.Number}}
+                    h5: span.a(scroll-to='crs.PDS') {{crs.Number}}
 
-.wrapped.addNew
-    .col-lg-9.no-pad
+#scrollTarget.wrapped.addNew(class='{{requests.display === false ? "col-lg-12" : "col-lg-9"}}')
+
+    .no-pad
+
+        +userInstructions('generate-898', true)
+
         +grouping()
 
             .well(id='{{row.PDS}}', ng-repeat='row in group'
             ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
 
-                h4
+                .h4
                     +icon('flag')
 
-                    span.btn.w15(class='btn-{{requestType(row)}}')
+                    .btn.white(class='btn-{{requestType(row)}}')
                         span.bigLetter {{row.requirements.length}}
-                        span(style='font-size:1.25em') {{row.PDS}}&nbsp;
+                        span(style='font-size:1.25em;position:relative;top:.15em;') {{row.PDS}}&nbsp;
+                        span(style='font-size:1.3em;position:relative;top:.25em;')
+                            +icon('plane')
+                            +icon('exclamation-circle')
 
-                    span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
-                        +icon('asterisk')
-                    .pull-right.w75.truncate.text-right(style='margin-top:5px') {{row.Title}}
+                    .pull-right.w75(style='position:relative;top:.2em')
+                        span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
+                            +icon('asterisk')
+                        .truncate.text-right(style='margin-top:5px') {{row.Title}}
 
                 hr.rollup
 
@@ -119,10 +126,10 @@ include ../__mixins
                                             td(style='width:125px;border-right:none') {{u.distance}}
                                             td.truncate
                                                 input.css-checkbox(type='radio',
-                                                                name='unit{{row.Id}}',
-                                                                ng-model='$parent.$parent.row.detRequest',
-                                                                ng-value='u'
-                                                                ng-change='checkStudent(row)')
+                                                name='unit{{row.Id}}',
+                                                ng-model='$parent.$parent.row.detRequest',
+                                                ng-value='u'
+                                                ng-change='checkStudent(row)')
                                                 label.css-label &nbsp;&nbsp;&nbsp;{{u.LongName}}
 
                         .col-lg-2
@@ -135,10 +142,10 @@ include ../__mixins
                                             td(style='border-right:none') {{r.waited}}
                                             td.truncate(style='display:block')
                                                 input.css-checkbox(type='checkbox',
-                                                                    ng-model='r.selected',
-                                                                    ng-change='checkStudent(row)')
+                                                ng-model='r.selected',
+                                                ng-change='checkStudent(row)')
                                                 label.css-label &nbsp;&nbsp;&nbsp;{{r.StudentName}}
-                            .alert.alert-danger.text-center.am-fade-and-slide-top(ng-if='row.Limit')
+                            .alert.alert-danger.text-center.am-fade-and-slide-bottom(ng-if='row.Limit')
                                 +icon('info')
                                 | It seems you don't meet the seat min or max for this course.
 
