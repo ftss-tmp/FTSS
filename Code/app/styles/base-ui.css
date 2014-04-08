@@ -18,7 +18,8 @@ body {
     position: relative
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4 {
+    display: block;
     line-height: inherit;
     margin: 0;
     font-family: 'Open Sans', sans-serif;
@@ -42,7 +43,7 @@ a, a:hover {
     font-size: 13px;
 }
 
-#mainView a {
+#mainView a, .a {
     border-bottom: 1px dotted;
 }
 
@@ -50,7 +51,7 @@ a, a:hover {
     border-bottom: 1px solid;
 }
 
-.nav a {
+.nav a, .a, a {
     cursor: pointer !important;
 }
 

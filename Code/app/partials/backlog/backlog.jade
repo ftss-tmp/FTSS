@@ -61,8 +61,8 @@ include ../__mixins
     .col-lg-9.no-pad
         +grouping()
 
-            .well(ng-repeat='row in group',
-                   ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
+            .well(id='{{row.PDS}}', ng-repeat='row in group'
+            ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
 
                 h4
                     +icon('flag')
