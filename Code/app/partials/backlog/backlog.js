@@ -75,9 +75,10 @@ FTSS.ng.controller(
 
 						data[row.Id] = {
 
+							'PDS'     : row.PDS,
 							'Number'  : row.Number,
 							'FTD'     : row.detRequest.Id,
-							'FTD_Name': row.detRequest.LongName,
+							'FTD_Name': row.detRequest.Base,
 							'Students': _.pluck(row.requirements, 'Id'),
 							'Type'    : $scope.requestType(row),
 							'Count'   : count,
