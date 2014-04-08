@@ -17,17 +17,18 @@ var LOG;
 	 *
 	 * @type {module}
 	 */
-	FTSS.ng = angular.module('FTSS',
-	                         [
-		                         'ngRoute',
-		                         'ngSharePoint',
-		                         'mgcrea.ngStrap',
-		                         'monospaced.elastic',
-		                         'partials',
-		                         'angularFileUpload',
-		                         'ngAnimate',
-		                         'ngSanitize'
-	                         ]);
+	FTSS.ng = angular.module(
+		'FTSS',
+		[
+			'ngRoute',
+			'ngSharePoint',
+			'mgcrea.ngStrap',
+			'monospaced.elastic',
+			'partials',
+			'angularFileUpload',
+			'ngAnimate',
+			'ngSanitize'
+		]);
 
 	/*
 	 * The AngularJS Router will be used to handle various page mappings and links to the HTML Partials for FTSS
@@ -77,8 +78,7 @@ var LOG;
 				angular.extend($datepickerProvider.defaults, {
 					'dateFormat': 'd MMM yyyy',
 					'startWeek' : 1,
-					'autoclose' : true,
-					'animation' : false
+					'autoclose' : true
 				});
 
 			}
