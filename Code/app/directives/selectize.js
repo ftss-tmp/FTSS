@@ -347,15 +347,15 @@
 
 									            loaded(hosts, 'Hosts', function (v) {
 
+										            var ftd = caches.Units[v.FTD] || {};
+
 										            v.Text = v.Unit;
 
-										            v.label = [
-											            '<b>',
-											            v.Unit,
-											            '</b><right>Det. ',
-											            caches.Units[v.FTD].Det,
-											            '</right>'
-										            ].join('');
+										            v.label = '<b>' +
+										                      v.Unit +
+										                      '</b><right>' +
+										                      (ftd.Det || 'No FTD') +
+										                      '</right>';
 
 										            return v.Unit;
 
@@ -372,7 +372,8 @@
 
 							      loaded(response, 'Instructors', function (val) {
 
-								      val.label = val.InstructorName && val.InstructorName.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
+								      val.label = val.InstructorName &&
+								                  val.InstructorName.replace(/[^|<br>]\w+,\s\w+/g, '<b>$&</b>');
 
 								      return  val.InstructorName;
 
