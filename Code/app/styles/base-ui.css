@@ -106,6 +106,8 @@ a, a:hover {
     margin-top: 15px;
 }
 
-.alert-danger .icon {
+.text-danger .icon {
+    color:#a94442;
     fill:#a94442!important;
 }
+
