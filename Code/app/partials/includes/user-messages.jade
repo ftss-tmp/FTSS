@@ -14,16 +14,15 @@ include ../__mixins
         Combine as many as you like, the first row of tags in <i><b>bold-italics</b></i> are custom searches for this page.
 
     #searchBox.
-        [icon=info] This search box lets you do full-text instant searches.  The more words you add,
-        the more specific your search will be.  I.e., "robins engines" would find any data that included <i>both</i> robins and engines.
+        [icon=info] This search box lets you do full-text instant searches.  The more words you add, the more specific your search will be.  I.e., "robins engines" would find any data that included <i>both</i> "robins" and "engines".
 
     #button-clear Clear this search
 
     #button-grouping Change how data is grouped
 
-    #button-sorting Change the sorting order
+    #button-sorting Change how data is sorted
 
-    #button-collapse Toggle expanded or collapsed rows
+    #button-collapse Expand or collapse rows
 
     #button-archive Toggle visibility of archived data
 
@@ -33,31 +32,27 @@ include ../__mixins
     // Manage Students Page ============================================================================================
 
     #students.
-          In FTSS, you should add all Airmen requiring FTD training upfront.
-          By doing so, we can automate the backlog tracking required by AFI.
-          After establishing your training requirements here, you can generate 898
-          requirements from your backlog.  If you use IMDS to track FTD training,
-          the course codes are already loaded into FTSS so you can just drag and drop
-          a student's 593 to load their training requirements.
+          After your unit is added under the Host Units tab, add all Airmen requiring FTD training here. Backlog tracking required by AFI will be automated from this data.
+          After establishing training requirements here, you can generate 898 requirements from your backlog by using the Generate 898 tab.  If you use IMDS to track FTD training, the course codes are already loaded into FTSS so you can just drag and drop a student's 593 to load their training requirements.
 
     #modal-students.
-        @TODO, Need to add some instructions here....
+        Add each student in your unit that will require FTD courses. You can look up their name in the GAL using the name search option, and you can drag and drop their IMDS 593, which will automatically decipher the courses the student requires according to the IMDS 593. 
 
-    #students-name @TODO, this is this name field when editing an existing student
+    #students-name Enter student name
 
-    #students-unit @TODO The unit this student is assigned to.
+    #students-unit Unit this student is assigned to.
 
-    #students-email @TODO
+    #students-email This email address may be used to send FTSS notifications about the student's FTD class
 
-    #students-date (optional) This is the in-processing date for the student,<br>it is used to sort students by longest wait-time.
+    #students-date (optional) This is the in-processing date for the student,<br>it is used to sort students by longest wait-time and is designed to help you decide who may need the class more than the rest to reduce overdues.
 
-    #students-category  Choose the student type, used in conjunction with TDY status to determine the seat request type.
+    #students-category  Choose the student type; this is used in conjunction with TDY status to determine the seat request type.
 
     #students-training
         p.
             This is a list of all the training requirements for this student.
             When a student is scheduled for a given course, it is automatically removed from this list.<br>
-        example This data can also be imported from an IMDS 593 using one of three ways:<br>
+        This data can also be imported from an IMDS 593 using one of three ways:<br>
         ol
             li Copy & paste the text anywhere on this screen.
             li Drag & drop the text file onto this window.
@@ -69,52 +64,44 @@ include ../__mixins
     // Generate 898 Page ===============================================================================================
 
     #generate-898.
-        This page shows the current backlog for a unit and enables you to generate an electronic 898.  To get started,
-        you should build a list of requests by choosing an FTD (the closest available will be selected by default) and list
-        of students for each course needed.  As you choose students, a summary list on the right will display your requirements.  Once
-        your list is completed, click the FTD base on the right side to confirm and submit each requirement (there will be
-        one 898 generated per FTD).
+        This page shows the current backlog for a unit and enables you to generate an electronic 898. To get started, view a course, select the FTD you will request from (the closest available will be selected by default), and select the students who will take the course that month. As you select the students, a summary list on the right will display your draft 898. Once your list is complete, click each FTD base header on the right side to confirm and submit each base 898 request for MTF CC/Chief approval.  
 
     #backlog-graph-view Click to toggle the backlog graphs & statistics for this unit.
 
-    #modal-backlog.
-        Verify the students month for this request (top-right), courses and student names.  When you are done,
-        press the verify button to confirm your requestion and then submit.
 
 
 
     // Course Catalog Page =============================================================================================
 
     #catalog.
-          @TODO, course catalog main instructions
+          Course Catalog enables you to view details for all J4 courses. Hover over the course to view the course title and hours. Hover over the instructor icon to view the FTDs that teach the specified course. Type course information above to refine your search. Only Squadron Training and Curriculum Managers can alter this information. 
 
     #modal-catalog
         h4:b.text-center APPLICATION-WIDE CHANGE
         p.
-            Editing the Course Catalog will affect all uses of this course.  Please ensure you are aware of the
-            implications of any changes before continuing.
+            Editing the Course Catalog will affect all users of this course.  Please ensure you are aware of the implications of any changes before continuing.
 
     #catalog-pds The unique, short-code for this course
 
-    #catalog-mds @TODO
+    #catalog-mds The airframe associated with this course
 
-    #catalog-afsc @TODO
+    #catalog-The AFSC taught in this course.
 
-    #catalog-number @TODO
+    #catalog-Course Number (J4....)
 
-    #catalog-imds (optional) The IMDS course number used for 593 imports and searching by course number
+    #catalog-imds (Optional) The IMDS course number used for 593 imports and searches by course number
 
-    #catalog-title @TODO
+    #catalog-Course Title
 
-    #catalog-days The number of training days
+    #catalog-days Total number of course days
 
-    #catalog-hours The number of training hours
+    #catalog-hours Total number of course hours 
 
     #catalog-min The minimum number of seats
 
     #catalog-max The maximum number of seats
 
-    #catalog-cafmcl Indicates whether this course is listed on the CAF/MCL, used for prioritizing 898 requirements
+    #catalog-cafmcl A Check mark indicates this course is listed on the CAF/MCL. This is used for prioritizing 898 requirements
 
 
 
@@ -122,21 +109,20 @@ include ../__mixins
     // Instructors Page ================================================================================================
 
     #instructors.
-        Use this page to add, edit or archive instructors, instructor bio photos are optional.
+        Use this page to add, edit or archive instructors. Instructor bio photos and instructor AFSCs can be added, but are not required. 
 
     #modal-instructors.
-           Here you can add or update an instructor's profile.  Only the instructor's name and unit
-           are required.  To add or change a photo, drag a new one into the widow and press "Submit".
+           Here you can add or update an instructor's profile.  Instructor bio photos and instructor AFSCs can be added, but are not required. To add or change a photo, drag a new one into the window and press "Submit".
 
-    #instructors-name @TODO
+    #instructors-name Type instructor name (last, first MI) and press enter to select from the GAL.
 
-    #instructors-email @TODO
+    #instructors-email Enter work email address
 
-    #instructors-unit @TODO
+    #instructors-unit Enter the instructor's detachment
 
-    #instructors-afsc @TODO
+    #instructors-afsc Enter the instructor's AFSC
 
-    #instructors-photo (optional) Drag a photo here to add or update for this instructor
+    #instructors-photo (Optional) Drag and drop a photo here to add/update this instructor's photo
 
 
 
@@ -144,16 +130,15 @@ include ../__mixins
     // FTDs Page =======================================================================================================
 
     #units.
-          Use this page to edit the info for FTDs.  Here you can add courses that are taught
-          at a particular unit to FTSS as well as annotate the contact email.
+          Use this page to edit FTD information.  You can add courses taught at a particular FTD and annotate the contact email (normally scheduler's email).
 
     #modal-units.
-            Update FTD contact email and list of courses taught.
+            Update FTD contact email and list of courses taught at the unit displayed above.
             An 898 cannot be generated or class built unless the course is first listed below.
 
     #units-email This email address will be used to send FTSS notifications to the FTD
 
-    #units-courses Adds all courses taught by this FTD here.  You can search by PFS, MDS, AFSC, Number, etc or copy & paste a list of PDSs
+    #units-courses Add every course offered by this FTD here.  You can search by PDS, MDS, AFSC, Course Number, et cetera, or you can copy & paste a list of PDSs here
 
 
 
@@ -161,22 +146,18 @@ include ../__mixins
     // Host Units Page =================================================================================================
 
     #hosts.
-          Before a student can be added to FTSS (required for 898s), the host unit must be added.
-          Use this page to add or edit hosts units.  If the unit has a local FTD, be sure to add
-          that to the unit as this is used in determining if this is a local or TDY request.
+          Before a student can be added to FTSS (required for the 898 process), the host unit must be added. Use this page to add or edit hosts units (groups).  If the unit has a local FTD, be sure to add that to the unit as this is used for determining if this is a local or TDY request.
 
     #modal-hosts.
-         The Host Unit must first be added before students can be loaded into FTSS.
-         Ideally, you should keep host units no lower than a group level but any level is permitted.
-         Be sure to choose a local FTD only if this unit is co-located with a FTD.
+         You must add your Host Unit before you load students into FTSS. Host units should be no lower than the group level unless you are a detachment (eg 826 AMXS at Nellis AFB is detached from their group at Moody AFB). 
 
-    #hosts-name @TODO
+    #hosts-name Ex: 461 MXG
 
-    #hosts-ftd @TODO
+    #hosts-ftd Be sure to choose a local FTD only if your unit would not need to go TDY when attending that FTD. If you have no local FTDs, leave this cell blank.
 
-    #hosts-email @TODO
+    #hosts-email This email address will be used to send FTSS notifications to the unit
 
-    #hosts-location @TODO
+    #hosts-location Add zip code of unit
 
 
 
