@@ -39,20 +39,21 @@ include ../__mixins
             .clearfix
 .clearfix
 
-#backlogRequests.am-fade-and-slide-right.col-lg-3(ng-if='requests.display')
+#backlogRequests.am-slide-right.col-lg-3(ng-if='requests.display')
 
     h3 {{requests.count}} Seats Requested
 
     .wrapped
 
-        .well.well-sm.am-fade-and-slide-bottom(ng-repeat='(unit, courses) in requests.display')
+        .well.well-sm.am-fade-and-slide-top(ng-repeat='(unit, courses) in requests.display')
 
-            h4(class='btn-{{courses[0].Type}}') {{unit}}
+            h4.animateColorFast(class='btn-{{courses[0].Type}}', ng-click='edit(true, courses)') {{unit}}
                 .pull-right.white
+                    +icon('add')
                     +icon('arrow-circle-o-right')
 
             ul.list-group(style='margin:0')
-                li.list-group-item(ng-repeat='crs in courses', ng-class='{limit:crs.Limit}')
+                li.list-group-item(ng-repeat='crs in courses', ng-class='{limit:(crs.Over ||crs.Under)}')
                     span.badge {{crs.Count}}
                     h5: span.a(scroll-to='crs.PDS') {{crs.Number}}
 
@@ -145,9 +146,12 @@ include ../__mixins
                                                 ng-model='r.selected',
                                                 ng-change='checkStudent(row)')
                                                 label.css-label &nbsp;&nbsp;&nbsp;{{r.StudentName}}
-                            .alert.alert-danger.text-center.am-fade-and-slide-bottom(ng-if='row.Limit')
-                                +icon('info')
-                                | It seems you don't meet the seat min or max for this course.
+
+                                        tr.text-danger
+                                            td(style='border-right:none')
+                                            td.am-fade-and-slide-bottom(style='font-weight:normal;padding-left:3em')
+                                                em(ng-if='row.Over') FYI, you've exceeded this course's max capacity
+                                                em(ng-if='row.Under') FYI, you're under the student minimum for this course
 
                 .clearfix
 
