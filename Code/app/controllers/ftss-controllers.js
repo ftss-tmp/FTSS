@@ -436,7 +436,7 @@ FTSS.controller = (function () {
 			'edit': function (callback) {
 
 				// the isNew boolean determines if this is a create or update action
-				return function (isNew) {
+				return function (isNew, data) {
 
 					var scope, instance;
 
@@ -450,7 +450,7 @@ FTSS.controller = (function () {
 					instance = $modal({
 						                  'scope'          : scope,
 						                  'backdrop'       : 'static',
-						                  'contentTemplate': '/partials/modal-' + opts.model + '.html'
+						                  'contentTemplate': '/partials/modal-' + (opts.modal || opts.model) + '.html'
 					                  });
 
 					// Bind close to instance.destroy to remove this modal
@@ -466,7 +466,7 @@ FTSS.controller = (function () {
 					scope.data = isNew ? {} : angular.copy(this.row);
 
 					// If the callback (our post-processor exists, call it too)
-					callback && callback(scope, isNew);
+					callback && callback(scope, isNew, data);
 
 				};
 
