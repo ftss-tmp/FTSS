@@ -12,6 +12,7 @@
 }
 
 #content {
+    box-shadow: -3px 3px 3px -2px #f1f1f3;
     background: #fff;
     border-left: 1px solid #dae3e9;
     bottom: 0;
