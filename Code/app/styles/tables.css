@@ -145,3 +145,7 @@ tr.modal-selected td:first-child {
 tr.archived photo, tr.archived .archiveExclude {
     display: none;
 }
+
+.rollupContainer td:first-child {
+    text-align: center;
+}

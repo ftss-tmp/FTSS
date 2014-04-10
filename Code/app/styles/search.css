@@ -236,13 +236,13 @@ right {
 #students #searchContainer #tagBox,
 #backlog #searchContainer #tagBox {
     float: left;
-    width: 40%;
+    width: 60%;
 }
 
 #students #searchContainer #searchBox,
 #backlog #searchContainer #searchBox {
     display: block !important;
-    width: 56%;
+    width: 36%;
     float: right;
     position: relative;
 }
