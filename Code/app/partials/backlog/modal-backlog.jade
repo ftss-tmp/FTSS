@@ -1,0 +1,57 @@
+include ../__mixins
+
+form(name='modal')
+
+    .modal-header.caps
+        h3
+            +icon('plus-circle')
+            | Validate 898 for {{courses[0].FTD.LongName}}
+            .pull-right
+                input.form-control(type='text',
+                ng-model='courses.month',
+                data-date-format='MMMM yyyy',
+                data-min-view=1,
+                data-min-date='today',
+                bs-datepicker)
+
+    .modal-body
+
+        +userInstructions('modal-backlog')
+
+        .well.well-sm(ng-repeat='row in courses', ng-class='{priority:row.priority}')
+
+            .h4
+                .pull-left(hover='This is a priority course (listed on the CAF/MCL).', style='margin-top:-.25em')
+                    +icon('asterisk')
+                .pull-left.truncate {{row.Title}}
+
+            .row
+                .col-lg-4
+                    table.table.table-split
+                        tbody
+                            tr
+                                td Course
+                                td {{row.PDS}} - {{row.Number}}
+
+                            tr
+                                td Length
+                                td {{row.Days}} Days / {{row.Hours}} Hours
+
+                            tr
+                                td Limits
+                                td {{row.Min}} Min / {{row.Max}} Max
+
+                .col-lg-1
+
+                .col-lg-7
+                    table.table.table-split
+                        tbody
+                            tr(ng-repeat='student in row.requirements|filter:{selected:true}')
+                                td(style='letter-spacing:.1em') {{student.StudentName}}
+
+
+        br
+        button.btn.btn-default.pull-right(type='button', ng-model='courses.verify', bs-checkbox) Yes, this request is valid.
+        br
+
+    +modalFooter()
