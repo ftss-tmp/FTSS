@@ -25,7 +25,7 @@ mixin pageHead()
 
 
 mixin icon(tag, viewbox)
-    label
+    label(class='lbl-' + tag)
         if viewbox
             svg.icon(class=tag + ' icon-' + tag, viewBox=viewbox)
                 use(xlink:href='#icon-' + tag)
@@ -62,7 +62,7 @@ mixin tableHeader(addNew, columns, instructions)
     if addNew
         .add-button.btn.btn-labeled.btn-success(ng-click='edit(true)')
             span.btn-label.white
-                +icon('add')
+                +icon('plus')
             span.text  &nbsp;Add&nbsp;
                 =addNew
 
