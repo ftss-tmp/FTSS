@@ -23,7 +23,17 @@ FTSS.ng.controller(
 					    'requirements': '# Requirements'
 				    },
 
-				    'model': 'students'
+				    'model': 'students',
+
+				    'modal': 'backlog',
+
+				    'edit': function (scope, isNew, courses) {
+
+					    courses.month = moment().add('months', 3);
+
+					    scope.courses = courses;
+
+				    }
 
 			    }),
 
@@ -67,29 +77,18 @@ FTSS.ng.controller(
 
 					var count = _(row.requirements).filter('selected').size();
 
-					$scope.requests.display = {};
-
 					if (count) {
 
-						row.Limit = count < row.Min || count > row.Max || false;
+						row.Over = count > row.Max;
+						row.Under = count < row.Min;
+						row.Count = count;
+						row.Type = $scope.requestType(row);
 
-						data[row.Id] = {
-
-							'PDS'     : row.PDS,
-							'Number'  : row.Number,
-							'FTD'     : row.detRequest.Id,
-							'FTD_Name': row.detRequest.Base,
-							'Students': _.pluck(row.requirements, 'Id'),
-							'Type'    : $scope.requestType(row),
-							'Count'   : count,
-							'Limit'   : row.Limit
-
-						};
+						data[row.Id] = row;
 
 					} else {
 
-						row.Limit = false;
-
+						row.Over = row.Under = false;
 						delete data[row.Id];
 
 					}
@@ -98,15 +97,12 @@ FTSS.ng.controller(
 
 					$scope.requests.display = _.size(data) ? _.groupBy(data, function (gp) {
 						$scope.requests.count += gp.Count;
-						return gp.FTD_Name;
+						return gp.detRequest.Base;
 					}) : false;
 
 				};
 
 			}());
-
-			//	$scope.$watch('requests.$', $scope.checkStudent, true);
-
 
 			self
 
