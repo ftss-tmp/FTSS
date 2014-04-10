@@ -1,0 +1,21 @@
+#home #content {
+    background: none !important;
+}
+
+.jumbotron {
+    background: rgba(255, 255, 255, .85);
+}
+
+#bg {
+    position: fixed;
+    top: 50px;
+    left: 177px;
+    min-width: calc(100% - 177px);
+    min-height: calc(100% - 50px);
+    z-index: -1;
+    opacity: .7;
+}
+
+#home .well {
+    background-color: rgba(245, 245, 245, .9);
+}
