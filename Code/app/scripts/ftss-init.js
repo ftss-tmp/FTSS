@@ -95,7 +95,7 @@ var LOG;
 		return function (value) {
 			return (!value) ? '' : value.replace(/ /g, '');
 		};
-	})
+	});
 
 	/**
 	 * Quick filter to return the first name of a person (AF GAL format)
