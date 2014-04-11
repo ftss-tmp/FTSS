@@ -225,7 +225,9 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
 
     var defaults = $datepicker.defaults;
     var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+    var isNumeric = function(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    };
 
     return {
       restrict: 'EAC',
@@ -251,12 +253,13 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             if(newValue === 'today') {
               var today = new Date();
               datepicker.$options[key] = +new Date(today.getFullYear(), today.getMonth(), today.getDate() + (key === 'maxDate' ? 1 : 0), 0, 0, 0, (key === 'minDate' ? 0 : -1));
-            } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) {
+            } else if(angular.isString(newValue) && newValue.match(/^".+"$/)) { // Support {{ dateObj }}
               datepicker.$options[key] = +new Date(newValue.substr(1, newValue.length - 2));
+            } else if(isNumeric(newValue)) {
+              datepicker.$options[key] = +new Date(parseInt(newValue, 10));
             } else {
               datepicker.$options[key] = +new Date(newValue);
             }
-            // console.warn(angular.isDate(newValue), newValue);
             // Build only if dirty
             !isNaN(datepicker.$options[key]) && datepicker.$build(false);
           });
@@ -280,8 +283,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
           var parsedDate = dateParser.parse(viewValue, controller.$dateValue);
           if(!parsedDate || isNaN(parsedDate.getTime())) {
             controller.$setValidity('date', false);
+            return;
           } else {
-            var isValid = parsedDate.getTime() >= options.minDate &&  parsedDate.getTime() <= options.maxDate;
+            var isValid = (isNaN(datepicker.$options.minDate) || parsedDate.getTime() >= datepicker.$options.minDate) &&
+              (isNaN(datepicker.$options.maxDate) || parsedDate.getTime() <= datepicker.$options.maxDate);
             controller.$setValidity('date', isValid);
             // Only update the model when we have a valid date
             if(isValid) controller.$dateValue = parsedDate;
@@ -300,8 +305,16 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
         // modelValue -> $formatters -> viewValue
         controller.$formatters.push(function(modelValue) {
           // console.warn('$formatter("%s"): modelValue=%o (%o)', element.attr('ng-model'), modelValue, typeof modelValue);
-          if(angular.isUndefined(modelValue) || modelValue === null) return;
-          var date = angular.isDate(modelValue) ? modelValue : new Date(modelValue);
+          var date;
+          if(angular.isUndefined(modelValue) || modelValue === null) {
+            date = NaN;
+          } else if(angular.isDate(modelValue)) {
+            date = modelValue;
+          } else if(options.dateType === 'string') {
+            date = dateParser.parse(modelValue);
+          } else {
+            date = new Date(modelValue);
+          }
           // Setup default value?
           // if(isNaN(date.getTime())) {
           //   var today = new Date();
@@ -345,6 +358,11 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
       return arrays;
     }
 
+    // Modulus operator
+    function mod(n, m) {
+      return ((n % m) + m) % m;
+    }
+
     this.$get = function($locale, $sce, dateFilter) {
 
       return function(picker) {
@@ -374,8 +392,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
               }
             },
             build: function() {
-              var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1);
-              var firstDate = new Date(+firstDayOfMonth - (firstDayOfMonth.getDay() - options.startWeek) * 864e5);
+              var firstDayOfMonth = new Date(viewDate.year, viewDate.month, 1), firstDayOfMonthOffset = firstDayOfMonth.getTimezoneOffset();
+              var firstDate = new Date(+firstDayOfMonth - mod(firstDayOfMonth.getDay() - options.startWeek, 6) * 864e5), firstDateOffset = firstDate.getTimezoneOffset();
+              // Handle daylight time switch
+              if(firstDateOffset !== firstDayOfMonthOffset) firstDate = new Date(+firstDate + (firstDateOffset - firstDayOfMonthOffset) * 60e3);
               var days = [], day;
               for(var i = 0; i < 42; i++) { // < 7 * 6
                 day = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + i);
@@ -434,10 +454,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             },
             onKeyDown: function(evt) {
               var actualMonth = picker.$date.getMonth();
-              if(evt.keyCode === 37) picker.select(picker.$date.setMonth(actualMonth - 1), true);
-              else if(evt.keyCode === 38) picker.select(picker.$date.setMonth(actualMonth - 4), true);
-              else if(evt.keyCode === 39) picker.select(picker.$date.setMonth(actualMonth + 1), true);
-              else if(evt.keyCode === 40) picker.select(picker.$date.setMonth(actualMonth + 4), true);
+              if(evt.keyCode === 37) picker.select(new Date(picker.$date.setMonth(actualMonth - 1)), true);
+              else if(evt.keyCode === 38) picker.select(new Date(picker.$date.setMonth(actualMonth - 4)), true);
+              else if(evt.keyCode === 39) picker.select(new Date(picker.$date.setMonth(actualMonth + 1)), true);
+              else if(evt.keyCode === 40) picker.select(new Date(picker.$date.setMonth(actualMonth + 4)), true);
             }
           }, {
             name: 'year',
@@ -474,10 +494,10 @@ angular.module('mgcrea.ngStrap.datepicker', ['mgcrea.ngStrap.helpers.dateParser'
             },
             onKeyDown: function(evt) {
               var actualYear = picker.$date.getFullYear();
-              if(evt.keyCode === 37) picker.select(picker.$date.setYear(actualYear - 1), true);
-              else if(evt.keyCode === 38) picker.select(picker.$date.setYear(actualYear - 4), true);
-              else if(evt.keyCode === 39) picker.select(picker.$date.setYear(actualYear + 1), true);
-              else if(evt.keyCode === 40) picker.select(picker.$date.setYear(actualYear + 4), true);
+              if(evt.keyCode === 37) picker.select(new Date(picker.$date.setYear(actualYear - 1)), true);
+              else if(evt.keyCode === 38) picker.select(new Date(picker.$date.setYear(actualYear - 4)), true);
+              else if(evt.keyCode === 39) picker.select(new Date(picker.$date.setYear(actualYear + 1)), true);
+              else if(evt.keyCode === 40) picker.select(new Date(picker.$date.setYear(actualYear + 4)), true);
             }
           }];
 

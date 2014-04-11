@@ -1,7 +1,7 @@
 {
   "name": "angular-strap",
   "description": "AngularStrap - AngularJS directives for Twitter Bootstrap",
-  "version": "2.0.0-rc.4",
+  "version": "2.0.1",
   "keywords": [
     "angular",
     "bootstrap"
@@ -19,12 +19,25 @@
   },
   "licenses": [
     {
-      "type": "MIT"
+      "type": "MIT",
+      "url": "https://github.com/mgcrea/angular-strap/blob/master/LICENSE.md"
     }
   ],
   "main": [
-    "dist/angular-strap.js",
-    "dist/angular-strap.tpl.min.js"
+	"src/module.js",
+	"src/alert/alert.js",
+	"src/aside/aside.js",
+	"src/button/button.js",
+	"src/datepicker/datepicker.js",
+	"src/modal/modal.js",
+	"src/timepicker/timepicker.js",
+	"src/helpers/date-parser.js",
+	"src/helpers/debounce.js",
+	"src/helpers/dimensions.js",
+	"src/helpers/parse-options.js",
+	"src/helpers/raf.js",
+	"src/tooltip/tooltip.js",
+    "dist/angular-strap.tpl.js"
   ],
   "ignore": [
     "docs",
@@ -48,14 +61,13 @@
     "highlightjs": "~8.0.0",
     "jquery": "~2.1.0"
   },
-  "_release": "2.0.0-rc.4",
+  "_release": "2.0.1",
   "_resolution": {
     "type": "version",
-    "tag": "v2.0.0-rc.4",
-    "commit": "05cd5f34fb86adb11a561f906dc4fdcdd363b016"
+    "tag": "v2.0.1",
+    "commit": "59f440e6c1e5328a092aae0e54237240e03f5c1d"
   },
   "_source": "git://github.com/mgcrea/angular-strap.git",
   "_target": "~2.0.0",
-  "_originalSource": "angular-strap",
-  "_direct": true
+  "_originalSource": "angular-strap"
 }
