@@ -235,14 +235,13 @@ right {
 
 #students #searchContainer #tagBox,
 #backlog #searchContainer #tagBox {
-    float: left;
-    width: 60%;
+    right:auto;
+    width: 55%;
 }
 
 #students #searchContainer #searchBox,
 #backlog #searchContainer #searchBox {
     display: block !important;
-    width: 36%;
-    float: right;
-    position: relative;
+    left:auto;
+    width: 38%;
 }

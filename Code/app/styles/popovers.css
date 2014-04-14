@@ -1,10 +1,10 @@
 .popover {
     max-width: 50%;
+    z-index: 9999 !important
 }
 
 .modal-open .popover {
     max-width: 28%;
-    z-index: 9999 !important
 }
 
 .popover h3 {

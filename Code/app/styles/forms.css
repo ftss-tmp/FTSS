@@ -191,3 +191,10 @@ input:-ms-input-placeholder {
 .css-label {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAoCAYAAAD+MdrbAAACK0lEQVR42u2Vz2oaURTGk9KGtjSUdtPn8CF0oRvdiOLGjYKgQRBswMZFLaQBQQyKmq1PILgQfZDkAQbU+mcc/6aj8eSejxkpDNPkhmQhZOBjhjPn+9175uo5B51O50jol5AiRJJSDO/RgXEx8Pz65oYWyyVt7u5kBA972+32b4E6NIF/Vre3tN1uSfKCR3gZOBCotwxlIFZ74gUvMwTsvdCb5wR+wi6fEXj8EsB3ewTUdf0pegXuCxDNYb1ey8LgMZvDDthqtS64BS1XK9n2BQ97G43G5e6vl0wmPzabzUuxSl+2wbJHwMoOh+PbrjlwyzFaz2ehL0JfpQQPvB/A4qYIMgJY5VhK8MCLBrtHM2UymZCiKDKCx3amIElelpkiBZzOZrtyNU1DzDJTHgkEYDafUzQapcTJCUodq6rtTHkIhgOIJxIUj8cpFovR99NT+Gybg2nu9Xq03mwQGw6HgM0XC4AikQjV63UKh8NUKpUeAgKG53K5TD9zOTz/1XUuEZBKpUKhUIiqtRreId8OOBqN+I6V/X4/VCgUKJ1OUyAQoHw+j1jt6gp5qqrCYwNEeXzHt/H5fJQTOwwGgygzm82S1+ulSrWKnPF4zPmQLXAwGPDPAiX+ODsjj8cDUCqVIrfbjZ0ZlSDX0P+BgE6ngGYyGXK5XOR0Oi2wRwH7/b4pPlmGovxisWguyO8ssgHixP4VQxE3vy/iVtnOFAC63a6UJpr2OlNeYKbcAw6XHRYYkJMCAAAAAElFTkSuQmCC');
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}

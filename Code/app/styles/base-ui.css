@@ -90,7 +90,7 @@ a, a:hover {
 }
 
 .modal.center {
-    overflow:hidden!important;
+    overflow: hidden !important;
 }
 
 .modal-backdrop.am-fade {
@@ -98,16 +98,40 @@ a, a:hover {
 }
 
 .modal.center .modal-dialog {
-    max-width:700px;
-    width:700px;
+    max-width: 700px;
+    width: 700px;
 }
 
 #consent li {
     margin-top: 15px;
 }
 
+.text-warning .icon {
+    fill:#8a6d3b!important;
+}
+
+.text-success .icon {
+    fill:#3c763d!important;
+}
 .text-danger .icon {
-    color:#a94442;
-    fill:#a94442!important;
+    color: #a94442;
+    fill: #a94442 !important;
+}
+
+[contenteditable] {
+    overflow-y: visible;
+    height: auto;
+}
+
+.question {
+    margin-bottom: 40px;
+}
+
+.panel-footer {
+    color:#777;
+}
+
+.answer {
+    margin-left: 7%;
 }
 
