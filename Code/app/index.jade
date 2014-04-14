@@ -1,7 +1,7 @@
 include partials/__mixins
 
 - base = 'https://ftss-982trg-us-af-mil-7w8qlky4ciob5.s3.amazonaws.com/development/'
-/ - base = ''
+- base = ''
 
 +pageHead
 
@@ -10,6 +10,11 @@ include partials/__mixins
         script(src=base + 'js/vendor.js')
 
     body.wait(ng-controller='mainController', id='{{fn.getPage()}}')
+
+        img#bg1
+        img#bg2
+        #bgText
+
         include partials/includes/content
 
         #spinner: +icon('refresh', '0 0 27 32')

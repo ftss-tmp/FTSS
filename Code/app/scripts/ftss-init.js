@@ -169,4 +169,94 @@ var LOG;
 
 	}());
 
+	var refresh;
+
+	$.ajax({
+		       'cache'   : true,
+		       'dataType': 'jsonp',
+		       'url'     : 'https://api.flickr.com/services/feeds/photos_public.gne?id=39513508@N06&format=json&jsoncallback=?'
+	       })
+
+		.success(
+		function (resp) {
+
+			var timer,
+
+			    flip = false,
+
+			    shuffle = function () {
+
+				    var index = Math.floor(Math.random() * resp.items.length),
+
+				        item = resp.items[index];
+
+				    return item ? [index,
+				                   item.media.m.replace('_m.', '_c_d.'),
+				                   item
+				    ] : shuffle();
+
+			    },
+
+			    parent = $('html'),
+
+			    text = $('#bgText');
+
+			refresh = function () {
+
+				clearTimeout(timer);
+
+				if (FTSS._fn.getPage() === 'home') {
+
+					var item = shuffle();
+
+					flip = !flip;
+
+					$(flip ? '#bg2' : '#bg1')
+
+						.unbind()
+
+						.load(function () {
+
+							      if (this.height < this.width) {
+
+								      if (flip) {
+									      parent.addClass('flip');
+								      } else {
+									      parent.removeClass('flip');
+								      }
+
+								      text.html(
+										      '<b>' + item[2].title + '</b>: ' +
+										      $(item[2].description.replace(/src=/g, 'fake='))
+											      .toArray()
+											      .pop()
+											      .innerText
+								      );
+
+								      timer = setTimeout(refresh, 10 * 1000);
+
+							      } else {
+
+								      resp.items[item[0]] = false;
+								      flip = !flip;
+								      refresh();
+
+							      }
+
+						      })
+
+						.attr('src', item[1]);
+
+				} else {
+
+					timer = setTimeout(refresh, 10 * 1000);
+
+				}
+
+			};
+
+			refresh();
+
+		});
+
 }());
