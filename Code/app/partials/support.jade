@@ -6,14 +6,58 @@ h3.light-bottom
 
 div(ng-controller='supportController')
 
-    .lead Add a question or comment here and a FTSS support team member will get back to you pretty quick.
+    .lead Search existing questions & answers or ask a new one and someone will get back to you pretty quick.
 
-    .panel.panel-default(ng-repeat='comment in comments', style='font-size:.9em')
+    .input-group(explain="If you can't find an answer below, type your question here and then press ENTER.",
+    right)
+        .input-group-addon Ask a question:
+        p.form-control(contenteditable,
+                        ng-model='askQuestion',
+                        onEnter='addReply()')
 
-        .panel-body
-            .pull-left{{comment.Comment}}
-            .pull-right.btn-link(ng-click='addReply') Reply
 
-        .panel-footer(ng-class='{bold:comment.Staff}')
-            .pull-left {{comment.CreatedBy.Name}}
-            .pull-right {{comment.TimeAgo}}
+    hr
+
+    div(ng-show='!supportLoaded')
+        spinner()
+
+    .alert.alert-warning.lead(ng-show='supportLoaded && !comments') No questions have been asked on this page yet.
+
+    div(ng-if='comments')
+
+        input.form-control.search.pull-right(ng-model='supportSearch',
+                                                placeholder='Search previous questions & answers',
+                                                style='Width:50%!important')
+
+        .clearfix
+
+        br
+
+        .question.am-fade-and-slide-bottom(ng-repeat='comment in comments | search:supportSearch')
+
+            .panel.panel-default
+
+                .panel-body
+                    .pull-left(style='font-size:18px') {{comment.Comment}}
+                    .pull-right.btn-link(ng-click='startReply(comment)') Reply
+
+                .panel-footer
+                    .pull-left {{comment.CreatedBy.Name}}
+                    .pull-right {{comment.TimeAgo}}
+
+            .input-group(ng-show='comment.reply',
+                            style='margin-bottom:15px;margin-left:7%;width:93%!important',
+                            explain="Type your reply and then press ENTER to save.",
+                            right)
+                .input-group-addon Add reply:
+                p.form-control(contenteditable,
+                                ng-model='comment.writeReply',
+                                onEnter='addReply(comment)')
+
+
+            blockquote.answer(ng-repeat='reply in comment.replies')
+
+                p {{reply.Comment}}
+
+                footer {{reply.TimeAgo}} by {{reply.CreatedBy.Name}}
+

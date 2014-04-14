@@ -14,67 +14,117 @@
 			'SharePoint',
 			'$timeout',
 			function ($scope, SharePoint, $timeout) {
-debugger;
 
-				$scope.$parent.$hide = function () {
-					debugger;
-					$scope.$destroy;
+				var model = FTSS.models.support,
+
+				    page = FTSS._fn.getPage(),
+
+				    update,
+
+				    previous;
+
+				$scope.$parent.$on('modal.hide', function () {
+
+					update = function () {};
+					$scope.$destroy();
+
+				});
+
+				model.params.$filter = "Page eq '" + page + "'";
+
+				$scope.startReply = function (comment) {
+
+					comment.reply = true;
+
 				};
 
-				$scope.$on('$destroy', function () {
+				$scope.addReply = function (comment) {
 
-					debugger;
-				});
+					$scope.supportLoaded = false;
 
-				$timeout(function () {
-
-					var model = FTSS.models.support,
-
-					    page = FTSS._fn.getPage(),
-
-					    update;
-
-					model.params.$filter = "Page eq '" + page + "'";
-
-					$scope.addReply = function () {
-
-						var send = {
-							'__metadata': 'Support',
-							'Page'      : page,
-							'Staff'     : false,
-							'Comment'   : 'Test'
-						};
-
-						SharePoint.create(send).then(function (resp) {
-
-							if (resp.status === 201) {
-
-								$scope.comments.push(send);
-
-							}
-
-						}), utils.alert.error;
-
-
+					var send = {
+						'__metadata': 'Support',
+						'cache'     : true,
+						'Page'      : page,
+						'Staff'     : false,
+						'Comment'   : comment ? comment.writeReply : $scope.askQuestion
 					};
 
-					update = function () {
-						LOG($scope);
-						SharePoint.read(model).then(function (data) {
+					if (comment) {
+						send.Thread = comment.Id;
+					}
 
-							_(data).each(function (d) {
-								d.TimeAgo = moment(d.Created).fromNow();
-							});
+					send.Comment && SharePoint.create(send).then(update, utils.alert.error);
 
-							$scope.comments = data;
+					$scope.writeReply = '';
+					$scope.askQuestion = '';
 
-							$timeout(update, 5000);
-						});
-					};
+				};
 
-					update();
+				update = function (repeat) {
 
-				});
+					SharePoint.read(model).then(function (data) {
+
+						var size = _.size(data);
+
+						if (size && size !== previous) {
+
+							previous = size;
+
+							$scope.comments = {};
+
+							_(data)
+
+								.sortBy('Created')
+
+								.reverse()
+
+								.each(function (d) {
+
+									      // Get the time from now with the GMT offset of the CS3 servers (-5)
+									      d.TimeAgo = moment(d.Created).add('h', 5).fromNow();
+
+									      if (d.Thread < 1) {
+										      d.replies = [];
+										      $scope.comments[d.Id] = d;
+									      }
+
+								      })
+
+								.each(function (d) {
+
+									      if (d.Thread > 0) {
+										      $scope.comments[d.Thread].replies.push(d);
+									      }
+
+								      });
+
+							$scope.comments = _($scope.comments)
+
+								.each(function (c) {
+
+									      c.search = c.Comment + _.pluck(c.replies, 'Comment').join(' ');
+
+								      })
+
+								.sortBy('Created')
+
+								.reverse()
+
+								.value();
+
+						}
+
+						(repeat === true) && $timeout(function () {
+							update(repeat);
+						}, 5000);
+
+						$scope.supportLoaded = true;
+
+					});
+				};
+
+				update(true);
 
 			}
 		]);
