@@ -1,7 +1,6 @@
 /*global utils, FTSS, _, caches */
 
 FTSS.ng.controller(
-
 	'catalogController',
 
 	[
@@ -41,9 +40,7 @@ FTSS.ng.controller(
 
 							      _(u.Courses_JSON).each(function (c) {
 
-								      var d = data[c].Units = data[c].Units ||
-									      [
-									      ];
+								      var d = data[c].Units = data[c].Units || [];
 
 								      d.push(u.LongName);
 

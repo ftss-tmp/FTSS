@@ -87,32 +87,19 @@ var LOG;
 	FTSS.people = {};
 	FTSS.utils = {};
 
-	/**
-	 * Converts SharePoint Date format into a the locale date string.
-	 *
-	 * This function uses a closure to store a cache of dates since runtime to reduce the (tiny) parsing overhead
-	 */
-	FTSS.utils.fixDate = (function () {
+	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
-		var dCache = {};
+		'limit': 50,
 
-		return function (date, time) {
+		'animate': true,
 
-			time = time || false;
+		'tooltips': true,
 
-			if (!dCache[date + time]) {
+		'page': true,
 
-				var tmp = new Date(Number(date.replace(/[^\d.]/g, '')));
+		'hover': true
 
-				dCache[date + time] = time ? tmp.toLocaleString() : tmp.toLocaleDateString();
-
-			}
-
-			return dCache[date + time];
-
-		};
-
-	}());
+	};
 
 	LOG = FTSS.utils.log = (function () {
 
