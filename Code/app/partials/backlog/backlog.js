@@ -33,6 +33,68 @@ FTSS.ng.controller(
 
 					    scope.courses = courses;
 
+					    scope.local = courses[0].detRequest.distanceInt < 50;
+
+					    scope.funding = 'majcom';
+
+				    },
+
+				    'submit': function (scope) {
+
+					    var students = {};
+
+					    _(scope.courses).each(function (c) {
+
+						    _(c.requirements).each(function (r) {
+
+							    var student =
+
+								        students[r.Id] =
+
+								        students[r.Id] ||
+								        {
+									        '__meatadata'      : r.__metadata,
+									        'Requirements_JSON': r.Requirements_JSON
+								        };
+
+							    student.Requirements_JSON = _.without(student.Requirements_JSON, c.Id);
+
+						    });
+
+					    });
+
+					    debugger;
+
+
+					    $.ajax(
+						    {type:'post',url:'http://localhost/_vti_bin/ListData.svc/$batch',
+							    headers: {'Content-Type': 'multipart/mixed; boundary=batch_357647d1-a6b5-4e6a-aa73-edfc88d8866e'},
+							    data:[
+								    '--batch_357647d1-a6b5-4e6a-aa73-edfc88d8866e',
+								    'Content-Type: application/http',
+								    'Content-Transfer-Encoding: binary',
+								    '',
+								    'GET http://localhost/_vti_bin/ListData.svc/Units HTTP/1.1',
+								    'Accept:application/json;',
+								    '',
+								    '--batch_357647d1-a6b5-4e6a-aa73-edfc88d8866e--'].join('\n')})
+					    // Use the model's cache setting & __metadata
+					    send.cache = model.cache;
+					    send.__metadata = scope.data.__metadata || model.source;
+
+					    SharePoint.create(send).then(function (resp) {
+
+						    if (resp.status === 201) {
+
+							    utils.alert.create();
+
+							    callback(eventData, true);
+							    actions.reload();
+
+						    }
+
+					    }, utils.alert.error);
+
 				    }
 
 			    }),
