@@ -1,3 +1,21 @@
+.btnFake {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
 #scrollTarget.col-lg-9 .no-pad > .alert {
     width: 100%;
 }
@@ -197,11 +215,11 @@
     left: .2em;
 }
 
-.h4 .btn {
+.h4 .btnFake {
     transition: all 500ms ease !important;
 }
 
-.h4 .btn .icon-exclamation-circle {
+.h4 .btnFake .icon-exclamation-circle {
     display: none;
 }
 
@@ -211,7 +229,7 @@
     display: inline;
 }
 
-.h4 .btn .icon-plane {
+.h4 .btnFake .icon-plane {
     transition: opacity 500ms ease;
     width: 0;
     opacity: 0;
@@ -223,7 +241,7 @@
     width: 2em;
 }
 
-.h4 .btn .bigLetter {
+.h4 .btnFake .bigLetter {
     border-right: 1px solid white;
     font-size: 2em;
     line-height: .75em;
