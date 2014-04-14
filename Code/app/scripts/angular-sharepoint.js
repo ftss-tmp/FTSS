@@ -1,4 +1,4 @@
-/*global angular, db, _, PRODUCTION */
+/*global angular, db, _, PRODUCTION, FTSS */
 
 /**
  * Angular SharePoint
@@ -11,7 +11,9 @@
 
 	"use strict";
 
-	var _cache = [];
+	var _cache;
+
+	FTSS.db = _cache = [];
 
 	db.open({
 		        'server' : 'FTSS',
@@ -425,7 +427,10 @@
 								 // If we already have cached data we need to add the timestamp to the filter
 								 if (hasCache) {
 
-									 if (_debounce[cacheString] && cachedData.time -  _debounce[cacheString] < 15) {
+									 if (_debounce[cacheString] &&
+									     cachedData.time -
+									     _debounce[cacheString] <
+									     (options.debounce || 15)) {
 
 										 callback(cachedData.json);
 										 return;
