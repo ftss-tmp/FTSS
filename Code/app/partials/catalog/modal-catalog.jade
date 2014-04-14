@@ -85,14 +85,11 @@ form.form-horizontal(name='modal')
         br
         br
 
-        .col-lg-4.pull-right.switch-wrapper
+        .col-lg-4.pull-right
 
-            label.switch-light.switch-android(hover='catalog-cafmcl', right)
-                input(ng-model='data.CAFMCL', type='checkbox')
-                span
-                    em CAF/MCL
-                    span &#x2717;
-                    span &#x2713;
-                a
+            +toggleBox('data.CAFMCL', 'CAF/MCL', 'catalog-cafmcl')
+
+        br
+        br
 
     +modalFooter()
