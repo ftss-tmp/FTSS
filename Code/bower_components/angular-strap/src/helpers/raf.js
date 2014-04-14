@@ -2,7 +2,7 @@
 
 (angular.version.minor < 3 && angular.version.dot < 14) && angular.module('ng')
 
-.factory('$$rAF', function($window, $timeout) {
+.factory('$$rAF', ['$window', '$timeout', function($window, $timeout) {
 
   var requestAnimationFrame = $window.requestAnimationFrame ||
                               $window.webkitRequestAnimationFrame ||
@@ -32,7 +32,7 @@
 
   return raf;
 
-});
+}]);
 
 // .factory('$$animateReflow', function($$rAF, $document) {
 

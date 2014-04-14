@@ -389,7 +389,7 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
 
   })
 
-  .directive('bsTooltip', function($window, $location, $sce, $tooltip, $$rAF) {
+  .directive('bsTooltip', ['$window', '$location', '$sce', '$tooltip', '$$rAF', function($window, $location, $sce, $tooltip, $$rAF) {
 
     return {
       restrict: 'EAC',
@@ -437,4 +437,4 @@ angular.module('mgcrea.ngStrap.tooltip', ['mgcrea.ngStrap.helpers.dimensions'])
       }
     };
 
-  });
+  }]);

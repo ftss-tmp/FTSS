@@ -35,7 +35,7 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsCheckbox', function($button, $$rAF) {
+  .directive('bsCheckbox', ['$button', '$$rAF', function($button, $$rAF) {
 
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
@@ -100,7 +100,7 @@ angular.module('mgcrea.ngStrap.button', [])
 
     };
 
-  })
+  }])
 
   .directive('bsRadioGroup', function() {
 
@@ -121,7 +121,7 @@ angular.module('mgcrea.ngStrap.button', [])
 
   })
 
-  .directive('bsRadio', function($button, $$rAF) {
+  .directive('bsRadio', ['$button', '$$rAF', function($button, $$rAF) {
 
     var defaults = $button.defaults;
     var constantValueRegExp = /^(true|false|\d+)$/;
@@ -162,4 +162,4 @@ angular.module('mgcrea.ngStrap.button', [])
 
     };
 
-  });
+  }]);

@@ -277,7 +277,11 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
   })
 
 
-  .directive('bsTimepicker', function($window, $parse, $q, $locale, dateFilter, $timepicker, $dateParser, $timeout) {
+  .directive('bsTimepicker',
+
+
+             ['$window', '$parse', '$q', '$locale', 'dateFilter', '$timepicker', '$dateParser', '$timeout',
+             function($window, $parse, $q, $locale, dateFilter, $timepicker, $dateParser, $timeout) {
 
     var defaults = $timepicker.defaults;
     var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
@@ -386,4 +390,4 @@ angular.module('mgcrea.ngStrap.timepicker', ['mgcrea.ngStrap.helpers.dateParser'
       }
     };
 
-  });
+  }]);

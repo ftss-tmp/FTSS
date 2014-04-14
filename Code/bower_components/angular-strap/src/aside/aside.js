@@ -39,7 +39,7 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
 
   })
 
-  .directive('bsAside', function($window, $location, $sce, $aside) {
+  .directive('bsAside', ['$window', '$location', '$sce', '$aside', function($window, $location, $sce, $aside) {
 
     var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
 
@@ -85,4 +85,4 @@ angular.module('mgcrea.ngStrap.aside', ['mgcrea.ngStrap.modal'])
       }
     };
 
-  });
+  }]);

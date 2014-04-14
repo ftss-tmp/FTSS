@@ -2,7 +2,7 @@
 
 angular.module('mgcrea.ngStrap.helpers.dimensions', [])
 
-  .factory('dimensions', function($document, $window) {
+  .factory('dimensions', ['$document', '$window', function($document, $window) {
 
     var jqLite = angular.element;
     var fn = {};
@@ -147,4 +147,4 @@ angular.module('mgcrea.ngStrap.helpers.dimensions', [])
 
     return fn;
 
-  });
+  }]);
