@@ -44,7 +44,7 @@ form.form-horizontal(name='modal', ng-any-drop)
                         | Civilian
 
             +formGroup('Training Needs', 'students-training')
-                .imds-import
+                .imds-import.pds
                     select(selectize='MasterCourseList', bind='Requirements_JSON', multiple, placeholder='Type to add training requirements.')
 
                     .pull-right(hover="Click to import a 593 from IMDS; you can also just drag & drop the file or text onto this window or copy/paste straight from IMDS.", right, text-parser='Import IMDS 593')
