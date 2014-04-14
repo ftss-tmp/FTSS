@@ -18,22 +18,21 @@
 			'cache' : true,
 			'source': 'MasterCourseList',
 			'params': {
-				'$select':
-					[
-						'Id',
-						'PDS',
-						'MDS',
-						'Days',
-						'Hours',
-						'Min',
-						'Max',
-						'AFSC',
-						'Title',
-						'Number',
-						'IMDS',
-						'CAFMCL',
-						'Archived'
-					]
+				'$select': [
+					'Id',
+					'PDS',
+					'MDS',
+					'Days',
+					'Hours',
+					'Min',
+					'Max',
+					'AFSC',
+					'Title',
+					'Number',
+					'IMDS',
+					'CAFMCL',
+					'Archived'
+				]
 			}
 
 		},
@@ -43,16 +42,15 @@
 			'cache' : true,
 			'source': 'Units',
 			'params': {
-				'$select':
-					[
-						'Id',
-						'Base',
-						'Det',
-						'Email',
-						'Phone',
-						'Location',
-						'Courses_JSON'
-					]
+				'$select': [
+					'Id',
+					'Base',
+					'Det',
+					'Email',
+					'Phone',
+					'Location',
+					'Courses_JSON'
+				]
 			}
 
 		},
@@ -62,14 +60,13 @@
 			'cache' : true,
 			'source': 'HostUnits',
 			'params': {
-				'$select':
-					[
-						'Id',
-						'Unit',
-						'FTD',
-					    'Location',
-					    'Email'
-					]
+				'$select': [
+					'Id',
+					'Unit',
+					'FTD',
+					'Location',
+					'Email'
+				]
 			}
 
 		},
@@ -79,16 +76,15 @@
 			'cache' : true,
 			'source': 'Instructors',
 			'params': {
-				'$select':
-					[
-						'Id',
-						'UnitId',
-						'AFSC',
-						'InstructorName',
-						'InstructorEmail',
-						'Photo',
-						'Archived'
-					]
+				'$select': [
+					'Id',
+					'UnitId',
+					'AFSC',
+					'InstructorName',
+					'InstructorEmail',
+					'Photo',
+					'Archived'
+				]
 			}
 
 		},
@@ -98,36 +94,34 @@
 			'cache' : true,
 			'source': 'Requests',
 			'params': {
-				'$expand':
-					[
-						'Students',
-						'CreatedBy',
-						'Scheduled/Course',
-						'Scheduled/Requests/Students'
-					],
-				'$select':
-					[
-						'Id',
-						'Notes',
-						'Status',
-						'Created',
-						'CreatedBy/Name',
-						'CreatedBy/WorkEMail',
-						'CreatedBy/WorkPhone',
-						'Response_JSON',
-						'Students/Name',
-						'Students/WorkEMail',
-						'Students/WorkPhone',
-						'Scheduled/UnitId',
-						'Scheduled/CourseId',
-						'Scheduled/Start',
-						'Scheduled/End',
-						'Scheduled/Host',
-						'Scheduled/Other',
-						'Scheduled/InstructorId',
-						'Scheduled/Requests/Status',
-						'Scheduled/Requests/Students/Id'
-					]
+				'$expand': [
+					'Students',
+					'CreatedBy',
+					'Scheduled/Course',
+					'Scheduled/Requests/Students'
+				],
+				'$select': [
+					'Id',
+					'Notes',
+					'Status',
+					'Created',
+					'CreatedBy/Name',
+					'CreatedBy/WorkEMail',
+					'CreatedBy/WorkPhone',
+					'Response_JSON',
+					'Students/Name',
+					'Students/WorkEMail',
+					'Students/WorkPhone',
+					'Scheduled/UnitId',
+					'Scheduled/CourseId',
+					'Scheduled/Start',
+					'Scheduled/End',
+					'Scheduled/Host',
+					'Scheduled/Other',
+					'Scheduled/InstructorId',
+					'Scheduled/Requests/Status',
+					'Scheduled/Requests/Students/Id'
+				]
 			}
 
 		},
@@ -137,24 +131,22 @@
 			'cache' : true,
 			'source': 'Scheduled',
 			'params': {
-				'$expand':
-					[
-						'Course',
-						'Requests/Students'
-					],
-				'$select':
-					[
-						'Id',
-						'UnitId',
-						'CourseId',
-						'Start',
-						'End',
-						'InstructorId',
-						'Host',
-						'Other',
-						'Requests/Status',
-						'Requests/Students/Id'
-					]
+				'$expand': [
+					'Course',
+					'Requests/Students'
+				],
+				'$select': [
+					'Id',
+					'UnitId',
+					'CourseId',
+					'Start',
+					'End',
+					'InstructorId',
+					'Host',
+					'Other',
+					'Requests/Status',
+					'Requests/Students/Id'
+				]
 			}
 
 		},
@@ -164,22 +156,20 @@
 			'cache' : true,
 			'source': 'Requirements',
 			'params': {
-				'$expand':
-					[
-						'Course',
-						'Students'
-					],
-				'$select':
-					[
-						'Id',
-						'UnitId',
-						'CourseId',
-						'StudentsId',
-						'DateNeeded',
-						'Students/Training/Requirements_JSON',
-						'Students/Id',
-						'Notes'
-					]
+				'$expand': [
+					'Course',
+					'Students'
+				],
+				'$select': [
+					'Id',
+					'UnitId',
+					'CourseId',
+					'StudentsId',
+					'DateNeeded',
+					'Students/Training/Requirements_JSON',
+					'Students/Id',
+					'Notes'
+				]
 			}
 		},
 
@@ -188,39 +178,54 @@
 			'cache' : true,
 			'source': 'Students',
 			'params': {
-				'$expand':
-					[
-						'HostUnit'
-					],
-				'$select':
-					[
-						'Id',
-						'StudentType',
-						'HostUnitId',
-						'ProcessDate',
-						'StudentName',
-						'StudentEmail',
-						'Requirements_JSON',
-						'Archived'
-					]
+				'$expand': [
+					'HostUnit'
+				],
+				'$select': [
+					'Id',
+					'StudentType',
+					'HostUnitId',
+					'ProcessDate',
+					'StudentName',
+					'StudentEmail',
+					'Requirements_JSON',
+					'Archived'
+				]
 			}
 		},
 
 
 		'support': {
 
-			'cache' : true,
-			'source': 'Support',
-			'params': {
+			'debounce': 3,
+			'cache'   : true,
+			'source'  : 'Support',
+			'params'  : {
 				'$expand': 'CreatedBy',
-				'$select':
-					[
-						'Page',
-						'Staff',
-						'Comment',
-						'Created',
-						'CreatedBy/Name'
-					]
+				'$select': [
+					'Id',
+					'Page',
+					'Thread',
+					'Staff',
+					'Comment',
+					'Created',
+					'CreatedBy/Name'
+				]
+			}
+
+		},
+
+
+		'updates': {
+
+			'cache' : true,
+			'source': 'Updates',
+			'params': {
+				'$select': [
+					'Id',
+					'Update',
+					'Created'
+				]
 			}
 
 		}
