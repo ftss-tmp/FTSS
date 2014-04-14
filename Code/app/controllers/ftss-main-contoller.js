@@ -270,6 +270,8 @@
 
 									if ($scope.tagBox) {
 										_fn.setLoaded();
+										FTSS.search.focus();
+										FTSS.search.$control_input.focus();
 									}
 
 								}
