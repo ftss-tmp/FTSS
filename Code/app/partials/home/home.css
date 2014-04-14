@@ -2,20 +2,81 @@
     background: none !important;
 }
 
-.jumbotron {
+body:not(#home) #bgText {
+    display: none;
+}
+
+.jumbotron, #bgText {
     background: rgba(255, 255, 255, .85);
 }
 
-#bg {
+#bgText {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    left: 177px;
+    padding: 10px;
+    z-index: -1;
+    color: #555;
+    opacity: .9;
+}
+
+#bg1, #bg2 {
+    transition: opacity 2s ease-in-out;
     position: fixed;
     top: 50px;
     left: 177px;
     min-width: calc(100% - 177px);
     min-height: calc(100% - 50px);
-    z-index: -1;
+    z-index: -2;
     opacity: .7;
 }
 
-#home .well {
-    background-color: rgba(245, 245, 245, .9);
+html:not(.flip) #bg2, html.flip #bg1 {
+    transition: opacity 2s ease-in-out;
+    opacity: 0;
+}
+
+#home .well, #home .panel {
+    border-width: 2px;
+    background-color: rgba(245, 245, 245, .85);
+}
+
+#home .alert {
+    opacity: .8;
+}
+
+#home .pageLimit {
+    padding: 0 .5em;
+    margin: 0;
+    line-height: 1em;
+    font-size: 1em;
+    width: 2.5em;
+    height: 2em;
+}
+
+#home #prefs td:nth-child(2) {
+    text-align: center;
+}
+
+html#noAnimate body * {
+    -webkit-transition-property: none !important;
+    -webkit-animation: none !important;
+    -webkit-transform: none !important;
+    transition-property: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+#home .row {
+    height: calc(100% - 200px);
+}
+
+#home #updates, #home #updates .panel {
+    height: 100%;
+}
+
+#home #updates .panel-body {
+    overflow-y: auto;
+    height: calc(100% - 50px);
 }

@@ -1,7 +1,18 @@
 include ../__mixins
 
-.wrapped(style='top:-77px;overflow:hidden')
 
+mixin panelGroup(ico, title, type)
+    .panel(class='panel-' + type + ' text-' + type)
+
+        .panel-heading
+            h4.panel-title
+                +icon(ico)
+                =title
+
+        .panel-body
+            block
+
+.wrapped(style='top:-77px;overflow:hidden')
 
     .jumbotron('style="margin:-25px;padding:25px"')
         h1 Field Training Scheduling System
@@ -13,19 +24,73 @@ include ../__mixins
 
     .row
 
-        .col-lg-1
+        .col-lg-3
+            +panelGroup('edit', 'My App Defaults', 'default')
 
-        .well.col-lg-3
-            table.table.table-split
+                table.table.table-split(style='margin-top:-16px')
 
-                tr
-                    td Role
-                    td Developer
+                    tr
+                        td Role
+                        td Developer
 
-                tr
-                    td FTD
-                    td Robins AFB
+                    tr
+                        td FTD
+                        td Robins AFB
 
-                tr
-                    td Host Unit
-                    td 5 CCG
+                    tr
+                        td Host Unit
+                        td 5 CCG
+
+            +panelGroup('check-square-o', 'My Preferences', 'default')
+
+                table.table.table-split#prefs(style='margin-top:-16px')
+
+                    tr
+                        td Show Instructions
+                        td
+                            input.css-checkbox(type='checkbox', ng-model='pref.page')
+                            label.css-label
+
+                    tr
+                        td Show Tooltips
+                        td
+                            input.css-checkbox(type='checkbox', ng-model='pref.tooltips')
+                            label.css-label
+                    tr
+                        td Enable Animations
+                        td
+                            input.css-checkbox(type='checkbox', ng-model='pref.animate')
+                            label.css-label
+                    tr
+                        td(style='padding-top:1em') Page Item Limit
+                        td
+                            input.form-control.pageLimit(type='number',
+                            min='10',
+                            max='99',
+                            ng-model='pref.limit')
+
+        .col-lg-6
+            +panelGroup('flag', 'Course Updates', 'success')
+
+                em(style='font-size:1.3em', ng-show='courseUpdates.length < 1') There haven't been any course catalog changes since your last visit.
+
+                div(ng-repeat='course in courseUpdates')
+                    h4
+                        .pull-left {{course.PDS}} - {{course.Number}}
+                        .pull-right {{course.AFSC}}
+
+                    .cleafix
+
+                    br
+
+                    .clearfix
+
+                    p {{course.Title}}
+
+        .col-lg-3#updates
+            +panelGroup('info', 'Application Updates', 'warning')
+                blockquote.blockquote-reverse(ng-repeat='update in updates')
+                    p(style='font-size:.85em') {{update.Update}}
+                    footer {{update.date}}
+
+
