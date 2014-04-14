@@ -35,6 +35,18 @@ mixin icon(tag, viewbox)
 
 
 
+mixin toggleBox(model, title, hover)
+    .switch-wrapper
+        label.switch-light.switch-android(hover=hover, right)
+            input(ng-model=model, type='checkbox')
+            span
+                if title
+                    em= title
+                span &#x2717;
+                span &#x2713;
+            a
+
+
 mixin link(page, tag, name)
     li(class=page)
         .pointer
@@ -151,15 +163,26 @@ mixin modalHeader(create, update)
                 =update
 
 
-mixin modalFooter()
+mixin modalFooter(submitText, defaultShow)
+
     .modal-footer
+
         .sending(ng-show='submitted')
+
             spinner(size='2em')
             | Please wait, sending data...
-        button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-hide='!modal.$dirty || modal.$invalid || submitted')
+
+        button.btn.btn-success.btn-labeled(type='button', ng-click='submit()', ng-hide='modal.$invalid || submitted' + (defaultShow ? '' : '|| !modal.$dirty'))
+
             span.btn-label.white
                 +icon('check-circle')
-            span.text &nbsp;Submit
+
+            if submitText
+                span.text &nbsp;
+                =submitText
+            else
+                span.text &nbsp;Submit
+
         button.btn.btn-default(ng-click='close()') Cancel
 
 
