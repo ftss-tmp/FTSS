@@ -23,6 +23,10 @@
 
 	body = $('body');
 
+	if (!FTSS.prefs.animate) {
+		$('html').attr('id', 'noAnimate');
+	}
+
 	/**
 	 * Intercepts paste events and handles if we have a paste handler set (FTSS.pasteAction)
 	 *
@@ -72,6 +76,10 @@
 		 */
 		'enter': function () {
 
+			if (!FTSS.prefs.tooltips) {
+				return;
+			}
+
 			var $el = $(this), title, content, placement;
 
 			if (!$el.data('freeze')) {
@@ -84,7 +92,7 @@
 					title = $el.attr('hover') || $el.attr('explain');
 				} else {
 					content = $el.attr('hover') || $el.attr('explain');
-					content = FTSS.messages[content] || content;
+					content = FTSS.messages && FTSS.messages[content] || content;
 				}
 
 				if (content) {
