@@ -457,7 +457,19 @@ FTSS.controller = (function () {
 					scope.close = instance.destroy;
 
 					// Bind the submit action with a destroy callback
-					scope.submit = actions.update(scope, scope.close, isNew);
+					if (opts.submit) {
+
+						scope.submit = function() {
+
+							opts.submit(scope);
+
+						};
+
+					} else {
+
+						scope.submit = actions.update(scope, scope.close, isNew);
+
+					}
 
 					// Pass action.update to the scope for our traverse directive
 					scope.update = actions.update;
@@ -584,7 +596,7 @@ FTSS.controller = (function () {
 
 								}
 
-							}), utils.alert.error;
+							}, utils.alert.error);
 
 						} else {
 
