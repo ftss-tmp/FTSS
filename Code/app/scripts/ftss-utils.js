@@ -294,9 +294,9 @@ utils.alert = (function () {
 			FTSS.utils.log(err);
 
 			builder({
-						'type': 'danger',
+				        'type'    : 'danger',
 				        'title'   : 'Sorry, something went wrong!',
-				        'content'  : "Please refresh the page and try again.",
+				        'content' : "Please refresh the page and try again.",
 				        'duration': 10
 			        });
 		}
