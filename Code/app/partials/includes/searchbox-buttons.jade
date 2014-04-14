@@ -12,10 +12,10 @@ include ../__mixins
             +icon('group')
         .dropdown-menu
             h3.popover-title Group By
-            .btn-group-vertical(bs-radio-group, ng-model='groupBy.$')
-                label.btn.btn-link(ng-repeat='(val,name) in grouping')
-                    input(value='{{val}}', type='radio')
-                    | {{name}}
+            .btn-group-vertical
+                .btn.btn-link(ng-repeat='(val,name) in grouping')
+                    input.css-checkbox(value='{{val}}', type='radio', name='group', ng-model='groupBy.$')
+                    label.css-label {{name}}
 
     span.dropdown
         span.dropdown-toggle.btn.btn-default(hover='button-sorting', left, data-toggle='dropdown')
@@ -23,10 +23,10 @@ include ../__mixins
 
         .dropdown-menu
             h3.popover-title Sort By
-            .btn-group-vertical(bs-radio-group, ng-model='sortBy.$')
-                label.btn.btn-link(ng-repeat='(val,name) in sorting')
-                    input(value='{{val}}', type='radio')
-                    | {{name}}
+            .btn-group-vertical
+                .btn.btn-link(ng-repeat='(val,name) in sorting')
+                    input.css-checkbox(ng-model='sortBy.$', ng-value='val', type='radio', name='sort')
+                    label.css-label {{name}}
 
     span(style='width:5%')  
 
