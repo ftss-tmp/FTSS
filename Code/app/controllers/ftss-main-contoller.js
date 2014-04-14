@@ -336,7 +336,7 @@
 						$scope.noSearch = false;
 					}
 
-					$scope.pageLimit = 25;
+					$scope.pageLimit = FTSS.prefs.limit;
 					$scope.count = '-';
 					$scope.overload = false;
 					$scope.filter = false;
