@@ -259,6 +259,86 @@
 
 				 },
 
+				 'batch' : function (collection) {
+
+					 var requests = _.map(collection, function (data) {
+
+						     var request =
+
+							         data.__metadata.etag ?
+
+							         [
+									         'MERGE ' + data.__metadata.uri + ' HTTP/1.1',
+									         'If-Match: ' + data.__metadata.etag
+
+							         ] : ['POST ' + data.__metadata + ' HTTP/1.1'];
+
+
+						     return request
+
+							     .concat(
+							     [
+								     'Content-Type: application/json;charset=utf-8',
+								     '',
+								     JSON.stringify(_utils.beforeSend(data))
+							     ])
+
+							     .join('\n');
+
+
+					     }),
+
+					     boundary = 'b_' + utils.generateUUID(),
+
+					     changeset = 'c_' + utils.generateUUID(),
+
+					     header = [
+						     '',
+						     '--' + changeset,
+						     'Content-Type: application/http',
+						     'Content-Transfer-Encoding: binary',
+						     '',
+						     ''
+					     ].join('\n'),
+
+					     data = '--' + boundary +
+					            '\nContent-Type: multipart/mixed; boundary=' +
+					            changeset + '\n';
+
+					 _(requests).each(function (r) {
+
+						 data += header + r;
+
+					 });
+
+					 data += ['\n\n--',
+					          changeset,
+					          '--\n',
+					          '--',
+					          boundary,
+					          '--'
+					 ].join('');
+
+					 return $http(
+						 {
+							 'method' : 'POST',
+							 'url'    : _config.baseURL + '$batch',
+							 'headers': {
+								 'Content-Type': 'multipart/mixed; boundary=' + boundary
+							 },
+							 data     : data
+						 })
+
+						 .then(function (response) {
+
+							       LOG(response);
+
+							       debugger;
+
+						       });
+
+
+				 },
 				 'create': function (scope) {
 
 					 return $http(
