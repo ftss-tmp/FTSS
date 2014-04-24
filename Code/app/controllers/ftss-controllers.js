@@ -95,7 +95,7 @@ FTSS.controller = (function () {
 							// Only act if there is a valid change to our watch
 							if (watch) {
 
-								actions.reload = function () {
+								actions.reload = function (secondaryCallback) {
 
 									var filters = [];
 
@@ -109,7 +109,13 @@ FTSS.controller = (function () {
 
 										.read(model)
 
-										.then(callback);
+										.then(function (data) {
+
+											      callback && callback(data);
+
+											      secondaryCallback && secondaryCallback(data);
+
+										      });
 
 								};
 
@@ -459,7 +465,7 @@ FTSS.controller = (function () {
 					// Bind the submit action with a destroy callback
 					if (opts.submit) {
 
-						scope.submit = function() {
+						scope.submit = function () {
 
 							opts.submit(scope);
 
