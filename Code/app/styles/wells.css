@@ -52,3 +52,7 @@
 .collapsed h4 {
     font-weight: 100
 }
+
+.well .input-group-addon {
+    background: #fafafa;
+}
