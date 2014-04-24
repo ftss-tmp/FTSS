@@ -169,7 +169,7 @@
 }
 
 #backlogStats:hover {
-    background: #3a87ad
+    background: #3a87ad;
 }
 
 #pieReqs .nv-label, #pieReqs .nv-label rect {
@@ -256,7 +256,7 @@
 }
 
 #backlog .modal-dialog {
-    width: 70%;
+    width: 85%;
 }
 
 #backlog .modal-dialog .table {
@@ -269,4 +269,10 @@
     height: inherit;
     text-align: right;
     line-height: 0;
+}
+
+#stats898 input {
+    margin-left: 2%;
+    line-height: normal;
+    font-weight: normal;
 }
