@@ -65,7 +65,7 @@
 				           'baseURL': 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/',
 				           'userURL': 'http://' + location.hostname + ':8080/_layouts/userdisp.aspx?Force=True',
 				           'pplURL' : 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/UserInformationList',
-				           'offline': false,
+				           'offline': true,
 				           'noCache': false
 			           };
 
@@ -80,25 +80,28 @@
 
 			 _utils.beforeSend = function (scope) {
 
+				 var scopeClone = angular.copy(scope);
+
 				 // Empty the debounce list to prevent etag issues if the user is a really fast clicker!
 				 _debounce = {};
 
-				 delete scope.__metadata;
+				 delete scopeClone.__metadata;
+				 delete scopeClone.callback;
 
-				 if (scope.cache) {
-					 scope.Timestamp = _utils.getTimeStamp();
-					 delete scope.cache;
+				 if (scopeClone.cache) {
+					 scopeClone.Timestamp = _utils.getTimeStamp();
+					 delete scopeClone.cache;
 				 }
 
-				 _(scope).each(function (s, field) {
+				 _(scopeClone).each(function (s, field) {
 
 					 if (field.indexOf('_JSON') > 0) {
-						 scope[field] = s !== null ? JSON.stringify(s) : '';
+						 scopeClone[field] = s !== null ? JSON.stringify(s) : '';
 					 }
 
 				 });
 
-				 return scope;
+				 return scopeClone;
 			 };
 
 			 _utils.getDate = (function () {
@@ -261,26 +264,26 @@
 
 				 'batch' : function (collection) {
 
-					 var requests = _.map(collection, function (data) {
+					 var map = [],
 
-						     var request =
+					     requests = _.map(collection, function (data) {
 
-							         data.__metadata.etag ?
+						     map.push(data);
 
-							         [
-									         'MERGE ' + data.__metadata.uri + ' HTTP/1.1',
-									         'If-Match: ' + data.__metadata.etag
+						     return (data.__metadata.etag ?
 
-							         ] : ['POST ' + data.__metadata + ' HTTP/1.1'];
+						             [
+								             'MERGE ' + data.__metadata.uri + ' HTTP/1.1',
+								             'If-Match: ' + data.__metadata.etag
 
-
-						     return request
+						             ] : ['POST ' + data.__metadata + ' HTTP/1.1'])
 
 							     .concat(
 							     [
 								     'Content-Type: application/json;charset=utf-8',
+								     'Accept: application/json',
 								     '',
-								     JSON.stringify(_utils.beforeSend(data))
+								     JSON.stringify(_utils.beforeSend(data)),
 							     ])
 
 							     .join('\n');
@@ -288,10 +291,16 @@
 
 					     }),
 
-					     boundary = 'b_' + utils.generateUUID(),
+					     // Generate a random string used for our multipart boundaries
+					     seed = Math.random().toString(36).substring(2),
 
-					     changeset = 'c_' + utils.generateUUID(),
+					     // Generate the boundary for this transaction set
+					     boundary = 'b_' + seed,
 
+					     // Generate the changeset that will separate each individual action
+					     changeset = 'c_' + seed,
+
+					     // The header that appears before each action(must have the extra linebreaks or SP will die)
 					     header = [
 						     '',
 						     '--' + changeset,
@@ -301,24 +310,30 @@
 						     ''
 					     ].join('\n'),
 
-					     data = '--' + boundary +
-					            '\nContent-Type: multipart/mixed; boundary=' +
-					            changeset + '\n';
+					     // Create the body of the request with lots of linebreaks to make SP not sad.....
+					     body = [
 
-					 _(requests).each(function (r) {
+						     // Body start
+							     '--' + boundary,
 
-						 data += header + r;
+						     // Content type & changeset declaration
+							     'Content-Type: multipart/mixed; boundary=' + changeset,
 
-					 });
+						     // Prepend a header to each request
+							     header + requests.join(header),
 
-					 data += ['\n\n--',
-					          changeset,
-					          '--\n',
-					          '--',
-					          boundary,
-					          '--'
-					 ].join('');
+						     // Another mandatory linebreak for SP
+							     '',
 
+						     // Close the changeset out
+							     '--' + changeset + '--',
+
+						     // Close the boundary as well
+							     '--' + boundary + '--'
+
+					     ].join('\n');
+
+					 // Call $http against $batch with the mulitpart/mixed content type & our body
 					 return $http(
 						 {
 							 'method' : 'POST',
@@ -326,14 +341,60 @@
 							 'headers': {
 								 'Content-Type': 'multipart/mixed; boundary=' + boundary
 							 },
-							 data     : data
+							 data     : body
 						 })
 
 						 .then(function (response) {
 
-							       LOG(response);
+							       var index = 0,
 
-							       debugger;
+							           data = response.data,
+
+							           processed = data.split(data.match(/boundary=([\w-]+)/)[1]),
+
+							           retVal = {
+
+								           'success': true,
+
+								           'transaction': {
+									           'sent'    : response.config.data,
+									           'received': data
+								           }
+
+							           };
+
+							       processed = processed.slice(2, processed.length - 1);
+
+							       _(processed).each(function (row) {
+
+								       var callback = map[index++].callback,
+
+									       etag = row.match(/ETag\:\s(.+)/i),
+
+									       json;
+
+								       if (retVal.success) {
+
+									       retVal.success = (row.indexOf('HTTP/1.1 201') > 0) ||
+									                        (row.indexOf('HTTP/1.1 204') > 0);
+
+									       try {
+										       json = JSON.parse(row.split(etag[0])[1].replace(/--$/,'')).d;
+									       } catch(e) {
+										       json = false;
+									       }
+
+									       callback && callback(
+										       {
+											       'etag': etag[1],
+											       'data': json
+										       });
+
+								       }
+
+							       });
+
+							       return retVal;
 
 						       });
 
