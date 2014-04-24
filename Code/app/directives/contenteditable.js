@@ -48,7 +48,11 @@
 
 					// Write data to the model
 					function read() {
-						ngModel.$setViewValue(element.text().replace(/[^\w.,*?[\]()!=]/mg, ' '));
+						var txt = element.text().replace(/[^\w.,*?[\]()!=]/mg, ' ');
+
+						if (txt !== '') {
+							ngModel.$setViewValue(txt);
+						}
 					}
 				}
 			};
