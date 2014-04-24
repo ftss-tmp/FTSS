@@ -5,7 +5,8 @@ FTSS.ng.controller(
 
 	[
 		'$scope',
-		function ($scope) {
+		'SharePoint',
+		function ($scope, SharePoint) {
 
 			var self = FTSS.controller($scope, {
 				    'sort' : 'PDS',
@@ -29,7 +30,34 @@ FTSS.ng.controller(
 
 				    'edit': function (scope, isNew, courses) {
 
-					    courses.month = moment().add('months', 3);
+					    var m = moment(),
+
+					        month = {
+
+						        'm1': m.month(),
+						        'd1': m.format('MMM YY'),
+						        'm2': m.add(1, 'month').month(),
+						        'd2': m.format('MMM YY'),
+						        'm3': m.add(1, 'month').month(),
+						        'd3': m.format('MMM YY')
+
+					        };
+
+					    courses.month = moment().add('months', 3).toISOString();
+
+					    _(courses).each(function (course) {
+
+						    course.limit = 3;
+
+						    course.History = angular.copy(month);
+
+						    course.students = _(course.requirements).map(function (req) {
+
+							    return req.selected ? req.StudentName.slice(0, 25) + '...' : false;
+
+						    }).filter().value();
+
+					    });
 
 					    scope.courses = courses;
 
@@ -41,59 +69,122 @@ FTSS.ng.controller(
 
 				    'submit': function (scope) {
 
-					    var students = {};
+					    scope.submitted = true;
 
-					    _(scope.courses).each(function (c) {
+					    var odataCall = {
 
-						    _(c.requirements).each(function (r) {
+						    'requirement': {
 
-							    var student =
+							    'cache': true,
 
-								        students[r.Id] =
+							    '__metadata': 'Requirements',
 
-								        students[r.Id] ||
-								        {
-									        '__meatadata'      : r.__metadata,
-									        'Requirements_JSON': r.Requirements_JSON
-								        };
+							    'UnitId': scope.courses[0].detRequest.Id,
 
-							    student.Requirements_JSON = _.without(student.Requirements_JSON, c.Id);
+							    'HostId': scope.courses[0].requirements[0].HostUnitId,
 
-						    });
+							    'DateNeeded': scope.courses.month,
 
-					    });
+							    'Funded': scope.local || scope.funding === 'unit',
 
-					    debugger;
+							    'TDY': !scope.local,
 
+							    'Notes': scope.notes,
 
-					    $.ajax(
-						    {type:'post',url:'http://localhost/_vti_bin/ListData.svc/$batch',
-							    headers: {'Content-Type': 'multipart/mixed; boundary=batch_357647d1-a6b5-4e6a-aa73-edfc88d8866e'},
-							    data:[
-								    '--batch_357647d1-a6b5-4e6a-aa73-edfc88d8866e',
-								    'Content-Type: application/http',
-								    'Content-Transfer-Encoding: binary',
-								    '',
-								    'GET http://localhost/_vti_bin/ListData.svc/Units HTTP/1.1',
-								    'Accept:application/json;',
-								    '',
-								    '--batch_357647d1-a6b5-4e6a-aa73-edfc88d8866e--'].join('\n')})
-					    // Use the model's cache setting & __metadata
-					    send.cache = model.cache;
-					    send.__metadata = scope.data.__metadata || model.source;
+							    'Requirements_JSON': [],
 
-					    SharePoint.create(send).then(function (resp) {
-
-						    if (resp.status === 201) {
-
-							    utils.alert.create();
-
-							    callback(eventData, true);
-							    actions.reload();
+							    'Requestor_JSON': [
+								    $scope.user.id,
+								    $scope.user.Name,
+								    $scope.user.WorkEMail
+							    ]
 
 						    }
 
-					    }, utils.alert.error);
+					    };
+
+					    _(scope.courses).each(function (course) {
+
+						    var req = [
+							    // Course
+							    course.Id,
+
+							    // Priority
+							    course.priority,
+
+							    // Notes
+							    course.CourseNotes,
+
+							    // Students
+							    [],
+
+							    // History
+							    course.History
+						    ];
+
+						    _(course.requirements)
+
+							    .filter('selected')
+
+							    .each(function (requirement) {
+
+								          var student =
+
+									              odataCall['_student_' + requirement.Id] =
+
+									              odataCall['_student_' + requirement.Id] ||
+
+									              {
+										              'cache': true,
+
+										              '__metadata': requirement.__metadata,
+
+										              'Requirements_JSON': requirement.Requirements_JSON
+									              };
+
+								          student.Requirements_JSON = _.without(student.Requirements_JSON, course.Id);
+
+								          req[3].push(
+									          [
+										          // Id
+										          requirement.Id,
+
+										          // StudentType
+										          requirement.StudentType,
+
+										          // StudentName
+										          requirement.StudentName,
+
+										          // StudentEmail
+										          requirement.StudentEmail
+									          ]);
+
+							          });
+
+						    odataCall.requirement.Requirements_JSON.push(req);
+
+					    });
+
+					    SharePoint.batch(odataCall).then(function (result) {
+
+						    if (result) {
+
+							    self.reload(function () {
+
+								    scope.$hide();
+								    utils.alert.create();
+
+								    scope.submitted = false;
+
+							    });
+
+						    } else {
+
+							    utils.alert.error('Batch 898 Creation failure');
+
+						    }
+
+					    });
 
 				    }
 
@@ -127,45 +218,6 @@ FTSS.ng.controller(
 
 			};
 
-			$scope.requests = {
-				'display': false
-			};
-
-			$scope.checkStudent = (function () {
-
-				var data = {};
-
-				return  function (row) {
-
-					var count = _(row.requirements).filter('selected').size();
-
-					if (count) {
-
-						row.Over = count > row.Max;
-						row.Under = count < row.Min;
-						row.Count = count;
-						row.Type = $scope.requestType(row);
-
-						data[row.Id] = row;
-
-					} else {
-
-						row.Over = row.Under = false;
-						delete data[row.Id];
-
-					}
-
-					$scope.requests.count = 0;
-
-					$scope.requests.display = _.size(data) ? _.groupBy(data, function (gp) {
-						$scope.requests.count += gp.Count;
-						return gp.detRequest.Base;
-					}) : false;
-
-				};
-
-			}());
-
 			self
 
 				.bind('filter')
@@ -182,6 +234,51 @@ FTSS.ng.controller(
 						          reqs[grp] = reqs[grp] ? ++reqs[grp] : 1;
 
 					          };
+
+
+					      $scope.requests = {
+						      'display': false
+					      };
+
+					      $scope.checkStudent = (function () {
+
+						      var data = {};
+
+						      return  function (row) {
+
+							      var count = row ? _(row.requirements).filter('selected').size() : false;
+
+							      if (count) {
+
+								      row.Over = count > row.Max;
+								      row.Under = count < row.Min;
+								      row.Count = count;
+								      row.Type = $scope.requestType(row);
+
+								      data[row.Id] = row;
+
+							      } else {
+
+								      row.Over = row.Under = false;
+								      delete data[row.Id];
+
+							      }
+
+							      $scope.requests.count = 0;
+
+							      $scope.requests.display = _.size(data) ?
+
+							                                _.groupBy(data, function (gp) {
+
+								                                $scope.requests.count += gp.Count;
+								                                return gp.detRequest.Base;
+
+							                                }) : false;
+
+						      };
+
+					      }());
+
 
 					      $scope.totals = {
 						      'allStudents': 0,

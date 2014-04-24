@@ -18,15 +18,23 @@ form(name='modal')
 
         +userInstructions('modal-backlog')
 
-        .pull-right(ng-if='!local')
-            | Funding Source:
-            .btn-group.no-toggle(hover='backlog-funding', right, bs-radio-group, ng-model='funding')
-                label.btn.btn-default
-                    input(value='unit', type='radio')
-                    | Unit
-                label.btn.btn-default
-                    input(value='majcom', type='radio')
-                    | MAJCOM
+        .row
+
+            .col-lg-8
+                .input-group(explain="(Optional) Add any general notes for this 898 request.", top)
+                    .input-group-addon 898 Notes:
+                    p.form-control(contenteditable, ng-model='notes')
+
+            .col-lg-4(ng-if='!local')
+                .input-group.pull-right(style='width:20em!important')
+                    .input-group-addon  Funding Source:
+                    .btn-group.no-toggle(hover='backlog-funding', right, bs-radio-group, ng-model='funding')
+                        label.btn.btn-default
+                            input(value='unit', type='radio')
+                            | Unit
+                        label.btn.btn-default
+                            input(value='majcom', type='radio')
+                            | MAJCOM
 
         .clearfix
 
@@ -35,33 +43,77 @@ form(name='modal')
         .well.well-sm(ng-repeat='row in courses', ng-class='{priority:row.priority}')
 
             .h4
-                .pull-left(hover='This is a priority course (listed on the CAF/MCL).', style='margin-top:-.25em')
-                    +icon('asterisk')
-                .pull-left.truncate {{row.Title}}
+                .btnFake.white(class='btn-primary')
+                    span.bigLetter {{row.requirements.length}}
+                    span(style='font-size:1.25em;position:relative;top:.15em;') {{row.PDS}}&nbsp;
 
-            .row
-                .col-lg-4
-                    table.table.table-split
-                        tbody
-                            tr
-                                td Course
-                                td {{row.PDS}} - {{row.Number}}
+                .pull-right.w75(style='position:relative;top:.2em')
+                    span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
+                        +icon('asterisk')
+                    .truncate.text-right(style='margin-top:5px') {{row.Title}}
 
-                            tr
-                                td Length
-                                td {{row.Days}} Days / {{row.Hours}} Hours
+            hr
 
-                            tr
-                                td Limits
-                                td {{row.Min}} Min / {{row.Max}} Max
+            .col-lg-3
+                table.table.table-split
+                    tbody
+                        tr
+                            td Course
+                            td {{row.Number}}
 
-                .col-lg-1
+                        tr
+                            td Length
+                            td {{row.Days}} Days / {{row.Hours}} Hours
 
-                .col-lg-7
-                    table.table.table-split
-                        tbody
-                            tr(ng-repeat='student in row.requirements|filter:{selected:true}')
-                                td(style='letter-spacing:.1em') {{student.StudentName}}
+                        tr
+                            td Limits
+                            td {{row.Min}} Min / {{row.Max}} Max
+
+            .col-lg-1
+
+            .col-lg-3
+                table.table.table-split#stats898
+                    tbody
+                        tr
+                            td {{row.History.d1}}
+                            td
+                                input.w60(ng-model='row.History.r1', placeholder='Requested')
+                                input.w30.pull-right(ng-model='row.History.b1', placeholder='Built')
+
+                        tr
+                            td {{row.History.d2}}
+                            td
+                                input.w60(ng-model='row.History.r2', placeholder='Requested')
+                                input.w30.pull-right(ng-model='row.History.b2', placeholder='Built')
+
+                        tr
+                            td {{row.History.d3}}
+                            td
+                                input.w60(ng-model='row.History.r3', placeholder='Requested')
+                                input.w30.pull-right(ng-model='row.History.b3', placeholder='Built')
+
+
+            .col-lg-1
+
+            .col-lg-4
+                table.table.table-split
+                    tbody
+                        tr(ng-repeat='student in (students =  (row.students | limitTo:row.limit))')
+                            td(style='letter-spacing:.1em')
+                                | {{student}}
+                                p(ng-show='$last && $index < (row.students.length - 1)')
+                                    a(ng-click='row.limit = 99') Show All
+
+            .clearfix
+            br
+
+
+
+            table.table.table-split
+                tbody
+                    tr(explain="(Optional) Add any notes for this course.", right)
+                        td(style='width:6.75em;white-space:normal') Course Notes
+                        td: p.form-control(contenteditable, ng-model='row.CourseNotes')
 
 
         br
