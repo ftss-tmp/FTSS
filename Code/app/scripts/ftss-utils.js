@@ -169,7 +169,6 @@ utils.tagHighlight = function (data) {
 				if (utils.deepRead(req, t.testField) === t.testValue) {
 
 					FTSS.search.$control.find('.item[data-value="' + t.id + '"]').addClass('matched');
-					delete test[k];
 
 				}
 
