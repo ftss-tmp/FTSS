@@ -156,18 +156,17 @@
 			'cache' : true,
 			'source': 'Requirements',
 			'params': {
-				'$expand': [
-					'Course',
-					'Students'
-				],
 				'$select': [
 					'Id',
 					'UnitId',
-					'CourseId',
-					'StudentsId',
+					'HostId',
 					'DateNeeded',
-					'Students/Training/Requirements_JSON',
-					'Students/Id',
+					'Requirements_JSON',
+					'Requestor_JSON',
+					'Validated',
+					'Approved',
+					'Funded',
+					'TDY',
 					'Notes'
 				]
 			}
