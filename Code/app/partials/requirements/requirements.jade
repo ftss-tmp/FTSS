@@ -1,68 +1,94 @@
 include ../__mixins
 
-+grouping()
+div
+    //-
+        _.keys(data[0])
+        ["__metadata", "Notes", "UnitId", "DateNeeded", "HostId", "Validated", "Approved", "Funded", "TDY", "Id", "Requestor", "Requirements"]
+        _.keys(data[0].Requirements[972])
+        ["course", "priority", "notes", "seatCount"]
 
-    .well(ng-repeat='row in group')
 
-        h4
-            span(class='btn btn-info') {{row.Students_JSON.length}} Required
-            span.rollupOnly {{row.Course.PDS}} - {{row.Course.Number}}
-            span.pull-right(style='letter-spacing: .1em')
-                | {{row.Date}}
-                +icon('calendar_range')
+.wrapped
 
-        hr.rollup
+    +userInstructions('requirements', true)
 
-        .rollup
+    +grouping()
 
-            .col-lg-7.pull-left
-                table.table.table-split
+        .well(ng-repeat='row in group', ng-class='{archived:row.Archived, updated:row.updated}', id='{{row.Id}}wr')
+
+            #requirementsProgress.wizard
+                ul.steps
+                    li.complete
+                        span.badge 1
+                        | MTF
+                        span.chevron
+                    li.complete
+                        span.badge 2
+                        | Group/CC
+                        span.chevron
+                    li.active
+                        span.badge 3
+                        | MAJCOM
+                        span.chevron
+                    li
+                        span.badge 4
+                        | FTD
+                        span.chevron
+
+            .h4
+                +icon('flag')
+
+                .btnFake(class='btn-info')
+                    span.bigLetter {{row.totalSeats}}
+                    span(style='font-size:1.25em;position:relative;top:.15em;') {{row.FTD.LongName}}&nbsp;
+
+            hr.rollup
+
+            .rollup
+
+                blockquote
+                    p {{row.Notes}}
+                    footer {{row.Requestor.Name}}
+
+                table.table.table-hover.table-center
                     thead
+
                         tr
-                            th.truncate(colspan='2') {{row.Course.PDS}} - {{row.Course.Number}}: {{row.Course.Title}}
+
+                            th.w5
+                            th.w5.left PDS
+                            th.left Course
+                            th.w10 {{row.History[1]}}
+                            th.w10 {{row.History[2]}}
+                            th.w10 {{row.History[3]}}
+                            th.w10
+                            th.w10 Min/Max
+                            th.w5 Seats
+
                     tbody
-                        tr
-                            td Location
-                            td {{row.Unit.LongName}}
-                        tr
-                            td MDS
-                            td {{row.Course.MDS}}
-                        tr
-                            td AFSC
-                            td {{row.Course.AFSC}}
-                        tr
-                            td Days
-                            td {{row.Course.Days}}
-                        tr
-                            td Hours
-                            td {{row.Course.Hours}}
 
-            .col-lg-5.pull-right.text-right(style='margin-top: 10px')
-                p.truncate(ng-repeat='student in row.Students', style='margin-bottom: 10px')
-                    +icon('student_hand')
-                    a(href='mailto:{{student.WorkEMail}}{{row.mail}}') {{student.Name}}
-                    br
-                    span(ng-show='student.WorkPhone') {{student.WorkPhone}}
+                        tr(ng-repeat='req in row.Requirements', ng-class='{priority:req.priority}')
 
+                            td
+                                +icon('asterisk')
+                                span.btn-muted(title='{{req.course.Title}}', hover='{{req.hover}}', right)
+                                    +icon('info')
 
-            .clearfix
-                .requestActions
-                    hr
-                    .pull-right.invert
-                        button.btn.btn-success.btn-labeled.btn-muted(type='button', ng-click='add(r)', ng-show='row.openSeats')
-                            span.btn-label
-                                +icon('add')
-                            | Request Seats
-                        button.btn.btn-primary.btn-labeled.btn-muted(type='button', ng-show='row.requestCount', ng-click='view(r)')
-                            span.btn-label
-                                +icon('search')
-                            | View Requests
-                        button.btn.btn-warning.btn-labeled.btn-muted(type='button', ng-click='edit(r)')
-                            span.btn-label
-                                +icon('edit')
-                            | Edit Class
-                        button.btn.btn-dangerow.btn-labeled.btn-muted(type='button', ng-click='archive(r)')
-                            span.btn-label
-                                +icon('delete')
-                            | Cancel Class
-                    .clearfix
+                            td.left
+                                b {{req.course.PDS}}
+
+                            td.left
+                                b {{req.course.Number}} ({{req.course.MDS}})
+
+                            td(class="{{req.history[0].style}}") {{req.history[0].text}}
+
+                            td(class="{{req.history[1].style}}") {{req.history[1].text}}
+
+                            td(class="{{req.history[2].style}}") {{req.history[2].text}}
+
+                            td
+
+                            td {{req.course.Min}} / {{req.course.Max}}
+
+                            td.bold(style='font-size:1.25em') {{req.seatCount}}
+
