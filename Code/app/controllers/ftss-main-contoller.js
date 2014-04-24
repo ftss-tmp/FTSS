@@ -12,18 +12,6 @@
 
 	"use strict";
 
-	FTSS.ng.controller(
-		'user',
-		[
-			'$scope',
-			'SharePoint',
-			function ($scope, SharePoint) {
-
-				SharePoint.user($scope);
-
-			}
-		]);
-
 	/**
 	 * The main controller performs the initial caching functions as well as setting up other app-wide $scope objects
 	 */
@@ -287,6 +275,8 @@
 					}
 
 				};
+
+				SharePoint.user($scope);
 
 				/**
 				 * User feedback function, provides alerts, errors and general instructions to users
