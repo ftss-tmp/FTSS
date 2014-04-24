@@ -6,63 +6,58 @@
 
 	var filters = {},
 
-		routes = {
-			'scheduled'   :
-				[
-					{'q': "Start ge datetime'TODAY'", 'label': 'Not Started'},
-					{'q': "End le datetime'TODAY'", 'label': 'Completed'},
-					{'q': "(Start le datetime'TODAY' and End ge datetime'TODAY')", 'label': 'In Progress'}
-				],
-			'requests'    :
-				[
-					{'q': 'Status gt 1', 'label': 'Completed Requests'},
-					{'q': 'Status eq 1', 'label': 'Pending Requests'},
-					{'q': 'Status eq 2', 'label': 'Approved Requests'},
-					{'q': 'Status eq 3', 'label': 'Denied Requests'}
-				],
-			'requirements':
-				[
-					{'q': '', 'label': ''}
-				],
-			'students'    :
-				[
-					{'q': '', 'label': ''}
-				]
-		},
+	    routes = {
+		    'scheduled'   : [
+			    {'q': "Start ge datetime'TODAY'", 'label': 'Not Started'},
+			    {'q': "End le datetime'TODAY'", 'label': 'Completed'},
+			    {'q': "(Start le datetime'TODAY' and End ge datetime'TODAY')", 'label': 'In Progress'}
+		    ],
+		    'requests'    : [
+			    {'q': 'Status gt 1', 'label': 'Completed Requests'},
+			    {'q': 'Status eq 1', 'label': 'Pending Requests'},
+			    {'q': 'Status eq 2', 'label': 'Approved Requests'},
+			    {'q': 'Status eq 3', 'label': 'Denied Requests'}
+		    ],
+		    'requirements': [
+			    {'q': '', 'label': ''}
+		    ],
+		    'students'    : [
+			    {'q': '', 'label': ''}
+		    ]
+	    },
 
-		filterMaps = {
-			'scheduled'   : {
-				'u': 'UnitId',
-				'm': "Course/MDS",
-				'a': "Course/AFSC",
-				'i': 'InstructorId',
-				'c': 'CourseId'
-			},
-			'requests'    : {
-				'u': 'Scheduled/UnitId',
-				'm': "Scheduled/Course/MDS",
-				'a': "Scheduled/Course/AFSC",
-				'i': 'Scheduled/InstructorId',
-				'c': 'Scheduled/CourseId'
-			},
-			'requirements': {
-				'u': 'UnitId',
-				'm': "Course/MDS",
-				'a': "Course/AFSC",
-				'c': 'CourseId'
-			},
-			'backlog'     : {
-				'h': 'HostUnitId'
-			},
-			'students'    : {
-				'u': 'HostUnit/FTD',
-				'h': 'HostUnitId'
-			}
-		},
+	    filterMaps = {
+		    'scheduled'   : {
+			    'u': 'UnitId',
+			    'm': "Course/MDS",
+			    'a': "Course/AFSC",
+			    'i': 'InstructorId',
+			    'c': 'CourseId'
+		    },
+		    'requests'    : {
+			    'u': 'Scheduled/UnitId',
+			    'm': "Scheduled/Course/MDS",
+			    'a': "Scheduled/Course/AFSC",
+			    'i': 'Scheduled/InstructorId',
+			    'c': 'Scheduled/CourseId'
+		    },
+		    'requirements': {
+			    'h': 'HostId',
+			    'u': 'UnitId'
+		    },
+		    'backlog'     : {
+			    'h': 'HostUnitId'
+		    },
+		    'students'    : {
+			    'u': 'HostUnit/FTD',
+			    'h': 'HostUnitId'
+		    }
+	    },
 
-		max = {
-			'backlog': 1
-		};
+	    max = {
+		    'backlog': 1,
+		    'requirements': 1
+	    };
 
 	/**
 	 *  This is the app-wide collection of custom filters used by the search box
