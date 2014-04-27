@@ -42,6 +42,9 @@ div
                     span.bigLetter {{row.totalSeats}}
                     span(style='font-size:1.25em;position:relative;top:.15em;') {{row.FTD.LongName}}&nbsp;
 
+                .pull-right(style='margin-top :-.5em!important')
+                    .btn.btn-muted(style='font-size:1.5em', ng-click='edit(true, row)'): +icon('printer')
+
             hr.rollup
 
             .rollup
@@ -58,9 +61,9 @@ div
                             th.w5
                             th.w5.left PDS
                             th.left Course
-                            th.w10 {{row.History[1]}}
-                            th.w10 {{row.History[2]}}
-                            th.w10 {{row.History[3]}}
+                            th.w10 {{row.History1}}
+                            th.w10 {{row.History2}}
+                            th.w10 {{row.History3}}
                             th.w10
                             th.w10 Min/Max
                             th.w5 Seats
@@ -80,15 +83,14 @@ div
                             td.left
                                 b {{req.course.Number}} ({{req.course.MDS}})
 
-                            td(class="{{req.history[0].style}}") {{req.history[0].text}}
+                            td(class="{{req.history1.style}}") {{req.history1.text}}
 
-                            td(class="{{req.history[1].style}}") {{req.history[1].text}}
+                            td(class="{{req.history2.style}}") {{req.history2.text}}
 
-                            td(class="{{req.history[2].style}}") {{req.history[2].text}}
+                            td(class="{{req.history3.style}}") {{req.history3.text}}
 
                             td
 
                             td {{req.course.Min}} / {{req.course.Max}}
 
                             td.bold(style='font-size:1.25em') {{req.seatCount}}
-

@@ -19,7 +19,13 @@ FTSS.ng.controller(
 					'Course.PDS': 'Course'
 				},
 
-				'model': 'requirements'
+				'model': 'requirements',
+
+				'edit': function (scope, create, row) {
+
+					scope.data = row;
+
+				}
 
 			});
 
@@ -70,49 +76,58 @@ FTSS.ng.controller(
 								      'hover': '<dl>' +
 								               '<dt>Notes</dt><dd><i>' + r[2] + '</i></dd></dl>' +
 								               '<dl>' +
-								               '<dt>Students</dt><dd> - ' + students.join('<br> - ') + '</dd></dl>',
-
-								      'history': _.map([1,
-								                        2,
-								                        3
-								                       ],
-
-								                       function (v) {
-
-									                       d.History[v] = d.History[v] || r[4]['d' + v] || 'Month ' + v;
-
-									                       var requested = r[4]['r' + v] || 0,
-
-									                           built = r[4]['b' + v] || 0;
-
-									                       switch (true) {
-
-										                       case (requested < 1):
-
-											                       return  {
-												                       'style': 'text-muted',
-												                       'text' : 'None'
-											                       };
-
-										                       case (requested > built):
-
-											                       return {
-												                       'style': 'text-danger bold',
-												                       'text' : requested + ' / ' + built
-											                       };
-
-										                       default:
-
-											                       return {
-												                       'style': 'text-success',
-												                       'text' : requested
-											                       };
-
-									                       }
-
-								                       })
+								               '<dt>Students</dt><dd> - ' + students.join('<br> - ') + '</dd></dl>'
 
 							      };
+
+							      _.each([1,
+							              2,
+							              3
+							             ],
+
+							             function (v) {
+
+								             d['History' + v] = r[4]['d' + v] || 'Month ' + v;
+
+								             var requested = r[4]['r' + v] || 0,
+
+								                 built = r[4]['b' + v] || 0;
+
+								             d.Requirements[r[0]]['history' + v] = (function () {
+
+									             switch (true) {
+
+										             case (requested < 1):
+
+											             return  {
+												             'style': 'text-muted',
+												             'text' : 'None',
+												             'val'  : '0'
+											             };
+
+										             case (requested > built):
+
+											             var val = requested + ' / ' + built;
+
+											             return {
+												             'style': 'text-danger bold',
+												             'text' : val,
+												             'val'  : val
+											             };
+
+										             default:
+
+											             return {
+												             'style': 'text-success',
+												             'text' : requested,
+												             'val'  : requested + ' / ' + built,
+											             };
+
+									             }
+
+								             }());
+
+							             });
 
 						      });
 
@@ -123,8 +138,6 @@ FTSS.ng.controller(
 					      });
 
 					      data = processed;
-
-					      //  debugger;
 
 					      self
 
@@ -139,4 +152,5 @@ FTSS.ng.controller(
 				      });
 
 		}
+
 	]);
