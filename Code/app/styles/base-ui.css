@@ -107,12 +107,13 @@ a, a:hover {
 }
 
 .text-warning .icon {
-    fill:#8a6d3b!important;
+    fill: #8a6d3b !important;
 }
 
 .text-success .icon {
-    fill:#3c763d!important;
+    fill: #3c763d !important;
 }
+
 .text-danger .icon {
     color: #a94442;
     fill: #a94442 !important;
@@ -128,10 +129,18 @@ a, a:hover {
 }
 
 .panel-footer {
-    color:#777;
+    color: #777;
 }
 
 .answer {
     margin-left: 7%;
 }
 
+html#noAnimate body * {
+    -webkit-transition-property: none !important;
+    -webkit-animation: none !important;
+    -webkit-transform: none !important;
+    transition-property: none !important;
+    transform: none !important;
+    animation: none !important;
+}

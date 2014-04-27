@@ -1,6 +1,20 @@
 #requirementsProgress {
     position: absolute;
     right: 1.5%;
+    right: 6em;
     left: auto;
     top: 1em
+}
+
+#requirements .modal-dialog {
+    width: 1020px;
+}
+
+#requirements .modal {
+    -webkit-transition-property: none !important;
+    -webkit-animation: none !important;
+    -webkit-transform: none !important;
+    transition-property: none !important;
+    transform: none !important;
+    animation: none !important;
 }
