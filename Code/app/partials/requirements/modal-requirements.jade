@@ -1,0 +1,15 @@
+include ../__mixins
+form(name='modal')
+    .modal-header.caps
+        h3
+            +icon('check-square-o')
+            | E-898 Signature Validation
+
+    .modal-body
+
+        e898
+
+    .modal-footer
+
+        .pull-right.btn.btn-default(ng-click='close()') Close
+
