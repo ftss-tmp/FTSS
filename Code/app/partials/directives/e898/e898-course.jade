@@ -1,0 +1,152 @@
+field(sid='PDS_INDEX_')
+    scrollhoriz never
+    scrollvert never
+    value <%= course.PDS %>
+    itemlocation
+        x 57
+        y <%= offset %>
+        width 42
+    previous CAFMCL_INDEX_
+    format
+        datatype string
+        presentation
+            casetype upper
+        constraints
+            mandatory on
+    next CourseNumber
+
+check(sid='CAFMCL_INDEX_')
+    itemlocation
+        x 18
+        y <%= offset %>
+    value <%= cafmcl %>
+    next PDS_INDEX_
+    previous FTD_INDEX_
+
+field(sid='CourseNumber_INDEX_')
+    scrollhoriz never
+    scrollvert never
+    value <%= course.Number %>
+    itemlocation
+        x 110
+        y <%= offset %>
+        width 180
+    previous PDS_INDEX_
+    format
+        datatype string
+        presentation
+            casetype upper
+        constraints
+            length
+                min 0
+                max 20
+            mandatory on
+    next CourseTitle_INDEX_
+
+field(sid='Backlog_INDEX_')
+    scrollhoriz never
+    scrollvert never
+    value <%= seatCount %>
+    itemlocation
+        x 302
+        y <%= offset %>
+        width 59
+    previous CourseTitle_INDEX_
+    format
+        datatype integer
+        constraints
+            range
+                min 0.0
+                max 999.0
+            mandatory on
+        presentation
+    justify center
+    next Month1_INDEX_
+
+field(sid='Month1_INDEX_')
+    scrollhoriz never
+    scrollvert never
+    value <%= history1.val %>
+    itemlocation
+        x 367
+        y <%= offset %>
+        width 59
+    previous Backlog_INDEX_
+    format
+        datatype string
+        presentation
+            casetype upper
+        constraints
+            mandatory on
+    justify center
+    next Month2_INDEX_
+
+field(sid='Month2_INDEX_')
+    scrollhoriz never
+    scrollvert never
+    value <%= history2.val %>
+    itemlocation
+        x 432
+        y <%= offset %>
+        width 59
+    previous Month1_INDEX_
+    format
+        datatype string
+        presentation
+            casetype upper
+        constraints
+            mandatory on
+    justify center
+    next Month3_INDEX_
+
+field(sid='Month3_INDEX_')
+    scrollhoriz never
+    scrollvert never
+    value <%= history3.val %>
+    itemlocation
+        x 497
+        y <%= offset %>
+        width 59
+    previous Month2_INDEX_
+    format
+        datatype string
+        presentation
+            casetype upper
+        constraints
+            mandatory on
+    justify center
+    next CourseNotes_INDEX_
+
+field(sid='CourseTitle_INDEX_')
+    scrollhoriz never
+    scrollvert never
+    value <%= course.Title %>
+    itemlocation
+        x 110
+        y <%= offsetTitle %>
+        width 445
+    previous CourseNumber_INDEX_
+    format
+        datatype string
+        presentation
+            casetype upper
+        constraints
+            length
+                min 0
+                max 2147483647
+            mandatory on
+    next Backlog_INDEX_
+
+field(sid='CourseNotes_INDEX_')
+    scrollhoriz never
+    scrollvert fixed
+    value Min/Max: <%= course.Min %> / <%= course.Max %>, MDS: <%= course.MDS %>.  <%= notes %>
+    itemlocation
+        x 573
+        y <%= offset %>
+        width 380
+        height 70
+    previous Month3_INDEX_
+    format
+        datatype string
+        presentation
