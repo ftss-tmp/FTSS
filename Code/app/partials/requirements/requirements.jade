@@ -92,3 +92,16 @@ div
                             td {{req.course.Min}} / {{req.course.Max}}
 
                             td.bold(style='font-size:1.25em') {{req.seatCount}}
+
+            .requestActions
+                hr
+                .pull-right.invert
+                    .btn.btn-success.btn-labeled.btn-muted(ng-click='approve()')
+                        span.btn-label.invert
+                            +icon('approve')
+                        | Approve
+                    .btn.btn-danger.btn-labeled.btn-muted(ng-click='deny()')
+                        span.btn-label.invert
+                            +icon('deny')
+                        | Deny
+                .clearfix
