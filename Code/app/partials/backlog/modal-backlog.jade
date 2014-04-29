@@ -28,12 +28,12 @@ form(name='modal')
             .col-lg-4(ng-if='!local')
                 .input-group.pull-right(style='width:20em!important')
                     .input-group-addon  Funding Source:
-                    .btn-group.no-toggle(hover='backlog-funding', right, bs-radio-group, ng-model='funding')
+                    .btn-group.no-toggle(hover='backlog-funding', right, bs-radio-group, ng-model='$parent.funded')
                         label.btn.btn-default
-                            input(value='unit', type='radio')
+                            input(value='true', type='radio')
                             | Unit
                         label.btn.btn-default
-                            input(value='majcom', type='radio')
+                            input(value='false', type='radio')
                             | MAJCOM
 
         .clearfix

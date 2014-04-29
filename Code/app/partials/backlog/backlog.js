@@ -63,7 +63,7 @@ FTSS.ng.controller(
 
 					    scope.local = courses[0].detRequest.distanceInt < 50;
 
-					    scope.funding = 'majcom';
+					    scope.funded = false;
 
 				    },
 
@@ -85,7 +85,7 @@ FTSS.ng.controller(
 
 							    'DateNeeded': scope.courses.month,
 
-							    'Funded': scope.local || scope.funding === 'unit',
+							    'Funded': scope.local || scope.funded,
 
 							    'TDY': !scope.local,
 

@@ -128,7 +128,8 @@ angular.module('mgcrea.ngStrap.button', []).provider('$button', function () {
           });
         };
         // view -> model
-        element.bind(options.toggleEvent, function () {
+	    // Added parent() binding to capture event bubble when wrapped in a <label> tag.  -Jeff Mccoy 28 Apr 2014
+        element.parent().bind(options.toggleEvent, function () {
           scope.$apply(function () {
             // console.warn('!click', element.attr('value'), 'controller.$viewValue', typeof controller.$viewValue, controller.$viewValue, 'controller.$modelValue', typeof controller.$modelValue, controller.$modelValue);
             controller.$setViewValue(value);
