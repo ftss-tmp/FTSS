@@ -52,8 +52,11 @@
 
 						});
 
-						$el[0].outerHTML = wrapper.replace('{{formData}}',
-						                                   formData.replace('<!-- COURSES-->', courseData));
+						$el[0].outerHTML = wrapper
+
+							.replace('{{formData}}', formData
+
+								         .replace('<!-- COURSES-->', courseData));
 
 					}
 				};
