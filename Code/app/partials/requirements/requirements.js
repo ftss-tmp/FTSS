@@ -35,7 +35,97 @@ FTSS.ng.controller(
 
 				.then(function (data) {
 
-					      var processed = _.map(data, function (d) {
+					      var stepBuilder, historyBuilder, processed;
+
+					      stepBuilder = function (d) {
+
+						      d.steps = [
+							      {
+								      'text'  : 'MTF',
+								      'status': d.Validated ? 'complete' : 'active'
+							      },
+
+							      {
+								      'text'  : 'Group/CC',
+								      'status': d.Validated ? d.Approved ? 'complete' : 'active' : 'pending'
+							      }
+						      ];
+
+						      if (d.TDY && !d.Funded) {
+
+							      d.steps.push(
+								      {
+									      'text'  : 'MAJCOM',
+									      'status': d.Approved ? d.ApprovedMAJCOM ? 'complete' : 'active' : 'pending'
+								      });
+
+						      }
+
+						      d.steps.push(
+							      {
+								      'text'  : 'FTD',
+								      'status': d.Approved && (d.TDY &&
+								                d.Funded ||
+								                d.ApprovedMAJCOM) ? (d.Archived ? 'complete' : 'active') : 'pending'
+							      });
+
+
+					      };
+
+					      historyBuilder = function (d, r) {
+
+						      _.each([1,
+						              2,
+						              3
+						             ],
+
+						             function (v) {
+
+							             d['History' + v] = r[4]['d' + v] || 'Month ' + v;
+
+							             var requested = r[4]['r' + v] || 0,
+
+							                 built = r[4]['b' + v] || 0;
+
+							             d.Requirements[r[0]]['history' + v] = (function () {
+
+								             switch (true) {
+
+									             case (requested < 1):
+
+										             return  {
+											             'style': 'text-muted',
+											             'text' : 'None',
+											             'val'  : '0'
+										             };
+
+									             case (requested > built):
+
+										             var val = requested + ' / ' + built;
+
+										             return {
+											             'style': 'text-danger bold',
+											             'text' : val,
+											             'val'  : val
+										             };
+
+									             default:
+
+										             return {
+											             'style': 'text-success',
+											             'text' : requested,
+											             'val'  : requested + ' / ' + built
+										             };
+
+								             }
+
+							             }());
+
+						             });
+
+					      };
+
+					      processed = _.map(data, function (d) {
 
 						      d.Host = caches.Hosts[d.HostId];
 						      d.FTD = caches.Units[d.UnitId];
@@ -47,11 +137,14 @@ FTSS.ng.controller(
 						                                 'Email'
 						                                ], d.Requestor_JSON);
 
+
 						      delete d.Requestor_JSON;
 
 						      d.totalSeats = 0;
 						      d.Requirements = {};
 						      d.History = {};
+
+						      stepBuilder(d);
 
 						      _.each(d.Requirements_JSON, function (r) {
 
@@ -80,54 +173,7 @@ FTSS.ng.controller(
 
 							      };
 
-							      _.each([1,
-							              2,
-							              3
-							             ],
-
-							             function (v) {
-
-								             d['History' + v] = r[4]['d' + v] || 'Month ' + v;
-
-								             var requested = r[4]['r' + v] || 0,
-
-								                 built = r[4]['b' + v] || 0;
-
-								             d.Requirements[r[0]]['history' + v] = (function () {
-
-									             switch (true) {
-
-										             case (requested < 1):
-
-											             return  {
-												             'style': 'text-muted',
-												             'text' : 'None',
-												             'val'  : '0'
-											             };
-
-										             case (requested > built):
-
-											             var val = requested + ' / ' + built;
-
-											             return {
-												             'style': 'text-danger bold',
-												             'text' : val,
-												             'val'  : val
-											             };
-
-										             default:
-
-											             return {
-												             'style': 'text-success',
-												             'text' : requested,
-												             'val'  : requested + ' / ' + built,
-											             };
-
-									             }
-
-								             }());
-
-							             });
+							      historyBuilder(d, r);
 
 						      });
 
@@ -137,11 +183,9 @@ FTSS.ng.controller(
 
 					      });
 
-					      data = processed;
-
 					      self
 
-						      .initialize(data)
+						      .initialize(processed)
 
 						      .then(function (d) {
 
@@ -152,5 +196,4 @@ FTSS.ng.controller(
 				      });
 
 		}
-
 	]);
