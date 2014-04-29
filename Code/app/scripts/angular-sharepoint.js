@@ -369,9 +369,9 @@
 
 								       var callback = map[index++].callback,
 
-									       etag = row.match(/ETag\:\s(.+)/i),
+								           etag = row.match(/ETag\:\s(.+)/i),
 
-									       json;
+								           json;
 
 								       if (retVal.success) {
 
@@ -379,8 +379,8 @@
 									                        (row.indexOf('HTTP/1.1 204') > 0);
 
 									       try {
-										       json = JSON.parse(row.split(etag[0])[1].replace(/--$/,'')).d;
-									       } catch(e) {
+										       json = JSON.parse(row.split(etag[0])[1].replace(/--$/, '')).d;
+									       } catch (e) {
 										       json = false;
 									       }
 
@@ -473,18 +473,29 @@
 
 								           json = [],
 
-								           date = [];
+								           dateWalk = function (item) {
+									           _(item).each(function (el, index, parent) {
+										           if (typeof el === 'object' || typeof el === 'array') {
+
+											           return dateWalk(el);
+
+										           } else {
+
+											           if (typeof el === 'string' && el.indexOf('/Date(') > -1) {
+
+												           parent[index] = _utils.getDate(el);
+
+											           }
+										           }
+									           })
+								           };
 
 								       if (data.length) {
 
 									       _(data[0]).each(function (d, f) {
 
-										       var type = typeof(d);
-
 										       if (f.indexOf('_JSON') > 1) {
 											       json.push(f);
-										       } else if (type === 'string' || type === 'object') {
-											       date.push(f);
 										       }
 
 									       });
@@ -499,19 +510,7 @@
 											       });
 										       }
 
-										       if (date.length) {
-											       _(date).each(function (field) {
-
-												       if (typeof v[field] ===
-												           'string' &&
-												           v[field].indexOf('/Date(') > -1) {
-
-													       v[field] = _utils.getDate(v[field]);
-
-												       }
-
-											       });
-										       }
+										       dateWalk(v);
 
 										       return v;
 
