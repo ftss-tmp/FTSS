@@ -27,9 +27,11 @@ div
             .h4
                 +icon('flag')
 
-                .btnFake(class='btn-{{row.TDY ? "warning" : "info"}}')
+                .btnFake.white(class='btn-{{row.TDY ? "warning" : "info"}}')
                     span.bigLetter {{row.totalSeats}}
                     span(style='font-size:1.25em;position:relative;top:.15em;') {{row.FTD.LongName}}&nbsp;
+                    span(style='font-size:1.3em;position:relative;top:.25em;')
+                        +icon('plane')
 
                 | &nbsp;&nbsp;
 
