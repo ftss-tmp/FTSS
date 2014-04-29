@@ -18,31 +18,27 @@ div
 
             #requirementsProgress.wizard
                 ul.steps
-                    li.complete
-                        span.badge 1
-                        | MTF
-                        span.chevron
-                    li.complete
-                        span.badge 2
-                        | Group/CC
-                        span.chevron
-                    li.active
-                        span.badge 3
-                        | MAJCOM
-                        span.chevron
-                    li
-                        span.badge 4
-                        | FTD
+                    li(ng-repeat='step in row.steps', class='{{step.status}}')
+                        +icon('check-square-o')
+                        +icon('wait', '0 0 36 32')
+                        span.text {{step.text}}
                         span.chevron
 
             .h4
                 +icon('flag')
 
-                .btnFake(class='btn-info')
+                .btnFake(class='btn-{{row.TDY ? "warning" : "info"}}')
                     span.bigLetter {{row.totalSeats}}
                     span(style='font-size:1.25em;position:relative;top:.15em;') {{row.FTD.LongName}}&nbsp;
 
-                .pull-right(style='margin-top :-.5em!important')
+                | &nbsp;&nbsp;
+
+                .btnFake.btn-primary.white(ng-show='row.TDY && row.Funded')
+                    +icon('info')
+                    i UNIT FUNDED TDY COURSE
+
+                .pull-right(style='margin-top :-.5em!important',
+                            hover='(optional) Use this button to create a custom 898 for this request for your refrence.  This is not needed for FTSS to function.')
                     .btn.btn-muted(style='font-size:1.5em', ng-click='edit(true, row)'): +icon('printer')
 
             hr.rollup

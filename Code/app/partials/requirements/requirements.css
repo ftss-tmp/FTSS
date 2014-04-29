@@ -6,8 +6,23 @@
     top: 1em
 }
 
+#requirementsProgress .pending .wait,
+#requirementsProgress .pending .check-square-o,
+#requirementsProgress .complete .wait,
+#requirementsProgress .active .check-square-o {
+    display: none;
+}
+
+#requirementsProgress .complete .badge:before {
+    content: '\2713';
+}
+
+#requirementsProgress .active .badge:before {
+    content: '-';
+}
+
 #requirements .modal-dialog {
-    width: 1020px;
+    width: 1040px;
 }
 
 #requirements .modal {

@@ -110,13 +110,25 @@ a, a:hover {
     fill: #8a6d3b !important;
 }
 
-.text-success .icon {
+.text-success .icon,
+.complete .icon {
     fill: #3c763d !important;
 }
 
 .text-danger .icon {
     color: #a94442;
     fill: #a94442 !important;
+}
+
+.active .icon {
+    color: #3a87ad;
+    fill: #3a87ad !important;
+}
+
+.pending .icon,
+.muted .icon {
+    color: #999;
+    fill: #999 !important;
 }
 
 [contenteditable] {
