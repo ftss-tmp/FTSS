@@ -65,7 +65,7 @@
 				           'baseURL': 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/',
 				           'userURL': 'http://' + location.hostname + ':8080/_layouts/userdisp.aspx?Force=True',
 				           'pplURL' : 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/UserInformationList',
-				           'offline': true,
+				           'offline': false,
 				           'noCache': false
 			           };
 
