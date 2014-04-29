@@ -42,7 +42,7 @@ FTSS.ng.controller('instructorsController',
 
 						                              'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype' :
 
-						                              'http://localhost:8080') + '/_vti_bin/ListData.svc/Bios',
+						                              'http://192.168.2.1:8080') + '/_vti_bin/ListData.svc/Bios',
 
 						                       slug = (PRODUCTION ? '/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' : '/Bios/');
 
