@@ -82,52 +82,48 @@
 
 			var $el = $(this), title, content, placement;
 
-			if (!$el.data('freeze')) {
+			$('.popover').remove();
 
-				$('.popover').remove();
+			content = $el.attr('content');
 
-				content = $el.attr('content');
+			if (content) {
+				title = $el.attr('hover') || $el.attr('explain');
+			} else {
+				content = $el.attr('hover') || $el.attr('explain');
+				content = FTSS.messages && FTSS.messages[content] || content;
+			}
 
-				if (content) {
-					title = $el.attr('hover') || $el.attr('explain');
-				} else {
-					content = $el.attr('hover') || $el.attr('explain');
-					content = FTSS.messages && FTSS.messages[content] || content;
-				}
+			if (content) {
 
-				if (content) {
+				content = popover.icon(content);
 
-					content = popover.icon(content);
+				_([
+					  'left',
+					  'right',
+					  'top',
+					  'bottom'
+				  ])
 
-					_([
-						  'left',
-						  'right',
-						  'top',
-						  'bottom'
-					  ])
+					.each(function (p) {
+						      if ($el[0].hasAttribute(p)) {
+							      placement = p;
+						      }
+					      });
 
-						.each(function (p) {
-							      if ($el[0].hasAttribute(p)) {
-								      placement = p;
-							      }
-						      });
+				$el.popover({
+					            'trigger'  : 'manual',
+					            'html'     : true,
+					            'title'    : title,
+					            'content'  : content,
+					            'placement': placement || 'auto',
+					            'container': 'body'
+				            });
 
-					$el.popover({
-						            'trigger'  : 'manual',
-						            'html'     : true,
-						            'title'    : title,
-						            'content'  : content,
-						            'placement': placement || 'auto',
-						            'container': 'body'
-					            });
+				$el.popover('show');
 
-					$el.popover('show');
+				if ($el[0].hasAttribute('no-arrow')) {
 
-					if ($el[0].hasAttribute('no-arrow')) {
-
-						$el.data('bs.popover').$tip.addClass('no-arrow');
-
-					}
+					$el.data('bs.popover').$tip.addClass('no-arrow');
 
 				}
 
@@ -140,42 +136,7 @@
 		 */
 		'exit': function () {
 
-			var $el = $(this);
-
-			if ($el.data('freeze') !== true) {
-
-				popover.clear($el);
-
-			}
-
-		},
-
-		/**
-		 *
-		 */
-		'toggle': function () {
-
-			var $el, tip;
-
-			$el = $(this);
-			tip = $el.data('bs.popover') && $el.data('bs.popover').$tip;
-
-			if ($el.hasClass('btn') || !tip) {
-
-				popover.clear($el);
-
-			} else {
-
-				$el.addClass('frozen');
-				tip.addClass('frozen');
-
-				$el.data('freeze', true);
-
-				$('body *').not('.popover, .popover *').one('click', function () {
-					popover.clear($el);
-				});
-
-			}
+			popover.clear($(this));
 
 		},
 
@@ -188,15 +149,8 @@
 
 			var obj = self.data('bs.popover');
 
-			self.removeClass('frozen');
 			self.popover((self[0].hasAttribute('live')) ? 'destroy' : 'hide');
-			self.data('freeze', false);
 
-			if (obj) {
-
-				obj.$tip.removeClass('frozen');
-
-			}
 
 		}
 	};
@@ -208,9 +162,6 @@
 			    evt.stopImmediatePropagation();
 			    $(this).parents('.slideToggleEffect').toggleClass('slideOut');
 		    })
-
-		// Bind to the click event of element with the [hover] attribute
-		.on('click', '[hover]:not(.no-toggle)', popover.toggle)
 
 		.on('mouseenter', '[hover]', popover.enter)
 
