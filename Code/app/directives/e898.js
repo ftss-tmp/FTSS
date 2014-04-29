@@ -47,8 +47,8 @@
 
 								.replace(/_INDEX_/g, course.course.Id);
 
-							offset += 85;
-							offsetTitle += 85;
+							offset += 115;
+							offsetTitle += 115;
 
 						});
 
