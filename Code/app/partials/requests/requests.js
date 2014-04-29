@@ -56,8 +56,6 @@ FTSS.ng.controller(
 
 							            req.openSeatsClass = req.reqSeats > req.openSeats ? 'danger' : 'success';
 
-							            req.Created = FTSS.utils.fixDate(req.Created, true);
-
 							            req.Scheduled.Course = req.Course;
 
 							            try {

@@ -246,15 +246,14 @@ FTSS.controller = (function () {
 
 					req.det = caches.Units[schedClass.UnitId];
 
-					req.Instructor = caches.Instructors[schedClass.InstructorId] || false;
+					req.Instructor = caches.Instructors[schedClass.InstructorId] || {};
 
-					req.instructor = req.Instructor.Instructor &&
-					                 req.Instructor.Instructor.Name ||
+					req.instructor = req.Instructor.InstructorName ||
 					                 'No Instructor Identified';
 
-					req.start = FTSS.utils.fixDate(schedClass.Start);
+					req.start = schedClass.Start.toDateString();
 
-					req.end = FTSS.utils.fixDate(schedClass.End);
+					req.end = schedClass.End.toDateString();
 
 					req.unit = req.det.LongName;
 

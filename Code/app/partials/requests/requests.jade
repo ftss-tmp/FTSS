@@ -1,103 +1,105 @@
 include ../__mixins
 
-+grouping()
+.wrapped
+    +grouping()
 
-    div(class='well request{{row.status}}', ng-class='{"true":"expanded"}', ng-repeat='row in group')
+        div(class='well request{{row.status}}', ng-class='{"true":"expanded"}', ng-repeat='row in group')
 
-        .statusBackground {{row.status}}
+            .statusBackground {{row.status}}
 
-        h4(ng-click='row.expand = !row.expand')
-            span(class='btn invertSimple btn-{{row.iconClass}}', style='opacity: 1;', disabled='')
-                icon(path='{{row.icon}}')
-            | {{row.Course.PDS}} - {{row.reqSeats}} Requested ({{row.openSeats}} Open)
-            span.pull-right(style='letter-spacing: .1em')
-                | {{row.start}} - {{row.end}}
-                +icon('calendar_range')
+            h4(ng-click='row.expand = !row.expand')
+                span.btn.invertSimple.btnFake(class='btn-{{row.iconClass}}', style='opacity: 1;')
+                    +icon('approve')
+                    +icon('deny')
+                | &nbsp;&nbsp; {{row.Course.PDS}} - {{row.reqSeats}} Requested ({{row.openSeats}} Open)
+                span.pull-right(style='letter-spacing: .1em')
+                    | {{row.start}} - {{row.end}}
+                    +icon('calendar_range')
 
-        hr.rollup
+            hr.rollup
 
-        .rollup.slide
-            p.lead(ng-hide='groupBy=="course"') {{row.Course.Number}}: {{row.Course.Title}}
-            .col-lg-7.pull-left
-                table.table.table-split.no-border
-                    tbody
-                        tr
-                            td(style='width:150px') Location
-                            td(style='width:10px')
-                                +icon('location')
-                            td
-                                b {{row.det.Base}} (Detachment {{row.det.Det}})
-                        tr
-                            td Instructor
-                            td
-                                +icon('instructor')
-                            td.truncate.bold {{row.instructor}}
-                        tr
-                            td Requested
-                            td
-                                +icon('sent')
-                            td
-                                b {{row.Created}}
-                        tr
-                            td Comments
-                            td
-                                +icon('comments')
-                            td.bold
-                                button.btn.btn-link.btn-inline.btn-muted(hover='{{row.CreatedBy.Name}} ({{row.CreatedBy.WorkPhone}})', content='{{row.Notes}}')
-                                    | By Requester
-                                span(ng-if='row.responseText')
-                                    | -
-                                    button.btn.btn-link.btn-inline.btn-muted(hover='{{row.responseName}}', content='{{row.responseText}}')
-                                        | FTD Response
-
-            .col-lg-5.pull-right.text-right(style='margin-top: 10px')
-                p.truncate(ng-repeat='s in row.Students.results', style='margin-bottom: 10px')
-                    +icon('student_hand')
-                    a(href='mailto:{{s.WorkEMail}}{{row.mail}}') {{s.Name}}
-                    br
-                    span(ng-show='s.WorkPhone') {{s.WorkPhone}}
-            .clearfix
-            .requestActions(ng-if='row.Status < 2')
-                hr
-                .col-lg-9.pull-left.requestStats(style='margin-top: 8px;')
-                    table.table-tiny(style='width:20%')
-                        thead(style='font-size:1.2em')
-                            tr
-                                th {{row.Course.Min}}
-                                th {{row.Course.Max}}
+            .rollup.slide
+                p.lead(ng-hide='groupBy=="course"') {{row.Course.Number}}: {{row.Course.Title}}
+                .col-lg-7.pull-left
+                    table.table.table-split.no-border
                         tbody
                             tr
-                                td Min
-                                td Max
-                    table.table-tiny
-                        thead(style='font-size:1.2em')
+                                td(style='width:150px') Location
+                                td(style='width:40px')
+                                    +icon('location')
+                                td
+                                    b {{row.det.Base}} (Detachment {{row.det.Det}})
                             tr
-                                th {{row.Scheduled.Host}}
-                                th {{row.Scheduled.Other}}
-                                th {{row.approvedSeats}}
-                        tbody
-                            tr
-                                td Host
-                                td Other
-                                td Approved
-                    table.table-tiny
-                        thead(style='font-size:1.2em')
-                            tr
-                                th {{row.reqSeats}}
-                                th {{row.pendingSeats}}
-                                th {{row.openSeats}}
-                        tbody
+                                td Instructor
+                                td
+                                    +icon('instructor')
+                                td.truncate.bold {{row.instructor}}
                             tr
                                 td Requested
-                                td Pending
-                                td Open
-                .pull-right
-                    button.btn.btn-success.btn-labeled.btn-muted(type='button')
-                        span.btn-label.invert
-                            +icon('approve')
-                        | Approve
-                    button.btn.btn-dangerow.btn-labeled.btn-muted(type='button')
-                        span.btn-label.invert
-                            +icon('deny')
-                        | Deny
+                                td
+                                    +icon('download')
+                                td
+                                    b {{row.Created.toLocaleString()}}
+                            tr
+                                td Comments
+                                td
+                                    +icon('comments')
+                                td.bold
+                                    button.btn.btn-link.btn-inline.btn-muted(hover='{{row.CreatedBy.Name}} ({{row.CreatedBy.WorkPhone}})', content='{{row.Notes}}')
+                                        | By Requester
+                                    span(ng-if='row.responseText')
+                                        | -
+                                        button.btn.btn-link.btn-inline.btn-muted(hover='{{row.responseName}}', content='{{row.responseText}}')
+                                            | FTD Response
+
+                .col-lg-5.pull-right.text-right(style='margin-top: 10px')
+                    p.truncate(ng-repeat='s in row.Students.results', style='margin-bottom: 10px')
+                        +icon('student_hand')
+                        a(href='mailto:{{s.WorkEMail}}{{row.mail}}') {{s.Name}}
+                        br
+                        span(ng-show='s.WorkPhone') {{s.WorkPhone}}
                 .clearfix
+                .requestActions(ng-if='row.Status < 2')
+                    hr
+                    .col-lg-9.pull-left.requestStats(style='margin-top: 8px;')
+                        table.table-tiny(style='width:20%')
+                            thead(style='font-size:1.2em')
+                                tr
+                                    th {{row.Course.Min}}
+                                    th {{row.Course.Max}}
+                            tbody
+                                tr
+                                    td Min
+                                    td Max
+                        table.table-tiny
+                            thead(style='font-size:1.2em')
+                                tr
+                                    th {{row.Scheduled.Host}}
+                                    th {{row.Scheduled.Other}}
+                                    th {{row.approvedSeats}}
+                            tbody
+                                tr
+                                    td Host
+                                    td Other
+                                    td Approved
+                        table.table-tiny
+                            thead(style='font-size:1.2em')
+                                tr
+                                    th {{row.reqSeats}}
+                                    th {{row.pendingSeats}}
+                                    th {{row.openSeats}}
+                            tbody
+                                tr
+                                    td Requested
+                                    td Pending
+                                    td Open
+                    .pull-right
+                        button.btn.btn-success.btn-labeled.btn-muted(type='button')
+                            span.btn-label.invert
+                                +icon('approve')
+                            | Approve
+                        button.btn.btn-dangerow.btn-labeled.btn-muted(type='button')
+                            span.btn-label.invert
+                                +icon('deny')
+                            | Deny
+                    .clearfix

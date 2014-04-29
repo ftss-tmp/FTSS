@@ -43,3 +43,8 @@
     padding: 0 8px;
     opacity: 1 !important;
 }
+
+.btn-success .deny,
+.btn-danger .approve {
+    display: none;
+}
