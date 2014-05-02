@@ -11,17 +11,36 @@
 
 	"use strict";
 
-	var _cache;
+	var _cache = [], _config = {};
 
-	FTSS.db = _cache = [];
+
+	_config = PRODUCTION ?
+	          {
+		          'baseURL': '/sites/OO-ED-AM-11/FTSS/Prototype/_vti_bin/ListData.svc/'
+	          } : {
+
+		          'baseURL': 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/',
+		          'userURL': 'http://' + location.hostname + ':8080/_layouts/userdisp.aspx?Force=True',
+		          'pplURL' : 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/UserInformationList'
+
+	          };
+
+
+	_config = _.defaults(
+		_config,
+		{
+			'baseURL'     : '/_vti_bin/ListData.svc/',
+			'userURL'     : '/_layouts/userdisp.aspx?Force=True',
+			'pplURL'      : '/_vti_bin/ListData.svc/UserInformationList',
+			'offline'     : true,
+			'noCache'     : false,
+			'cacheVersion': 1
+		});
 
 	db.open({
-		        'server' : 'FTSS',
+		        'server' : 'angularSharepoint',
 		        'version': 1,
 		        'schema' : {
-			        'prefs' : {
-				        'keyPath': 'q'
-			        },
 			        'caches': {
 				        'keyPath': 'q'
 			        }
@@ -51,23 +70,7 @@
 
 		 function ($http) {
 
-			 var _config, _utils = {}, _debounce = {};
-
-			 _config = PRODUCTION ?
-
-			           {
-				           'baseURL': '/sites/OO-ED-AM-11/FTSS/Prototype/_vti_bin/ListData.svc/',
-				           'userURL': '/_layouts/userdisp.aspx?Force=True',
-				           'pplURL' : '/_vti_bin/ListData.svc/UserInformationList',
-				           'offline': false,
-				           'noCache': false
-			           } : {
-				           'baseURL': 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/',
-				           'userURL': 'http://' + location.hostname + ':8080/_layouts/userdisp.aspx?Force=True',
-				           'pplURL' : 'http://' + location.hostname + ':8080/_vti_bin/ListData.svc/UserInformationList',
-				           'offline': false,
-				           'noCache': false
-			           };
+			 var _utils = {}, _debounce = {};
 
 			 /**
 			  * Generate a timestamp offset from 1 Jan 2014 (EPOCH was too large and causing SP to throw a 500 error) :-/
@@ -78,6 +81,12 @@
 				 return Math.floor(new Date().getTime() / 1000 - 1388552400);
 			 };
 
+			 /**
+			  * Performs object cleanup prior to sending to SharePoint to prevent 500 errors
+			  *
+			  * @param scope
+			  * @returns {*}
+			  */
 			 _utils.beforeSend = function (scope) {
 
 				 var scopeClone = angular.copy(scope);
@@ -104,6 +113,9 @@
 				 return scopeClone;
 			 };
 
+			 /**
+			  * Helper utility to convert SharePoint date strings to Date() objects with caching
+			  */
 			 _utils.getDate = (function () {
 
 				 var dCache = {};
@@ -112,32 +124,25 @@
 
 					 if (date && !dCache[date]) {
 
-						 dCache[date] = new Date(Number(date.replace(/[^\d.]/g, '')));
+						 dCache[date] = Number(date.replace(/[^\d.]/g, ''));
 
 					 }
 
-					 return date ? dCache[date] : null;
+					 return date ? new Date(dCache[date]) : null;
 
 				 };
 
 			 }());
 
 			 /**
-			  * Creates a sanitized for our cache key
+			  * Creates a sanitized string for our cache key
 			  * @param options
 			  * @returns {*}
 			  */
 			 _utils.cacheString = function (options) {
 
-				 return options.cache ?
-
-					 // Include the SP List name
-					    options.source + JSON.stringify(options.params)
-
-						    // Remove all the junk from our JSON string of the model
-						    .replace(/[^\w]/gi, '')
-
-					 : '';
+				 // Remove all the junk from our JSON string of the model
+				 return JSON.stringify(options).replace(/[^\w]/gi, '') + _config.cacheVersion
 
 			 };
 
@@ -149,7 +154,7 @@
 				 'people': (function () {
 
 					 // This is the cache of our people queries
-					 var _cache = {};
+					 var _cachePeople = {};
 
 					 return function (search, filter) {
 
@@ -165,11 +170,11 @@
 						 };
 
 						 // If we've already done this search during the app's lifecycle, return it instead
-						 if (_cache[search]) {
+						 if (_cachePeople[search]) {
 
 							 return {
 								 'then': function (callback) {
-									 callback(execFilter(_cache[search]));
+									 callback(execFilter(_cachePeople[search]));
 								 }
 							 };
 
@@ -184,15 +189,15 @@
 								 'url'     : _config.pplURL,
 								 'params'  : {
 									 '$select': 'Name,WorkEMail',
-									 '$filter': "startswith(Name,'" + search + "')",
-									 '$top'   : 5
+									 '$filter': "startswith(WorkEMail,'" + search + "')",
+									 '$top'   : 10
 								 }
 							 })
 
 							 // Now convert to an array, store a copy in the cache and return results of execFilter()
 							 .then(function (response) {
 
-								       var data = _cache[search] = _.toArray(response.data.d);
+								       var data = _cachePeople[search] = _.toArray(response.data.d);
 								       return execFilter(data);
 
 							       });
@@ -262,7 +267,7 @@
 
 				 },
 
-				 'batch' : function (collection) {
+				 'batch': function (collection) {
 
 					 var map = [],
 
@@ -283,7 +288,7 @@
 								     'Content-Type: application/json;charset=utf-8',
 								     'Accept: application/json',
 								     '',
-								     JSON.stringify(_utils.beforeSend(data)),
+								     JSON.stringify(_utils.beforeSend(data))
 							     ])
 
 							     .join('\n');
@@ -339,7 +344,8 @@
 							 'method' : 'POST',
 							 'url'    : _config.baseURL + '$batch',
 							 'headers': {
-								 'Content-Type': 'multipart/mixed; boundary=' + boundary
+								 'Content-Type'      : 'multipart/mixed; boundary=' + boundary,
+								 'DataServiceVersion': '2.0'
 							 },
 							 data     : body
 						 })
@@ -400,13 +406,25 @@
 
 
 				 },
+
+				 /**
+				  * Create action
+				  *
+				  * Performs a CREATE with the given scope variable, The scope
+				  *
+				  * @param scope
+				  * @returns {*}
+				  */
 				 'create': function (scope) {
 
 					 return $http(
 						 {
-							 'method': 'POST',
-							 'url'   : _config.baseURL + scope.__metadata,
-							 'data'  : _utils.beforeSend(scope)
+							 'method' : 'POST',
+							 'url'    : _config.baseURL + scope.__metadata,
+							 'data'   : _utils.beforeSend(scope),
+							 'headers': {
+								 'DataServiceVersion': '2.0'
+							 }
 						 });
 
 				 },
@@ -418,8 +436,9 @@
 							 'method' : 'POST',
 							 'url'    : scope.__metadata.uri,
 							 'headers': {
-								 'If-Match'     : scope.__metadata.etag,
-								 'X-HTTP-Method': 'MERGE'
+								 'If-Match'          : scope.__metadata.etag,
+								 'X-HTTP-Method'     : 'MERGE',
+								 'DataServiceVersion': '2.0'
 							 },
 							 'data'   : _utils.beforeSend(scope)
 						 });
@@ -428,7 +447,7 @@
 
 				 'read': function (optOriginal) {
 
-					 var getData, getCache, cacheString, options;
+					 var getData, getCache, options;
 
 					 options = angular.copy(optOriginal);
 
@@ -436,9 +455,6 @@
 					 if (options.params && _.isEmpty(options.params.$filter)) {
 						 delete options.params.$filter;
 					 }
-
-					 // If this request uses caching, then we need to create a localStorage key
-					 cacheString = _utils.cacheString(options);
 
 					 /**
 					  * getData $http wrapper, wraps the $http service with some SP-specific garbage
@@ -460,7 +476,10 @@
 								 'dataType': 'json',
 								 'method'  : 'GET',
 								 'url'     : _config.baseURL + opt.source,
-								 'params'  : opt.params || null
+								 'params'  : opt.params || null,
+								 'headers' : {
+									 'DataServiceVersion': '2.0'
+								 }
 							 })
 
 							 .then(function (response) {
@@ -531,7 +550,7 @@
 
 					 /**
 					  * getCache custom cache resolver/awesomeness generator
-					  * This will attempt to read localStorage for any previously cached data and merge
+					  * This will attempt to read indexerdb for any previously cached data and merge
 					  * updates with the cache.
 					  *
 					  * YOU MUST HAVE A SP FIELD NUMBER FIELD NAMED "Timestamp" FOR THIS TO WORK
@@ -545,6 +564,9 @@
 						 // Load the cached data, if it doesn't actually exist we'll deal with it later on
 						 var runner = function () {
 
+							 // Create a cache key based on the model
+							 var cacheString = _utils.cacheString(options);
+
 							 _cache.caches.get(cacheString).done(function (cachedData, opts, hasCache, oldStamp) {
 
 								 cachedData = cachedData || {'json': {}, 'time': false};
@@ -557,8 +579,10 @@
 
 								 }
 
+								 // Really make this a boolean
 								 hasCache = !!cachedData.time;
 
+								 // Save a copy of the old timestamp
 								 oldStamp = cachedData.time;
 
 								 // Set a new timestamp before our network call (so we don't miss anything)
@@ -567,6 +591,7 @@
 								 // If we already have cached data we need to add the timestamp to the filter
 								 if (hasCache) {
 
+									 // This is a messy comparison to see if we're under the debounce threshold
 									 if (_debounce[cacheString] &&
 									     cachedData.time -
 									     _debounce[cacheString] <
@@ -587,6 +612,8 @@
 									                        ' and ' + opts.params.$filter : '');
 
 								 }
+
+								 // Add the last cachedData.time variable to our _debounce array
 								 _debounce[cacheString] = cachedData.time;
 
 								 // Call getData() with the custom opts or options as applicable
@@ -611,7 +638,7 @@
 
 											       if (hasCache) {
 
-												       // Add a helpful little updated property to our response (but only after caching without it)
+												       // Add an updated=true property to our response
 												       _(data).each(function (row, key) {
 													       cachedData.json[key].updated = true;
 												       });
@@ -630,6 +657,7 @@
 
 						 };
 
+						 // Que up the requests if the _cache DB isn't loaded yet
 						 if (typeof _cache.length === 'number') {
 							 _cache.push(runner);
 						 } else {
