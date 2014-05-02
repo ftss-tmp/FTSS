@@ -236,6 +236,9 @@
 							      // Pull unqiue MDS list from MCL & copy to Caches
 							      loaded(_(response).pluck('MDS').uniq().compact().value(), 'MDS');
 
+							      // Pull the unique IMDS course codes into the cache
+							      caches.IMDS = _(response).pluck('IMDS').uniq().compact().value();
+
 							      // Add MCL to Selectize with row callback
 							      loaded(response, 'MasterCourseList', function (v) {
 
