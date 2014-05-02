@@ -133,3 +133,7 @@ time-ago {
 .people-picker input {
     width: 100% !important;
 }
+
+.loading + #loading {
+    display: block!important;
+}

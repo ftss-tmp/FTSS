@@ -47,6 +47,10 @@ h4 .icon, .input-group-addon .icon {
     fill: #555 !important;
 }
 
+#home #spinner svg.icon {
+    fill: #fff !important;
+}
+
 .wait #spinner {
     visibility: visible;
     transition: opacity 300ms linear;
