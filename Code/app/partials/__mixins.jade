@@ -219,3 +219,5 @@ mixin peoplePicker(field)
 
     +formGroup('Name', 'people-picker')
         select(selectize='people', field=field, placeholder='Type a name to search...')
+        #loading.hide(style='position: absolute;right: -1.5em; margin-top: -2.75em;')
+            spinner(size='2em')
