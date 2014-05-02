@@ -446,6 +446,71 @@ FTSS.ng.controller(
 
 				      });
 
+
+			FTSS.pasteAction = function (text) {
+
+				var collection = {};
+
+				text
+
+					.replace(/^.+(QUAL|COMP).+$\n/gim, '')
+
+					.replace(/\n+/gm, '\n')
+
+					.replace(/EVT\-ID\s\n([\w\s\n\d\/\\\*\-]*)\n^PCN/gim,
+
+				             function (str, $1) {
+
+					             var last = false;
+
+					             _($1.split('\n')).each(function (s) {
+
+						             s = !last ?
+
+						                 s.replace(/^([a-z]+\s[a-z]+).*\s(\d{5})\s/gi,
+
+						                           function (m, $$1, $$2) {
+
+							                           last = {
+								                           'name': $$1.trim(),
+								                           'id'  : $$2.trim()
+							                           };
+
+							                           return '';
+
+						                           }) : s;
+
+						             s.replace(/\s([\d]{6})\s/, function (m, $$1) {
+
+							             if (caches.IMDS.indexOf($$1) > -1) {
+
+								             collection[$$1] = collection[$$1] || [];
+
+								             last.date = '';
+
+								             s.replace(/\d\d\s[a-z]{3}\s\d\d/i, function (m) {
+									             last.date = m;
+								             });
+
+								             collection[$$1].push(last);
+
+							             }
+
+						             });
+
+
+					             })
+				             });
+
+				_(collection).each(function (c, k) {
+
+					c.course = _.findWhere(caches.MasterCourseList, {'IMDS': k});
+
+				});
+
+				debugger;
+			};
+
 		}
 	])
 ;
