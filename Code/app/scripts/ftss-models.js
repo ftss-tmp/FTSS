@@ -31,6 +31,8 @@
 					'Number',
 					'IMDS',
 					'CAFMCL',
+					'Earliest',
+					'Suspense',
 					'Archived'
 				]
 			}
@@ -164,7 +166,8 @@
 					'Requirements_JSON',
 					'Requestor_JSON',
 					'Validated',
-					'Approved',
+					'ApprovedCC',
+					'ApprovedMAJCOM',
 					'Funded',
 					'TDY',
 					'Notes'
