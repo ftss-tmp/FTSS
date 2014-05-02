@@ -85,9 +85,21 @@ form.form-horizontal(name='modal')
         br
         br
 
-        .col-lg-4.pull-right
+        h4.light-bottom
+            +icon('asterisk')
+            | CAF/MCL Course
 
-            +toggleBox('data.CAFMCL', 'CAF/MCL', 'catalog-cafmcl')
+        .col-lg-4
+            +toggleBox('data.CAFMCL', ' Mandatory', 'catalog-cafmcl')
+
+        .col-lg-4(explain='catalog-earliest', bottom)
+            .input-group
+                input.form-control(ng-model='data.Earliest', type='number', min='0')
+                .input-group-addon Min Days
+        .col-lg-4(explain='catalog-suspense', right)
+            .input-group
+                input.form-control(ng-model='data.Suspense', type='number', min='0')
+                .input-group-addon Max Days
 
         br
         br
