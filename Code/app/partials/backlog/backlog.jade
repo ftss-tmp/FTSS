@@ -1,6 +1,6 @@
 include ../__mixins
 
-#main-stats.slideToggleEffect.slideOut
+#main-stats.slideToggleEffect.slideOut(ng-if='viewPaste')
     #backlogStats(hover='backlog-graph-view', left)
         +icon('graph_pie')
     .stats-row
@@ -58,11 +58,26 @@ include ../__mixins
                     span.badge {{crs.Count}}
                     h5: span.a(scroll-to='crs.course.PDS') {{crs.course.Number}}
 
-#scrollTarget.wrapped.addNew(class='{{requests.display === false ? "col-lg-12" : "col-lg-9"}}')
+#scrollTarget.wrapped.addNew(class='{{requests.display === false ? "col-lg-12" : "col-lg-9"}}', ng-any-drop, style='padding-top:10px')
 
     .no-pad
 
+        #dragIcon
+            +icon('insert')
+
         +userInstructions('generate-898', true)
+
+        .pull-left(hover="backlog-drag-drop", text-parser='Import IMDS AAA Background Product')
+
+        .clearfix
+
+        br
+
+        div(ng-show='viewPaste')
+
+         //   h4 Here's the courses we found:
+            pre {{viewPaste}}
+            br
 
         +grouping()
 
