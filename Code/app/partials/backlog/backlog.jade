@@ -154,8 +154,6 @@ include ../__mixins
                         .col-lg-7(style='overflow:hidden;margin-left:-1%')
                             table.table.table-split.table-hover
                                 thead: tr: th.truncate(colspan='2') 2. Choose students
-                                                em(ng-if='row.Over') FYI, you've exceeded this course's max capacity
-                                                em(ng-if='row.Under') FYI, you're under the student minimum for this course
                                 tbody
                                     tr(ng-repeat="r in row.requirements")
                                         td(style='border-right:none')
@@ -171,6 +169,8 @@ include ../__mixins
 
 
                             .text-danger.am-fade-and-slide-bottom.text-center
+                                em(ng-if='row.Over') FYI, you've exceeded this course's max capacity
+                                em(ng-if='row.Under') FYI, you're under the student minimum for this course
 
                 .clearfix
 
