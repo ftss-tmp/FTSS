@@ -95,27 +95,34 @@ FTSS.controller = (function () {
 							// Only act if there is a valid change to our watch
 							if (watch) {
 
-								actions.reload = function (secondaryCallback) {
+								actions.reload = function () {
 
-									var filters = [];
+									var finalize = function (data) {
 
-									opts.filter && filters.push(opts.filter);
+										callback && callback(data);
 
-									(prop === 'filter') && filters.push(watch);
+									};
 
-									model.params.$filter = filters.join(' and ');
+									if (!opts.static) {
 
-									SharePoint
+										var filters = [];
 
-										.read(model)
+										opts.filter && filters.push(opts.filter);
 
-										.then(function (data) {
+										(prop === 'filter') && filters.push(watch);
 
-											      callback && callback(data);
+										model.params.$filter = filters.join(' and ');
 
-											      secondaryCallback && secondaryCallback(data);
+										SharePoint
 
-										      });
+											.read(model)
+
+											.then(finalize);
+									} else {
+
+										finalize();
+
+									}
 
 								};
 
