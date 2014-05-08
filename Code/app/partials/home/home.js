@@ -17,25 +17,31 @@
 
 			 $scope.pref = FTSS.prefs;
 
-			 SharePoint.read(FTSS.models.updates).then(function (data) {
+			 SharePoint
 
-				 $scope.updates = _(data)
+				 .read(FTSS.models.updates)
 
-					 .sortBy('Created')
+				 .then(function (data) {
 
-					 .reverse()
+					       $scope.updates = _(data)
 
-					 .map(function (d) {
-						      d.date = moment(d.Created).format('ll');
-						      return d;
-					      })
+						       .sortBy('Created')
 
-					 .value();
+						       .reverse()
 
-			 });
+						       .map(function (d) {
+							            d.date = moment(d.Created).format('ll');
+							            return d;
+						            })
 
-			 $scope.$watch(
-				 'cleanSlate', function (res) {
+						       .value();
+
+				       });
+
+			 $scope.$parent.$watch(
+				 'cleanSlate',
+
+				 function (res) {
 
 					 if (res) {
 
@@ -47,7 +53,9 @@
 				 });
 
 			 $scope.$watch(
-				 'pref', function (val, old) {
+				 'pref',
+
+				 function (val, old) {
 
 					 if (val && val !== old) {
 
