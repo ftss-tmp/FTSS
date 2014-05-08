@@ -28,7 +28,7 @@ form(name='modal')
             .col-lg-4(ng-if='!local')
                 .input-group.pull-right(style='width:20em!important')
                     .input-group-addon  Funding Source:
-                    .btn-group.no-toggle(hover='backlog-funding', right, bs-radio-group, ng-model='$parent.funded')
+                    .btn-group(hover='backlog-funding', right, bs-radio-group, ng-model='$parent.funded')
                         label.btn.btn-default
                             input(value='true', type='radio')
                             | Unit
@@ -43,14 +43,14 @@ form(name='modal')
         .well.well-sm(ng-repeat='row in courses', ng-class='{priority:row.priority}')
 
             .h4
-                .btnFake.white(class='btn-primary')
-                    span.bigLetter {{row.requirements.length}}
-                    span(style='font-size:1.25em;position:relative;top:.15em;') {{row.PDS}}&nbsp;
+                .btnFake.btn-dark
+                    span.bigLetter {{row.students.length}}
+                    span {{row.course.PDS}}&nbsp;
 
                 .pull-right.w75(style='position:relative;top:.2em')
                     span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
                         +icon('asterisk')
-                    .truncate.text-right(style='margin-top:5px') {{row.Title}}
+                    .truncate.text-right(style='margin-top:5px') {{row.course.Title}}
 
             hr
 
@@ -59,15 +59,15 @@ form(name='modal')
                     tbody
                         tr
                             td Course
-                            td {{row.Number}}
+                            td {{row.course.Number}}
 
                         tr
                             td Length
-                            td {{row.Days}} Days / {{row.Hours}} Hours
+                            td {{row.course.Days}} Days / {{row.course.Hours}} Hours
 
                         tr
                             td Limits
-                            td {{row.Min}} Min / {{row.Max}} Max
+                            td {{row.course.Min}} Min / {{row.course.Max}} Max
 
             .col-lg-1
 
@@ -100,7 +100,7 @@ form(name='modal')
                     tbody
                         tr(ng-repeat='student in (students =  (row.students | limitTo:row.limit))')
                             td(style='letter-spacing:.1em')
-                                | {{student}}
+                                | {{student.name}}
                                 p(ng-show='$last && $index < (row.students.length - 1)')
                                     a(ng-click='row.limit = 99') Show All
 
