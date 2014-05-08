@@ -32,7 +32,7 @@
 			'baseURL'     : '/_vti_bin/ListData.svc/',
 			'userURL'     : '/_layouts/userdisp.aspx?Force=True',
 			'pplURL'      : '/_vti_bin/ListData.svc/UserInformationList',
-			'offline'     : true,
+			'offline'     : false,
 			'noCache'     : false,
 			'cacheVersion': 1
 		});
