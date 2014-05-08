@@ -1,3 +1,16 @@
+#dragIcon {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    font-size: 12em;
+    opacity: .75;
+    display: none;
+}
+
+.dragover #dragIcon {
+    display: block;
+}
+
 .btnFake {
     display: inline-block;
     padding: 6px 12px;
@@ -16,6 +29,7 @@
     border: 1px solid transparent;
     border-radius: 4px;
 }
+
 #scrollTarget.col-lg-9 .no-pad > .alert {
     width: 100%;
 }
@@ -23,7 +37,7 @@
 #backlogRequests {
     position: absolute;
     right: 5px;
-    top: 10px;
+    top: 4.75em;
     height: 100%;
 }
 
@@ -250,6 +264,18 @@
     margin-right: .35em;
 }
 
+.h4 .btnFake .bigLetter + span {
+    font-size: 1.25em;
+    position: relative;
+    top: .15em;
+}
+
+.h4 .btnFake .bigLetter + span + span {
+    font-size: 1.3em;
+    position: relative;
+    top: .25em;
+}
+
 #backlogRequests .badge {
     font-size: 1.35em;
     margin: -.2em 0 0 0;
@@ -265,7 +291,7 @@
 
 #backlog .modal-header input {
     font-size: 1.2em;
-    border: none!important;
+    border: none !important;
     height: inherit;
     text-align: right;
     margin-top: -.25em;

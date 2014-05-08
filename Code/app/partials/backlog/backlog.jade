@@ -89,8 +89,6 @@ include ../__mixins
 
                     .btnFake.white(class='btn-{{requestType(row)}}')
                         span.bigLetter {{row.requirements.length}}
-                        span(style='font-size:1.25em;position:relative;top:.15em;') {{row.PDS}}&nbsp;
-                        span(style='font-size:1.3em;position:relative;top:.25em;')
                         span {{row.course.PDS}}&nbsp;
                         span
                             +icon('plane')
