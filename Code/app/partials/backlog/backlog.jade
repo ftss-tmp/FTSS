@@ -56,7 +56,7 @@ include ../__mixins
             ul.list-group(style='margin:0')
                 li.list-group-item(ng-repeat='crs in courses', ng-class='{limit:(crs.Over ||crs.Under)}')
                     span.badge {{crs.Count}}
-                    h5: span.a(scroll-to='crs.PDS') {{crs.Number}}
+                    h5: span.a(scroll-to='crs.course.PDS') {{crs.course.Number}}
 
 #scrollTarget.wrapped.addNew(class='{{requests.display === false ? "col-lg-12" : "col-lg-9"}}')
 
@@ -66,7 +66,7 @@ include ../__mixins
 
         +grouping()
 
-            .well(id='{{row.PDS}}', ng-repeat='row in group'
+            .well(id='{{row.course.PDS}}', ng-repeat='row in group'
             ng-class='{priority:row.priority, archived:row.Archived, updated:row.updated}')
 
                 .h4
@@ -76,13 +76,15 @@ include ../__mixins
                         span.bigLetter {{row.requirements.length}}
                         span(style='font-size:1.25em;position:relative;top:.15em;') {{row.PDS}}&nbsp;
                         span(style='font-size:1.3em;position:relative;top:.25em;')
+                        span {{row.course.PDS}}&nbsp;
+                        span
                             +icon('plane')
                             +icon('exclamation-circle')
 
                     .pull-right.w75(style='position:relative;top:.2em')
                         span.pull-right(hover='This is a priority course (listed on the CAF/MCL).')
                             +icon('asterisk')
-                        .truncate.text-right(style='margin-top:5px') {{row.Title}}
+                        .truncate.text-right(style='margin-top:5px') {{row.course.Title}}
 
                 hr.rollup
 
@@ -93,29 +95,29 @@ include ../__mixins
                             table.table.table-split
                                 tbody
                                     tr
-                                        td {{row.MDS}}
-                                        td {{row.Number}}
+                                        td {{row.course.MDS}}
+                                        td {{row.course.Number}}
 
                         .col-lg-4
                             table.table.table-split
                                 tbody
                                     tr
                                         td Length
-                                        td {{row.Days}} Days / {{row.Hours}} Hours
+                                        td {{row.course.Days}} Days / {{row.course.Hours}} Hours
 
                         .col-lg-3
                             table.table.table-split
                                 tbody
                                     tr
                                         td Limits
-                                        td {{row.Min}} Min / {{row.Max}} Max
+                                        td {{row.course.Min}} Min / {{row.course.Max}} Max
 
                     br
 
                     .alert.alert-danger(ng-if='!row.detRequest')
                         .lead *** No available FTD's found! ***
-                        p: b Please verify {{row.PDS}} is the course required for the student(s) listed below:
-                        p: ol: li(ng-repeat="r in row.requirements") {{r.StudentName}}
+                        p: b Please verify {{row.course.PDS}} is the course required for the student(s) listed below:
+                        p: ol: li(ng-repeat="r in row.requirements") {{r.name}}
                         unbind
 
                     .row(ng-if='row.detRequest')
@@ -128,7 +130,7 @@ include ../__mixins
                                             td(style='width:125px;border-right:none') {{u.distance}}
                                             td.truncate
                                                 input.css-checkbox(type='radio',
-                                                name='unit{{row.Id}}',
+                                                name='unit{{row.course.Id}}',
                                                 ng-model='$parent.$parent.row.detRequest',
                                                 ng-value='u'
                                                 ng-change='checkStudent(row)')
@@ -139,20 +141,23 @@ include ../__mixins
                         .col-lg-7(style='overflow:hidden;margin-left:-1%')
                             table.table.table-split.table-hover
                                 thead: tr: th.truncate(colspan='2') 2. Choose students
-                                    tbody
-                                        tr(ng-repeat="r in row.requirements")
-                                            td(style='border-right:none') {{r.waited}}
-                                            td.truncate(style='display:block')
-                                                input.css-checkbox(type='checkbox',
-                                                ng-model='r.selected',
-                                                ng-change='checkStudent(row)')
-                                                label.css-label &nbsp;&nbsp;&nbsp;{{r.StudentName}}
-
-                                        tr.text-danger
-                                            td(style='border-right:none')
-                                            td.am-fade-and-slide-bottom(style='font-weight:normal;padding-left:3em')
                                                 em(ng-if='row.Over') FYI, you've exceeded this course's max capacity
                                                 em(ng-if='row.Under') FYI, you're under the student minimum for this course
+                                tbody
+                                    tr(ng-repeat="r in row.requirements")
+                                        td(style='border-right:none')
+                                            | {{r.dueDate}}
+                                            .pull-right.muted(hover='IMDS Text Verification', content='{{r.text}}')
+                                                +icon('search')
+
+                                        td.truncate(style='display:block')
+                                            input.css-checkbox(type='checkbox',
+                                            ng-model='r.selected',
+                                            ng-change='checkStudent(row)')
+                                            label.css-label &nbsp;&nbsp;&nbsp;{{r.name}}
+
+
+                            .text-danger.am-fade-and-slide-bottom.text-center
 
                 .clearfix
 
