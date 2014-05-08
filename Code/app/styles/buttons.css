@@ -132,3 +132,12 @@ traverse * {
 .white label svg.icon {
     fill:#fff!important;
 }
+
+.btn-dark {
+    background: #333;
+    color: #fff;
+}
+
+.btn-dark svg.icon {
+    fill:#fff!important;
+}
