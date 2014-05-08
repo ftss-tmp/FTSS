@@ -21,9 +21,10 @@
 		    'requirements': [
 			    {'q': '', 'label': ''}
 		    ],
-		    'students'    : [
+		    'backlog': [
 			    {'q': '', 'label': ''}
 		    ]
+
 	    },
 
 	    filterMaps = {
@@ -46,10 +47,6 @@
 			    'u': 'UnitId'
 		    },
 		    'backlog'     : {
-			    'h': 'HostUnitId'
-		    },
-		    'students'    : {
-			    'u': 'HostUnit/FTD',
 			    'h': 'HostUnitId'
 		    }
 	    },
