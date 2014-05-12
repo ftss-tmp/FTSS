@@ -49,7 +49,8 @@ div
 
                 blockquote
                     p {{row.Notes}}
-                    footer {{row.Requestor.Name}}
+                    footer
+                        a(href='mailto:{{row.CreatedBy.WorkEMail}}?{{row.email}}') {{row.CreatedBy.Name}}
 
                 table.table.table-hover.table-center
                     thead
