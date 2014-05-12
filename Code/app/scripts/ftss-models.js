@@ -158,44 +158,23 @@
 			'cache' : true,
 			'source': 'Requirements',
 			'params': {
+				'$expand': 'CreatedBy',
 				'$select': [
 					'Id',
 					'UnitId',
 					'HostId',
 					'DateNeeded',
 					'Requirements_JSON',
-					'Requestor_JSON',
-					'Validated',
 					'ApprovedCC',
 					'ApprovedMAJCOM',
 					'Funded',
 					'TDY',
-					'Notes'
+					'Notes',
+				    'CreatedBy/Name',
+				    'CreatedBy/WorkEMail'
 				]
 			}
 		},
-
-		'students': {
-
-			'cache' : true,
-			'source': 'Students',
-			'params': {
-				'$expand': [
-					'HostUnit'
-				],
-				'$select': [
-					'Id',
-					'StudentType',
-					'HostUnitId',
-					'ProcessDate',
-					'StudentName',
-					'StudentEmail',
-					'Requirements_JSON',
-					'Archived'
-				]
-			}
-		},
-
 
 		'support': {
 
