@@ -5,7 +5,7 @@ form(name='modal')
     .modal-header.caps
         h3
             +icon('plus-circle')
-            | Validate 898 for {{courses[0].FTD.LongName}}
+            | Validate 898 for {{$parent.ftd.LongName}}
             .pull-right
                 input.form-control(type='text',
                 ng-model='courses.month',
