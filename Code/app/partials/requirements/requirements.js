@@ -132,14 +132,6 @@ FTSS.ng.controller(
 
 						      d.Month = moment(d.DateNeeded).format('MMMM YYYY');
 
-						      d.Requestor = _.zipObject(['Id',
-						                                 'Name',
-						                                 'Email'
-						                                ], d.Requestor_JSON);
-
-
-						      delete d.Requestor_JSON;
-
 						      d.totalSeats = 0;
 						      d.Requirements = {};
 						      d.History = {};
