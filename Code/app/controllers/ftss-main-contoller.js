@@ -26,6 +26,8 @@
 			'$http',
 			function ($scope, $location, SharePoint, $routeParams, $timeout, $http) {
 
+				$scope.cleanSlate = false;
+
 				var _fn = $scope.fn = {
 
 					'setLoaded': function (callback) {
@@ -266,7 +268,9 @@
 
 							} else {
 
-								$scope.cleanSlate = true;
+								$timeout(function () {
+									$scope.cleanSlate = true;
+								});
 
 							}
 
@@ -343,7 +347,7 @@
 
 					var prefs = $routeParams.view ? JSON.parse(atob($routeParams.view)) : {};
 
-					$scope.permaLink = $routeParams.link || '';
+					$scope.permaLink = _fn.getPage() !== 'home' && $routeParams.link || '';
 
 					$scope.sortBy.$ = prefs.s || '';
 					$scope.groupBy.$ = prefs.g || '';

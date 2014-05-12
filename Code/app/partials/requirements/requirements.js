@@ -42,12 +42,12 @@ FTSS.ng.controller(
 						      d.steps = [
 							      {
 								      'text'  : 'MTF',
-								      'status': d.Validated ? 'complete' : 'active'
+								      'status': 'complete'
 							      },
 
 							      {
 								      'text'  : 'Group/CC',
-								      'status': d.Validated ? d.Approved ? 'complete' : 'active' : 'pending'
+								      'status': d.Approved ? 'complete' : 'active'
 							      }
 						      ];
 
@@ -132,17 +132,11 @@ FTSS.ng.controller(
 
 						      d.Month = moment(d.DateNeeded).format('MMMM YYYY');
 
-						      d.Requestor = _.zipObject(['Id',
-						                                 'Name',
-						                                 'Email'
-						                                ], d.Requestor_JSON);
-
-
-						      delete d.Requestor_JSON;
-
 						      d.totalSeats = 0;
 						      d.Requirements = {};
 						      d.History = {};
+
+						      d.email = encodeURI('subject=FTSS 898 Submission - ' + d.Month + ' for ' + d.FTD.LongName)
 
 						      stepBuilder(d);
 

@@ -241,7 +241,7 @@ utils.distanceCalc = function (start, end) {
 };
 
 /**
- * IE's version of toLocaleString() is apparently stupid so we'll just do it manually using a regex couretsy of SO
+ * IE's version of toLocaleString() is apparently stupid so we'll just do it manually using a regex courtesy of SO
  *
  * http://stackoverflow.com/a/2901298/467373
  *

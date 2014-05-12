@@ -236,6 +236,9 @@
 							      // Pull unqiue MDS list from MCL & copy to Caches
 							      loaded(_(response).pluck('MDS').uniq().compact().value(), 'MDS');
 
+							      // Pull the unique IMDS course codes into the cache
+							      caches.IMDS = _(response).pluck('IMDS').uniq().compact().value();
+
 							      // Add MCL to Selectize with row callback
 							      loaded(response, 'MasterCourseList', function (v) {
 
@@ -389,16 +392,18 @@
 		'people': function (scope, SharePoint, field) {
 
 			return {
-				'labelField' : 'label',
-				'valueField' : 'Name',
-				'sortField'  : 'Name',
-				'searchField': 'Name',
-				'persist'    : false,
-				'create'     : true,
-				'plugins'    : [
+				'delimiter'   : '+',
+				'loadThrottle': 500,
+				'labelField'  : 'label',
+				'valueField'  : 'Name',
+				'sortField'   : 'Name',
+				'searchField' : 'WorkEMail',
+				'persist'     : false,
+				'create'      : true,
+				'plugins'     : [
 					'remove_button'
 				],
-				'onChange'   : function (val) {
+				'onChange'    : function (val) {
 
 					var self = this;
 
@@ -410,10 +415,10 @@
 					});
 
 				},
-				'load'       : function (query, callback) {
+				'load'        : function (query, callback) {
 
-					// Dont start searching until after four characters
-					if (!PRODUCTION || query.length > 4) {
+					// Dont start searching until after the dot
+					if (!PRODUCTION || query.indexOf('.') > 1) {
 
 						SharePoint
 
