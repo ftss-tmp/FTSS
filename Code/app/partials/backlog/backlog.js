@@ -83,7 +83,7 @@ FTSS.ng.controller(
 
 							    'UnitId': scope.courses[0].detRequest.Id,
 
-							    'HostId': scope.courses[0].requirements[0].HostUnitId,
+							    'HostId': $scope.host.Id,
 
 							    'DateNeeded': scope.courses.month,
 
@@ -93,13 +93,7 @@ FTSS.ng.controller(
 
 							    'Notes': scope.notes,
 
-							    'Requirements_JSON': [],
-
-							    'Requestor_JSON': [
-								    $scope.user.id,
-								    $scope.user.Name,
-								    $scope.user.WorkEMail
-							    ]
+							    'Requirements_JSON': []
 
 						    }
 
@@ -109,13 +103,13 @@ FTSS.ng.controller(
 
 						    var req = [
 							    // Course
-							    course.Id,
+							    course.course.Id,
 
 							    // Priority
 							    course.priority,
 
 							    // Notes
-							    course.CourseNotes,
+							    course.CourseNotes || '',
 
 							    // Students
 							    [],
@@ -130,35 +124,19 @@ FTSS.ng.controller(
 
 							    .each(function (requirement) {
 
-								          var student =
-
-									              odataCall['_student_' + requirement.Id] =
-
-									              odataCall['_student_' + requirement.Id] ||
-
-									              {
-										              'cache': true,
-
-										              '__metadata': requirement.__metadata,
-
-										              'Requirements_JSON': requirement.Requirements_JSON
-									              };
-
-								          student.Requirements_JSON = _.without(student.Requirements_JSON, course.Id);
-
 								          req[3].push(
 									          [
-										          // Id
-										          requirement.Id,
+										          // IMDS Id
+										          requirement.id,
 
-										          // StudentType
-										          requirement.StudentType,
+										          // IMDS Grade
+										          requirement.grade,
 
-										          // StudentName
-										          requirement.StudentName,
+										          // Name
+										          requirement.name,
 
-										          // StudentEmail
-										          requirement.StudentEmail
+										          // Course date
+										          requirement.dueDate
 									          ]);
 
 							          });
@@ -169,16 +147,14 @@ FTSS.ng.controller(
 
 					    SharePoint.batch(odataCall).then(function (result) {
 
-						    if (result) {
+						    if (result.success) {
 
-							    self.reload(function () {
+							    self.reload();
 
-								    scope.$hide();
-								    utils.alert.create();
+							    scope.$hide();
+							    utils.alert.create();
 
-								    scope.submitted = false;
-
-							    });
+							    scope.submitted = false;
 
 						    } else {
 
@@ -379,6 +355,7 @@ FTSS.ng.controller(
 								courses[course.Id] = {
 									'requirements': c,
 									'course'      : course,
+									'priority'    : course.CAFMCL,
 									'CAFMCL'      : course.CAFMCL ? 'CAF/MCL Course(s)' : 'Regular Course(s)',
 									'listFTD'     : []
 								};
@@ -504,16 +481,16 @@ FTSS.ng.controller(
 					// We hav to use _.size() since this is an ojbect no array
 					$scope.requests.display = _.size(data) ?
 
-					                          // There is data so groupBy the FTD
-					                          _.groupBy(data, function (gp) {
+						// There is data so groupBy the FTD
+						                      _.groupBy(data, function (gp) {
 
-						                          // Add the count to our total count
-						                          $scope.requests.count += gp.Count;
+							                      // Add the count to our total count
+							                      $scope.requests.count += gp.Count;
 
-						                          // Return the FTD base for data grouping
-						                          return gp.detRequest.Base;
+							                      // Return the FTD base for data grouping
+							                      return gp.detRequest.Base;
 
-					                          }) : false;
+						                      }) : false;
 
 				};
 
