@@ -136,6 +136,8 @@ FTSS.ng.controller(
 						      d.Requirements = {};
 						      d.History = {};
 
+						      d.email = encodeURI('subject=FTSS 898 Submission - ' + d.Month + ' for ' + d.FTD.LongName)
+
 						      stepBuilder(d);
 
 						      _.each(d.Requirements_JSON, function (r) {
