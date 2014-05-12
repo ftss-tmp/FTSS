@@ -42,12 +42,12 @@ FTSS.ng.controller(
 						      d.steps = [
 							      {
 								      'text'  : 'MTF',
-								      'status': d.Validated ? 'complete' : 'active'
+								      'status': 'complete'
 							      },
 
 							      {
 								      'text'  : 'Group/CC',
-								      'status': d.Validated ? d.Approved ? 'complete' : 'active' : 'pending'
+								      'status': d.Approved ? 'complete' : 'active'
 							      }
 						      ];
 
