@@ -84,7 +84,7 @@ utils.masterReset = function () {
 
 		window.sessionStorage.clear();
 		window.localStorage.clear();
-		window.indexedDB.deleteDatabase('FTSS');
+		window.indexedDB.deleteDatabase('angularSharepoint');
 
 	} catch (e) {
 
