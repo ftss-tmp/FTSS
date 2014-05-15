@@ -176,6 +176,19 @@
 			}
 		},
 
+		'requirements_stats': {
+
+			'cache': true,
+			'source': 'RequirementsStats',
+			'params': {
+				'$select': [
+				    'Month',
+				    'Data_JSON'
+				]
+			}
+
+		},
+
 		'support': {
 
 			'debounce': 3,
