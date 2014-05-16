@@ -47,7 +47,7 @@
 			    'u': 'UnitId'
 		    },
 		    'backlog'     : {
-			    'h': 'HostUnitId'
+			    'h': 'HostId'
 		    }
 	    },
 
