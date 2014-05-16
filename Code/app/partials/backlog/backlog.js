@@ -11,8 +11,6 @@ FTSS.ng.controller(
 
 			var self = FTSS.controller($scope, {
 
-				    'static': true,
-
 				    'sort' : 'course.PDS',
 				    'group': 'course.MDS',
 
@@ -29,6 +27,9 @@ FTSS.ng.controller(
 				    },
 
 				    'modal': 'backlog',
+
+				    // We bind this controller to the requirement's stats for 898 building & tracking existing requests
+				    'model': 'requirements_stats',
 
 				    'edit': function (scope, isNew, courses) {
 
