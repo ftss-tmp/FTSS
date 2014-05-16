@@ -35,25 +35,51 @@ FTSS.ng.controller(
 
 					    var m = moment(),
 
+					        getHistory = function (collection, interval, course) {
+
+						        var history = $scope.history[collection[interval]];
+
+						        if (history && history[course]) {
+
+							        collection['b' + interval] = history[course].built;
+							        collection['r' + interval] = history[course].required;
+
+						        }
+
+					        },
+
 					        month = {
 
 						        'm1': m.month(),
 						        'd1': m.format('MMM YY'),
+						        '1' : m.format('YYMM'),
+
 						        'm2': m.add(1, 'month').month(),
 						        'd2': m.format('MMM YY'),
+						        '2' : m.format('YYMM'),
+
 						        'm3': m.add(1, 'month').month(),
-						        'd3': m.format('MMM YY')
+						        'd3': m.format('MMM YY'),
+						        '3' : m.format('YYMM')
 
 					        };
 
-					    courses.month = moment().add('months', 3).toISOString();
-
 					    _(courses).each(function (course) {
 
+						    // This just limits how many students are visible by default
 						    course.limit = 3;
 
+						    // Need to copy to avoid the month data being linked across courses
 						    course.History = angular.copy(month);
 
+						    _([1,
+						       2,
+						       3
+						      ]).each(function (interval) {
+							    getHistory(course.History, interval, course.course.Id);
+						    });
+
+						    // Get only the selected students
 						    course.students = _(course.requirements).map(function (req) {
 
 							    return req.selected ? req : false;
@@ -61,6 +87,9 @@ FTSS.ng.controller(
 						    }).filter().value();
 
 					    });
+
+					    courses.Month = moment().add('months', 3);
+					    courses.month = courses.Month.toISOString();
 
 					    scope.courses = courses;
 
@@ -74,7 +103,16 @@ FTSS.ng.controller(
 
 					    scope.submitted = true;
 
-					    var odataCall = {
+					    /**
+					     * This object stores all our SharePoint batch calls.
+					     *
+					     * Because of the size and complexity of the data our _JSON fields will store everything as
+					     * simple arrays instead of objects with named properties.  While this does tend to add some
+					     * risk of data corruption (if we mess up in a later version and are off on the fields), it
+					     * is a HUGE bandwidth saver as it cuts down signficantly on the JSON size
+					     *
+					     */
+					    var oDataCall = {
 
 						    'requirement': {
 
@@ -96,57 +134,86 @@ FTSS.ng.controller(
 
 							    'Requirements_JSON': []
 
+						    },
+
+						    'stats': {
+
+							    'cache': true,
+
+							    '__metadata': 'RequirementsStats',
+
+							    'Month': scope.courses.Month.format('YYMM'),
+
+							    'HostId': $scope.host.Id,
+
+							    'Data_JSON': {}
+
 						    }
 
 					    };
 
+					    // Iterate over each course in the modal and parse/add to oDataCall
 					    _(scope.courses).each(function (course) {
 
 						    var req = [
-							    // Course
-							    course.course.Id,
+							        // Course
+							        course.course.Id,
 
-							    // Priority
-							    course.priority,
+							        // Priority
+							        course.priority,
 
-							    // Notes
-							    course.CourseNotes || '',
+							        // Notes
+							        course.CourseNotes || '',
 
-							    // Students
-							    [],
+							        // Students
+							        [],
 
-							    // History
-							    course.History
+							        // History
+							        course.History
+						        ],
+
+						        //Students by ID # or name if no ID #
+						        history = [];
+
+						    // Iterate through all the students and add to the 898 and stats respectively
+						    _(course.students).each(function (requirement) {
+
+							    history.push(requirement.id);
+
+							    // Add each student (requirement) to the 898
+							    req[3].push(
+								    [
+									    // IMDS Id
+									    requirement.id,
+
+									    // IMDS Grade
+									    requirement.grade,
+
+									    // Name
+									    requirement.name,
+
+									    // Course date
+									    requirement.dueDate
+								    ]);
+
+						    });
+
+						    // Add the requirement to the 898 call
+						    oDataCall.requirement.Requirements_JSON.push(req);
+
+						    // Add the stats for this requirement to the stats call
+						    oDataCall.stats.Data_JSON[course.course.Id] = [
+
+							    // This is the # of seats built (default to < 0)
+							    -1,
+
+							    // This is the list of student IDs for this request
+							    history
 						    ];
-
-						    _(course.requirements)
-
-							    .filter('selected')
-
-							    .each(function (requirement) {
-
-								          req[3].push(
-									          [
-										          // IMDS Id
-										          requirement.id,
-
-										          // IMDS Grade
-										          requirement.grade,
-
-										          // Name
-										          requirement.name,
-
-										          // Course date
-										          requirement.dueDate
-									          ]);
-
-							          });
-
-						    odataCall.requirement.Requirements_JSON.push(req);
 
 					    });
 
-					    SharePoint.batch(odataCall).then(function (result) {
+					    SharePoint.batch(oDataCall).then(function (result) {
 
 						    if (result.success) {
 
