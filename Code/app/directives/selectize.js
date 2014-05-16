@@ -237,7 +237,17 @@
 							      loaded(_(response).pluck('MDS').uniq().compact().value(), 'MDS');
 
 							      // Pull the unique IMDS course codes into the cache
-							      caches.IMDS = _(response).pluck('IMDS').uniq().compact().value();
+							      caches.imds = {};
+							      caches.IMDS = [];
+
+							      _(response).each(function (r) {
+
+								      if (r.IMDS) {
+									      caches.IMDS.push(r.IMDS);
+									      caches.imds[r.IMDS] = r.Id;
+								      }
+
+							      });
 
 							      // Add MCL to Selectize with row callback
 							      loaded(response, 'MasterCourseList', function (v) {
