@@ -34,7 +34,7 @@
 			'pplURL'      : '/_vti_bin/ListData.svc/UserInformationList',
 			'offline'     : false,
 			'noCache'     : false,
-			'cacheVersion': 1
+			'cacheVersion': 2
 		});
 
 	db.open({
@@ -466,9 +466,17 @@
 
 						 // Join the params list if it is an array
 						 _(opt.params).each(function (param, key) {
+
+							 // Allows array params that we flatten to a string
 							 if (param instanceof Array) {
 								 opt.params[key] = param.join(',');
 							 }
+
+							 // If this is a $select field and Id isn't specified, we'll need to add it for caching
+							 if (key === '$select' && param.indexOf('Id') < 0) {
+								 opt.params.$select += ',Id';
+							 }
+
 						 });
 
 						 return $http(

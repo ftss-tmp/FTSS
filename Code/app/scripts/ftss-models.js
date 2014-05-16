@@ -19,7 +19,6 @@
 			'source': 'MasterCourseList',
 			'params': {
 				'$select': [
-					'Id',
 					'PDS',
 					'MDS',
 					'Days',
@@ -45,7 +44,6 @@
 			'source': 'Units',
 			'params': {
 				'$select': [
-					'Id',
 					'Base',
 					'Det',
 					'Email',
@@ -63,7 +61,6 @@
 			'source': 'HostUnits',
 			'params': {
 				'$select': [
-					'Id',
 					'Unit',
 					'FTD',
 					'Location',
@@ -79,7 +76,6 @@
 			'source': 'Instructors',
 			'params': {
 				'$select': [
-					'Id',
 					'UnitId',
 					'AFSC',
 					'InstructorName',
@@ -103,7 +99,6 @@
 					'Scheduled/Requests/Students'
 				],
 				'$select': [
-					'Id',
 					'Notes',
 					'Status',
 					'Created',
@@ -138,7 +133,6 @@
 					'Requests/Students'
 				],
 				'$select': [
-					'Id',
 					'UnitId',
 					'CourseId',
 					'Start',
@@ -160,7 +154,6 @@
 			'params': {
 				'$expand': 'CreatedBy',
 				'$select': [
-					'Id',
 					'UnitId',
 					'HostId',
 					'DateNeeded',
@@ -197,7 +190,6 @@
 			'params'  : {
 				'$expand': 'CreatedBy',
 				'$select': [
-					'Id',
 					'Page',
 					'Thread',
 					'Staff',
@@ -216,7 +208,6 @@
 			'source': 'Updates',
 			'params': {
 				'$select': [
-					'Id',
 					'Update',
 					'Created'
 				]
