@@ -69,15 +69,20 @@ include ../__mixins
 
         .pull-left(hover="backlog-drag-drop", text-parser='Import IMDS AAA Background Product')
 
+        .pull-right(data-content-template='/partials/aaa-paste-text.html',
+                    bs-modal='modal',
+                    style='margin-right:3em!important',
+                    ng-show='viewPaste')
+
+            label.btn.btn-info.btn-labeled.white
+                span.btn-label
+                    +icon('search')
+                | Inspect Evaluated AAA Data
+
+
         .clearfix
 
         br
-
-        div(ng-show='viewPaste')
-
-         //   h4 Here's the courses we found:
-            pre {{viewPaste}}
-            br
 
         +grouping()
 
@@ -155,7 +160,7 @@ include ../__mixins
                             table.table.table-split.table-hover
                                 thead: tr: th.truncate(colspan='2') 2. Choose students
                                 tbody
-                                    tr(ng-repeat="r in row.requirements")
+                                    tr(ng-repeat='r in row.requirements')
                                         td(style='border-right:none')
                                             | {{r.dueDate}}
                                             .pull-right.muted(hover='IMDS Text Verification', content='{{r.text}}')

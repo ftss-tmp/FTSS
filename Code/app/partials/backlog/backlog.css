@@ -1,3 +1,7 @@
+.btn-label .lbl-search {
+    margin-bottom:0;
+}
+
 #dragIcon {
     position: absolute;
     top: 20%;
