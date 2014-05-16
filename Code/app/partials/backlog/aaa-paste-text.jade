@@ -1,0 +1,26 @@
+include ../__mixins
+
+.modal-header.caps
+    h3
+        +icon('search')
+        | Inspect Evaluated AAA Data
+
+.modal-body
+
+    +userInstructions('modal-aaa-eval')
+
+    h4 Here's the courses we found:
+
+    pre {{viewPaste}}
+
+    br
+
+    h4 These courses have previously been requested:
+
+    pre {{previousRequests}}
+
+    br
+
+.modal-footer
+
+    button.btn.btn-default(ng-click='close()') Cancel
