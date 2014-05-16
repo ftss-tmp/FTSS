@@ -251,7 +251,9 @@ FTSS.ng.controller(
 			    parseText = function (text) {
 
 				    // This is the header for our AAA text dump
-				    $scope.$parent.viewPaste = 'NAME                EMP #  GRD   DAFSC  PAFSC     COURSE                          STATUS    DATE\n\n';
+				    $scope.$parent.viewPaste =
+				    $scope.$parent.previousRequests =
+				    'NAME                EMP #  GRD   DAFSC  PAFSC     COURSE                          STATUS    DATE\n\n';
 
 				    var _collection = {},
 
@@ -288,7 +290,7 @@ FTSS.ng.controller(
 					    s
 
 						    // Match the last, first, CAMSID and grade for each student
-						    .replace(/^([a-z]+)\s([a-z]+).*\s(\d{5})\s+([\da-z]{3})/gi,
+						    .replace(/^([a-z]+)\s([a-z]+).*\s(\d{5})\s+([\da-z]{3})\s+\w+\s+\w+\s+/gi,
 
 					                 function (match, lastName, firstName, CAMSID, grade) {
 
@@ -307,7 +309,7 @@ FTSS.ng.controller(
 							                 'first': firstName,
 
 							                 // Trim the IMDS(CAMS)ID in case we need to use later
-							                 'id'   : CAMSID.trim(),
+							                 'id'   : CAMSID ? parseInt(CAMSID, 10) : name.replace(/[^\w]/gi, '-'),
 
 							                 // This is used by the hover so add some HTML decoration
 							                 'text' : '<h4>' + match + '</h4>',
@@ -344,18 +346,22 @@ FTSS.ng.controller(
 					                 })
 
 						    // Look for each course code left (always a six-digit number)
-						    .replace(/\s([\d]{6})\s/,
+						    .replace(/\s([\d]{6})\s(.+)/,
 
-					                 function (match, courseCode, offset, str) {
+					                 function (match, courseCode, textMatch) {
 
 						                 // Test if the courseCode is listed in our course catalog
 						                 if (caches.IMDS.indexOf(courseCode) > -1) {
 
-							                 // Add to the course array if it already exists
-							                 _collection[courseCode] = _collection[courseCode] || [];
+							                 // Add the name + matching text to the requested field
+							                 var ptLine = function (field) {
+
+								                 $scope.$parent[field] += mLast + textMatch + '\n';
+
+							                 };
 
 							                 // Add the matching text to our hover info
-							                 last.text += '<br>' + str;
+							                 last.text += '<br>' + textMatch;
 
 							                 // Now find the first date if it exists
 							                 s.replace(/\d\d\s[a-z]{3}\s\d\d/i, function (match) {
@@ -367,13 +373,25 @@ FTSS.ng.controller(
 								                 last.dueDate = match;
 							                 });
 
-							                 // Now add the student to the course collection
-							                 _collection[courseCode].push(angular.copy(last));
+							                 if (textMatch.indexOf(' SCHED ') < 0 &&
 
-							                 // This lets us show a dump of the parsed data for verification
-							                 $scope.$parent.viewPaste += (mLast + s + '\n')
+							                     ($scope.old[caches.imds[courseCode]] || '').indexOf(last.id) < 0) {
 
-								                 .replace(/\s{10,}/g, '          ');
+								                 // Add to the course array if it already exists
+								                 _collection[courseCode] = _collection[courseCode] || [];
+
+								                 // Now add the student to the course collection
+								                 _collection[courseCode].push(angular.copy(last));
+
+								                 // Dump match courses
+								                 ptLine('viewPaste');
+
+							                 } else {
+
+								                 // Dump prior course text
+								                 ptLine('previousRequests');
+
+							                 }
 
 						                 }
 
@@ -387,23 +405,47 @@ FTSS.ng.controller(
 
 			    };
 
-			/* $scope.filter causes a page navigation action (updates the page URL for bit.ly/bookmark stuff) so we'll
-			 * we'll just keep a copy of it in the FTSS object for now...
-			 *
-			 * @todo this is a really dumb hack that should be refactored.
-			 */
-			FTSS.temp898 = FTSS.temp898 || false;
-
 			// Bind to $scope.filter for now just because it's easy---but probably should be refactored in FTSS.controller
-			self.bind('filter').then(function (val) {
+			self.bind('filter').then(function (backlogStats) {
 
-				var courses = {};
+				// Wrap in $timeout() to notify Angular's digest cycle of the change
+				$timeout(function () {
 
-				// Only do work if the data was already parsed
-				if (FTSS.temp898) {
+					var courses = {};
 
-					// Wrap in $timeout() to notify Angular's digest cycle of the change
-					$timeout(function () {
+					$scope.old = {};
+					$scope.history = {};
+
+					// Iterate over our stats data--this will tell us if a user has already been submitted before and track our history
+					_(backlogStats).each(function (stat) {
+
+						// This will let us have multiple 898's for one month
+						var history = $scope.history[stat.Month] = $scope.history[stat.Month] || {};
+
+						// Iterate over all the courses in an 898
+						_(stat.Data_JSON).each(function (course, id) {
+
+							// Build our list of trainee requests so we don't show prior requests still in the AAA
+							$scope.old[id] = $scope.old[id] ? $scope.old[id].concat(course[1]) : course[1];
+
+							// This will let us have duplicate course requests in one month
+							var h = history[id] = history[id] || {'built': 0, 'required': 0};
+
+							// We have to make -1 a 0 (the default is -1 when FTD hasn't responded)
+							h.built += (course[0] < 1) ? 0 : course[0];
+							h.required += course[1].length;
+
+						});
+
+					});
+
+
+					/* $scope.filter causes a page navigation action (updates the page URL for bit.ly/bookmark stuff) so we'll
+					 * we'll just keep a copy of it in the FTSS object for now...
+					 *
+					 * @todo this is a really dumb hack that should be refactored.
+					 */
+					if (FTSS.temp898) {
 
 						// Read the host object from our dropdown selection
 						$scope.host = FTSS.search.options[FTSS.search.getValue()].data || {};
@@ -434,8 +476,6 @@ FTSS.ng.controller(
 
 						// This will loop over each FTD and add then add itself to any courses in our list
 						_(caches.Units).each(function (u) {
-
-							//var counted = false,
 
 							var unit = angular.copy(u);
 
@@ -480,27 +520,26 @@ FTSS.ng.controller(
 
 						});
 
-						self
+					}
 
-							// Send the generated data through the controller init function
-							.initialize(courses)
+					self
 
-							.then(function (d) {
+						// Send the generated data through the controller init function
+						.initialize(courses)
 
-								      // Sort the available FTDs by distance (closest first)
-								      d.listFTD = _.sortBy(d.listFTD, 'distanceInt');
+						.then(function (d) {
 
-								      d.requirements = _.sortBy(d.requirements, 'date');
+							      // Sort the available FTDs by distance (closest first)
+							      d.listFTD = _.sortBy(d.listFTD, 'distanceInt');
 
-								      // Pre-check our closest FTD if available
-								      d.detRequest = d.listFTD[0] || false;
+							      d.requirements = _.sortBy(d.requirements, 'date');
 
+							      // Pre-check our closest FTD if available
+							      d.detRequest = d.listFTD[0] || false;
 
-							      });
+						      });
 
-					});
-
-				}
+				});
 
 				// Need to call setLoaded() to finish the page load
 				$scope.fn.setLoaded();
