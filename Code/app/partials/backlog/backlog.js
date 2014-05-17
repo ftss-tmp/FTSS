@@ -309,7 +309,7 @@ FTSS.ng.controller(
 							                 'first': firstName,
 
 							                 // Trim the IMDS(CAMS)ID in case we need to use later
-							                 'id'   : CAMSID ? parseInt(CAMSID, 10) : name.replace(/[^\w]/gi, '-'),
+							                 'id'   : CAMSID ? CAMSID.trim() : name.replace(/[^\w]/gi, '-'),
 
 							                 // This is used by the hover so add some HTML decoration
 							                 'text' : '<h4>' + match + '</h4>',
