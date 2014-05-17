@@ -48,6 +48,7 @@
 						 $scope.courseUpdates = _.filter(caches.MasterCourseList, 'updated');
 
 						 utils.loading(false);
+
 					 }
 
 				 });

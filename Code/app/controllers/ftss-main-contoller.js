@@ -280,6 +280,7 @@
 
 				};
 
+				// Load our user data into FTSS
 				SharePoint.user($scope);
 
 				/**

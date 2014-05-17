@@ -177,15 +177,7 @@ FTSS.ng.controller(
 
 					      });
 
-					      self
-
-						      .initialize(processed)
-
-						      .then(function (d) {
-
-							            console.info(d);
-						            });
-
+					      self.initialize(processed).then();
 
 				      });
 
