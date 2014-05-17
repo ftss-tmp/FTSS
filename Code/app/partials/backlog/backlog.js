@@ -109,7 +109,7 @@ FTSS.ng.controller(
 					     * Because of the size and complexity of the data our _JSON fields will store everything as
 					     * simple arrays instead of objects with named properties.  While this does tend to add some
 					     * risk of data corruption (if we mess up in a later version and are off on the fields), it
-					     * is a HUGE bandwidth saver as it cuts down signficantly on the JSON size
+					     * is a HUGE bandwidth saver as it cuts down significantly on the JSON size
 					     *
 					     */
 					    var oDataCall = {
@@ -175,8 +175,12 @@ FTSS.ng.controller(
 						        //Students by ID # or name if no ID #
 						        history = [];
 
+						    delete course.requirements;
+
 						    // Iterate through all the students and add to the 898 and stats respectively
 						    _(course.students).each(function (requirement) {
+
+							    requirement.selected = false;
 
 							    history.push(requirement.id);
 
@@ -197,6 +201,8 @@ FTSS.ng.controller(
 								    ]);
 
 						    });
+
+						    $scope.checkStudent(course);
 
 						    // Add the requirement to the 898 call
 						    oDataCall.requirement.Requirements_JSON.push(req);
@@ -251,8 +257,8 @@ FTSS.ng.controller(
 			    parseText = function (text) {
 
 				    // This is the header for our AAA text dump
-				    $scope.$parent.viewPaste =
-				    $scope.$parent.previousRequests =
+				    $scope.viewPaste =
+				    $scope.previousRequests =
 				    'NAME                EMP #  GRD   DAFSC  PAFSC     COURSE                          STATUS    DATE\n\n';
 
 				    var _collection = {},
@@ -356,7 +362,7 @@ FTSS.ng.controller(
 							                 // Add the name + matching text to the requested field
 							                 var ptLine = function (field) {
 
-								                 $scope.$parent[field] += mLast + textMatch + '\n';
+								                 $scope[field] += mLast + textMatch + '\n';
 
 							                 };
 
@@ -445,7 +451,7 @@ FTSS.ng.controller(
 					 *
 					 * @todo this is a really dumb hack that should be refactored.
 					 */
-					if (FTSS.temp898) {
+					if ($scope.$parent.temp898) {
 
 						// Read the host object from our dropdown selection
 						$scope.host = FTSS.search.options[FTSS.search.getValue()].data || {};
@@ -454,7 +460,7 @@ FTSS.ng.controller(
 						$scope.ftd = $scope.host.FTD ? caches.Units[$scope.host.FTD] : false;
 
 						// Iterate over all the requirements
-						_(FTSS.temp898).each(function (c, k) {
+						_(parseText($scope.$parent.temp898)).each(function (c, k) {
 
 							// This should always work--but just in case, get our course data from the course catalog
 							var course = _.findWhere(caches.MasterCourseList, {'IMDS': k}) || {};
@@ -562,7 +568,7 @@ FTSS.ng.controller(
 				return function (row) {
 
 					// Get the count of checked students
-					var count = row ? _(row.requirements).filter('selected').size() : false;
+					var count = row ? _(row.requirements || row.students).filter('selected').size() : false;
 
 					if (count) {
 
@@ -628,7 +634,7 @@ FTSS.ng.controller(
 
 			FTSS.pasteAction = function (text) {
 
-				FTSS.temp898 = parseText(text);
+				$scope.$parent.temp898 = text;
 
 				self.reload();
 
