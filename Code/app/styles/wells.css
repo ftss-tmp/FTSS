@@ -10,7 +10,7 @@
 .well:not(.well-sm) {
     font-size: 1.1em;
     position: relative;
-    max-height: 1000px;
+    max-height: 10000px;
     transition: all 1s;
 }
 
