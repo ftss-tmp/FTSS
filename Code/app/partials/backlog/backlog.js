@@ -33,51 +33,49 @@ FTSS.ng.controller(
 
 				    'edit': function (scope, isNew, courses) {
 
-					    var m = moment(),
+					    /**
+					     * Generates a History property on the given course.
+					     *
+					     * This will calculate the month names, intervals & lookup any built/required history for
+					     * the given months
+					     *
+					     * @param course - The course to build a history for
+					     */
+					    var getHistory = function (course) {
 
-					        getHistory = function (collection, interval, course) {
+						    var int = 0,
 
-						        var history = $scope.history[collection[interval]];
+						        month = moment().subtract(1, 'month'),
 
-						        if (history && history[course]) {
+						        histories = course.History = {};
 
-							        collection['b' + interval] = history[course].built;
-							        collection['r' + interval] = history[course].required;
+						    while (int++ < 3) {
 
-						        }
+							    var history = $scope.history[
 
-					        },
+								    month
+									    .add(1, 'month')
+									    .format('YYMM')
 
-					        month = {
+								    ];
 
-						        'm1': m.month(),
-						        'd1': m.format('MMM YY'),
-						        '1' : m.format('YYMM'),
+							    histories['m' + int] = month.month();
+							    histories['d' + int] = month.format('MMM YY');
+							    histories['b' + int] = utils.deepRead(history, course + '.built') || '';
+							    histories['r' + int] = utils.deepRead(history, course + '.required') || '';
 
-						        'm2': m.add(1, 'month').month(),
-						        'd2': m.format('MMM YY'),
-						        '2' : m.format('YYMM'),
+						    }
 
-						        'm3': m.add(1, 'month').month(),
-						        'd3': m.format('MMM YY'),
-						        '3' : m.format('YYMM')
 
-					        };
+					    };
 
 					    _(courses).each(function (course) {
 
 						    // This just limits how many students are visible by default
 						    course.limit = 3;
 
-						    // Need to copy to avoid the month data being linked across courses
-						    course.History = angular.copy(month);
-
-						    _([1,
-						       2,
-						       3
-						      ]).each(function (interval) {
-							    getHistory(course.History, interval, course.course.Id);
-						    });
+						    // Call our history builder for this course
+						    getHistory(course);
 
 						    // Get only the selected students
 						    course.students = _(course.requirements).map(function (req) {
@@ -88,13 +86,19 @@ FTSS.ng.controller(
 
 					    });
 
-					    courses.Month = moment().add('months', 3);
+					    // Add one last month to our momentJS object to get the 90 days out month
+					    courses.Month = moment().add(3, 'months');
+
+					    // This month value will be used as a JSON datestamp later on
 					    courses.month = courses.Month.toISOString();
 
+					    // Copy our courses object to the modal's scope
 					    scope.courses = courses;
 
+					    // If the course is < 50 miles away then this is a local course
 					    scope.local = courses[0].detRequest.distanceInt < 50;
 
+					    // Default to unfunded (this is used for TDY 898s)
 					    scope.funded = false;
 
 				    },
