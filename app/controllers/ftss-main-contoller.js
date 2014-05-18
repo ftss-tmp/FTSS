@@ -360,6 +360,8 @@
 
 				FTSS._fn = _fn;
 
+				utils.flickr();
+
 			}
 		]);
 
