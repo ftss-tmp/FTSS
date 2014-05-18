@@ -1,7 +1,17 @@
-.DS_Store
-Collaboration/
-.idea
-.dropbox
-Collaboration Docs/
-Collaboration Docs/*
-Code/app/assets/aaa.txt
+**/.DS_Store
+nbproject
+manifest.mf
+build.xml
+
+node_modules
+
+.project
+.settings
+.idea/*
+
+_public
+node_modules/*
+npm-debug.log
+
+test/test-results.xml
+
