@@ -51,7 +51,7 @@
 
 								      '<img src="' + (data.Photo ? 'https://cs3.eis.af.mil/sites/OO-ED-AM-11/FTSS/Prototype/Bios/' + photo : noPhoto) + '" />' :
 
-								      '<img src="' + (data.Photo ? 'http://192.168.2.1:8080/Bios/' + photo : noPhoto) + '" />';
+								      '<img src="' + (data.Photo ? 'http://ftss.plexhosted.net/Bios/' + photo : noPhoto) + '" />';
 
 							$el[0].innerHTML = html + (data.Photo || force ? img : '') + '</div>';
 
