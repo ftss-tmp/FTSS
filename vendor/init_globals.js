@@ -10,7 +10,7 @@
 	window.FTSS = {};
 	window.utils = {};
 	window.caches = {};
-	window.PRODUCTION = (location.hostname !== 'localhost' && location.hostname !== '192.168.2.1');
+	window.PRODUCTION = (location.hostname !== 'localhost' && location.hostname !== 'c9.io');
 
 	window.brunch = {
 		'auto-reload': {

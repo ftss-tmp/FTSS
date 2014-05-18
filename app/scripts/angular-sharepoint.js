@@ -19,9 +19,9 @@
 		          'baseURL': '/sites/OO-ED-AM-11/FTSS/Prototype/_vti_bin/ListData.svc/'
 	          } : {
 
-		          'baseURL': 'http://ftss.plexhosted.net/_vti_bin/ListData.svc/',
-		          'userURL': 'http://ftss.plexhosted.net/_layouts/userdisp.aspx?Force=True',
-		          'pplURL' : 'http://ftss.plexhosted.net/_vti_bin/ListData.svc/UserInformationList'
+		          'baseURL': 'https://ftss.plexhosted.net/_vti_bin/ListData.svc/',
+		          'userURL': 'https://ftss.plexhosted.net/_layouts/userdisp.aspx?Force=True',
+		          'pplURL' : 'https://ftss.plexhosted.net/_vti_bin/ListData.svc/UserInformationList'
 
 	          };
 
