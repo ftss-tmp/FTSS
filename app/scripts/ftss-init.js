@@ -10,8 +10,6 @@ var LOG;
 
 	"use strict";
 
-	var debug = true;
-
 	/**
 	 * Create the Angular module & declare dependencies
 	 *
@@ -89,7 +87,7 @@ var LOG;
 
 	FTSS.prefs = localStorage.FTSS_prefs ? JSON.parse(localStorage.FTSS_prefs) : {
 
-		'limit': 50,
+		'limit': 35,
 
 		'animate': true,
 
@@ -107,7 +105,7 @@ var LOG;
 
 		return function (data, noStamp) {
 
-			if (debug && console) {
+			if (console) {
 
 				var stamp = (new Date()).getTime();
 
