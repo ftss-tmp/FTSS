@@ -307,7 +307,7 @@ utils.imdsGradeLookup = function (grade) {
 
 		'CON': 'Contractor'
 
-	}[grade];
+	}[grade] || 'Unknown';
 
 };
 
